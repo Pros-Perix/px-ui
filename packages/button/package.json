@@ -1,0 +1,15 @@
+{
+  "name": "button",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "vite build",
+    "dev": "vite",
+    "test": "vitest",
+    "lint": "eslint src --ext .ts,.tsx"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
