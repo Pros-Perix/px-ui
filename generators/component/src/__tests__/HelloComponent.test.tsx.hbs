@@ -4,7 +4,7 @@ import { HelloComponent } from '../components/HelloComponent';
 
 describe('HelloComponent', () => {
   it('renders button text', () => {
-    render(<HelloComponent>Test</HelloComponent>);
-    expect(screen.getByRole('button')).toHaveTextContent('Test');
+    render(<HelloComponent />);
+    expect(screen.getByRole('button')).toHaveTextContent('Click me');
   });
 });
