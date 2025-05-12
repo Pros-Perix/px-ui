@@ -6,7 +6,7 @@ const config: StorybookConfig = {
     name: path.dirname(require.resolve("@storybook/react-vite/package.json")),
     options: {},
   },
-  stories: ["../packages/**/*.stories.@(ts|tsx)"],
+  stories: ["../packages/**/.storybook/stories/*.@(ts|tsx)"],
   addons: ["@storybook/addon-essentials"],
   core: {
     builder: {
