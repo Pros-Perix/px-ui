@@ -1,0 +1,8 @@
+import '../../../core/dist/core.css';
+import * as root from '../../../.storybook/preview';
+
+export const parameters: Preview["parameters"] = {
+  ...rootPreview.parameters,
+};
+
+export const decorators = [...(rootPreview.decorators || [])];

@@ -1,0 +1,18 @@
+{
+  "name": "@px-ui/{{kebabCase name}}",
+  "version": "0.0.1",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "vite build",
+    "storybook": "storybook dev",
+    "dev": "concurrently \"pnpm run --workspace-root watch-core-styles\" \"pnpm run storybook\"",
+    "test": "vitest",
+    "lint": "eslint src --ext .ts,.tsx"
+  },
+  "keywords": [],
+  "author": "anit.rai@prosperix.com",
+  "license": "ISC",
+  "dependencies": {
+    "@px-ui/core": "workspace:^"
+  }
+}

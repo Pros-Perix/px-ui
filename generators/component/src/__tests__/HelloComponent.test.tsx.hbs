@@ -1,0 +1,10 @@
+import { render, screen } from '@testing-library/react';
+import { describe, it, expect } from 'vitest';
+import { HelloComponent } from '../components/HelloComponent';
+
+describe('HelloComponent', () => {
+  it('renders button text', () => {
+    render(<HelloComponent>Test</HelloComponent>);
+    expect(screen.getByRole('button')).toHaveTextContent('Test');
+  });
+});
