@@ -1,4 +1,4 @@
-import "../packages/button/src/index.css";
+import "../packages/core/dist/core.css";
 import type { Preview } from "@storybook/react";
 
 const preview: Preview = {

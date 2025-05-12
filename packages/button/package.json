@@ -1,5 +1,5 @@
 {
-  "name": "button",
+  "name": "@px-ui/button",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -11,5 +11,8 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "@px-ui/core": "workspace:^"
+  }
 }
