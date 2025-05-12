@@ -11,7 +11,7 @@ export const PrimaryButton: React.FC<PrimaryButtonProps> = ({
   return (
     <ButtonBase
       className={twMerge(
-        "bg-red-600 hover:bg-blue-700 text-white px-4 py-2 rounded",
+        "bg-yellow-600 hover:bg-blue-700 text-white px-4 py-2 rounded",
         className,
       )}
       {...props}
