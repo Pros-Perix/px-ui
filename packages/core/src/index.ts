@@ -1,4 +1,7 @@
-// You can add design token helpers or class exports here in future
-import "./index.css";
+import tokens from "./design/tokens.json";
 
-export * from "./design/tokens.json";
+import "./index.css";
+export * from "./components/ButtonBase";
+export * from "./components/PrimaryButton";
+
+export { tokens };
