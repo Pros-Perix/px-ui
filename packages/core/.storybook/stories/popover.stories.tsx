@@ -3,17 +3,10 @@ import type { Meta, StoryObj } from "@storybook/react";
 
 import { Button } from "../../src/components/button";
 import { TextInput } from "../../src/components/text-input";
-import {
-  Popover,
-  PopoverContent,
-  PopoverDescription,
-  PopoverHeader,
-  PopoverTitle,
-  PopoverTrigger,
-} from "../../src/components/popover";
+import * as Popover from "../../src/components/popover";
 
-const meta: Meta<typeof Popover> = {
-  component: PopoverDemo,
+const meta: Meta<typeof Popover.Root> = {
+  component: Popover.Root,
   title: "Components/popover",
   tags: ["autodocs"],
   argTypes: {},
@@ -21,7 +14,9 @@ const meta: Meta<typeof Popover> = {
 
 export default meta;
 
-export const Default: StoryObj<typeof PopoverDemo> = {};
+export const Default: StoryObj<typeof Popover.Root> = {
+  render: () => <PopoverDemo />,
+};
 
 function PopoverDemo() {
   const copyToClipboard = () => {
@@ -30,19 +25,19 @@ function PopoverDemo() {
   };
 
   return (
-    <Popover>
-      <PopoverTrigger
+    <Popover.Root>
+      <Popover.Trigger
         render={(props) => (
           <Button {...props} variant="outline">
             Share
           </Button>
         )}
       />
-      <PopoverContent className="w-[calc(100vw-4rem)] sm:w-[500px]">
-        <PopoverHeader>
-          <PopoverTitle>Share</PopoverTitle>
-          <PopoverDescription>Share this component.</PopoverDescription>
-        </PopoverHeader>
+      <Popover.Content className="w-[calc(100vw-4rem)] sm:w-[500px]">
+        <Popover.Header>
+          <Popover.Title>Share</Popover.Title>
+          <Popover.Description>Share this component.</Popover.Description>
+        </Popover.Header>
         <div className="mt-2 flex w-full gap-2">
           <TextInput
             inputContainerClassName="w-full"
@@ -54,7 +49,7 @@ function PopoverDemo() {
             Copy
           </Button>
         </div>
-      </PopoverContent>
-    </Popover>
+      </Popover.Content>
+    </Popover.Root>
   );
 }

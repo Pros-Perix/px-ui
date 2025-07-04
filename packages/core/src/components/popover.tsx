@@ -2,41 +2,35 @@ import { Popover as BasePopover } from "@base-ui-components/react/popover";
 
 import { cn } from "../utils";
 
-function Popover({ ...props }: React.ComponentProps<typeof BasePopover.Root>) {
+function Root({ ...props }: React.ComponentProps<typeof BasePopover.Root>) {
   return <BasePopover.Root data-slot="popover" {...props} />;
 }
 
-function PopoverPortal({
-  ...props
-}: React.ComponentProps<typeof BasePopover.Portal>) {
+function Portal({ ...props }: React.ComponentProps<typeof BasePopover.Portal>) {
   return <BasePopover.Portal data-slot="popover-portal" {...props} />;
 }
 
-function PopoverTrigger({
+function Trigger({
   ...props
 }: React.ComponentProps<typeof BasePopover.Trigger>) {
   return <BasePopover.Trigger data-slot="popover-trigger" {...props} />;
 }
 
-function PopoverClose({
-  ...props
-}: React.ComponentProps<typeof BasePopover.Close>) {
+function Close({ ...props }: React.ComponentProps<typeof BasePopover.Close>) {
   return <BasePopover.Close data-slot="popover-close" {...props} />;
 }
 
-function PopoverArrow({
-  ...props
-}: React.ComponentProps<typeof BasePopover.Arrow>) {
+function Arrow({ ...props }: React.ComponentProps<typeof BasePopover.Arrow>) {
   return <BasePopover.Arrow data-slot="popover-arrow" {...props} />;
 }
 
-function PopoverPositioner({
+function Positioner({
   ...props
 }: React.ComponentProps<typeof BasePopover.Positioner>) {
   return <BasePopover.Positioner data-slot="popover-positioner" {...props} />;
 }
 
-function PopoverHeader({ className, ...props }: React.ComponentProps<"div">) {
+function Header({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       data-slot="popover-header"
@@ -46,7 +40,7 @@ function PopoverHeader({ className, ...props }: React.ComponentProps<"div">) {
   );
 }
 
-function PopoverTitle({
+function Title({
   className,
   ...props
 }: React.ComponentProps<typeof BasePopover.Title>) {
@@ -59,7 +53,7 @@ function PopoverTitle({
   );
 }
 
-function PopoverDescription({
+function Description({
   className,
   ...props
 }: React.ComponentProps<typeof BasePopover.Description>) {
@@ -72,7 +66,7 @@ function PopoverDescription({
   );
 }
 
-function PopoverContent({
+function Content({
   children,
   className,
   align = "center",
@@ -85,12 +79,8 @@ function PopoverContent({
   arrow?: boolean;
 }) {
   return (
-    <PopoverPortal>
-      <PopoverPositioner
-        sideOffset={sideOffset}
-        align={align}
-        positionMethod="fixed"
-      >
+    <Portal>
+      <Positioner sideOffset={sideOffset} align={align} positionMethod="fixed">
         <BasePopover.Popup
           data-slot="popover-content"
           className={cn(
@@ -100,7 +90,7 @@ function PopoverContent({
           {...props}
         >
           {arrow && (
-            <PopoverArrow className="data-[side=bottom]:top-[-8px] data-[side=left]:right-[-13px] data-[side=left]:rotate-90 data-[side=right]:left-[-13px] data-[side=right]:-rotate-90 data-[side=top]:bottom-[-8px] data-[side=top]:rotate-180">
+            <Arrow className="data-[side=bottom]:top-[-8px] data-[side=left]:right-[-13px] data-[side=left]:rotate-90 data-[side=right]:left-[-13px] data-[side=right]:-rotate-90 data-[side=top]:bottom-[-8px] data-[side=top]:rotate-180">
               <svg width="20" height="10" viewBox="0 0 20 10" fill="none">
                 <path
                   d="M9.66437 2.60207L4.80758 6.97318C4.07308 7.63423 3.11989 8 2.13172 8H0V9H20V8H18.5349C17.5468 8 16.5936 7.63423 15.8591 6.97318L11.0023 2.60207C10.622 2.2598 10.0447 2.25979 9.66437 2.60207Z"
@@ -111,16 +101,16 @@ function PopoverContent({
                   className="fill-border"
                 />
               </svg>
-            </PopoverArrow>
+            </Arrow>
           )}
           {children}
         </BasePopover.Popup>
-      </PopoverPositioner>
-    </PopoverPortal>
+      </Positioner>
+    </Portal>
   );
 }
 
-function PopoverFooter({ className, ...props }: React.ComponentProps<"div">) {
+function Footer({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       data-slot="popover-footer"
@@ -134,15 +124,15 @@ function PopoverFooter({ className, ...props }: React.ComponentProps<"div">) {
 }
 
 export {
-  Popover,
-  PopoverTrigger,
-  PopoverHeader,
-  PopoverTitle,
-  PopoverDescription,
-  PopoverContent,
-  PopoverFooter,
-  PopoverClose,
-  PopoverArrow,
-  PopoverPositioner,
-  PopoverPortal,
+  Root,
+  Trigger,
+  Header,
+  Title,
+  Description,
+  Content,
+  Footer,
+  Close,
+  Arrow,
+  Positioner,
+  Portal,
 };

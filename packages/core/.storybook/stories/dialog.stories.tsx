@@ -1,19 +1,10 @@
 import * as React from "react";
 import type { Meta, StoryObj } from "@storybook/react";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-  DialogFooter,
-  DialogTrigger,
-  DialogClose,
-} from "../../src/components/dialog";
+import * as Dialog from "../../src/components/dialog";
 import { Button } from "../../src/components/button";
 
-const meta: Meta<typeof Dialog> = {
-  component: Dialog,
+const meta: Meta<typeof Dialog.Root> = {
+  component: Dialog.Root,
   title: "Components/dialog",
   tags: ["autodocs"],
   argTypes: {},
@@ -21,22 +12,24 @@ const meta: Meta<typeof Dialog> = {
 
 export default meta;
 
-export const Default: StoryObj<typeof Dialog> = {
+export const Default: StoryObj<typeof Dialog.Root> = {
   args: {
     children: (
       <>
-        <DialogTrigger render={<Button>Open Dialog</Button>} />
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Dialog Title</DialogTitle>
-            <DialogDescription>Dialog Description</DialogDescription>
-          </DialogHeader>
-          <div></div>
-          <DialogFooter>
-            <DialogClose render={<Button variant="outline">Close</Button>} />
+        <Dialog.Trigger render={<Button>Open Dialog</Button>} />
+        <Dialog.Content>
+          <Dialog.Header>
+            <Dialog.Title>Dialog Title</Dialog.Title>
+            <Dialog.Description>Dialog Description</Dialog.Description>
+          </Dialog.Header>
+          <div>
+            <p>Dialog Content</p>
+          </div>
+          <Dialog.Footer>
+            <Dialog.Close render={<Button variant="outline">Close</Button>} />
             <Button>Save changes</Button>
-          </DialogFooter>
-        </DialogContent>
+          </Dialog.Footer>
+        </Dialog.Content>
       </>
     ),
   },
