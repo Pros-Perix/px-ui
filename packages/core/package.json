@@ -35,7 +35,7 @@
   "license": "ISC",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Pros-Perix/px-ui.git",
+    "url": "https://github.com/irshath/px-ui.git",
     "directory": "packages/core"
   },
   "peerDependencies": {
