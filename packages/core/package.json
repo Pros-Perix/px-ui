@@ -1,17 +1,47 @@
 {
-  "name": "@px-ui/core",
+  "name": "@irshath/px-ui-core",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "A modern React component library built with Tailwind CSS",
+  "main": "./dist/index.cjs.js",
+  "module": "./dist/index.es.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.es.js",
+      "require": "./dist/index.cjs.js"
+    },
+    "./styles": "./dist/core.css"
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
   "scripts": {
     "build": "vite build",
     "test": "vitest",
     "lint": "eslint src --ext .ts,.tsx",
-    "watch:styles": "npx @tailwindcss/cli -i ./src/index.css -o ./dist/core.css --watch"
+    "watch:styles": "npx @tailwindcss/cli -i ./src/index.css -o ./dist/core.css --watch",
+    "prepublishOnly": "npm run build"
   },
-  "keywords": [],
+  "keywords": [
+    "react",
+    "components",
+    "ui",
+    "tailwind",
+    "design-system"
+  ],
   "author": "",
   "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Pros-Perix/px-ui.git",
+    "directory": "packages/core"
+  },
+  "peerDependencies": {
+    "react": ">=16.8.0",
+    "react-dom": ">=16.8.0"
+  },
   "dependencies": {
     "@base-ui-components/react": "1.0.0-beta.1",
     "class-variance-authority": "^0.7.1",
@@ -24,6 +54,7 @@
     "@tailwindcss/postcss": "^4.1.5",
     "autoprefixer": "10.4.19",
     "postcss": "8.5.3",
-    "tailwindcss": "4.1.5"
+    "tailwindcss": "4.1.5",
+    "vite-plugin-dts": "^4.5.4"
   }
 }
