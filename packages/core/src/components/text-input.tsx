@@ -1,12 +1,11 @@
 import * as React from "react";
-import { Input as BaseInput } from "@base-ui-components/react/input";
 import { cn } from "../utils";
 
-interface InputProps extends React.ComponentProps<typeof BaseInput> {
+type InputProps = React.ComponentProps<"input"> & {
   inputContainerClassName?: string;
   leadingIcon?: React.ReactNode;
   trailingIcon?: React.ReactNode;
-}
+};
 
 export function TextInput({
   inputContainerClassName,
