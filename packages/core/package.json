@@ -1,17 +1,24 @@
 {
   "name": "@irshath/px-ui-core",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "A modern React component library built with Tailwind CSS",
-  "main": "./dist/index.cjs.js",
-  "module": "./dist/index.es.js",
+  "type": "module",
+  "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
+  "sideEffects": [
+    "**/*.css",
+    "./dist/index.js"
+  ],
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.es.js",
-      "require": "./dist/index.cjs.js"
+      "import": "./dist/index.js"
     },
-    "./styles": "./dist/core.css"
+    "./styles": "./dist/px-ui-core.css",
+    "./components/*": {
+      "types": "./dist/components/*.d.ts",
+      "import": "./dist/components/*.js"
+    }
   },
   "files": [
     "dist",
@@ -21,7 +28,7 @@
     "build": "vite build",
     "test": "vitest",
     "lint": "eslint src --ext .ts,.tsx",
-    "watch:styles": "npx @tailwindcss/cli -i ./src/index.css -o ./dist/core.css --watch",
+    "watch:styles": "npx @tailwindcss/cli -i ./src/index.css -o ./dist/px-ui-core.css --watch",
     "prepublishOnly": "npm run build"
   },
   "keywords": [
@@ -35,7 +42,7 @@
   "license": "ISC",
   "repository": {
     "type": "git",
-    "url": "https://github.com/irshath/px-ui.git",
+    "url": "git+https://github.com/irshath/px-ui.git",
     "directory": "packages/core"
   },
   "peerDependencies": {

@@ -18,16 +18,15 @@ export default defineConfig({
     lib: {
       entry: path.resolve(__dirname, "src/index.ts"),
       name: "PxUICore",
-      fileName: (format) => `index.${format}.js`,
-      formats: ["es", "cjs"],
+      fileName: () => `index.js`,
+      formats: ["es"],
     },
     rollupOptions: {
       external: ["react", "react-dom"],
       output: {
-        globals: {
-          react: "React",
-          "react-dom": "ReactDOM",
-        },
+        preserveModules: true,
+        preserveModulesRoot: "src",
+        entryFileNames: "[name].js",
       },
     },
   },
