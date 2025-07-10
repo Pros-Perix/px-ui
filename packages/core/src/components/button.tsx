@@ -8,21 +8,23 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default:
-          "bg-primary text-primary-foreground shadow-xs hover:bg-primary/90",
+          "bg-gray-11 text-white shadow-xs not-disabled:hover:bg-gray-10 not-disabled:active:bg-gray-11 disabled:bg-gray-6",
+        primary:
+          "bg-green-5 text-white shadow-xs not-disabled:hover:bg-green-4 not-disabled:active:bg-green-5 disabled:bg-green-2 disabled:text-gray-8",
         destructive:
           "bg-destructive text-white shadow-xs hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60",
         outline:
-          "border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50",
+          "shadow-xs not-disabled:hover:text-green-4 not-disabled:hover:border-green-4 not-disabled:active:text-green-5 not-disabled:active:border-green-5 disabled:text-green-2 disabled:border-green-2 border border-green-5 text-green-5",
         secondary:
           "bg-secondary text-secondary-foreground shadow-xs hover:bg-secondary/80",
         ghost:
           "hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50",
-        link: "text-primary underline-offset-4 hover:underline",
+        link: "text-gray-12 underline-offset-4 hover:underline",
       },
       size: {
-        default: "h-9 px-4 py-2 has-[>svg]:px-3",
-        sm: "h-8 rounded-md gap-1.5 px-3 has-[>svg]:px-2.5",
-        lg: "h-10 rounded-md px-6 has-[>svg]:px-4",
+        default: "px-5 py-3 text-[0.8125rem] leading-4",
+        sm: "rounded-md gap-1.5 px-4 py-2 text-base leading-5",
+        lg: "rounded-md px-6 py-4 text-base leading-5",
         icon: "size-9",
       },
     },

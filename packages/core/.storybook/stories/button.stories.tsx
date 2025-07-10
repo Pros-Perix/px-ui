@@ -3,6 +3,7 @@ import { Button, Variant, Size } from "../../src/components/button";
 
 const variants: Variant[] = [
   "default",
+  "primary",
   "outline",
   "ghost",
   "link",
@@ -24,6 +25,9 @@ const meta: Meta<typeof Button> = {
     size: {
       control: "select",
       options: sizes,
+    },
+    disabled: {
+      control: "boolean",
     },
   },
 };
