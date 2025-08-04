@@ -11,9 +11,6 @@ export default defineConfig({
       exclude: ["src/**/*.test.*", "src/**/__tests__/**"],
     }),
   ],
-  css: {
-    postcss: "./postcss.config.mjs",
-  },
   build: {
     lib: {
       entry: path.resolve(__dirname, "src/index.ts"),

@@ -28,7 +28,6 @@
     "build": "vite build",
     "test": "vitest",
     "lint": "eslint src --ext .ts,.tsx",
-    "watch:styles": "npx @tailwindcss/cli -i ./src/index.css -o ./dist/px-ui-core.css --watch",
     "prepublishOnly": "npm run build"
   },
   "keywords": [
@@ -56,13 +55,8 @@
     "tw-animate-css": "^1.3.4"
   },
   "devDependencies": {
-    "@tailwindcss/cli": "^4.1.5",
-    "@tailwindcss/postcss": "^4.1.5",
-    "autoprefixer": "10.4.19",
-    "postcss": "8.5.3",
     "react": "19.1.0",
     "react-dom": "19.1.0",
-    "tailwindcss": "4.1.5",
     "vite-plugin-dts": "^4.5.4"
   }
 }

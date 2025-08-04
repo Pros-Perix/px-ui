@@ -1,5 +1,5 @@
-import "../packages/core/dist/px-ui-core.css";
 import type { Preview } from "@storybook/react";
+import "./index.css";
 
 const preview: Preview = {
   parameters: {

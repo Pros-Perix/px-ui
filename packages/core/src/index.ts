@@ -1,4 +1,3 @@
-import "./index.css";
 import * as Dialog from "./components/dialog";
 import * as Popover from "./components/popover";
 
