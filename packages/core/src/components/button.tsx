@@ -8,18 +8,18 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default:
-          "bg-gray-11 text-white shadow-xs not-disabled:hover:bg-gray-10 not-disabled:active:bg-gray-11 disabled:bg-gray-6",
+          "bg-ppx-gray-11 text-white shadow-xs not-disabled:hover:bg-ppx-gray-10 not-disabled:active:bg-ppx-gray-11 disabled:bg-ppx-gray-6",
         primary:
-          "bg-green-5 text-white shadow-xs not-disabled:hover:bg-green-4 not-disabled:active:bg-green-5 disabled:bg-green-2 disabled:text-gray-8",
+          "bg-ppx-green-5 text-white shadow-xs not-disabled:hover:bg-ppx-green-4 not-disabled:active:bg-ppx-green-5 disabled:bg-ppx-green-2 disabled:text-ppx-gray-8",
         destructive:
-          "bg-destructive text-white shadow-xs hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60",
+          "bg-ppx-red-5 text-white shadow-xs hover:bg-ppx-red-4 not-disabled:active:bg-ppx-red-5 disabled:bg-ppx-red-2 disabled:text-ppx-gray-8",
         outline:
-          "shadow-xs not-disabled:hover:text-green-4 not-disabled:hover:border-green-4 not-disabled:active:text-green-5 not-disabled:active:border-green-5 disabled:text-green-2 disabled:border-green-2 border border-green-5 text-green-5",
+          "shadow-xs not-disabled:hover:text-ppx-green-4 not-disabled:hover:border-ppx-green-4 not-disabled:active:text-ppx-green-5 not-disabled:active:border-ppx-green-5 disabled:text-ppx-green-2 disabled:border-ppx-green-2 border border-ppx-green-5 text-ppx-green-5",
         secondary:
-          "bg-secondary text-secondary-foreground shadow-xs hover:bg-secondary/80",
+          "bg-ppx-secondary text-ppx-secondary-foreground shadow-xs hover:bg-ppx-secondary/80",
         ghost:
-          "hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50",
-        link: "text-gray-12 underline-offset-4 hover:underline",
+          "hover:bg-ppx-accent hover:text-ppx-accent-foreground dark:hover:bg-ppx-accent/50",
+        link: "text-ppx-gray-12 underline-offset-4 hover:underline",
       },
       size: {
         default: "px-5 py-3 text-[0.8125rem] leading-4",
