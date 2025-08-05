@@ -1,16 +1,42 @@
 import { Checkbox as BaseCheckbox } from "@base-ui-components/react/checkbox";
 
 import { cn } from "../utils";
+import { cva, VariantProps } from "class-variance-authority";
+
+const checkboxVariants = cva(
+  "peer aria-invalid:border-ppx-destructive aria-invalid:text-shadow-ppx-destructive-foreground flex items-center justify-center rounded-sm border transition-colors duration-150 outline-none focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-50",
+  {
+    variants: {
+      variant: {
+        default:
+          "bg-white data-checked:bg-ppx-green-5 data-[indeterminate]:bg-ppx-green-5 data-checked:text-white data-[indeterminate]:text-white  border-ppx-gray-10 data-checked:border-ppx-green-5 data-[indeterminate]:border-ppx-green-5",
+      },
+      size: {
+        default: "size-5",
+        sm: "size-4",
+        lg: "size-6",
+      },
+    },
+    defaultVariants: {
+      variant: "default",
+      size: "default",
+    },
+  }
+);
 
 function Checkbox({
   className,
   ...props
-}: React.ComponentProps<typeof BaseCheckbox.Root>) {
+}: React.ComponentProps<typeof BaseCheckbox.Root> &
+  VariantProps<typeof checkboxVariants>) {
   return (
     <BaseCheckbox.Root
       data-slot="checkbox"
       className={cn(
-        "peer bg-input focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:text-destructive aria-invalid:focus:ring-destructive/50 data-checked:border-primary data-checked:bg-primary data-checked:text-primary-foreground data-[indeterminate]:text-foreground flex size-4 items-center justify-center rounded-[4px] border transition-colors duration-150 outline-none focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-50",
+        checkboxVariants({
+          variant: props.variant,
+          size: props.size,
+        }),
         className
       )}
       {...props}

@@ -22,6 +22,7 @@
     --font-weight-semibold: 600;
     --font-weight-bold: 700;
     --radius-xs: 0.125rem;
+    --radius-sm: 0.25rem;
     --radius-md: 0.375rem;
     --radius-lg: 0.5rem;
     --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
@@ -50,6 +51,9 @@
     --color-ppx-primary-5: #408ff0;
     --color-ppx-accent: #dfe2e6;
     --color-ppx-accent-foreground: #6b788e;
+    --color-ppx-destructive: var(--color-ppx-red-5);
+    --color-ppx-destructive-foreground: var(--color-ppx-red-5);
+    --radius-ppx-xs: 0.125rem;
     --radius-ppx-s: 0.5rem;
     --radius-ppx-m: 0.75rem;
     --radius-ppx-l: 1rem;
@@ -288,6 +292,10 @@
     width: calc(var(--spacing) * 5);
     height: calc(var(--spacing) * 5);
   }
+  .size-6 {
+    width: calc(var(--spacing) * 6);
+    height: calc(var(--spacing) * 6);
+  }
   .size-8 {
     width: calc(var(--spacing) * 8);
     height: calc(var(--spacing) * 8);
@@ -417,12 +425,21 @@
   .rounded-ppx-s {
     border-radius: var(--radius-ppx-s);
   }
+  .rounded-ppx-xs {
+    border-radius: var(--radius-ppx-xs);
+  }
+  .rounded-sm {
+    border-radius: var(--radius-sm);
+  }
   .rounded-xs {
     border-radius: var(--radius-xs);
   }
   .border {
     border-style: var(--tw-border-style);
     border-width: 1px;
+  }
+  .border-ppx-gray-10 {
+    border-color: var(--color-ppx-gray-10);
   }
   .border-ppx-green-5 {
     border-color: var(--color-ppx-green-5);
@@ -453,6 +470,9 @@
   }
   .bg-ppx-red-5 {
     background-color: var(--color-ppx-red-5);
+  }
+  .bg-white {
+    background-color: var(--color-white);
   }
   .object-cover {
     object-fit: cover;
@@ -864,6 +884,19 @@
       opacity: 70%;
     }
   }
+  .aria-invalid\:border-ppx-destructive {
+    &[aria-invalid="true"] {
+      border-color: var(--color-ppx-destructive);
+    }
+  }
+  .aria-invalid\:text-shadow-ppx-destructive-foreground {
+    &[aria-invalid="true"] {
+      --tw-text-shadow-color: #ba0000;
+      @supports (color: color-mix(in lab, red, red)) {
+        --tw-text-shadow-color: color-mix(in oklab, var(--color-ppx-destructive-foreground) var(--tw-text-shadow-alpha), transparent);
+      }
+    }
+  }
   .data-checked\:translate-x-\[calc\(100\%\)\] {
     &[data-checked] {
       --tw-translate-x: calc(100%);
@@ -900,9 +933,24 @@
       translate: var(--tw-translate-x) var(--tw-translate-y);
     }
   }
+  .data-checked\:border-ppx-green-5 {
+    &[data-checked] {
+      border-color: var(--color-ppx-green-5);
+    }
+  }
   .data-checked\:bg-ppx-green-5 {
     &[data-checked] {
       background-color: var(--color-ppx-green-5);
+    }
+  }
+  .data-checked\:bg-white {
+    &[data-checked] {
+      background-color: var(--color-white);
+    }
+  }
+  .data-checked\:text-white {
+    &[data-checked] {
+      color: var(--color-white);
     }
   }
   .data-unchecked\:translate-x-px {
@@ -933,6 +981,31 @@
   .data-\[ending-style\]\:opacity-0 {
     &[data-ending-style] {
       opacity: 0%;
+    }
+  }
+  .data-\[indeterminate\]\:border-ppx-green-5 {
+    &[data-indeterminate] {
+      border-color: var(--color-ppx-green-5);
+    }
+  }
+  .data-\[indeterminate\]\:bg-ppx-gray-10 {
+    &[data-indeterminate] {
+      background-color: var(--color-ppx-gray-10);
+    }
+  }
+  .data-\[indeterminate\]\:bg-ppx-green-5 {
+    &[data-indeterminate] {
+      background-color: var(--color-ppx-green-5);
+    }
+  }
+  .data-\[indeterminate\]\:bg-white {
+    &[data-indeterminate] {
+      background-color: var(--color-white);
+    }
+  }
+  .data-\[indeterminate\]\:text-white {
+    &[data-indeterminate] {
+      color: var(--color-white);
     }
   }
   .data-\[side\=bottom\]\:top-\[-8px\] {
@@ -1239,6 +1312,15 @@ body {
   syntax: "*";
   inherits: false;
 }
+@property --tw-text-shadow-color {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-text-shadow-alpha {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 100%;
+}
 @property --tw-scale-x {
   syntax: "*";
   inherits: false;
@@ -1280,6 +1362,8 @@ body {
       --tw-outline-style: solid;
       --tw-duration: initial;
       --tw-ease: initial;
+      --tw-text-shadow-color: initial;
+      --tw-text-shadow-alpha: 100%;
       --tw-scale-x: 1;
       --tw-scale-y: 1;
       --tw-scale-z: 1;

@@ -9,4 +9,15 @@ const meta: Meta<typeof Checkbox> = {
 
 export default meta;
 
-export const Default: StoryObj<typeof Checkbox> = {};
+export const Default: StoryObj<typeof Checkbox> = {
+  argTypes: {
+    size: {
+      control: "select",
+      options: ["default", "sm", "lg"],
+    },
+    variant: {
+      control: "select",
+      options: ["default", "primary"],
+    },
+  },
+};
