@@ -12,5 +12,11 @@ export default meta;
 export const Default: StoryObj<typeof TextInput> = {
   args: {
     placeholder: "Enter your email",
+    inputContainerClassName: "w-[300px]!",
+  },
+  argTypes: {
+    disabled: {
+      control: "boolean",
+    },
   },
 };

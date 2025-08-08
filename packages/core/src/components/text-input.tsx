@@ -1,11 +1,15 @@
 import * as React from "react";
 import { cn } from "../utils";
+import { Input as BaseInput } from "@base-ui-components/react/input";
 
-type InputProps = React.ComponentProps<"input"> & {
+interface InputProps
+  extends Omit<React.ComponentProps<typeof BaseInput>, "size"> {
+  size?: "default" | "sm";
   inputContainerClassName?: string;
   leadingIcon?: React.ReactNode;
   trailingIcon?: React.ReactNode;
-};
+  invalid?: boolean;
+}
 
 export function TextInput({
   inputContainerClassName,
@@ -13,6 +17,8 @@ export function TextInput({
   type,
   leadingIcon,
   trailingIcon,
+  size = "default",
+  invalid,
   ...props
 }: InputProps) {
   return (
@@ -23,29 +29,30 @@ export function TextInput({
       {leadingIcon && (
         <span
           data-slot="input-leading-icon"
-          className="text-muted-foreground absolute top-1/2 left-3 shrink-0 -translate-y-1/2 [&_svg]:shrink-0 [&_svg:not([class*='pointer-events-'])]:pointer-events-none [&_svg:not([class*='size-'])]:size-4"
+          className="left-3 [&_svg:not([class*='size-'])]:size-4 absolute top-1/2 shrink-0 -translate-y-1/2 [&_svg]:shrink-0 [&_svg:not([class*='pointer-events-'])]:pointer-events-none"
         >
           {leadingIcon}
         </span>
       )}
-      <input
+      <BaseInput
         type={type}
         data-slot="input"
         className={cn(
-          "placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground bg-input flex h-9 w-full min-w-0 rounded-md border px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm",
-          "file:text-foreground file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium",
-          "focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-2",
-          "aria-invalid:ring-destructive/50 aria-invalid:border-destructive",
-          leadingIcon && "pl-10",
-          trailingIcon && "pr-10",
-          className
+          "min-w-0 font-medium placeholder:font-light shadow-xs flex w-full border-ppx-gray-5 bg-ppx-gray-1 text-ppx-sm text-ppx-gray-18 transition-[color,box-shadow] outline-none placeholder:text-ppx-sm placeholder:text-ppx-gray-18 focus:border-ppx-green-2 disabled:cursor-not-allowed disabled:border-ppx-gray-3 disabled:bg-ppx-gray-3 disabled:text-ppx-gray-11 disabled:placeholder:text-ppx-gray-11 aria-invalid:border-ppx-red-4 aria-invalid:bg-ppx-red-1 aria-invalid:ring-ppx-red-2",
+          size === "sm" &&
+            "h-8 p-2 rounded-ppx-s border-[0.046875rem] focus:ring focus:ring-ppx-green-2",
+          size === "default" && "h-10 p-2 rounded-ppx-s border-2",
+          leadingIcon ? "pl-10" : "",
+          trailingIcon ? "pr-10" : "",
+          className,
         )}
+        aria-invalid={invalid}
         {...props}
       />
       {trailingIcon && (
         <span
           data-slot="input-trailing-icon"
-          className="text-muted-foreground absolute top-1/2 right-3 shrink-0 -translate-y-1/2 [&_svg]:shrink-0 [&_svg:not([class*='pointer-events-'])]:pointer-events-none [&_svg:not([class*='size-'])]:size-4"
+          className="right-3 [&_svg:not([class*='size-'])]:size-4 absolute top-1/2 shrink-0 -translate-y-1/2 [&_svg]:shrink-0 [&_svg:not([class*='pointer-events-'])]:pointer-events-none"
         >
           {trailingIcon}
         </span>
