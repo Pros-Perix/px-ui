@@ -10,6 +10,8 @@ const buttonVariants = cva(
         default:
           "bg-ppx-gray-11 text-white shadow-xs not-disabled:hover:bg-ppx-gray-10 not-disabled:active:bg-ppx-gray-11 disabled:bg-ppx-gray-6",
         primary:
+          "bg-ppx-primary-5 text-white shadow-xs not-disabled:hover:bg-ppx-primary-4 not-disabled:active:bg-ppx-primary-5 disabled:bg-ppx-primary-2 disabled:text-ppx-gray-8",
+        confirmative:
           "bg-ppx-green-5 text-white shadow-xs not-disabled:hover:bg-ppx-green-4 not-disabled:active:bg-ppx-green-5 disabled:bg-ppx-green-2 disabled:text-ppx-gray-8",
         destructive:
           "bg-ppx-red-5 text-white shadow-xs hover:bg-ppx-red-4 not-disabled:active:bg-ppx-red-5 disabled:bg-ppx-red-2 disabled:text-ppx-gray-8",
@@ -23,6 +25,7 @@ const buttonVariants = cva(
         default: "px-5 py-3 text-ppx-base font-medium rounded-ppx-m",
         sm: "gap-1.5 px-4 py-2 text-ppx-sm font-medium rounded-ppx-s",
         lg: "px-6 py-4 text-ppx-base font-bold rounded-ppx-l",
+        icon: "size-9 rounded-ppx-s",
       },
     },
     defaultVariants: {

@@ -4,10 +4,10 @@ import { Button, Variant, Size } from "../../src/components/button";
 const variants: Variant[] = [
   "default",
   "primary",
+  "confirmative",
   "outline",
   "ghost",
   "link",
-  "secondary",
   "destructive",
 ];
 

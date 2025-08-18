@@ -50,6 +50,9 @@
     --color-ppx-gray-11: #6b788e;
     --color-ppx-gray-12: #5d6b82;
     --color-ppx-gray-18: #091e42;
+    --color-ppx-primary-2: #b1d1f9;
+    --color-ppx-primary-4: #60a2f3;
+    --color-ppx-primary-5: #408ff0;
     --color-ppx-destructive: var(--color-ppx-red-5);
     --color-ppx-destructive-foreground: var(--color-ppx-red-5);
     --radius-ppx-s: 0.5rem;
@@ -305,6 +308,10 @@
     width: calc(var(--spacing) * 8);
     height: calc(var(--spacing) * 8);
   }
+  .size-9 {
+    width: calc(var(--spacing) * 9);
+    height: calc(var(--spacing) * 9);
+  }
   .size-10 {
     width: calc(var(--spacing) * 10);
     height: calc(var(--spacing) * 10);
@@ -477,6 +484,9 @@
   }
   .bg-ppx-green-5 {
     background-color: var(--color-ppx-green-5);
+  }
+  .bg-ppx-primary-5 {
+    background-color: var(--color-ppx-primary-5);
   }
   .bg-ppx-red-5 {
     background-color: var(--color-ppx-red-5);
@@ -750,6 +760,15 @@
       }
     }
   }
+  .not-disabled\:hover\:bg-ppx-primary-4 {
+    &:not(*:disabled) {
+      &:hover {
+        @media (hover: hover) {
+          background-color: var(--color-ppx-primary-4);
+        }
+      }
+    }
+  }
   .not-disabled\:hover\:text-black {
     &:not(*:disabled) {
       &:hover {
@@ -840,6 +859,13 @@
       }
     }
   }
+  .not-disabled\:active\:bg-ppx-primary-5 {
+    &:not(*:disabled) {
+      &:active {
+        background-color: var(--color-ppx-primary-5);
+      }
+    }
+  }
   .not-disabled\:active\:bg-ppx-red-5 {
     &:not(*:disabled) {
       &:active {
@@ -880,6 +906,11 @@
   .disabled\:bg-ppx-green-2 {
     &:disabled {
       background-color: var(--color-ppx-green-2);
+    }
+  }
+  .disabled\:bg-ppx-primary-2 {
+    &:disabled {
+      background-color: var(--color-ppx-primary-2);
     }
   }
   .disabled\:bg-ppx-red-2 {
