@@ -1,6 +1,6 @@
 import * as React from "react";
 import { cn } from "../utils";
-import { Input as BaseInput } from "@base-ui-components/react/input";
+import { Input as BaseInput } from "@base-ui-components/react";
 
 interface InputProps
   extends Omit<React.ComponentProps<typeof BaseInput>, "size"> {
