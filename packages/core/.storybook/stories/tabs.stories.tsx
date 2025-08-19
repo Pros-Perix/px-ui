@@ -17,7 +17,7 @@ export const Default: StoryObj = {
 function TabsDemo() {
   return (
     <div className="space-y-10">
-      <Tabs.Root>
+      <Tabs.Root defaultValue="comments">
         <Tabs.List>
           <Tabs.Trigger value="comments">Comments</Tabs.Trigger>
           <Tabs.Trigger value="events">Events</Tabs.Trigger>
