@@ -101,4 +101,15 @@
   line-height: 0.75rem;
 }
 
+.no-arrow-spin {
+  -moz-appearance: textfield;
+}
+
+.no-arrow-spin::-webkit-outer-spin-button,
+.no-arrow-spin::-webkit-inner-spin-button {
+  margin: 0;
+  -webkit-appearance: none;
+}
+
+
 @source "./**/*.{js,jsx,ts,tsx}";

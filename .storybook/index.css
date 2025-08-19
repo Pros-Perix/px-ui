@@ -71,6 +71,7 @@
     --color-ppx-red-2: #e39696;
     --color-ppx-red-4: #c62b2b;
     --color-ppx-red-5: #ba0000;
+    --color-ppx-red-7: #710000;
     --color-ppx-gray-1: #fafbfb;
     --color-ppx-gray-2: #f5f6f7;
     --color-ppx-gray-3: #ebedf0;
@@ -293,9 +294,6 @@
   .z-50 {
     z-index: 50;
   }
-  .mx-auto {
-    margin-inline: auto;
-  }
   .mt-2 {
     margin-top: calc(var(--spacing) * 2);
   }
@@ -400,9 +398,6 @@
   .w-72 {
     width: calc(var(--spacing) * 72);
   }
-  .w-\[300px\] {
-    width: 300px;
-  }
   .w-\[300px\]\! {
     width: 300px !important;
   }
@@ -411,9 +406,6 @@
   }
   .w-\[calc\(100vw-4rem\)\] {
     width: calc(100vw - 4rem);
-  }
-  .w-fit {
-    width: fit-content;
   }
   .w-full {
     width: 100%;
@@ -662,6 +654,9 @@
   }
   .text-ppx-muted-foreground {
     color: var(--color-ppx-muted-foreground);
+  }
+  .text-ppx-red-7 {
+    color: var(--color-ppx-red-7);
   }
   .text-white {
     color: var(--color-white);
@@ -1042,36 +1037,9 @@
       }
     }
   }
-  .has-not-disabled\:not-has-data-checked\:hover\:border-ppx-gray-6 {
-    &:has(*:not(*:disabled)) {
-      &:not(*:has(*[data-checked])) {
-        &:hover {
-          @media (hover: hover) {
-            border-color: var(--color-ppx-gray-6);
-          }
-        }
-      }
-    }
-  }
-  .has-not-disabled\:has-not-data-checked\:hover\:border-ppx-gray-6 {
-    &:has(*:not(*:disabled)) {
-      &:has(*:not(*[data-checked])) {
-        &:hover {
-          @media (hover: hover) {
-            border-color: var(--color-ppx-gray-6);
-          }
-        }
-      }
-    }
-  }
   .has-disabled\:cursor-not-allowed {
     &:has(*:disabled) {
       cursor: not-allowed;
-    }
-  }
-  .has-disabled\:border-ppx-gray-3 {
-    &:has(*:disabled) {
-      border-color: var(--color-ppx-gray-3);
     }
   }
   .has-disabled\:opacity-60 {
@@ -1096,23 +1064,9 @@
       }
     }
   }
-  .has-data-checked\:border-ppx-green-5 {
-    &:has(*[data-checked]) {
-      border-color: var(--color-ppx-green-5);
-    }
-  }
   .has-data-checked\:border-ppx-green-5\! {
     &:has(*[data-checked]) {
       border-color: var(--color-ppx-green-5) !important;
-    }
-  }
-  .has-data-checked\:hover\:border-ppx-green-5 {
-    &:has(*[data-checked]) {
-      &:hover {
-        @media (hover: hover) {
-          border-color: var(--color-ppx-green-5);
-        }
-      }
     }
   }
   .aria-invalid\:border-ppx-destructive {
@@ -1128,14 +1082,6 @@
   .aria-invalid\:bg-ppx-red-1 {
     &[aria-invalid="true"] {
       background-color: var(--color-ppx-red-1);
-    }
-  }
-  .aria-invalid\:shadow-ppx-red-2 {
-    &[aria-invalid="true"] {
-      --tw-shadow-color: #e39696;
-      @supports (color: color-mix(in lab, red, red)) {
-        --tw-shadow-color: color-mix(in oklab, var(--color-ppx-red-2) var(--tw-shadow-alpha), transparent);
-      }
     }
   }
   .aria-invalid\:ring-ppx-red-2 {
@@ -1411,6 +1357,13 @@
       opacity: 0%;
     }
   }
+}
+.no-arrow-spin {
+  -moz-appearance: textfield;
+}
+.no-arrow-spin::-webkit-outer-spin-button, .no-arrow-spin::-webkit-inner-spin-button {
+  margin: 0;
+  -webkit-appearance: none;
 }
 body {
   font-family: var(--font-sans);

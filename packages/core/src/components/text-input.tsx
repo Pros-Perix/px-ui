@@ -19,7 +19,7 @@ export function TextInput({
   trailingIcon,
   size = "default",
   invalid,
-  ...props
+  ...rest
 }: InputProps) {
   return (
     <div
@@ -44,10 +44,11 @@ export function TextInput({
           size === "default" && "h-10 p-2 rounded-ppx-s border-2",
           leadingIcon ? "pl-10" : "",
           trailingIcon ? "pr-10" : "",
+          type === "number" && "no-arrow-spin",
           className,
         )}
         aria-invalid={invalid}
-        {...props}
+        {...rest}
       />
       {trailingIcon && (
         <span
