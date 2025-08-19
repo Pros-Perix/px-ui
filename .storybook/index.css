@@ -1,10 +1,43 @@
 /*! tailwindcss v4.1.5 | MIT License | https://tailwindcss.com */
-@import url("https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap");
 @layer properties;
+@layer base {
+  @font-face {
+    font-family: "Ubuntu L";
+    src: url("./Ubuntu-Light.ttf");
+  }
+  @font-face {
+    font-family: "Ubuntu R";
+    src: url("./Ubuntu-Regular.ttf");
+  }
+  @font-face {
+    font-family: "Ubuntu B";
+    src: url("./Ubuntu-Bold.ttf");
+  }
+  @font-face {
+    font-family: "Lato L";
+    src: url("./Lato-Light.ttf");
+  }
+  @font-face {
+    font-family: "Lato R";
+    src: url("./Lato-Regular.ttf");
+  }
+  @font-face {
+    font-family: "Lato B";
+    src: url("./Lato-Bold.ttf");
+  }
+  @font-face {
+    font-family: "Lato SB";
+    src: url("./Lato-SemiBold.ttf");
+  }
+  @font-face {
+    font-family: "Cedarville Cursive";
+    src: url("./CedarvilleCursive-Regular.ttf");
+  }
+}
 @layer theme, base, components, utilities;
 @layer theme {
   :root, :host {
-    --font-sans: "Lato", system-ui, sans-serif;
+    --font-sans: "Lato R", system-ui, sans-serif;
     --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
       "Courier New", monospace;
     --color-blue-600: oklch(54.6% 0.245 262.881);
@@ -14,8 +47,6 @@
     --container-lg: 32rem;
     --text-sm: 0.875rem;
     --text-sm--line-height: calc(1.25 / 0.875);
-    --text-base: 1rem;
-    --text-base--line-height: calc(1.5 / 1);
     --text-lg: 1.125rem;
     --text-lg--line-height: calc(1.75 / 1.125);
     --font-weight-light: 300;
@@ -31,6 +62,7 @@
     --default-transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
     --default-font-family: var(--font-sans);
     --default-mono-font-family: var(--font-mono);
+    --font-sans-sb: "Lato SB", system-ui, sans-serif;
     --color-ppx-green-1: #eaf8f1;
     --color-ppx-green-2: #a7e1c6;
     --color-ppx-green-4: #4dc28c;
@@ -53,6 +85,8 @@
     --color-ppx-primary-2: #b1d1f9;
     --color-ppx-primary-4: #60a2f3;
     --color-ppx-primary-5: #408ff0;
+    --color-ppx-foreground: #000;
+    --color-ppx-muted-foreground: #6b788e;
     --color-ppx-destructive: var(--color-ppx-red-5);
     --color-ppx-destructive-foreground: var(--color-ppx-red-5);
     --radius-ppx-s: 0.5rem;
@@ -259,8 +293,17 @@
   .z-50 {
     z-index: 50;
   }
+  .mx-auto {
+    margin-inline: auto;
+  }
   .mt-2 {
     margin-top: calc(var(--spacing) * 2);
+  }
+  .mb-5 {
+    margin-bottom: calc(var(--spacing) * 5);
+  }
+  .ml-auto {
+    margin-left: auto;
   }
   .block {
     display: block;
@@ -273,9 +316,6 @@
   }
   .inline-flex {
     display: inline-flex;
-  }
-  .field-sizing-content {
-    field-sizing: content;
   }
   .aspect-square {
     aspect-ratio: 1 / 1;
@@ -345,6 +385,9 @@
   .min-h-16 {
     min-height: calc(var(--spacing) * 16);
   }
+  .min-h-\[155px\] {
+    min-height: 155px;
+  }
   .w-8 {
     width: calc(var(--spacing) * 8);
   }
@@ -357,17 +400,29 @@
   .w-72 {
     width: calc(var(--spacing) * 72);
   }
+  .w-\[300px\] {
+    width: 300px;
+  }
   .w-\[300px\]\! {
     width: 300px !important;
   }
+  .w-\[400px\] {
+    width: 400px;
+  }
   .w-\[calc\(100vw-4rem\)\] {
     width: calc(100vw - 4rem);
+  }
+  .w-fit {
+    width: fit-content;
   }
   .w-full {
     width: 100%;
   }
   .min-w-0 {
     min-width: calc(var(--spacing) * 0);
+  }
+  .flex-1 {
+    flex: 1;
   }
   .shrink-0 {
     flex-shrink: 0;
@@ -386,6 +441,9 @@
   .cursor-pointer {
     cursor: pointer;
   }
+  .grid-cols-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
   .flex-col {
     flex-direction: column;
   }
@@ -394,6 +452,9 @@
   }
   .items-center {
     align-items: center;
+  }
+  .justify-between {
+    justify-content: space-between;
   }
   .justify-center {
     justify-content: center;
@@ -410,8 +471,18 @@
   .gap-4 {
     gap: calc(var(--spacing) * 4);
   }
+  .space-y-10 {
+    :where(& > :not(:last-child)) {
+      --tw-space-y-reverse: 0;
+      margin-block-start: calc(calc(var(--spacing) * 10) * var(--tw-space-y-reverse));
+      margin-block-end: calc(calc(var(--spacing) * 10) * calc(1 - var(--tw-space-y-reverse)));
+    }
+  }
   .gap-y-1 {
     row-gap: calc(var(--spacing) * 1);
+  }
+  .self-start {
+    align-self: flex-start;
   }
   .overflow-hidden {
     overflow: hidden;
@@ -454,6 +525,9 @@
   .border-\[0\.046875rem\] {
     border-style: var(--tw-border-style);
     border-width: 0.046875rem;
+  }
+  .border-ppx-gray-3 {
+    border-color: var(--color-ppx-gray-3);
   }
   .border-ppx-gray-5 {
     border-color: var(--color-ppx-gray-5);
@@ -503,11 +577,11 @@
   .p-4 {
     padding: calc(var(--spacing) * 4);
   }
+  .p-5 {
+    padding: calc(var(--spacing) * 5);
+  }
   .p-6 {
     padding: calc(var(--spacing) * 6);
-  }
-  .px-3 {
-    padding-inline: calc(var(--spacing) * 3);
   }
   .px-4 {
     padding-inline: calc(var(--spacing) * 4);
@@ -536,9 +610,8 @@
   .text-center {
     text-align: center;
   }
-  .text-base {
-    font-size: var(--text-base);
-    line-height: var(--tw-leading, var(--text-base--line-height));
+  .font-sans-sb {
+    font-family: var(--font-sans-sb);
   }
   .text-lg {
     font-size: var(--text-lg);
@@ -575,6 +648,9 @@
   .whitespace-nowrap {
     white-space: nowrap;
   }
+  .text-ppx-foreground {
+    color: var(--color-ppx-foreground);
+  }
   .text-ppx-gray-12 {
     color: var(--color-ppx-gray-12);
   }
@@ -583,6 +659,9 @@
   }
   .text-ppx-green-5 {
     color: var(--color-ppx-green-5);
+  }
+  .text-ppx-muted-foreground {
+    color: var(--color-ppx-muted-foreground);
   }
   .text-white {
     color: var(--color-white);
@@ -595,6 +674,10 @@
   }
   .opacity-50 {
     opacity: 50%;
+  }
+  .shadow-\[0px_0px_12px_\#0000001F\] {
+    --tw-shadow: 0px 0px 12px var(--tw-shadow-color, #0000001F);
+    box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
   }
   .shadow-lg {
     --tw-shadow: 0 10px 15px -3px var(--tw-shadow-color, rgb(0 0 0 / 0.1)), 0 4px 6px -4px var(--tw-shadow-color, rgb(0 0 0 / 0.1));
@@ -950,6 +1033,88 @@
       }
     }
   }
+  .has-not-disabled\:hover\:border-ppx-gray-6 {
+    &:has(*:not(*:disabled)) {
+      &:hover {
+        @media (hover: hover) {
+          border-color: var(--color-ppx-gray-6);
+        }
+      }
+    }
+  }
+  .has-not-disabled\:not-has-data-checked\:hover\:border-ppx-gray-6 {
+    &:has(*:not(*:disabled)) {
+      &:not(*:has(*[data-checked])) {
+        &:hover {
+          @media (hover: hover) {
+            border-color: var(--color-ppx-gray-6);
+          }
+        }
+      }
+    }
+  }
+  .has-not-disabled\:has-not-data-checked\:hover\:border-ppx-gray-6 {
+    &:has(*:not(*:disabled)) {
+      &:has(*:not(*[data-checked])) {
+        &:hover {
+          @media (hover: hover) {
+            border-color: var(--color-ppx-gray-6);
+          }
+        }
+      }
+    }
+  }
+  .has-disabled\:cursor-not-allowed {
+    &:has(*:disabled) {
+      cursor: not-allowed;
+    }
+  }
+  .has-disabled\:border-ppx-gray-3 {
+    &:has(*:disabled) {
+      border-color: var(--color-ppx-gray-3);
+    }
+  }
+  .has-disabled\:opacity-60 {
+    &:has(*:disabled) {
+      opacity: 60%;
+    }
+  }
+  .has-disabled\:hover\:border-ppx-gray-3 {
+    &:has(*:disabled) {
+      &:hover {
+        @media (hover: hover) {
+          border-color: var(--color-ppx-gray-3);
+        }
+      }
+    }
+  }
+  .has-aria-invalid\:shadow-ppx-red-2 {
+    &:has(*[aria-invalid="true"]) {
+      --tw-shadow-color: #e39696;
+      @supports (color: color-mix(in lab, red, red)) {
+        --tw-shadow-color: color-mix(in oklab, var(--color-ppx-red-2) var(--tw-shadow-alpha), transparent);
+      }
+    }
+  }
+  .has-data-checked\:border-ppx-green-5 {
+    &:has(*[data-checked]) {
+      border-color: var(--color-ppx-green-5);
+    }
+  }
+  .has-data-checked\:border-ppx-green-5\! {
+    &:has(*[data-checked]) {
+      border-color: var(--color-ppx-green-5) !important;
+    }
+  }
+  .has-data-checked\:hover\:border-ppx-green-5 {
+    &:has(*[data-checked]) {
+      &:hover {
+        @media (hover: hover) {
+          border-color: var(--color-ppx-green-5);
+        }
+      }
+    }
+  }
   .aria-invalid\:border-ppx-destructive {
     &[aria-invalid="true"] {
       border-color: var(--color-ppx-destructive);
@@ -963,6 +1128,14 @@
   .aria-invalid\:bg-ppx-red-1 {
     &[aria-invalid="true"] {
       background-color: var(--color-ppx-red-1);
+    }
+  }
+  .aria-invalid\:shadow-ppx-red-2 {
+    &[aria-invalid="true"] {
+      --tw-shadow-color: #e39696;
+      @supports (color: color-mix(in lab, red, red)) {
+        --tw-shadow-color: color-mix(in oklab, var(--color-ppx-red-2) var(--tw-shadow-alpha), transparent);
+      }
     }
   }
   .aria-invalid\:ring-ppx-red-2 {
@@ -1207,12 +1380,6 @@
       }
     }
   }
-  .md\:text-sm {
-    @media (width >= 48rem) {
-      font-size: var(--text-sm);
-      line-height: var(--tw-leading, var(--text-sm--line-height));
-    }
-  }
   .\[\&_svg\]\:pointer-events-none {
     & svg {
       pointer-events: none;
@@ -1259,6 +1426,11 @@ body {
   initial-value: 0;
 }
 @property --tw-translate-z {
+  syntax: "*";
+  inherits: false;
+  initial-value: 0;
+}
+@property --tw-space-y-reverse {
   syntax: "*";
   inherits: false;
   initial-value: 0;
@@ -1384,6 +1556,7 @@ body {
       --tw-translate-x: 0;
       --tw-translate-y: 0;
       --tw-translate-z: 0;
+      --tw-space-y-reverse: 0;
       --tw-border-style: solid;
       --tw-leading: initial;
       --tw-font-weight: initial;

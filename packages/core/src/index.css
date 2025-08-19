@@ -1,5 +1,7 @@
 @theme {
-  --font-sans: "Lato", system-ui, sans-serif;
+  --font-sans: "Lato R", system-ui, sans-serif;
+  --font-sans-sb: "Lato SB", system-ui, sans-serif;
+  --font-sans-b: "Lato B", system-ui, sans-serif;
   --color-ppx-green-1: #eaf8f1;
   --color-ppx-green-2: #a7e1c6;
   --color-ppx-green-3: #82d5ae;

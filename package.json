@@ -39,7 +39,7 @@
     "build": "pnpm -r run build",
     "lint": "eslint . --ext .ts,.tsx",
     "test": "vitest",
-    "storybook": "storybook dev",
+    "storybook": "storybook dev -p 6969 --no-open",
     "build-storybook": "storybook build",
     "dev": "concurrently \"pnpm run watch:styles\" \"pnpm run storybook\"",
     "prepare": "husky install",
