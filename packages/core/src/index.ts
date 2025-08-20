@@ -8,6 +8,7 @@ export * from "./components/checkbox";
 export * from "./components/label";
 export * from "./components/text-input";
 export * from "./components/avatar";
+export * from "./components/avatar-group";
 export * from "./components/segmented-control";
 
 export { Dialog };
