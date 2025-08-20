@@ -1,14 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import {
-  Avatar,
-  AvatarImage,
-  AvatarFallback,
-} from "../../src/components/avatar";
-import * as React from "react";
+import { Avatar } from "../../src/components/avatar";
 
 const meta: Meta<typeof Avatar> = {
   component: Avatar,
-  title: "Components/avatar",
+  title: "Components/Avatar",
   tags: ["autodocs"],
 };
 
@@ -16,11 +11,9 @@ export default meta;
 
 export const Default: StoryObj<typeof Avatar> = {
   args: {
-    children: (
-      <>
-        <AvatarImage src="https://github.com/shadcn.png" />
-        <AvatarFallback>CN</AvatarFallback>
-      </>
-    ),
+    imgSrc: "https://github.com/shadccn.png",
+    name: "John Doe",
+    size: "40px",
+    // variant: "rounded",
   },
 };

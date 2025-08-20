@@ -111,5 +111,8 @@
   -webkit-appearance: none;
 }
 
+.root {
+  isolation: isolate;
+}
 
 @source "./**/*.{js,jsx,ts,tsx}";
