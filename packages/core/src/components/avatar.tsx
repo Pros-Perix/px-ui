@@ -1,6 +1,7 @@
 import { Avatar as AvatarBase } from "@base-ui-components/react/avatar";
 import { cn } from "../utils";
 import { useMemo } from "react";
+import * as Tooltip from "./tooltip";
 
 type AvatarVariant = "squared" | "rounded";
 
@@ -75,6 +76,7 @@ export function Avatar(props: {
   size?: `${number}px`;
   className?: string;
   children?: React.ReactNode;
+  hideTooltip?: boolean;
 }) {
   const { variant = "squared", size = "100px" } = props;
   const name = props.name ?? "";
@@ -86,36 +88,45 @@ export function Avatar(props: {
   );
 
   return (
-    <AvatarBase.Root
-      data-slot="avatar"
-      className={cn(
-        "@container relative flex shrink-0 overflow-hidden",
-        variant === "rounded" && "rounded-full",
-        variant === "squared" && "rounded-ppx-s",
-        props.className,
-      )}
-      style={{
-        width: size,
-        height: size,
-      }}
-    >
-      <AvatarBase.Image
-        data-slot="avatar-image"
-        className={"size-full object-cover"}
-        src={sizeReplacedUrl}
+    <Tooltip.Root disabled={props.hideTooltip}>
+      <Tooltip.Trigger
+        render={(tooltipProps) => (
+          <AvatarBase.Root
+            data-slot="avatar"
+            className={cn(
+              "@container relative flex shrink-0 overflow-hidden",
+              variant === "rounded" && "rounded-full",
+              variant === "squared" && "rounded-ppx-s",
+              props.className,
+            )}
+            style={{
+              width: size,
+              height: size,
+            }}
+            {...tooltipProps}
+          >
+            <AvatarBase.Image
+              data-slot="avatar-image"
+              className={"size-full object-cover"}
+              src={sizeReplacedUrl}
+            />
+
+            <AvatarBase.Fallback
+              data-slot="avatar-fallback"
+              className={cn(
+                "font-medium flex size-full items-center justify-center text-[40cqw] select-none",
+              )}
+              style={colorStyle}
+            >
+              {nameInitial}
+            </AvatarBase.Fallback>
+
+            {props.children}
+          </AvatarBase.Root>
+        )}
       />
 
-      <AvatarBase.Fallback
-        data-slot="avatar-fallback"
-        className={cn(
-          "font-medium flex size-full items-center justify-center text-[40cqw] select-none",
-        )}
-        style={colorStyle}
-      >
-        {nameInitial}
-      </AvatarBase.Fallback>
-
-      {props.children}
-    </AvatarBase.Root>
+      <Tooltip.Content>{props.name}</Tooltip.Content>
+    </Tooltip.Root>
   );
 }

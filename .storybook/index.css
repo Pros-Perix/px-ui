@@ -74,7 +74,6 @@
     --color-ppx-red-2: #e39696;
     --color-ppx-red-4: #c62b2b;
     --color-ppx-red-5: #ba0000;
-    --color-ppx-red-7: #710000;
     --color-ppx-gray-1: #fafbfb;
     --color-ppx-gray-2: #f5f6f7;
     --color-ppx-gray-3: #ebedf0;
@@ -377,21 +376,9 @@
     width: calc(var(--spacing) * 6);
     height: calc(var(--spacing) * 6);
   }
-  .size-8 {
-    width: calc(var(--spacing) * 8);
-    height: calc(var(--spacing) * 8);
-  }
   .size-9 {
     width: calc(var(--spacing) * 9);
     height: calc(var(--spacing) * 9);
-  }
-  .size-10 {
-    width: calc(var(--spacing) * 10);
-    height: calc(var(--spacing) * 10);
-  }
-  .size-12 {
-    width: calc(var(--spacing) * 12);
-    height: calc(var(--spacing) * 12);
   }
   .size-full {
     width: 100%;
@@ -577,9 +564,6 @@
   .rounded-ppx-s {
     border-radius: var(--radius-ppx-s);
   }
-  .rounded-ppx-xs {
-    border-radius: var(--radius-ppx-xs);
-  }
   .rounded-sm {
     border-radius: var(--radius-sm);
   }
@@ -631,9 +615,6 @@
   .bg-ppx-gray-1 {
     background-color: var(--color-ppx-gray-1);
   }
-  .bg-ppx-gray-2 {
-    background-color: var(--color-ppx-gray-2);
-  }
   .bg-ppx-gray-3 {
     background-color: var(--color-ppx-gray-3);
   }
@@ -642,9 +623,6 @@
   }
   .bg-ppx-green-5 {
     background-color: var(--color-ppx-green-5);
-  }
-  .bg-ppx-muted {
-    background-color: var(--color-ppx-muted);
   }
   .bg-ppx-primary-5 {
     background-color: var(--color-ppx-primary-5);
@@ -657,9 +635,6 @@
   }
   .fill-black {
     fill: var(--color-black);
-  }
-  .fill-white {
-    fill: var(--color-white);
   }
   .object-cover {
     object-fit: cover;
@@ -744,14 +719,8 @@
     font-size: var(--text-xs);
     line-height: var(--tw-leading, var(--text-xs--line-height));
   }
-  .text-\[30cqw\] {
-    font-size: 30cqw;
-  }
   .text-\[40cqw\] {
     font-size: 40cqw;
-  }
-  .text-\[50cqw\] {
-    font-size: 50cqw;
   }
   .leading-none {
     --tw-leading: 1;
@@ -796,9 +765,6 @@
   .text-ppx-muted-foreground {
     color: var(--color-ppx-muted-foreground);
   }
-  .text-red-500 {
-    color: var(--color-red-500);
-  }
   .text-white {
     color: var(--color-white);
   }
@@ -841,9 +807,6 @@
   }
   .-outline-offset-1 {
     outline-offset: calc(1px * -1);
-  }
-  .outline-ppx-gray-10 {
-    outline-color: var(--color-ppx-gray-10);
   }
   .transition-\[color\,box-shadow\] {
     transition-property: color,box-shadow;

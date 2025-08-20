@@ -3,19 +3,10 @@ import { Tooltip as BaseTooltip } from "@base-ui-components/react/tooltip";
 
 import { cn } from "../utils";
 
-function TooltipProvider({
-  delay = 0,
-  closeDelay = 0,
-  ...props
-}: React.ComponentProps<typeof BaseTooltip.Provider>) {
-  return (
-    <BaseTooltip.Provider
-      data-slot="tooltip-provider"
-      delay={delay}
-      closeDelay={closeDelay}
-      {...props}
-    />
-  );
+function TooltipProvider(
+  props: React.ComponentProps<typeof BaseTooltip.Provider>,
+) {
+  return <BaseTooltip.Provider data-slot="tooltip-provider" {...props} />;
 }
 
 function TooltipPortal({

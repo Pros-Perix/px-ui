@@ -11,9 +11,10 @@ export default meta;
 
 export const Default: StoryObj<typeof Avatar> = {
   args: {
-    imgSrc: "https://github.com/shadccn.png",
+    imgSrc: "https://github.com/shadcn.png",
     name: "John Doe",
     size: "40px",
     // variant: "rounded",
+    // hideTooltip: true,
   },
 };
