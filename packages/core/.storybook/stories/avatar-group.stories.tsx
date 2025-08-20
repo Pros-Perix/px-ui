@@ -138,6 +138,7 @@ export const LargeAvatars: StoryObj<typeof AvatarGroup> = {
 export const NoImages: StoryObj<typeof AvatarGroup> = {
   args: {
     avatars: usersWithoutImages.map((user) => ({
+      imgSrc: null,
       name: user.name,
       variant: "rounded",
     })),
