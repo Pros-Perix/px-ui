@@ -58,7 +58,7 @@ export function AvatarGroup({ max = 4, avatars, className }: AvatarGroupProps) {
               </div>
             </Popover.Trigger>
 
-            <Popover.Content className="w-80 bg-white">
+            <Popover.Content className="w-80" align="start" side="top">
               <div className="space-y-2 max-h-64 overflow-y-auto">
                 {overflowAvatars.map((avatar) => (
                   <div
