@@ -69,7 +69,7 @@ const replaceSizeInUrl = (url: string, size: string) => {
   return url.replace("/SIZE/", `/${newSize}/`);
 };
 
-export function Avatar(props: {
+interface AvatarProps {
   imgSrc: string | null | undefined;
   name: string | null | undefined;
   variant?: AvatarVariant;
@@ -77,8 +77,27 @@ export function Avatar(props: {
   className?: string;
   children?: React.ReactNode;
   hideTooltip?: boolean;
-}) {
-  const { variant = "squared", size = "100px" } = props;
+}
+
+export function Avatar(props: AvatarProps) {
+  return (
+    <Tooltip.Root disabled={props.hideTooltip}>
+      <Tooltip.Trigger
+        render={(tooltipProps) => (
+          <AvatarImpl {...props} avatarRootProps={tooltipProps} />
+        )}
+      />
+      <Tooltip.Content>{props.name}</Tooltip.Content>
+    </Tooltip.Root>
+  );
+}
+
+export function AvatarImpl(
+  props: Omit<AvatarProps, "hideTooltip"> & {
+    avatarRootProps?: React.ComponentProps<typeof AvatarBase.Root>;
+  },
+) {
+  const { variant = "squared", size = "100px", avatarRootProps } = props;
   const name = props.name ?? "";
   const nameInitial = useMemo(() => generateNameInitials(name), [name]);
   const colorStyle = useMemo(() => getBgColorAndTextColor(name), [name]);
@@ -88,45 +107,37 @@ export function Avatar(props: {
   );
 
   return (
-    <Tooltip.Root disabled={props.hideTooltip}>
-      <Tooltip.Trigger
-        render={(tooltipProps) => (
-          <AvatarBase.Root
-            data-slot="avatar"
-            className={cn(
-              "@container relative flex shrink-0 overflow-hidden",
-              variant === "rounded" && "rounded-full",
-              variant === "squared" && "rounded-ppx-s",
-              props.className,
-            )}
-            style={{
-              width: size,
-              height: size,
-            }}
-            {...tooltipProps}
-          >
-            <AvatarBase.Image
-              data-slot="avatar-image"
-              className={"size-full object-cover"}
-              src={sizeReplacedUrl}
-            />
-
-            <AvatarBase.Fallback
-              data-slot="avatar-fallback"
-              className={cn(
-                "font-medium flex size-full items-center justify-center text-[40cqw] select-none",
-              )}
-              style={colorStyle}
-            >
-              {nameInitial}
-            </AvatarBase.Fallback>
-
-            {props.children}
-          </AvatarBase.Root>
-        )}
+    <AvatarBase.Root
+      data-slot="avatar"
+      className={cn(
+        "@container relative flex shrink-0 overflow-hidden",
+        variant === "rounded" && "rounded-full",
+        variant === "squared" && "rounded-ppx-s",
+        props.className,
+      )}
+      style={{
+        width: size,
+        height: size,
+      }}
+      {...avatarRootProps}
+    >
+      <AvatarBase.Image
+        data-slot="avatar-image"
+        className={"size-full object-cover"}
+        src={sizeReplacedUrl}
       />
 
-      <Tooltip.Content>{props.name}</Tooltip.Content>
-    </Tooltip.Root>
+      <AvatarBase.Fallback
+        data-slot="avatar-fallback"
+        className={cn(
+          "font-medium flex size-full items-center justify-center text-[40cqw] select-none",
+        )}
+        style={colorStyle}
+      >
+        {nameInitial}
+      </AvatarBase.Fallback>
+
+      {props.children}
+    </AvatarBase.Root>
   );
 }

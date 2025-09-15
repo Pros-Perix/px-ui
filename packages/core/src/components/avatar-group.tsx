@@ -1,6 +1,8 @@
+import React from "react";
 import { cn } from "../utils";
-import { Avatar } from "./avatar";
+import { Avatar, AvatarImpl } from "./avatar";
 import * as Popover from "./popover";
+import * as Tooltip from "./tooltip";
 
 export interface AvatarGroupProps {
   avatars: React.ComponentProps<typeof Avatar>[];
@@ -13,69 +15,82 @@ export function AvatarGroup({ max = 4, avatars, className }: AvatarGroupProps) {
   const overflowAvatars = avatars.slice(max);
 
   return (
-    <div
-      className={cn("flex items-center", className)}
-      data-slot="avatar-group"
-    >
-      {avatars.map((avatar, index) => (
-        <div
-          key={avatar.name}
-          className="relative"
-          style={{
-            marginLeft:
-              index > 0 ? `-${parseInt(avatar.size ?? "100px") * 0.25}px` : "0",
-            zIndex: avatars.length - index,
-          }}
-        >
-          <Avatar {...avatar} className="ring-white ring-2" />
-        </div>
-      ))}
-
-      {hasOverflow && (
-        <div
-          className="relative"
-          style={{
-            marginLeft: `-${parseInt(avatars[0].size ?? "100px") * 0.25}px`,
-            zIndex: 0,
-          }}
-        >
-          <Popover.Root openOnHover>
-            <Popover.Trigger>
-              <div
-                className={cn(
-                  "font-medium flex cursor-pointer items-center justify-center bg-ppx-gray-3 text-ppx-gray-18 transition-colors hover:bg-ppx-gray-4",
-                  avatars[0].variant === "rounded"
-                    ? "rounded-full"
-                    : "rounded-ppx-s",
-                )}
-                style={{
-                  width: avatars[0].size ?? "100px",
-                  height: avatars[0].size ?? "100px",
-                  fontSize: `${parseInt(avatars[0].size ?? "100px") * 0.3}px`,
-                }}
-              >
-                +{overflowAvatars.length}
-              </div>
-            </Popover.Trigger>
-
-            <Popover.Content className="w-80" align="start" side="top">
-              <div className="space-y-2 max-h-64 overflow-y-auto">
-                {overflowAvatars.map((avatar) => (
+    <Tooltip.BaseProvider>
+      <div
+        className={cn("flex items-center", className)}
+        data-slot="avatar-group"
+      >
+        {avatars.map((avatar, index) => (
+          <React.Fragment key={avatar.name}>
+            <Tooltip.BaseRoot>
+              <Tooltip.Trigger
+                render={(tooltipProps) => (
                   <div
-                    key={avatar.name}
-                    className="gap-3 p-2 rounded-md flex items-center"
+                    className="relative"
+                    style={{
+                      marginLeft:
+                        index > 0
+                          ? `-${parseInt(avatar.size ?? "100px") * 0.25}px`
+                          : "0",
+                      zIndex: avatars.length - index,
+                    }}
+                    {...tooltipProps}
                   >
-                    <Avatar {...avatar} size="24px" hideTooltip />
-                    <span className="text-sm font-medium text-ppx-gray-18">
-                      {avatar.name}
-                    </span>
+                    <AvatarImpl {...avatar} className="ring-white ring-2" />
                   </div>
-                ))}
-              </div>
-            </Popover.Content>
-          </Popover.Root>
-        </div>
-      )}
-    </div>
+                )}
+              />
+              <Tooltip.Content>{avatar.name}</Tooltip.Content>
+            </Tooltip.BaseRoot>
+          </React.Fragment>
+        ))}
+
+        {hasOverflow && (
+          <div
+            className="relative"
+            style={{
+              marginLeft: `-${parseInt(avatars[0].size ?? "100px") * 0.25}px`,
+              zIndex: 0,
+            }}
+          >
+            <Popover.Root openOnHover>
+              <Popover.Trigger>
+                <div
+                  className={cn(
+                    "font-medium flex cursor-pointer items-center justify-center bg-ppx-neutral-3 text-ppx-neutral-18 transition-colors hover:bg-ppx-neutral-4",
+                    avatars[0].variant === "rounded"
+                      ? "rounded-full"
+                      : "rounded-ppx-s",
+                  )}
+                  style={{
+                    width: avatars[0].size ?? "100px",
+                    height: avatars[0].size ?? "100px",
+                    fontSize: `${parseInt(avatars[0].size ?? "100px") * 0.3}px`,
+                  }}
+                >
+                  +{overflowAvatars.length}
+                </div>
+              </Popover.Trigger>
+
+              <Popover.Content className="w-80" align="start" side="top">
+                <div className="space-y-2 max-h-64 overflow-y-auto">
+                  {overflowAvatars.map((avatar) => (
+                    <div
+                      key={avatar.name}
+                      className="gap-3 p-2 rounded-md flex items-center"
+                    >
+                      <Avatar {...avatar} size="24px" hideTooltip />
+                      <span className="text-sm font-medium text-ppx-neutral-18">
+                        {avatar.name}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </Popover.Content>
+            </Popover.Root>
+          </div>
+        )}
+      </div>
+    </Tooltip.BaseProvider>
   );
 }

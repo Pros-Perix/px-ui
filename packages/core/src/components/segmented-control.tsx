@@ -10,7 +10,7 @@ const segmentedControlItemVariants = cva(
     variants: {
       variant: {
         default:
-          "text-ppx-gray-11 data-checked:bg-ppx-green-5 data-checked:text-white data-checked:shadow-sm hover:text-ppx-gray-12",
+          "text-ppx-neutral-11 data-checked:bg-ppx-primary-5 data-checked:text-white data-checked:shadow-sm hover:text-ppx-neutral-12",
       },
       size: {
         default: "min-h-10 px-6",
@@ -33,7 +33,7 @@ export function Root({
     <BaseRadioGroup
       data-slot="segmented-control"
       className={cn(
-        "p-1 inline-flex items-center rounded-full bg-ppx-gray-3",
+        "p-1 inline-flex items-center rounded-full bg-ppx-neutral-3",
         className,
       )}
       {...props}

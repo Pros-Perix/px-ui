@@ -72,7 +72,7 @@ export function Trigger({
     <BaseTabs.Tab
       data-slot="tabs-trigger"
       className={cn(
-        "focus-visible:ring-ring/50 [&_svg:not([class*='size-'])] gap-1.5 px-2 py-1 text-sm font-medium z-[1] flex-1 items-center justify-center text-nowrap whitespace-nowrap text-ppx-gray-18 not-data-selected:hover:text-ppx-gray-12 focus-visible:ring-[3px] data-selected:text-ppx-primary-5 data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0",
+        "focus-visible:ring-ring/50 [&_svg:not([class*='size-'])] gap-1.5 px-2 py-1 text-sm font-medium z-[1] flex-1 items-center justify-center text-nowrap whitespace-nowrap text-ppx-neutral-18 not-data-selected:hover:text-ppx-neutral-12 focus-visible:ring-[3px] data-selected:text-ppx-primary-b-5 data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0",
         className,
       )}
       {...props}
@@ -91,7 +91,9 @@ function Indicator({
       data-slot="tab-indicator"
       className={cn(
         "left-0 ease-in-out absolute w-[var(--active-tab-width)] translate-x-[var(--active-tab-left)] -translate-y-1/2 transition-all duration-300",
-        variant === "underline" ? "top-full z-10 h-[2px] bg-ppx-primary-5" : "",
+        variant === "underline"
+          ? "top-full z-10 h-[2px] bg-ppx-primary-b-5"
+          : "",
         className,
       )}
       {...props}

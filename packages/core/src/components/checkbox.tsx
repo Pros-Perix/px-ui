@@ -4,12 +4,12 @@ import { cn } from "../utils";
 import { cva, VariantProps } from "class-variance-authority";
 
 const checkboxVariants = cva(
-  "peer aria-invalid:border-ppx-destructive aria-invalid:text-shadow-ppx-destructive-foreground flex items-center justify-center rounded-sm border transition-colors duration-150 outline-none focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-50",
+  "peer aria-invalid:border-ppx-red-5 aria-invalid:text-shadow-ppx-red-5 flex items-center justify-center rounded-sm border transition-colors duration-150 outline-none focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-50",
   {
     variants: {
       variant: {
         default:
-          "bg-white data-checked:bg-ppx-green-5 data-[indeterminate]:bg-ppx-green-5 data-checked:text-white data-[indeterminate]:text-white  border-ppx-gray-10 data-checked:border-ppx-green-5 data-[indeterminate]:border-ppx-green-5",
+          "bg-white data-checked:bg-ppx-primary-5 data-[indeterminate]:bg-ppx-primary-5 data-checked:text-white data-[indeterminate]:text-white  border-ppx-neutral-10 data-checked:border-ppx-primary-5 data-[indeterminate]:border-ppx-primary-5",
       },
       size: {
         default: "size-5",
@@ -21,7 +21,7 @@ const checkboxVariants = cva(
       variant: "default",
       size: "default",
     },
-  }
+  },
 );
 
 function Checkbox({
@@ -37,7 +37,7 @@ function Checkbox({
           variant: props.variant,
           size: props.size,
         }),
-        className
+        className,
       )}
       {...props}
     >

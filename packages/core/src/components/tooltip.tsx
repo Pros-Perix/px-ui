@@ -37,6 +37,9 @@ export function Root({
   );
 }
 
+export const BaseRoot = BaseTooltip.Root;
+export const BaseProvider = BaseTooltip.Provider;
+
 export function Trigger({
   ...props
 }: React.ComponentProps<typeof BaseTooltip.Trigger>) {

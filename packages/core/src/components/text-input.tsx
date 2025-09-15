@@ -38,9 +38,9 @@ export function TextInput({
         type={type}
         data-slot="input"
         className={cn(
-          "min-w-0 font-medium placeholder:font-light shadow-xs flex w-full border-ppx-gray-5 bg-ppx-gray-1 text-ppx-sm text-ppx-gray-18 transition-[color,box-shadow] outline-none placeholder:text-ppx-sm! placeholder:text-ppx-gray-12 focus:border-ppx-green-2 disabled:cursor-not-allowed disabled:border-ppx-gray-3 disabled:bg-ppx-gray-3 disabled:text-ppx-gray-11 disabled:placeholder:text-ppx-gray-11 aria-invalid:border-ppx-red-4 aria-invalid:bg-ppx-red-1 aria-invalid:ring-ppx-red-2",
+          "min-w-0 font-medium placeholder:font-light shadow-xs flex w-full border-ppx-neutral-5 bg-ppx-neutral-1 text-ppx-sm text-ppx-neutral-18 transition-[color,box-shadow] outline-none placeholder:text-ppx-sm! placeholder:text-ppx-neutral-12 focus:border-ppx-primary-2 disabled:cursor-not-allowed disabled:border-ppx-neutral-3 disabled:bg-ppx-neutral-3 disabled:text-ppx-neutral-11 disabled:placeholder:text-ppx-neutral-11 aria-invalid:border-ppx-red-4 aria-invalid:bg-ppx-red-1 aria-invalid:ring-ppx-red-2",
           size === "sm" &&
-            "h-8 p-2 rounded-ppx-s border-[0.046875rem] focus:ring focus:ring-ppx-green-2",
+            "h-8 p-2 rounded-ppx-s border-[0.046875rem] focus:ring focus:ring-ppx-primary-2",
           size === "default" && "h-10 p-2 rounded-ppx-s border-2",
           leadingIcon ? "pl-10" : "",
           trailingIcon ? "pr-10" : "",

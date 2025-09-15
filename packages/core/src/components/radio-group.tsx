@@ -12,18 +12,18 @@ function RadioGroup({
   return (
     <BaseRadioGroup
       data-slot="radio-group"
-      className={cn("flex flex-col gap-3", className)}
+      className={cn("gap-3 flex flex-col", className)}
       {...props}
     />
   );
 }
 
 const radioVariants = cva(
-  "bg-white aria-invalid:border-ppx-destructive aspect-square shrink-0 rounded-full border border-ppx-gray-10 shadow-xs transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 ",
+  "bg-white aria-invalid:border-ppx-red-5 aspect-square shrink-0 rounded-full border border-ppx-neutral-10 shadow-xs transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 ",
   {
     variants: {
       variant: {
-        default: "data-checked:border-ppx-green-5 text-ppx-green-5",
+        default: "data-checked:border-ppx-primary-5 text-ppx-primary-5",
       },
       size: {
         default: "size-5",
@@ -35,7 +35,7 @@ const radioVariants = cva(
       variant: "default",
       size: "default",
     },
-  }
+  },
 );
 
 function RadioGroupItem({
@@ -69,7 +69,7 @@ function RadioGroupItem({
             "absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2",
             size === "sm" && "size-2",
             size === undefined && "size-3",
-            size === "lg" && "size-3.5"
+            size === "lg" && "size-3.5",
           )}
         >
           <circle cx="12" cy="12" r="10" />
