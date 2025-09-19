@@ -1,9 +1,13 @@
 import * as React from "react";
 import type { Meta, StoryObj } from "@storybook/react";
 import * as Combobox from "../../src/components/combobox/base";
+import { Avatar } from "../../src/components/avatar";
 
 const posts = [
-  { label: "Understanding React Hooks", value: "post-1" },
+  {
+    label: "Understanding React Hooks and dependencies, React with TypeScript",
+    value: "post-1",
+  },
   { label: "Getting Started with TypeScript", value: "post-2" },
   { label: "CSS Grid Layout Tutorial", value: "post-3" },
   { label: "JavaScript ES6 Features", value: "post-4" },
@@ -93,22 +97,28 @@ function ExampleCombobox() {
   );
 }
 
-export function ExampleComboboxTrigger() {
+export function WithCustomizableOnlyTrigger() {
   return (
     <>
-      <Combobox.Root
-        items={posts2}
-        value={posts2[0]}
-        onValueChange={(value) => console.log(value)}
-      >
+      <Combobox.Root items={posts}>
         <Combobox.Trigger placeholder="Select post">
-          {(selectedValue) => selectedValue?.post}
+          {(selectedValue) => (
+            <div className="gap-2 flex items-center truncate">
+              <Avatar
+                imgSrc="https://github.com/shadcn.png"
+                name="John Doe"
+                size="20px"
+                variant="rounded"
+              />
+              <span className="flex-1 truncate">{selectedValue?.label}</span>
+            </div>
+          )}
         </Combobox.Trigger>
         <Combobox.Content>
           <Combobox.List>
-            {(item: (typeof posts2)[number]) => (
-              <Combobox.Item key={item.postId} value={item}>
-                {item.post}{" "}
+            {(item: (typeof posts)[number]) => (
+              <Combobox.Item key={item.value} value={item}>
+                {item.label}{" "}
               </Combobox.Item>
             )}
           </Combobox.List>
