@@ -127,3 +127,49 @@ export function WithCustomizableOnlyTrigger() {
     </>
   );
 }
+
+export function WithOnlyIconWithNoSelectedValue() {
+  return (
+    <>
+      <Combobox.Root items={posts}>
+        <Combobox.Trigger size="auto">
+          <Avatar
+            imgSrc="https://github.com/shadcn.png"
+            name="John Doe"
+            size="20px"
+            variant="rounded"
+          />
+        </Combobox.Trigger>
+        <Combobox.Content>
+          <Combobox.List>
+            {(item: (typeof posts)[number]) => (
+              <Combobox.Item key={item.value} value={item}>
+                {item.label}{" "}
+              </Combobox.Item>
+            )}
+          </Combobox.List>
+        </Combobox.Content>
+      </Combobox.Root>
+    </>
+  );
+}
+
+export function WithSearchOnPopup() {
+  return (
+    <>
+      <Combobox.Root items={posts}>
+        <Combobox.Trigger placeholder="Select post" />
+        <Combobox.Content>
+          <Combobox.Search />
+          <Combobox.List>
+            {(item: (typeof posts)[number]) => (
+              <Combobox.Item key={item.value} value={item}>
+                {item.label}
+              </Combobox.Item>
+            )}
+          </Combobox.List>
+        </Combobox.Content>
+      </Combobox.Root>
+    </>
+  );
+}
