@@ -141,6 +141,7 @@ export function WithOnlyIconWithNoSelectedValue() {
           />
         </Combobox.Trigger>
         <Combobox.Content>
+          <Combobox.Search />
           <Combobox.List>
             {(item: (typeof posts)[number]) => (
               <Combobox.Item key={item.value} value={item}>
