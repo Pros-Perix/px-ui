@@ -1600,14 +1600,29 @@
       background-color: var(--color-ppx-primary-b-1);
     }
   }
+  .data-selected\:border-ppx-primary-5 {
+    &[data-selected] {
+      border-color: var(--color-ppx-primary-5);
+    }
+  }
   .data-selected\:bg-ppx-primary-1\! {
     &[data-selected] {
       background-color: var(--color-ppx-primary-1) !important;
     }
   }
+  .data-selected\:bg-ppx-primary-5 {
+    &[data-selected] {
+      background-color: var(--color-ppx-primary-5);
+    }
+  }
   .data-selected\:text-ppx-primary-b-5 {
     &[data-selected] {
       color: var(--color-ppx-primary-b-5);
+    }
+  }
+  .data-selected\:text-white {
+    &[data-selected] {
+      color: var(--color-white);
     }
   }
   .data-unchecked\:translate-x-px {

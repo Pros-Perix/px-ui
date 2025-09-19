@@ -101,6 +101,38 @@ export function Item({
   );
 }
 
+export function MultiItem({
+  className,
+  ...props
+}: React.ComponentProps<typeof Combobox.Item>) {
+  return (
+    <Combobox.Item
+      {...props}
+      render={(itemProps, state) => (
+        <div {...itemProps} className={cn(BASE_ITEM_CN, className)}>
+          <ItemIndicator selected={state.selected} />
+          {props.children}
+        </div>
+      )}
+    ></Combobox.Item>
+  );
+}
+
+function ItemIndicator(props: { selected: boolean }) {
+  return (
+    <div
+      className={cn(
+        "peer rounded-sm bg-white size-4 flex shrink-0 items-center justify-center border border-ppx-neutral-10 transition-colors duration-150 outline-none",
+        props.selected && "text-white border-ppx-primary-5 bg-ppx-primary-5",
+      )}
+    >
+      <Combobox.ItemIndicator>
+        <CheckboxIcon />
+      </Combobox.ItemIndicator>
+    </div>
+  );
+}
+
 export function SearchableTrigger() {
   return (
     <div className="gap-1 text-sm leading-5 font-medium relative flex w-fit flex-col text-ppx-neutral-17">
@@ -213,6 +245,25 @@ function SearchIcon(props: React.ComponentProps<"svg">) {
         d="M15.9038 14.9625L11.2623 10.321C12.1404 9.24234 12.6723 7.85136 12.6723 6.33612C12.6723 2.83678 9.83548 0 6.33612 0C2.83677 0 0 2.83677 0 6.33612C0 9.83547 2.83677 12.6723 6.33612 12.6723C7.85133 12.6723 9.24233 12.1404 10.3326 11.2532L10.321 11.2623L14.9613 15.9026C15.0215 15.9628 15.1047 16 15.1966 16C15.2885 16 15.3717 15.9628 15.4319 15.9026L15.9026 15.4319C15.9628 15.3716 16 15.2884 16 15.1965C16 15.1053 15.9633 15.0226 15.9038 14.9624L15.9038 14.9625L15.9038 14.9625ZM6.34922 11.341C6.34886 11.341 6.34842 11.341 6.34798 11.341C3.59045 11.341 1.35503 9.10555 1.35503 6.34802C1.35503 3.59048 3.59045 1.35506 6.34798 1.35506C9.10552 1.35506 11.3409 3.59048 11.3409 6.34802C11.3409 6.34845 11.3409 6.34887 11.3409 6.34931V6.34925C11.3374 9.10469 9.10467 11.3375 6.34955 11.341H6.3492L6.34922 11.341Z"
         fill="currentColor"
       />
+    </svg>
+  );
+}
+
+function CheckboxIcon() {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className="size-3"
+    >
+      <path d="M20 6 9 17l-5-5" />
     </svg>
   );
 }

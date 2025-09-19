@@ -158,15 +158,15 @@ export function WithOnlyIconWithNoSelectedValue() {
 export function WithSearchOnPopup() {
   return (
     <>
-      <Combobox.Root items={posts}>
-        <Combobox.Trigger placeholder="Select post" />
+      <Combobox.Root items={posts} multiple>
+        <Combobox.Trigger>Select post</Combobox.Trigger>
         <Combobox.Content>
           <Combobox.Search />
-          <Combobox.List>
+          <Combobox.List data-testid="list">
             {(item: (typeof posts)[number]) => (
-              <Combobox.Item key={item.value} value={item}>
+              <Combobox.MultiItem key={item.value} value={item}>
                 {item.label}
-              </Combobox.Item>
+              </Combobox.MultiItem>
             )}
           </Combobox.List>
         </Combobox.Content>
