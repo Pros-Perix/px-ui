@@ -62,6 +62,34 @@ const posts2 = [
   { post: "Post 25", postId: "post-id-25" },
 ];
 
+const users = [
+  { name: "Emma Thompson", userId: "user-1234" },
+  { name: "Michael Chen", userId: "user-5678" },
+  { name: "Sofia Rodriguez", userId: "user-9012" },
+  { name: "James Wilson", userId: "user-3456" },
+  { name: "Aisha Patel", userId: "user-7890" },
+  { name: "Lucas Anderson", userId: "user-2345" },
+  { name: "Maria Garcia", userId: "user-6789" },
+  { name: "David Kim", userId: "user-0123" },
+  { name: "Sarah Johnson", userId: "user-4567" },
+  { name: "Omar Hassan", userId: "user-8901" },
+  { name: "Emily Zhang", userId: "user-2345" },
+  { name: "Alexander Brown", userId: "user-6789" },
+  { name: "Priya Sharma", userId: "user-0124" },
+  { name: "Thomas Moore", userId: "user-4568" },
+  { name: "Isabella Silva", userId: "user-8902" },
+  { name: "William Lee", userId: "user-2346" },
+  { name: "Fatima Ahmed", userId: "user-6790" },
+  { name: "Daniel Murphy", userId: "user-0125" },
+  { name: "Julia Santos", userId: "user-4569" },
+  { name: "Ryan O'Connor", userId: "user-8903" },
+  { name: "Olivia Taylor", userId: "user-2347" },
+  { name: "Mohammed Ali", userId: "user-6791" },
+  { name: "Anna Kowalski", userId: "user-0126" },
+  { name: "Christopher Wong", userId: "user-4570" },
+  { name: "Elena Popov", userId: "user-8904" },
+];
+
 const meta: Meta<typeof Combobox> = {
   component: ExampleCombobox,
   title: "Components/combobox",
@@ -158,14 +186,59 @@ export function WithOnlyIconWithNoSelectedValue() {
 export function WithSearchOnPopup() {
   return (
     <>
-      <Combobox.Root items={posts} multiple>
-        <Combobox.Trigger>Select post</Combobox.Trigger>
+      <Combobox.Root items={users} multiple>
+        <Combobox.Trigger>Select users</Combobox.Trigger>
         <Combobox.Content>
           <Combobox.Search />
           <Combobox.List data-testid="list">
-            {(item: (typeof posts)[number]) => (
-              <Combobox.MultiItem key={item.value} value={item}>
-                {item.label}
+            {(item: (typeof users)[number]) => (
+              <Combobox.MultiItem key={item.userId} value={item}>
+                <Avatar
+                  imgSrc={`https://placeholder.co/150x150/${item.name.replace(/ /g, "")}`}
+                  name={item.name}
+                  size="20px"
+                  variant="rounded"
+                />
+                {item.name}
+              </Combobox.MultiItem>
+            )}
+          </Combobox.List>
+        </Combobox.Content>
+      </Combobox.Root>
+    </>
+  );
+}
+
+export function WithCustomizableChipsTrigger() {
+  return (
+    <>
+      <Combobox.Root items={users} multiple>
+        <Combobox.ChipsTrigger placeholder="Select users">
+          {(selectedValue: (typeof users)[number][]) =>
+            selectedValue.map((item) => (
+              <Combobox.Chip key={item.userId}>
+                <Avatar
+                  imgSrc={`https://placeholder.co/150x150/${item.name.replace(/ /g, "")}`}
+                  name={item.name}
+                  size="20px"
+                  variant="rounded"
+                />
+                {item.name}
+              </Combobox.Chip>
+            ))
+          }
+        </Combobox.ChipsTrigger>
+        <Combobox.Content>
+          <Combobox.List data-testid="list">
+            {(item: (typeof users)[number]) => (
+              <Combobox.MultiItem key={item.userId} value={item}>
+                <Avatar
+                  imgSrc={`https://placeholder.co/150x150/${item.name.replace(/ /g, "")}`}
+                  name={item.name}
+                  size="20px"
+                  variant="rounded"
+                />
+                {item.name}
               </Combobox.MultiItem>
             )}
           </Combobox.List>

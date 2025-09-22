@@ -138,7 +138,7 @@ export function SearchableTrigger() {
     <div className="gap-1 text-sm leading-5 font-medium relative flex w-fit flex-col text-ppx-neutral-17">
       <Input
         placeholder="e.g. Apple"
-        className="h-10 min-w-75 max-w-75 font-normal pl-3.5 pr-14 text-base truncate rounded-ppx-s border border-ppx-neutral-5 bg-[canvas] text-ppx-neutral-17 focus:outline-2 focus:-outline-offset-1 focus:outline-ppx-primary-2"
+        className="h-10 min-w-75 max-w-75 font-normal pl-3.5 pr-14 text-base bg-white truncate rounded-ppx-s border border-ppx-neutral-5 text-ppx-neutral-17 focus:outline-2 focus:-outline-offset-1 focus:outline-ppx-primary-2"
       />
       <div className="right-2 bottom-0 h-10 text-gray-600 absolute flex items-center justify-center">
         <Clear />
@@ -202,7 +202,6 @@ export function Trigger({
           if (typeof selectedValue === "object" && "label" in selectedValue) {
             return <span className="truncate">{selectedValue.label}</span>;
           }
-
           return null;
         }}
       </Combobox.Value>
@@ -212,12 +211,73 @@ export function Trigger({
   );
 }
 
+export function ChipsTrigger({
+  size = "enforced",
+  ...props
+}: {
+  children: React.ReactNode | ((selectedValue: any) => React.ReactNode);
+  placeholder?: string;
+  size?: "auto" | "enforced";
+  className?: string;
+}) {
+  return (
+    <Combobox.Chips
+      className={cn(
+        "gap-2 px-2 py-1 text-base bg-white flex w-fit items-center justify-between rounded-ppx-s border border-ppx-neutral-5 focus-within:outline-2 focus-within:-outline-offset-1 focus-within:outline-ppx-primary-2",
+        size === "enforced" && "w-75",
+        size === "auto" && "w-auto",
+        props.className,
+      )}
+    >
+      <div className="gap-0.5 flex flex-1 flex-wrap items-center">
+        <Combobox.Value>
+          {(value: any[]) => (
+            <>
+              {typeof props.children === "function"
+                ? props.children(value)
+                : props.children}
+              <Combobox.Input
+                placeholder={value.length > 0 ? "" : props.placeholder}
+                className="min-w-12 h-8 pl-2 text-base flex-1 border-0 bg-transparent text-ppx-neutral-17 outline-none"
+              />
+            </>
+          )}
+        </Combobox.Value>
+      </div>
+
+      <Combobox.Trigger>
+        <ChevronDownIcon />
+      </Combobox.Trigger>
+    </Combobox.Chips>
+  );
+}
+
+export function Chip(props: React.ComponentProps<typeof Combobox.Chip>) {
+  return (
+    <Combobox.Chip
+      {...props}
+      className={cn(
+        "gap-1 pl-2 pr-1 text-sm flex cursor-default items-center rounded-full bg-ppx-neutral-3 py-[0.2rem] text-ppx-neutral-17 outline-none",
+        props.className,
+      )}
+    >
+      {props.children}
+      <Combobox.ChipRemove
+        className="size-5 hover:text-white flex shrink-0 items-center justify-center rounded-full border border-transparent text-inherit hover:border-ppx-neutral-4 hover:bg-ppx-neutral-5 active:bg-ppx-neutral-6"
+        aria-label="Remove"
+      >
+        <CloseIcon className="size-3" />
+      </Combobox.ChipRemove>
+    </Combobox.Chip>
+  );
+}
+
 export function Search({
   placeholder = "Search options",
   ...props
 }: React.ComponentProps<typeof Combobox.Input>) {
   return (
-    <div className="top-0 bg-white p-2 gap-2 sticky flex items-center justify-between border-b-[0.75px] border-ppx-neutral-7">
+    <div className="top-0 bg-white p-2 gap-2 sticky z-10 flex items-center justify-between border-b-[0.75px] border-ppx-neutral-7">
       <Combobox.Input
         placeholder={placeholder}
         className="text-sm flex-1 placeholder:text-ppx-neutral-7 focus:outline-none"
@@ -263,6 +323,26 @@ function CheckboxIcon() {
       className="size-3"
     >
       <path d="M20 6 9 17l-5-5" />
+    </svg>
+  );
+}
+
+function CloseIcon(props: React.ComponentProps<"svg">) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      {...props}
+    >
+      <path d="M18 6 6 18" />
+      <path d="m6 6 12 12" />
     </svg>
   );
 }
