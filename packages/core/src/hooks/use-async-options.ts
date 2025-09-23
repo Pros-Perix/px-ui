@@ -11,7 +11,7 @@ type LoadOptionsReturn = {
   error: any;
 };
 
-type LoadOptionsFn = (params: {
+export type LoadOptionsFn = (params: {
   search: string;
   page: number;
 }) => Promise<LoadOptionsReturn>;
@@ -69,7 +69,7 @@ export function useAsyncOptions(params: {
     onOpenChange: setIsOpen,
     inputValue: search,
     onInputValueChange: setSearch,
-    loadMore: query.fetchNextPage,
+    onLoadMore: query.fetchNextPage,
     _query: query,
   };
 }

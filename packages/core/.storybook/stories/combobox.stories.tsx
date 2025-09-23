@@ -2,7 +2,10 @@ import * as React from "react";
 import type { Meta, StoryObj } from "@storybook/react";
 import * as Combobox from "../../src/components/combobox/base";
 import { Avatar } from "../../src/components/avatar";
-import { useAsyncOptions } from "../../src/hooks/use-async-options";
+import {
+  LoadOptionsFn,
+  useAsyncOptions,
+} from "../../src/hooks/use-async-options";
 import { QueryClient, QueryClientContext } from "@tanstack/react-query";
 
 const posts = [
@@ -268,21 +271,24 @@ export function WithAsyncLoading() {
   );
 }
 
+const loadUserOptions: LoadOptionsFn = async ({ page, search }) => {
+  const perPage = 10;
+  await new Promise((resolve) => setTimeout(resolve, 1000));
+  const res = await fetch(
+    `https://dummyjson.com/users${search ? "/search" : ""}?limit=${perPage}&skip=${(page - 1) * perPage}${search ? `&q=${search}` : ""}`,
+  );
+  const data = await res.json();
+
+  return {
+    data: { options: data.users, hasMore: data.total > page * perPage },
+    error: null,
+  };
+};
+
 function AsyncLoadingImpl() {
   const userOptions = useAsyncOptions({
     cacheKey: ["users"],
-    loadOptionsFn: async ({ page, search }) => {
-      const perPage = 10;
-      const res = await fetch(
-        `https://dummyjson.com/users${search ? "/search" : ""}?limit=${perPage}&skip=${(page - 1) * perPage}${search ? `&q=${search}` : ""}`,
-      );
-      const data = await res.json();
-
-      return {
-        data: { options: data.users, hasMore: data.total > page * perPage },
-        error: null,
-      };
-    },
+    loadOptionsFn: loadUserOptions,
   });
 
   return (

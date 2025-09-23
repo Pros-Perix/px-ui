@@ -48,6 +48,10 @@ type ComboboxContextValues = React.ComponentProps<
   typeof Combobox.Root<any, any, any>
 > & {
   chipsContainerRef: React.RefObject<HTMLDivElement | null>;
+  isLoading?: boolean;
+  isFetchingNextPage?: boolean;
+  isError?: boolean;
+  onLoadMore?: () => void;
 };
 
 const ComboboxContext = React.createContext<ComboboxContextValues>(
@@ -63,7 +67,11 @@ export function Root<
   ...props
 }: React.ComponentProps<
   typeof Combobox.Root<ItemValue, SelectedValue, Multiple>
->) {
+> &
+  Pick<
+    ComboboxContextValues,
+    "isLoading" | "isFetchingNextPage" | "isError" | "onLoadMore"
+  >) {
   const chipsContainerRef = React.useRef<HTMLDivElement>(null);
 
   const value = React.useMemo(
@@ -168,15 +176,28 @@ function ItemIndicator(props: { selected: boolean }) {
   );
 }
 
+export function LoadingIndicator(props: { className?: string }) {
+  return (
+    <div className={cn("flex items-center justify-center", props.className)}>
+      <div className="space-x-1 flex">
+        <div className="w-1 h-1 animate-bounce rounded-full bg-ppx-neutral-17 opacity-40 [animation-delay:-0.3s] [animation-name:bounce-color]"></div>
+        <div className="w-1 h-1 animate-bounce rounded-full bg-ppx-neutral-17 opacity-70 [animation-delay:-0.15s] [animation-name:bounce-color]"></div>
+        <div className="w-1 h-1 animate-bounce rounded-full bg-ppx-neutral-17 opacity-100 [animation-name:bounce-color]"></div>
+      </div>
+    </div>
+  );
+}
+
 export function SearchableTrigger() {
+  const { isLoading } = useComboboxContext();
   return (
     <div className="gap-1 text-sm leading-5 font-medium relative flex w-fit flex-col text-ppx-neutral-17">
       <Input
         placeholder="e.g. Apple"
         className="h-10 min-w-75 max-w-75 font-normal pl-3.5 pr-14 text-base bg-white truncate rounded-ppx-s border border-ppx-neutral-5 text-ppx-neutral-17 focus:outline-2 focus:-outline-offset-1 focus:outline-ppx-primary-2"
       />
-      <div className="right-2 bottom-0 h-10 text-gray-600 absolute flex items-center justify-center">
-        <Clear />
+      <div className="right-2 bottom-0 h-10 text-gray-600 gap-1 absolute flex items-center justify-center">
+        {isLoading ? <LoadingIndicator className="mr-0.5" /> : <Clear />}
         <Combobox.Trigger
           className="h-10 w-5 rounded flex items-center justify-center bg-transparent"
           aria-label="Open popup"
@@ -197,6 +218,7 @@ export function Trigger({
   placeholder?: string;
   size?: "auto" | "enforced";
 }) {
+  const { isLoading } = useComboboxContext();
   return (
     <Combobox.Trigger
       aria-label="Open popup"
@@ -241,7 +263,10 @@ export function Trigger({
         }}
       </Combobox.Value>
 
-      <ChevronDownIcon />
+      <div className="gap-2 flex items-center">
+        {isLoading && <LoadingIndicator />}
+        <ChevronDownIcon />
+      </div>
     </Combobox.Trigger>
   );
 }
@@ -255,7 +280,7 @@ export function ChipsTrigger({
   size?: "auto" | "enforced";
   className?: string;
 }) {
-  const { chipsContainerRef } = useComboboxContext();
+  const { chipsContainerRef, isLoading } = useComboboxContext();
   return (
     <Combobox.Chips
       className={cn(
@@ -282,7 +307,8 @@ export function ChipsTrigger({
         </Combobox.Value>
       </div>
 
-      <Combobox.Trigger>
+      <Combobox.Trigger className="gap-2 flex items-center">
+        {isLoading && <LoadingIndicator />}
         <ChevronDownIcon />
       </Combobox.Trigger>
     </Combobox.Chips>

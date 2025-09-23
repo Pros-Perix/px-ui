@@ -116,4 +116,19 @@
   isolation: isolate;
 }
 
+
+@keyframes bounce-color {
+
+  0%,
+  100% {
+    transform: translateY(0);
+    background-color: rgb(209 213 219);
+  }
+
+  50% {
+    transform: translateY(-25%);
+    background-color: rgb(55 65 81);
+  }
+}
+
 @source "./**/*.{js,jsx,ts,tsx}";
