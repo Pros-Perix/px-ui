@@ -2,6 +2,8 @@ import * as React from "react";
 import type { Meta, StoryObj } from "@storybook/react";
 import * as Combobox from "../../src/components/combobox/base";
 import { Avatar } from "../../src/components/avatar";
+import { useAsyncOptions } from "../../src/hooks/use-async-options";
+import { QueryClient, QueryClientContext } from "@tanstack/react-query";
 
 const posts = [
   {
@@ -98,6 +100,16 @@ const meta: Meta<typeof Combobox> = {
 };
 
 export default meta;
+
+const queryClient = new QueryClient();
+
+function Provider(props: React.PropsWithChildren) {
+  return (
+    <QueryClientContext value={queryClient}>
+      {props.children}
+    </QueryClientContext>
+  );
+}
 
 export const Default: StoryObj<typeof Combobox> = {
   render: () => <ExampleCombobox />,
@@ -245,5 +257,66 @@ export function WithCustomizableChipsTrigger() {
         </Combobox.Content>
       </Combobox.Root>
     </>
+  );
+}
+
+export function WithAsyncLoading() {
+  return (
+    <Provider>
+      <AsyncLoadingImpl />
+    </Provider>
+  );
+}
+
+function AsyncLoadingImpl() {
+  const userOptions = useAsyncOptions({
+    cacheKey: ["users"],
+    loadOptionsFn: async ({ page, search }) => {
+      const perPage = 10;
+      const res = await fetch(
+        `https://dummyjson.com/users${search ? "/search" : ""}?limit=${perPage}&skip=${(page - 1) * perPage}${search ? `&q=${search}` : ""}`,
+      );
+      const data = await res.json();
+
+      return {
+        data: { options: data.users, hasMore: data.total > page * perPage },
+        error: null,
+      };
+    },
+  });
+
+  return (
+    <Combobox.Root {...userOptions} multiple>
+      <Combobox.ChipsTrigger placeholder="Select users">
+        {(selectedValue: (typeof userOptions.items)[number][]) =>
+          selectedValue.map((item) => (
+            <Combobox.Chip key={item.id}>
+              <Avatar
+                imgSrc={item.image}
+                name={`${item.firstName} ${item.lastName}`}
+                size="20px"
+                variant="rounded"
+              />
+              {`${item.firstName} ${item.lastName}`}
+            </Combobox.Chip>
+          ))
+        }
+      </Combobox.ChipsTrigger>
+      <Combobox.Content>
+        <Combobox.List data-testid="list">
+          {(item: (typeof userOptions.items)[number]) => (
+            <Combobox.MultiItem key={item.id} value={item}>
+              <Avatar
+                imgSrc={item.image}
+                name={`${item.firstName} ${item.lastName}`}
+                size="20px"
+                variant="rounded"
+              />
+              {`${item.firstName} ${item.lastName}`}
+            </Combobox.MultiItem>
+          )}
+        </Combobox.List>
+      </Combobox.Content>
+    </Combobox.Root>
   );
 }

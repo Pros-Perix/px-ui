@@ -41,9 +41,42 @@ function ChevronDownIcon(props: React.ComponentProps<"svg">) {
   );
 }
 
-export const Root = Combobox.Root;
 export const List = Combobox.List;
 export const Input = Combobox.Input;
+
+type ComboboxContextValues = React.ComponentProps<
+  typeof Combobox.Root<any, any, any>
+> & {
+  chipsContainerRef: React.RefObject<HTMLDivElement | null>;
+};
+
+const ComboboxContext = React.createContext<ComboboxContextValues>(
+  {} as ComboboxContextValues,
+);
+
+export function Root<
+  ItemValue,
+  SelectedValue = ItemValue,
+  Multiple extends boolean | undefined = false,
+>({
+  children,
+  ...props
+}: React.ComponentProps<
+  typeof Combobox.Root<ItemValue, SelectedValue, Multiple>
+>) {
+  const chipsContainerRef = React.useRef<HTMLDivElement>(null);
+
+  const value = React.useMemo(
+    () => ({ ...props, chipsContainerRef }),
+    [props, chipsContainerRef],
+  );
+
+  return (
+    <ComboboxContext.Provider value={value}>
+      <Combobox.Root {...props}>{children}</Combobox.Root>
+    </ComboboxContext.Provider>
+  );
+}
 
 export function Clear() {
   return (
@@ -68,13 +101,15 @@ export function Content({
   positionerProps?: React.ComponentProps<typeof Combobox.Positioner>;
   popupProps?: React.ComponentProps<typeof Combobox.Popup>;
 }>) {
+  const { chipsContainerRef } = useComboboxContext();
   return (
     <Combobox.Portal {...portalProps}>
       <Combobox.Positioner
-        className="outline-none"
         sideOffset={4}
         align="start"
         {...positionerProps}
+        className={cn("outline-none", positionerProps?.className)}
+        anchor={positionerProps?.anchor ?? chipsContainerRef}
       >
         <Combobox.Popup
           className="scroll-pt-2 scroll-pb-2 rounded-md shadow-lg bg-white max-h-[min(var(--available-height),23rem)] w-[max(var(--anchor-width),250px)] max-w-[var(--available-width)] origin-[var(--transform-origin)] overflow-y-auto overscroll-contain text-ppx-neutral-18 shadow-ppx-neutral-5 outline-1 outline-ppx-neutral-5 transition-[transform,scale,opacity] data-[ending-style]:scale-95 data-[ending-style]:opacity-0 data-[side=none]:data-[ending-style]:transition-none data-[starting-style]:scale-95 data-[starting-style]:opacity-0 data-[side=none]:data-[starting-style]:scale-100 data-[side=none]:data-[starting-style]:opacity-100 data-[side=none]:data-[starting-style]:transition-none"
@@ -220,6 +255,7 @@ export function ChipsTrigger({
   size?: "auto" | "enforced";
   className?: string;
 }) {
+  const { chipsContainerRef } = useComboboxContext();
   return (
     <Combobox.Chips
       className={cn(
@@ -228,6 +264,7 @@ export function ChipsTrigger({
         size === "auto" && "w-auto",
         props.className,
       )}
+      ref={chipsContainerRef}
     >
       <div className="gap-0.5 flex flex-1 flex-wrap items-center">
         <Combobox.Value>
@@ -345,4 +382,8 @@ function CloseIcon(props: React.ComponentProps<"svg">) {
       <path d="m6 6 12 12" />
     </svg>
   );
+}
+
+function useComboboxContext() {
+  return React.useContext(ComboboxContext);
 }
