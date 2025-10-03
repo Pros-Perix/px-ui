@@ -1,4 +1,4 @@
-import { useDeferredValue, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { useInfiniteQuery, QueryKey } from "@tanstack/react-query";
 
 type LoadOptionsData = {
@@ -39,10 +39,9 @@ export function useAsyncOptions(params: {
   const [search, setSearch] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState(search);
   const timeout = useRef<NodeJS.Timeout | null>(null);
-  const deferredSearch = useDeferredValue(search);
 
   const query = useInfiniteQuery({
-    queryKey: [...params.cacheKey, deferredSearch],
+    queryKey: [...params.cacheKey, debouncedSearch],
     queryFn: async ({ pageParam }) => {
       const { error, data } = await params.loadOptionsFn({
         search: debouncedSearch,

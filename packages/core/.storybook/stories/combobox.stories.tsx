@@ -1,6 +1,10 @@
 import * as React from "react";
 import type { Meta, StoryObj } from "@storybook/react";
 import * as Combobox from "../../src/components/combobox/base";
+import PropBasedCombobox, {
+  SingleCombobox,
+  MultipleCombobox,
+} from "../../src/components/combobox/prop-based";
 import { Avatar } from "../../src/components/avatar";
 import {
   LoadOptionsFn,
