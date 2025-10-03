@@ -230,19 +230,17 @@ export function WithCustomizableChipsTrigger() {
     <>
       <Combobox.Root items={users} multiple autoHighlight={true}>
         <Combobox.ChipsTrigger placeholder="Select users">
-          {(selectedValue: (typeof users)[number][]) =>
-            selectedValue.map((item) => (
-              <Combobox.Chip key={item.userId}>
-                <Avatar
-                  imgSrc={`https://placeholder.co/150x150/${item.name.replace(/ /g, "")}`}
-                  name={item.name}
-                  size="20px"
-                  variant="rounded"
-                />
-                {item.name}
-              </Combobox.Chip>
-            ))
-          }
+          {(item) => (
+            <Combobox.Chip key={item.userId}>
+              <Avatar
+                imgSrc={`https://placeholder.co/150x150/${item.name.replace(/ /g, "")}`}
+                name={item.name}
+                size="20px"
+                variant="rounded"
+              />
+              {item.name}
+            </Combobox.Chip>
+          )}
         </Combobox.ChipsTrigger>
         <Combobox.Content>
           <Combobox.List data-testid="list">
@@ -305,19 +303,17 @@ function AsyncLoadingImpl() {
       isItemEqualToValue={(item, selected) => item.id === selected.id}
     >
       <Combobox.ChipsTrigger placeholder="Select users">
-        {(selectedValue: (typeof userOptions.items)[number][]) =>
-          selectedValue.map((item) => (
-            <Combobox.Chip key={item.id}>
-              <Avatar
-                imgSrc={item.image}
-                name={`${item.firstName} ${item.lastName}`}
-                size="20px"
-                variant="rounded"
-              />
-              {`${item.firstName} ${item.lastName}`}
-            </Combobox.Chip>
-          ))
-        }
+        {(item) => (
+          <Combobox.Chip key={item.id}>
+            <Avatar
+              imgSrc={item.image}
+              name={`${item.firstName} ${item.lastName}`}
+              size="20px"
+              variant="rounded"
+            />
+            {`${item.firstName} ${item.lastName}`}
+          </Combobox.Chip>
+        )}
       </Combobox.ChipsTrigger>
       <Combobox.Content>
         <Combobox.List>

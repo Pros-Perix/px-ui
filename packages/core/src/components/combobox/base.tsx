@@ -311,9 +311,11 @@ export function ChipsTrigger({
         <Combobox.Value>
           {(value: any[]) => (
             <>
-              {typeof props.children === "function"
-                ? props.children(value)
-                : props.children}
+              {value.map((item) => {
+                return typeof props.children === "function"
+                  ? props.children(item)
+                  : props.children;
+              })}
               <Combobox.Input
                 placeholder={value.length > 0 ? "" : props.placeholder}
                 className="min-w-12 h-8 pl-2 text-base flex-1 border-0 bg-transparent text-ppx-neutral-17 outline-none"
