@@ -300,7 +300,7 @@ export function ChipsTrigger({
   return (
     <Combobox.Chips
       className={cn(
-        "gap-2 px-2 py-1 text-base bg-white flex w-fit items-center justify-between rounded-ppx-s border border-ppx-neutral-5 focus-within:outline-2 focus-within:-outline-offset-1 focus-within:outline-ppx-primary-2",
+        "pl-2 py-1 text-base bg-white flex w-fit items-center justify-between rounded-ppx-s border border-ppx-neutral-5 focus-within:outline-2 focus-within:-outline-offset-1 focus-within:outline-ppx-primary-2",
         size === "enforced" && "w-75",
         size === "auto" && "w-auto",
         props.className,
@@ -325,7 +325,7 @@ export function ChipsTrigger({
         </Combobox.Value>
       </div>
 
-      <Combobox.Trigger className="gap-2 flex items-center">
+      <Combobox.Trigger className="gap-2 px-2 flex h-stretch-available items-center">
         {isLoading && <LoadingIndicator />}
         <ChevronDownIcon />
       </Combobox.Trigger>

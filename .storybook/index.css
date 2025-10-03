@@ -40,6 +40,7 @@
     --font-sans: "Lato R", system-ui, sans-serif;
     --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
       "Courier New", monospace;
+    --color-red-500: oklch(63.7% 0.237 25.331);
     --color-blue-600: oklch(54.6% 0.245 262.881);
     --color-gray-600: oklch(44.6% 0.03 256.802);
     --color-black: #000;
@@ -402,6 +403,11 @@
     width: 100%;
     height: 100%;
   }
+  .h-stretch-available {
+    height: -webkit-fill-available;
+    height: -moz-available;
+    height: stretch;
+  }
   .h-1 {
     height: calc(var(--spacing) * 1);
   }
@@ -425,6 +431,9 @@
   }
   .h-\[2px\] {
     height: 2px;
+  }
+  .h-full {
+    height: 100%;
   }
   .max-h-64 {
     max-height: calc(var(--spacing) * 64);
@@ -753,6 +762,9 @@
   .bg-ppx-red-5 {
     background-color: var(--color-ppx-red-5);
   }
+  .bg-red-500 {
+    background-color: var(--color-red-500);
+  }
   .bg-transparent {
     background-color: transparent;
   }
@@ -824,6 +836,9 @@
   }
   .pr-1 {
     padding-right: calc(var(--spacing) * 1);
+  }
+  .pr-2 {
+    padding-right: calc(var(--spacing) * 2);
   }
   .pr-8 {
     padding-right: calc(var(--spacing) * 8);

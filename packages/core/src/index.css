@@ -102,6 +102,15 @@
   line-height: 0.75rem;
 }
 
+@utility h-stretch-available {
+  /* For WebKit browsers */
+  height: -webkit-fill-available;
+  /* For Mozilla browsers */
+  height: -moz-available;
+  /* Standard for modern browsers */
+  height: stretch;
+}
+
 .no-arrow-spin {
   -moz-appearance: textfield;
 }
