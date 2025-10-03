@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useDeferredValue, useRef, useState } from "react";
 import { useInfiniteQuery, QueryKey } from "@tanstack/react-query";
 
 type LoadOptionsData = {
@@ -37,12 +37,15 @@ export function useAsyncOptions(params: {
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const [search, setSearch] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState(search);
+  const timeout = useRef<NodeJS.Timeout | null>(null);
+  const deferredSearch = useDeferredValue(search);
 
   const query = useInfiniteQuery({
-    queryKey: params.cacheKey,
+    queryKey: [...params.cacheKey, deferredSearch],
     queryFn: async ({ pageParam }) => {
       const { error, data } = await params.loadOptionsFn({
-        search: search,
+        search: debouncedSearch,
         page: pageParam,
       });
 
@@ -56,9 +59,30 @@ export function useAsyncOptions(params: {
     initialPageParam: 1,
     getNextPageParam: (lastPage, allPages) =>
       lastPage.hasMore ? allPages.length + 1 : undefined,
+    retry: false,
+    staleTime: Infinity,
   });
 
   const items = query.data?.pages.flatMap((page) => page.options) ?? [];
+
+  const handleSearchChange = (value: string) => {
+    setSearch(value);
+
+    if (timeout.current) {
+      clearTimeout(timeout.current);
+    }
+
+    if (value === "") {
+      setDebouncedSearch(value);
+      timeout.current = null;
+      return;
+    }
+
+    timeout.current = setTimeout(() => {
+      setDebouncedSearch(value);
+      timeout.current = null;
+    }, 300);
+  };
 
   return {
     items,
@@ -68,7 +92,7 @@ export function useAsyncOptions(params: {
     open: isOpen,
     onOpenChange: setIsOpen,
     inputValue: search,
-    onInputValueChange: setSearch,
+    onInputValueChange: handleSearchChange,
     onLoadMore: query.fetchNextPage,
     _query: query,
   };

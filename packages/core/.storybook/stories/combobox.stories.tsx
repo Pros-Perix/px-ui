@@ -78,8 +78,8 @@ const users = [
   { name: "David Kim", userId: "user-0123" },
   { name: "Sarah Johnson", userId: "user-4567" },
   { name: "Omar Hassan", userId: "user-8901" },
-  { name: "Emily Zhang", userId: "user-2345" },
-  { name: "Alexander Brown", userId: "user-6789" },
+  { name: "Emily Zhang", userId: "user-2348" },
+  { name: "Alexander Brown", userId: "user-6792" },
   { name: "Priya Sharma", userId: "user-0124" },
   { name: "Thomas Moore", userId: "user-4568" },
   { name: "Isabella Silva", userId: "user-8902" },
@@ -158,6 +158,7 @@ export function WithCustomizableOnlyTrigger() {
           )}
         </Combobox.Trigger>
         <Combobox.Content>
+          <Combobox.Search />
           <Combobox.List>
             {(item: (typeof posts)[number]) => (
               <Combobox.Item key={item.value} value={item}>
@@ -227,7 +228,7 @@ export function WithSearchOnPopup() {
 export function WithCustomizableChipsTrigger() {
   return (
     <>
-      <Combobox.Root items={users} multiple>
+      <Combobox.Root items={users} multiple autoHighlight={true}>
         <Combobox.ChipsTrigger placeholder="Select users">
           {(selectedValue: (typeof users)[number][]) =>
             selectedValue.map((item) => (
@@ -273,7 +274,7 @@ export function WithAsyncLoading() {
 
 const loadUserOptions: LoadOptionsFn = async ({ page, search }) => {
   const perPage = 10;
-  await new Promise((resolve) => setTimeout(resolve, 1000));
+  await new Promise((resolve) => setTimeout(resolve, 300));
   const res = await fetch(
     `https://dummyjson.com/users${search ? "/search" : ""}?limit=${perPage}&skip=${(page - 1) * perPage}${search ? `&q=${search}` : ""}`,
   );
@@ -291,8 +292,18 @@ function AsyncLoadingImpl() {
     loadOptionsFn: loadUserOptions,
   });
 
+  const [selected, setSelected] = React.useState<
+    (typeof userOptions.items)[number][]
+  >([]);
+
   return (
-    <Combobox.Root {...userOptions} multiple>
+    <Combobox.Root
+      {...userOptions}
+      multiple
+      value={selected}
+      onValueChange={setSelected}
+      isItemEqualToValue={(item, selected) => item.id === selected.id}
+    >
       <Combobox.ChipsTrigger placeholder="Select users">
         {(selectedValue: (typeof userOptions.items)[number][]) =>
           selectedValue.map((item) => (
@@ -309,7 +320,7 @@ function AsyncLoadingImpl() {
         }
       </Combobox.ChipsTrigger>
       <Combobox.Content>
-        <Combobox.List data-testid="list">
+        <Combobox.List>
           {(item: (typeof userOptions.items)[number]) => (
             <Combobox.MultiItem key={item.id} value={item}>
               <Avatar

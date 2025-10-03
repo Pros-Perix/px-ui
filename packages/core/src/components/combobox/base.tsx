@@ -81,7 +81,9 @@ export function Root<
 
   return (
     <ComboboxContext.Provider value={value}>
-      <Combobox.Root {...props}>{children}</Combobox.Root>
+      <Combobox.Root autoHighlight {...props}>
+        {children}
+      </Combobox.Root>
     </ComboboxContext.Provider>
   );
 }
@@ -109,11 +111,11 @@ export function Content({
   positionerProps?: React.ComponentProps<typeof Combobox.Positioner>;
   popupProps?: React.ComponentProps<typeof Combobox.Popup>;
 }>) {
-  const { chipsContainerRef } = useComboboxContext();
+  const { chipsContainerRef, isLoading, isError } = useComboboxContext();
   return (
     <Combobox.Portal {...portalProps}>
       <Combobox.Positioner
-        sideOffset={4}
+        sideOffset={6}
         align="start"
         {...positionerProps}
         className={cn("outline-none", positionerProps?.className)}
@@ -124,9 +126,23 @@ export function Content({
           {...popupProps}
         >
           {children}
-          <Combobox.Empty className="px-4 py-2 leading-4 text-gray-600 empty:m-0 empty:p-0 text-center text-[0.925rem]">
-            {empty}
-          </Combobox.Empty>
+          {!isLoading && !isError && (
+            <Combobox.Empty className="px-4 py-2 leading-4 text-sm min-h-11 flex items-center justify-center text-ppx-neutral-10 empty:hidden">
+              {empty}
+            </Combobox.Empty>
+          )}
+
+          {isLoading && (
+            <div className="px-4 py-2 leading-4 text-sm min-h-11 flex items-center justify-center text-ppx-neutral-10">
+              Loading...
+            </div>
+          )}
+
+          {isError && (
+            <Combobox.Status className="px-4 py-2 leading-4 text-sm min-h-11 flex items-center justify-center text-ppx-neutral-10">
+              Error loading options
+            </Combobox.Status>
+          )}
         </Combobox.Popup>
       </Combobox.Positioner>
     </Combobox.Portal>
