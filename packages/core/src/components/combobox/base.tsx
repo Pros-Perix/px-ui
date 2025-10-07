@@ -7,6 +7,9 @@ import { Spinner } from "../spinner";
 const BASE_ITEM_CN =
   "gap-2 py-2 pr-8 pl-4 text-base leading-4 flex cursor-default items-center outline-none select-none data-highlighted:bg-ppx-primary-b-1 data-selected:bg-ppx-primary-1! text-ppx-neutral-17 my-1";
 
+const TRIGGER_ERROR_CN =
+  "data-invalid:border-ppx-red-4 data-invalid:focus-within:outline-ppx-red-2";
+
 function ClearIcon(props: React.ComponentProps<"svg">) {
   return (
     <svg
@@ -50,6 +53,7 @@ type ComboboxContextValues = React.ComponentProps<
   typeof Combobox.Root<any, any, any>
 > & {
   chipsContainerRef: React.RefObject<HTMLDivElement | null>;
+  invalid?: boolean;
   isLoading?: boolean;
   isLoadingMore?: boolean;
   isError?: boolean;
@@ -73,7 +77,12 @@ export function Root<
 > &
   Pick<
     ComboboxContextValues,
-    "isLoading" | "isLoadingMore" | "isError" | "onLoadMore" | "hasMore"
+    | "isLoading"
+    | "isLoadingMore"
+    | "isError"
+    | "onLoadMore"
+    | "hasMore"
+    | "invalid"
   >) {
   const chipsContainerRef = React.useRef<HTMLDivElement>(null);
 
@@ -232,12 +241,16 @@ export function LoadingIndicator(props: { className?: string }) {
 }
 
 export function SearchableTrigger() {
-  const { isLoading } = useComboboxContext();
+  const { isLoading, invalid } = useComboboxContext();
   return (
     <div className="gap-1 text-sm leading-5 font-medium relative flex w-fit flex-col text-ppx-neutral-17">
       <Input
         placeholder="e.g. Apple"
-        className="h-10 min-w-75 max-w-75 font-normal pl-3.5 pr-14 text-base bg-white truncate rounded-ppx-s border border-ppx-neutral-5 text-ppx-neutral-17 focus:outline-2 focus:-outline-offset-1 focus:outline-ppx-primary-2"
+        className={cn(
+          "h-10 min-w-75 max-w-75 font-normal pl-3.5 pr-14 text-base bg-white truncate rounded-ppx-s border border-ppx-neutral-5 text-ppx-neutral-17 focus:outline-2 focus:-outline-offset-1 focus:outline-ppx-primary-2",
+          TRIGGER_ERROR_CN,
+        )}
+        data-invalid={invalid ?? undefined}
       />
       <div className="right-2 bottom-0 h-10 text-gray-600 gap-1 absolute flex items-center justify-center">
         {isLoading ? <LoadingIndicator className="mr-0.5" /> : <Clear />}
@@ -261,7 +274,7 @@ export function Trigger({
   placeholder?: string;
   size?: "auto" | "enforced";
 }) {
-  const { isLoading } = useComboboxContext();
+  const { isLoading, invalid } = useComboboxContext();
   return (
     <Combobox.Trigger
       aria-label="Open popup"
@@ -270,7 +283,9 @@ export function Trigger({
         size === "enforced" && "w-75",
         size === "auto" && "w-auto",
         props.className,
+        TRIGGER_ERROR_CN,
       )}
+      data-invalid={invalid ?? undefined}
     >
       <Combobox.Value>
         {(selectedValue) => {
@@ -327,7 +342,7 @@ export function ChipsTrigger({
   size?: "auto" | "enforced";
   className?: string;
 }) {
-  const { chipsContainerRef, isLoading } = useComboboxContext();
+  const { chipsContainerRef, isLoading, invalid } = useComboboxContext();
   return (
     <Combobox.Chips
       className={cn(
@@ -335,7 +350,9 @@ export function ChipsTrigger({
         size === "enforced" && "w-75",
         size === "auto" && "w-auto",
         props.className,
+        TRIGGER_ERROR_CN,
       )}
+      data-invalid={invalid ?? undefined}
       ref={chipsContainerRef}
     >
       <div className="gap-0.5 flex flex-1 flex-wrap items-center">

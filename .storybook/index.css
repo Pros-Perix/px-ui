@@ -1592,6 +1592,30 @@
       background-color: var(--color-ppx-primary-b-1);
     }
   }
+  .data-invalid\:border-ppx-red-4 {
+    &[data-invalid] {
+      border-color: var(--color-ppx-red-4);
+    }
+  }
+  .data-invalid\:border-ppx-red-5 {
+    &[data-invalid] {
+      border-color: var(--color-ppx-red-5);
+    }
+  }
+  .data-invalid\:focus-within\:outline-ppx-red-2 {
+    &[data-invalid] {
+      &:focus-within {
+        outline-color: var(--color-ppx-red-2);
+      }
+    }
+  }
+  .data-invalid\:focus\:outline-ppx-red-2 {
+    &[data-invalid] {
+      &:focus {
+        outline-color: var(--color-ppx-red-2);
+      }
+    }
+  }
   .data-selected\:bg-ppx-primary-1\! {
     &[data-selected] {
       background-color: var(--color-ppx-primary-1) !important;
