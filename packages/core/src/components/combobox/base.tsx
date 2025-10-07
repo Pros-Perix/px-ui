@@ -1,6 +1,8 @@
 import * as React from "react";
 import { Combobox } from "@base-ui-components/react/combobox";
 import { cn } from "../../utils";
+import useInfiniteScroll from "../../hooks/use-infinite-scroll";
+import { Spinner } from "../spinner";
 
 const BASE_ITEM_CN =
   "gap-2 py-2 pr-8 pl-4 text-base leading-4 flex cursor-default items-center outline-none select-none data-highlighted:bg-ppx-primary-b-1 data-selected:bg-ppx-primary-1! text-ppx-neutral-17 my-1";
@@ -49,8 +51,9 @@ type ComboboxContextValues = React.ComponentProps<
 > & {
   chipsContainerRef: React.RefObject<HTMLDivElement | null>;
   isLoading?: boolean;
-  isFetchingNextPage?: boolean;
+  isLoadingMore?: boolean;
   isError?: boolean;
+  hasMore?: boolean;
   onLoadMore?: () => void;
 };
 
@@ -70,7 +73,7 @@ export function Root<
 > &
   Pick<
     ComboboxContextValues,
-    "isLoading" | "isFetchingNextPage" | "isError" | "onLoadMore"
+    "isLoading" | "isLoadingMore" | "isError" | "onLoadMore" | "hasMore"
   >) {
   const chipsContainerRef = React.useRef<HTMLDivElement>(null);
 
@@ -111,7 +114,21 @@ export function Content({
   positionerProps?: React.ComponentProps<typeof Combobox.Positioner>;
   popupProps?: React.ComponentProps<typeof Combobox.Popup>;
 }>) {
-  const { chipsContainerRef, isLoading, isError } = useComboboxContext();
+  const {
+    chipsContainerRef,
+    isLoading,
+    isError,
+    isLoadingMore,
+    hasMore,
+    onLoadMore,
+  } = useComboboxContext();
+  const [infiniteScrollRef] = useInfiniteScroll({
+    isLoadingMore: !!isLoadingMore,
+    hasMore: !!hasMore,
+    onLoadMore: () => onLoadMore?.(),
+    disabled: isError,
+  });
+
   return (
     <Combobox.Portal {...portalProps}>
       <Combobox.Positioner
@@ -126,6 +143,7 @@ export function Content({
           {...popupProps}
         >
           {children}
+
           {!isLoading && !isError && (
             <Combobox.Empty className="px-4 py-2 leading-4 text-sm min-h-11 flex items-center justify-center text-ppx-neutral-10 empty:hidden">
               {empty}
@@ -142,6 +160,15 @@ export function Content({
             <Combobox.Status className="px-4 py-2 leading-4 text-sm min-h-11 flex items-center justify-center text-ppx-neutral-10">
               Error loading options
             </Combobox.Status>
+          )}
+
+          {hasMore && (
+            <div
+              ref={infiniteScrollRef}
+              className="h-10 flex items-center justify-center"
+            >
+              <Spinner className="stroke-ppx-neutral-10" size="medium" />
+            </div>
           )}
         </Combobox.Popup>
       </Combobox.Positioner>
@@ -272,7 +299,11 @@ export function Trigger({
             return <span className="truncate">{selectedValue}</span>;
           }
 
-          if (typeof selectedValue === "object" && "label" in selectedValue) {
+          if (
+            selectedValue &&
+            typeof selectedValue === "object" &&
+            "label" in selectedValue
+          ) {
             return <span className="truncate">{selectedValue.label}</span>;
           }
           return null;

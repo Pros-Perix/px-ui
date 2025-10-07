@@ -1,13 +1,9 @@
 import * as React from "react";
 import type { Meta, StoryObj } from "@storybook/react";
 import * as Combobox from "../../src/components/combobox/base";
-import PropBasedCombobox, {
-  SingleCombobox,
-  MultipleCombobox,
-} from "../../src/components/combobox/prop-based";
 import { Avatar } from "../../src/components/avatar";
 import {
-  LoadOptionsFn,
+  defineAsyncOptions,
   useAsyncOptions,
 } from "../../src/hooks/use-async-options";
 import { QueryClient, QueryClientContext } from "@tanstack/react-query";
@@ -205,21 +201,40 @@ export function WithOnlyIconWithNoSelectedValue() {
 
 export function WithSearchOnPopup() {
   return (
+    <Provider>
+      <WithSearchOnPopupImpl />
+    </Provider>
+  );
+}
+
+function WithSearchOnPopupImpl() {
+  const userLoader = useAsyncOptions(userOptions);
+  const [selected, setSelected] = React.useState<typeof userLoader.items>([]);
+
+  return (
     <>
-      <Combobox.Root items={users} multiple>
-        <Combobox.Trigger>Select users</Combobox.Trigger>
+      <Combobox.Root
+        // multiple
+        // value={selected}
+        // onValueChange={setSelected}
+        isItemEqualToValue={(item, selected) => item.id === selected.id}
+        {...userLoader}
+      >
+        <Combobox.Trigger placeholder="Select user">
+          {(item) => item?.firstName}
+        </Combobox.Trigger>
         <Combobox.Content>
           <Combobox.Search />
-          <Combobox.List data-testid="list">
-            {(item: (typeof users)[number]) => (
-              <Combobox.MultiItem key={item.userId} value={item}>
+          <Combobox.List>
+            {(item: (typeof userLoader.items)[number]) => (
+              <Combobox.MultiItem key={item.id} value={item}>
                 <Avatar
-                  imgSrc={`https://placeholder.co/150x150/${item.name.replace(/ /g, "")}`}
-                  name={item.name}
+                  imgSrc={`https://placeholder.co/150x150/${item.firstName.replace(/ /g, "")}`}
+                  name={`${item.firstName} ${item.lastName}`}
                   size="20px"
                   variant="rounded"
                 />
-                {item.name}
+                {`${item.firstName} ${item.lastName}`}
               </Combobox.MultiItem>
             )}
           </Combobox.List>
@@ -274,37 +289,48 @@ export function WithAsyncLoading() {
   );
 }
 
-const loadUserOptions: LoadOptionsFn = async ({ page, search }) => {
-  const perPage = 10;
-  await new Promise((resolve) => setTimeout(resolve, 300));
-  const res = await fetch(
-    `https://dummyjson.com/users${search ? "/search" : ""}?limit=${perPage}&skip=${(page - 1) * perPage}${search ? `&q=${search}` : ""}`,
-  );
-  const data = await res.json();
+const userOptions = defineAsyncOptions({
+  cacheKey: ["users"],
+  loader: async ({ page, search }) => {
+    const perPage = 20;
+    await new Promise((resolve) => setTimeout(resolve, 300));
+    const res = await fetch(
+      `https://dummyjson.com/users${search ? "/search" : ""}?limit=${perPage}&skip=${(page - 1) * perPage}${search ? `&q=${search}` : ""}`,
+    );
+    const data = (await res.json()) as {
+      users: Array<{
+        id: number;
+        firstName: string;
+        lastName: string;
+        image: string;
+        email: string;
+      }>;
+      total: number;
+    };
 
-  return {
-    data: { options: data.users, hasMore: data.total > page * perPage },
-    error: null,
-  };
-};
+    return {
+      data: {
+        options: data.users,
+        hasMore: data.total > page * perPage,
+      },
+      error: null,
+    };
+  },
+});
 
 function AsyncLoadingImpl() {
-  const userOptions = useAsyncOptions({
-    cacheKey: ["users"],
-    loadOptionsFn: loadUserOptions,
-  });
-
-  const [selected, setSelected] = React.useState<
-    (typeof userOptions.items)[number][]
-  >([]);
+  const asyncUserOptions = useAsyncOptions(userOptions);
+  const [selected, setSelected] = React.useState<typeof asyncUserOptions.items>(
+    [],
+  );
 
   return (
     <Combobox.Root
-      {...userOptions}
       multiple
       value={selected}
       onValueChange={setSelected}
       isItemEqualToValue={(item, selected) => item.id === selected.id}
+      {...asyncUserOptions}
     >
       <Combobox.ChipsTrigger placeholder="Select users">
         {(item) => (
@@ -321,7 +347,7 @@ function AsyncLoadingImpl() {
       </Combobox.ChipsTrigger>
       <Combobox.Content>
         <Combobox.List>
-          {(item: (typeof userOptions.items)[number]) => (
+          {(item: (typeof asyncUserOptions.items)[number]) => (
             <Combobox.MultiItem key={item.id} value={item}>
               <Avatar
                 imgSrc={item.image}
@@ -337,3 +363,30 @@ function AsyncLoadingImpl() {
     </Combobox.Root>
   );
 }
+
+/*
+<SearchableDropdown 
+{...userLoader} 
+placeholder="Select users" 
+getOptionLabel={(item) => `${item.firstName} ${item.lastName}`} 
+getOptionValue={(item) => item.id} 
+/>
+*/
+
+/*
+<ChipsDropdown 
+{...userLoader} 
+placeholder="Select users" 
+getOptionLabel={(item) => `${item.firstName} ${item.lastName}`} 
+getOptionValue={(item) => item.id} 
+/>
+*/
+
+/*
+<TriggerDropdown 
+{...userLoader} 
+placeholder="Select users" 
+getOptionLabel={(item) => `${item.firstName} ${item.lastName}`} 
+getOptionValue={(item) => item.id} 
+/>
+*/

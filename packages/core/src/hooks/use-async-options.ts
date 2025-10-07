@@ -1,51 +1,59 @@
 import { useRef, useState } from "react";
 import { useInfiniteQuery, QueryKey } from "@tanstack/react-query";
 
-type LoadOptionsData = {
-  options: any[];
+type LoadOptionsData<TData> = {
+  options: TData[];
   hasMore: boolean;
 };
 
-type LoadOptionsReturn = {
-  data: LoadOptionsData;
+type LoadOptionsReturn<TData> = {
+  data: LoadOptionsData<TData>;
   error: any;
 };
 
-export type LoadOptionsFn = (params: {
+type LoadOptionsFn<TData> = (params: {
   search: string;
   page: number;
-}) => Promise<LoadOptionsReturn>;
+  signal: AbortSignal;
+}) => Promise<LoadOptionsReturn<TData>>;
 
-export function useAsyncOptions(params: {
+export function useAsyncOptions<TData = any>(params: {
   /**
    * An unique key to identify the cache, used to cache the results.
    * This must be unique
    *
    * @example
-   * const query = useAsyncOptions({
-   *   cacheKey: ["organizations"],
-   *   loadOptionsFn: async ({ search, page }) => {
+   * ```ts
+   * const userOptions = defineAsyncOptions({
+   *   cacheKey: ["users"],
+   *   loader: async ({ page, search }) => {
+   *     // Your async loading logic here
    *     return {
    *       data: { options: [], hasMore: false },
    *       error: null,
    *     };
    *   },
+   * }),
+   * const userOptions = useAsyncOptions(userOptions);
+   * ```
    * });
    */
   cacheKey: QueryKey;
-  loadOptionsFn: LoadOptionsFn;
+  loader: LoadOptionsFn<TData>;
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const [search, setSearch] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState(search);
   const timeout = useRef<NodeJS.Timeout | null>(null);
+  const isFetchedAfterMount = useRef(false);
 
   const query = useInfiniteQuery({
     queryKey: [...params.cacheKey, debouncedSearch],
-    queryFn: async ({ pageParam }) => {
-      const { error, data } = await params.loadOptionsFn({
+    queryFn: async ({ pageParam, signal }) => {
+      const { error, data } = await params.loader({
         search: debouncedSearch,
         page: pageParam,
+        signal,
       });
 
       if (error) {
@@ -56,15 +64,19 @@ export function useAsyncOptions(params: {
     },
     enabled: isOpen,
     initialPageParam: 1,
+    staleTime: () => (isFetchedAfterMount.current ? Infinity : 0),
     getNextPageParam: (lastPage, allPages) =>
       lastPage.hasMore ? allPages.length + 1 : undefined,
     retry: false,
-    staleTime: Infinity,
   });
+
+  if (query.isFetchedAfterMount && !isFetchedAfterMount.current) {
+    isFetchedAfterMount.current = true;
+  }
 
   const items = query.data?.pages.flatMap((page) => page.options) ?? [];
 
-  const handleSearchChange = (value: string) => {
+  const handleInputValueChange = (value: string) => {
     setSearch(value);
 
     if (timeout.current) {
@@ -83,16 +95,28 @@ export function useAsyncOptions(params: {
     }, 300);
   };
 
+  const handleLoadMore = () => {
+    query.fetchNextPage();
+  };
+
   return {
     items,
     isLoading: query.isLoading,
-    isFetchingNextPage: query.isFetchingNextPage,
+    isLoadingMore: query.isFetchingNextPage,
+    hasMore: query.hasNextPage,
     isError: query.isError,
     open: isOpen,
     onOpenChange: setIsOpen,
     inputValue: search,
-    onInputValueChange: handleSearchChange,
-    onLoadMore: query.fetchNextPage,
+    onInputValueChange: handleInputValueChange,
+    onLoadMore: handleLoadMore,
     _query: query,
   };
+}
+
+export function defineAsyncOptions<TData = any>(options: {
+  cacheKey: QueryKey;
+  loader: LoadOptionsFn<TData>;
+}) {
+  return options;
 }
