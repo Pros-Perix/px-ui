@@ -163,14 +163,15 @@ export function Trigger({
       )}
       data-invalid={invalid ?? undefined}
     >
-      <Select.Value>
-        {(selectedValue) => {
+      <Select.Value
+        render={(valueProps, { value: selectedValue }) => {
           const isSelectedValueEmpty =
             selectedValue == null ||
             (Array.isArray(selectedValue) && selectedValue.length === 0);
+
           if (isSelectedValueEmpty && props.placeholder) {
             return (
-              <span className="truncate text-ppx-neutral-10">
+              <span className="truncate text-ppx-neutral-10" {...valueProps}>
                 {props.placeholder}
               </span>
             );
@@ -183,14 +184,22 @@ export function Trigger({
                 : props.children;
 
             if (typeof children === "string") {
-              return <span className="truncate">{children}</span>;
+              return (
+                <span className="truncate" {...valueProps}>
+                  {children}
+                </span>
+              );
             }
 
-            return children;
+            return <span {...valueProps}>{children}</span>;
           }
 
           if (typeof selectedValue === "string") {
-            return <span className="truncate">{selectedValue}</span>;
+            return (
+              <span className="truncate" {...valueProps}>
+                {selectedValue}
+              </span>
+            );
           }
 
           if (
@@ -198,11 +207,16 @@ export function Trigger({
             typeof selectedValue === "object" &&
             "label" in selectedValue
           ) {
-            return <span className="truncate">{selectedValue.label}</span>;
+            return (
+              <span className="truncate" {...valueProps}>
+                {selectedValue.label}
+              </span>
+            );
           }
-          return null;
+
+          return null as any;
         }}
-      </Select.Value>
+      ></Select.Value>
 
       <Select.Icon>
         <ChevronDownIcon />
