@@ -1,31 +1,15 @@
 import * as React from "react";
 import { Menu } from "@base-ui-components/react/menu";
 import { cn } from "../utils";
+import ChevronDownIcon from "../icons/chevron-down-icon";
 
 const BASE_ITEM_CN =
   "gap-2 py-2 pr-8 pl-4 text-sm leading-4 flex cursor-default items-center outline-none select-none data-highlighted:bg-ppx-primary-b-1 data-checked:bg-ppx-primary-1! text-ppx-neutral-17 my-0.5";
 
-function ChevronDownIcon(props: React.ComponentProps<"svg">) {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      {...props}
-      className={cn("size-4 shrink-0", props.className)}
-    >
-      <path d="M6 9l6 6 6-6" />
-    </svg>
-  );
-}
+export const TRIGGER_CN =
+  "h-10 gap-2 px-3.5 text-base bg-white inline-flex items-center justify-center rounded-ppx-s border border-ppx-neutral-5 text-ppx-neutral-18 not-disabled:hover:bg-ppx-neutral-2 focus-visible:outline-2 focus-visible:-outline-offset-1 focus-visible:outline-ppx-primary-2 data-popup-open:bg-ppx-neutral-3 disabled:opacity-50 disabled:cursor-not-allowed";
 
-export function Root(props: React.ComponentProps<typeof Menu.Root>) {
-  return <Menu.Root {...props} />;
-}
+export const Root = Menu.Root;
 
 export function Trigger({
   className,
@@ -33,13 +17,7 @@ export function Trigger({
   ...props
 }: React.ComponentProps<typeof Menu.Trigger>) {
   return (
-    <Menu.Trigger
-      className={cn(
-        "h-10 gap-2 px-3.5 text-base bg-white inline-flex items-center justify-center rounded-ppx-s border border-ppx-neutral-5 text-ppx-neutral-18 outline-none hover:bg-ppx-neutral-2 focus-visible:outline-2 focus-visible:-outline-offset-1 focus-visible:outline-ppx-primary-2 active:bg-ppx-neutral-3 data-popup-open:bg-ppx-neutral-3",
-        className,
-      )}
-      {...props}
-    >
+    <Menu.Trigger className={cn(TRIGGER_CN, className)} {...props}>
       {children}
       <ChevronDownIcon className="-mr-1" />
     </Menu.Trigger>
@@ -127,3 +105,5 @@ export function RadioItem({
 }: React.ComponentProps<typeof Menu.RadioItem>) {
   return <Menu.RadioItem className={cn(BASE_ITEM_CN, className)} {...props} />;
 }
+
+export const BaseMenu = Menu;

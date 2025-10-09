@@ -1688,6 +1688,11 @@
       background-color: var(--color-ppx-neutral-3);
     }
   }
+  .data-pressed\:bg-ppx-neutral-3 {
+    &[data-pressed] {
+      background-color: var(--color-ppx-neutral-3);
+    }
+  }
   .data-selected\:bg-ppx-primary-1\! {
     &[data-selected] {
       background-color: var(--color-ppx-primary-1) !important;
