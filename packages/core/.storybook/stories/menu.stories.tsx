@@ -1,6 +1,6 @@
 import * as React from "react";
 import type { Meta, StoryObj } from "@storybook/react";
-import * as Menu from "../../src/components/menu/base";
+import * as Menu from "../../src/components/menu";
 
 const meta: Meta<typeof Menu> = {
   component: ExampleMenu,

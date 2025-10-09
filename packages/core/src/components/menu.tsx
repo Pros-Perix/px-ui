@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Menu } from "@base-ui-components/react/menu";
-import { cn } from "../../utils";
+import { cn } from "../utils";
 
 const BASE_ITEM_CN =
   "gap-2 py-2 pr-8 pl-4 text-sm leading-4 flex cursor-default items-center outline-none select-none data-highlighted:bg-ppx-primary-b-1 data-checked:bg-ppx-primary-1! text-ppx-neutral-17 my-0.5";

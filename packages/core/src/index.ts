@@ -2,9 +2,9 @@ import "./index.css";
 
 import * as Dialog from "./components/dialog";
 import * as Popover from "./components/popover";
-import * as Combobox from "./components/combobox/base";
-import * as Select from "./components/select/base";
-import * as Menu from "./components/menu/base";
+import * as Combobox from "./components/combobox";
+import * as Select from "./components/select";
+import * as Menu from "./components/menu";
 
 export * from "./components/button";
 export * from "./components/checkbox";

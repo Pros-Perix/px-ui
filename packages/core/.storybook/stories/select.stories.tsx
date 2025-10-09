@@ -1,6 +1,6 @@
 import * as React from "react";
 import type { Meta, StoryObj } from "@storybook/react";
-import * as Select from "../../src/components/select/base";
+import * as Select from "../../src/components/select";
 import { Avatar } from "../../src/components/avatar";
 
 const posts = [
