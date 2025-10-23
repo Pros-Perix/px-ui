@@ -1,15 +1,14 @@
 import * as React from "react";
+import { cn } from "../utils";
 import { cva, VariantProps } from "class-variance-authority";
 
-import { cn } from "../utils";
-
-const textareaVariants = cva(
+const inputVariants = cva(
   "min-w-2xs font-medium placeholder:font-light shadow-xs inline-flex border-ppx-neutral-5 bg-ppx-neutral-1 text-ppx-sm text-ppx-foreground transition-[color,box-shadow] outline-none placeholder:text-ppx-sm! placeholder:text-ppx-neutral-12 focus:border-ppx-primary-2 disabled:cursor-not-allowed disabled:border-ppx-neutral-3 disabled:bg-ppx-neutral-3 disabled:text-ppx-neutral-11 disabled:placeholder:text-ppx-neutral-11 aria-invalid:border-ppx-red-4 aria-invalid:bg-ppx-red-1 aria-invalid:ring-ppx-red-2",
   {
     variants: {
       size: {
-        default: "min-h-16 p-input rounded-input border focus:border-[1.5px]",
-        sm: "min-h-12 p-input-s rounded-input-s border focus:border-[1.5px]",
+        default: "h-input p-input rounded-input border focus:border-[1.5px]",
+        sm: "h-input-s p-input-s rounded-input-s border focus:border-[1.5px]",
       },
     },
     defaultVariants: {
@@ -18,21 +17,25 @@ const textareaVariants = cva(
   },
 );
 
-function Textarea({
+function Input({
   className,
   size,
   invalid,
   ...props
-}: React.ComponentProps<"textarea"> &
-  VariantProps<typeof textareaVariants> & { invalid?: boolean }) {
+}: React.ComponentProps<"input"> &
+  VariantProps<typeof inputVariants> & { invalid?: boolean }) {
   return (
-    <textarea
-      data-slot="textarea"
-      className={cn(textareaVariants({ size }), className)}
+    <input
+      data-slot="input"
+      className={cn(
+        inputVariants({ size }),
+        props.type === "number" && "no-arrow-spin",
+        className,
+      )}
       aria-invalid={invalid}
       {...props}
     />
   );
 }
 
-export { Textarea };
+export { Input };
