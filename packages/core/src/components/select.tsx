@@ -156,7 +156,7 @@ export function Trigger({
       aria-label="Open popup"
       className={cn(
         "h-10 gap-2 px-2 text-base bg-white flex items-center justify-between rounded-ppx-s border border-ppx-neutral-5 text-ppx-neutral-18 outline-none first:flex-1",
-        size === "enforced" && "w-75",
+        size === "enforced" && "w-2xs",
         size === "auto" && "w-auto",
         props.className,
         TRIGGER_ERROR_CN,

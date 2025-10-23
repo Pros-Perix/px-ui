@@ -7,7 +7,7 @@ const BASE_ITEM_CN =
   "gap-2 py-2 pr-8 pl-4 text-sm leading-4 flex cursor-default items-center outline-none select-none data-highlighted:bg-ppx-primary-b-1 data-checked:bg-ppx-primary-1! text-ppx-neutral-17 my-0.5";
 
 export const TRIGGER_CN =
-  "h-10 gap-2 px-3.5 text-base bg-white inline-flex items-center justify-center rounded-ppx-s border border-ppx-neutral-5 text-ppx-neutral-18 not-disabled:hover:bg-ppx-neutral-2 focus-visible:outline-2 focus-visible:-outline-offset-1 focus-visible:outline-ppx-primary-2 data-popup-open:bg-ppx-neutral-3 disabled:opacity-50 disabled:cursor-not-allowed";
+  "h-10 gap-2 px-2.5 text-base bg-white inline-flex items-center justify-center rounded-ppx-s border border-ppx-neutral-5 text-ppx-neutral-18 not-disabled:not-data-popup-open:hover:bg-ppx-neutral-2 focus-visible:outline-2 focus-visible:-outline-offset-1 focus-visible:outline-ppx-primary-2 data-popup-open:bg-ppx-neutral-3 disabled:opacity-50 disabled:cursor-not-allowed";
 
 export const Root = Menu.Root;
 
@@ -19,7 +19,7 @@ export function Trigger({
   return (
     <Menu.Trigger className={cn(TRIGGER_CN, className)} {...props}>
       {children}
-      <ChevronDownIcon className="-mr-1" />
+      <ChevronDownIcon />
     </Menu.Trigger>
   );
 }
@@ -54,6 +54,10 @@ export function Content({
       </Menu.Positioner>
     </Menu.Portal>
   );
+}
+
+export function DropdownIndicator() {
+  return <ChevronDownIcon className="data-popup-open:rotate-180" />;
 }
 
 export function Item({

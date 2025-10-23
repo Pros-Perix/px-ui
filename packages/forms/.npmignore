@@ -1,0 +1,13 @@
+src
+node_modules
+*.log
+.DS_Store
+tsconfig.json
+vite.config.ts
+vitest.config.ts
+*.test.*
+__tests__
+coverage
+.turbo
+EXAMPLE.md
+

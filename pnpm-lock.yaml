@@ -137,6 +137,40 @@ importers:
         specifier: ^4.5.4
         version: 4.5.4(rollup@4.40.2)(typescript@5.8.3)(vite@6.3.5)
 
+  packages/forms:
+    dependencies:
+      classnames:
+        specifier: '>2.0.0'
+        version: 2.5.1
+      react-hook-form:
+        specifier: '>=7.0.0'
+        version: 7.65.0(react@19.2.0)
+      zod:
+        specifier: '>=3.0.0'
+        version: 3.24.4
+    devDependencies:
+      '@hookform/resolvers':
+        specifier: ^5.1.1
+        version: 5.2.2(react-hook-form@7.65.0)
+      '@px-ui/core':
+        specifier: workspace:*
+        version: link:../core
+      '@types/react':
+        specifier: ^19.2.0
+        version: 19.2.0
+      '@types/react-dom':
+        specifier: ^19.2.0
+        version: 19.2.0(@types/react@19.2.0)
+      react:
+        specifier: 19.2.0
+        version: 19.2.0
+      react-dom:
+        specifier: 19.2.0
+        version: 19.2.0(react@19.2.0)
+      vite-plugin-dts:
+        specifier: ^4.5.4
+        version: 4.5.4(rollup@4.40.2)(typescript@5.8.3)(vite@6.3.5)
+
 packages:
 
   /@adobe/css-tools@4.4.2:
@@ -953,6 +987,15 @@ packages:
     resolution: {integrity: sha512-aGTxbpbg8/b5JfU1HXSrbH3wXZuLPJcNEcZQFMxLs3oSzgtVu6nFPkbbGGUvBcUjKV2YyB9Wxxabo+HEH9tcRQ==}
     dev: false
 
+  /@hookform/resolvers@5.2.2(react-hook-form@7.65.0):
+    resolution: {integrity: sha512-A/IxlMLShx3KjV/HeTcTfaMxdwy690+L/ZADoeaTltLx+CVuzkeVIPuybK3jrRfw7YZnmdKsVVHAlEPIAEUNlA==}
+    peerDependencies:
+      react-hook-form: ^7.55.0
+    dependencies:
+      '@standard-schema/utils': 0.3.0
+      react-hook-form: 7.65.0(react@19.2.0)
+    dev: true
+
   /@humanfs/core@0.19.1:
     resolution: {integrity: sha512-5DyQ4+1JEUzejeK1JGICcideyfUbGixgS9jNgex5nqkW+cY7WZhxBigmieN5Qnw9ZosSNVC9KQKyb+GUaGyKUA==}
     engines: {node: '>=18.18.0'}
@@ -1528,6 +1571,10 @@ packages:
       string-argv: 0.3.2
     transitivePeerDependencies:
       - '@types/node'
+    dev: true
+
+  /@standard-schema/utils@0.3.0:
+    resolution: {integrity: sha512-e7Mew686owMaPJVNNLs55PUvgz371nKgwsc4vxE49zsODpJEnxgxRo2y/OKrqueavXgZNMDVj3DdHFlaSAeU8g==}
     dev: true
 
   /@storybook/addon-actions@8.6.12(storybook@8.6.12):
@@ -5615,6 +5662,14 @@ packages:
       react: 19.2.0
       scheduler: 0.27.0
 
+  /react-hook-form@7.65.0(react@19.2.0):
+    resolution: {integrity: sha512-xtOzDz063WcXvGWaHgLNrNzlsdFgtUWcb32E6WFaGTd7kPZG3EeDusjdZfUsPwKCKVXy1ZlntifaHZ4l8pAsmw==}
+    engines: {node: '>=18.0.0'}
+    peerDependencies:
+      react: ^16.8.0 || ^17 || ^18 || ^19
+    dependencies:
+      react: 19.2.0
+
   /react-is@17.0.2:
     resolution: {integrity: sha512-w2GsyukL62IJnlaff/nRegPQR94C/XXamvMWmSHRJ4y7Ts/4ocGRmTHvOs8PSE6pB3dWOrD/nueuU5sduBsQ4w==}
     dev: true
@@ -6876,4 +6931,3 @@ packages:
 
   /zod@3.24.4:
     resolution: {integrity: sha512-OdqJE9UDRPwWsrHjLN2F8bPxvwJBK22EHLWtanu0LSYr5YqzsaaW3RMgmjwr8Rypg5k+meEJdSPXJZXE/yqOMg==}
-    dev: true
