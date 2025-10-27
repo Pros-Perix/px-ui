@@ -1,6 +1,7 @@
 :root {}
 
 @theme {
+  --font-sans-light: "Lato L", system-ui, sans-serif;
   --font-sans: "Lato R", system-ui, sans-serif;
   --font-sans-sb: "Lato SB", system-ui, sans-serif;
   --font-sans-b: "Lato B", system-ui, sans-serif;
@@ -60,11 +61,10 @@
   --color-ppx-background: #fff;
   --color-ppx-foreground: var(--color-ppx-neutral-18);
   --color-ppx-muted-background: #dfe2e6;
-  --color-ppx-muted-foreground: #6b788e;
+  --color-ppx-muted-foreground: var(--color-ppx-neutral-13);
   --color-ppx-border: var(--color-ppx-neutral-3);
 
   --padding-input: 0.5rem;
-  --padding-input-s: 0.25rem;
 
   --height-input: 2.5rem;
   --height-input-s: 2rem;
@@ -77,7 +77,7 @@
   --radius-ppx-l: 1rem;
   --radius-ppx-xl: 1.25rem;
   --radius-input: var(--radius-ppx-s);
-  --radius-input-s: var(--radius-ppx-xs);
+  --radius-input-s: var(--radius-ppx-s);
 }
 
 @utility text-ppx-h1 {

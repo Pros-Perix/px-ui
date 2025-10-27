@@ -209,7 +209,7 @@ export default meta;
 export const Demo: StoryObj = {
   render: () => (
     <div className="w-[400px]">
-      <InputGroup.Root>
+      <InputGroup.Root size="sm">
         <InputGroup.Input placeholder="Search..." />
         <InputGroup.Addon>
           <SearchIcon />
@@ -497,7 +497,7 @@ export const ErrorState: StoryObj = {
 export const DisabledState: StoryObj = {
   render: () => (
     <div className="space-y-4 w-[400px]">
-      <InputGroup.Root data-disabled="true">
+      <InputGroup.Root disabled size="default">
         <InputGroup.Input placeholder="Search..." disabled />
         <InputGroup.Addon>
           <SearchIcon />
@@ -507,7 +507,7 @@ export const DisabledState: StoryObj = {
         </InputGroup.Addon>
       </InputGroup.Root>
 
-      <InputGroup.Root data-disabled="true">
+      <InputGroup.Root disabled>
         <InputGroup.Input placeholder="Write message..." disabled />
         <InputGroup.Addon align="inline-end">
           <InputGroup.Button size="sm" disabled>
