@@ -7,7 +7,7 @@ const config: StorybookConfig = {
     options: {},
   },
   stories: ["../packages/**/.storybook/stories/*.@(ts|tsx)"],
-  addons: ["@storybook/addon-essentials"],
+  addons: ["@storybook/addon-essentials", "@storybook/addon-a11y"],
   core: {
     builder: {
       name: path.dirname(
