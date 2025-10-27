@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { Button, Variant, Size } from "../../src/components/button";
-import { getComponentStatus, generateAccessibilityBadge } from "../../src/accessibility/component-status";
+import { getComponentStatus } from "../../src/accessibility/component-status";
+import { generateAccessibilityBadge } from "../../src/utils/accessibility";
 
 const variants: Variant[] = [
   "default",
