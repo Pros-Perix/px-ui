@@ -1,9 +1,11 @@
 import * as React from "react";
 import { Select } from "@base-ui-components/react/select";
 import { cn } from "../utils";
-
-const BASE_ITEM_CN =
-  "gap-2 py-2 pr-8 pl-4 text-base leading-4 flex cursor-default items-center outline-none select-none data-highlighted:bg-ppx-primary-b-1 data-selected:bg-ppx-primary-1! text-ppx-neutral-17 my-1";
+import {
+  DROPDOWN_ITEM_CN,
+  DROPDOWN_POPUP_CN,
+  DROPDOWN_POSITIONER_CN,
+} from "../tw-styles/dropdown";
 
 const TRIGGER_ERROR_CN =
   "data-invalid:border-ppx-red-4 data-invalid:focus-within:outline-ppx-red-2";
@@ -84,11 +86,11 @@ export function Content({
       <Select.Positioner
         sideOffset={6}
         {...positionerProps}
-        className={cn("z-10 outline-none", positionerProps?.className)}
+        className={cn(DROPDOWN_POSITIONER_CN, positionerProps?.className)}
         alignItemWithTrigger={false}
       >
         <Select.Popup
-          className="group rounded-md py-1 text-gray-900 shadow-lg bg-white max-h-[var(--available-height)] w-[max(var(--anchor-width),250px)] max-w-[var(--available-width)] origin-[var(--transform-origin)] overflow-y-auto bg-clip-padding shadow-ppx-neutral-5 outline-1 outline-ppx-neutral-5 transition-[transform,scale,opacity] data-[ending-style]:scale-90 data-[ending-style]:opacity-0 data-[side=none]:data-[ending-style]:transition-none data-[starting-style]:scale-90 data-[starting-style]:opacity-0 data-[side=none]:data-[starting-style]:scale-100 data-[side=none]:data-[starting-style]:opacity-100 data-[side=none]:data-[starting-style]:transition-none dark:shadow-none"
+          className={cn(DROPDOWN_POPUP_CN, popupProps?.className)}
           {...popupProps}
         >
           {children}
@@ -103,7 +105,7 @@ export function Item({
   ...props
 }: React.ComponentProps<typeof Select.Item>) {
   return (
-    <Select.Item className={cn(BASE_ITEM_CN, className)} {...props}>
+    <Select.Item className={cn(DROPDOWN_ITEM_CN, className)} {...props}>
       <Select.ItemText>{props.children}</Select.ItemText>
     </Select.Item>
   );
@@ -117,7 +119,7 @@ export function MultiItem({
     <Select.Item
       {...props}
       render={(itemProps, state) => (
-        <div {...itemProps} className={cn(BASE_ITEM_CN, className)}>
+        <div {...itemProps} className={cn(DROPDOWN_ITEM_CN, className)}>
           <ItemIndicator selected={state.selected} />
           <Select.ItemText>{props.children}</Select.ItemText>
         </div>

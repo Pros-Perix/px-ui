@@ -2,9 +2,11 @@ import * as React from "react";
 import { Menu } from "@base-ui-components/react/menu";
 import { cn } from "../utils";
 import ChevronDownIcon from "../icons/chevron-down-icon";
-
-const BASE_ITEM_CN =
-  "gap-2 py-2 pr-8 pl-4 text-ppx-sm flex cursor-default items-center outline-none select-none data-highlighted:not-data-checked:bg-ppx-primary-b-1 data-checked:bg-ppx-primary-1 text-ppx-foreground my-0.5";
+import {
+  DROPDOWN_ITEM_CN,
+  DROPDOWN_POPUP_CN,
+  DROPDOWN_POSITIONER_CN,
+} from "../tw-styles/dropdown";
 
 export const TRIGGER_CN =
   "h-input gap-2 p-input text-ppx-sm bg-ppx-neutral-1 inline-flex items-center justify-center rounded-input border border-ppx-neutral-5 text-ppx-foreground not-disabled:not-data-popup-open:hover:bg-ppx-neutral-2 focus-visible:outline-2 focus-visible:-outline-offset-1 focus-visible:outline-ppx-primary-2 data-popup-open:bg-ppx-neutral-3 disabled:opacity-50 disabled:cursor-not-allowed";
@@ -40,13 +42,10 @@ export function Content({
         sideOffset={6}
         align="start"
         {...positionerProps}
-        className={cn("z-10 outline-none", positionerProps?.className)}
+        className={cn(DROPDOWN_POSITIONER_CN, positionerProps?.className)}
       >
         <Menu.Popup
-          className={cn(
-            "rounded-md py-1 shadow-lg bg-white max-h-[var(--available-height)] min-w-[12rem] origin-[var(--transform-origin)] overflow-y-auto bg-clip-padding shadow-ppx-neutral-5 outline-1 outline-ppx-neutral-5 transition-[transform,scale,opacity] data-[ending-style]:scale-90 data-[ending-style]:opacity-0 data-[side=none]:data-[ending-style]:transition-none data-[starting-style]:scale-90 data-[starting-style]:opacity-0 data-[side=none]:data-[starting-style]:scale-100 data-[side=none]:data-[starting-style]:opacity-100 data-[side=none]:data-[starting-style]:transition-none",
-            popupProps?.className,
-          )}
+          className={cn(DROPDOWN_POPUP_CN, popupProps?.className)}
           {...popupProps}
         >
           {children}
@@ -66,7 +65,7 @@ export function Item({
   ...props
 }: React.ComponentProps<typeof Menu.Item>) {
   return (
-    <Menu.Item className={cn(BASE_ITEM_CN, className)} {...props}>
+    <Menu.Item className={cn(DROPDOWN_ITEM_CN, className)} {...props}>
       {children}
     </Menu.Item>
   );
@@ -107,7 +106,9 @@ export function RadioItem({
   className,
   ...props
 }: React.ComponentProps<typeof Menu.RadioItem>) {
-  return <Menu.RadioItem className={cn(BASE_ITEM_CN, className)} {...props} />;
+  return (
+    <Menu.RadioItem className={cn(DROPDOWN_ITEM_CN, className)} {...props} />
+  );
 }
 
 export const BaseTrigger = Menu.Trigger;

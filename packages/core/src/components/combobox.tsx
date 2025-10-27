@@ -3,9 +3,11 @@ import { Combobox } from "@base-ui-components/react/combobox";
 import { cn } from "../utils";
 import useInfiniteScroll from "../hooks/use-infinite-scroll";
 import { Spinner } from "./spinner";
-
-const BASE_ITEM_CN =
-  "gap-2 py-2 pr-8 pl-4 text-base leading-4 flex cursor-default items-center outline-none select-none data-highlighted:bg-ppx-primary-b-1 data-selected:bg-ppx-primary-1! text-ppx-neutral-17 my-1";
+import {
+  DROPDOWN_ITEM_CN,
+  DROPDOWN_POPUP_CN,
+  DROPDOWN_POSITIONER_CN,
+} from "../tw-styles/dropdown";
 
 const TRIGGER_ERROR_CN =
   "data-invalid:border-ppx-red-4 data-invalid:focus-within:outline-ppx-red-2";
@@ -144,11 +146,15 @@ export function Content({
         sideOffset={6}
         align="start"
         {...positionerProps}
-        className={cn("outline-none", positionerProps?.className)}
+        className={cn(DROPDOWN_POSITIONER_CN, positionerProps?.className)}
         anchor={positionerProps?.anchor ?? chipsContainerRef}
       >
         <Combobox.Popup
-          className="scroll-pt-2 scroll-pb-2 rounded-md shadow-lg bg-white max-h-[min(var(--available-height),23rem)] w-[max(var(--anchor-width),250px)] max-w-[var(--available-width)] origin-[var(--transform-origin)] overflow-y-auto overscroll-contain text-ppx-neutral-18 shadow-ppx-neutral-5 outline-1 outline-ppx-neutral-5 transition-[transform,scale,opacity] data-[ending-style]:scale-95 data-[ending-style]:opacity-0 data-[side=none]:data-[ending-style]:transition-none data-[starting-style]:scale-95 data-[starting-style]:opacity-0 data-[side=none]:data-[starting-style]:scale-100 data-[side=none]:data-[starting-style]:opacity-100 data-[side=none]:data-[starting-style]:transition-none"
+          className={cn(
+            DROPDOWN_POPUP_CN,
+            "scroll-pt-2 scroll-pb-2 overscroll-contain",
+            popupProps?.className,
+          )}
           {...popupProps}
         >
           {children}
@@ -190,7 +196,7 @@ export function Item({
   ...props
 }: React.ComponentProps<typeof Combobox.Item>) {
   return (
-    <Combobox.Item className={cn(BASE_ITEM_CN, className)} {...props}>
+    <Combobox.Item className={cn(DROPDOWN_ITEM_CN, className)} {...props}>
       {props.children}
     </Combobox.Item>
   );
@@ -204,7 +210,7 @@ export function MultiItem({
     <Combobox.Item
       {...props}
       render={(itemProps, state) => (
-        <div {...itemProps} className={cn(BASE_ITEM_CN, className)}>
+        <div {...itemProps} className={cn(DROPDOWN_ITEM_CN, className)}>
           <ItemIndicator selected={state.selected} />
           {props.children}
         </div>
