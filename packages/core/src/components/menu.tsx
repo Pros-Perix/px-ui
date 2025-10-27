@@ -7,19 +7,37 @@ import {
   DROPDOWN_POPUP_CN,
   DROPDOWN_POSITIONER_CN,
 } from "../tw-styles/dropdown";
+import { cva, VariantProps } from "class-variance-authority";
 
-export const TRIGGER_CN =
-  "h-input gap-2 p-input text-ppx-sm bg-ppx-neutral-1 inline-flex items-center justify-center rounded-input border border-ppx-neutral-5 text-ppx-foreground not-disabled:not-data-popup-open:hover:bg-ppx-neutral-2 focus-visible:outline-2 focus-visible:-outline-offset-1 focus-visible:outline-ppx-primary-2 data-popup-open:bg-ppx-neutral-3 disabled:opacity-50 disabled:cursor-not-allowed";
+export const triggerVariants = cva(
+  "gap-2 p-input text-ppx-sm bg-ppx-neutral-1 inline-flex items-center justify-center border border-ppx-neutral-5 text-ppx-foreground not-disabled:not-data-popup-open:hover:bg-ppx-neutral-2 focus-visible:outline-2 focus-visible:-outline-offset-1 focus-visible:outline-ppx-primary-2 data-popup-open:bg-ppx-neutral-3 disabled:opacity-50 disabled:cursor-not-allowed",
+  {
+    variants: {
+      size: {
+        default: "h-input rounded-input",
+        sm: "h-input-s rounded-input-s",
+      },
+    },
+    defaultVariants: {
+      size: "default",
+    },
+  },
+);
 
 export const Root = Menu.Root;
 
 export function Trigger({
   className,
   children,
+  size,
   ...props
-}: React.ComponentProps<typeof Menu.Trigger>) {
+}: React.ComponentProps<typeof Menu.Trigger> &
+  VariantProps<typeof triggerVariants>) {
   return (
-    <Menu.Trigger className={cn(TRIGGER_CN, className)} {...props}>
+    <Menu.Trigger
+      className={cn(triggerVariants({ size }), className)}
+      {...props}
+    >
       {children}
       <DropdownIndicator />
     </Menu.Trigger>
