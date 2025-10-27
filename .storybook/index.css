@@ -1853,6 +1853,11 @@
       border-color: var(--color-ppx-primary-5);
     }
   }
+  .data-checked\:bg-ppx-primary-1 {
+    &[data-checked] {
+      background-color: var(--color-ppx-primary-1);
+    }
+  }
   .data-checked\:bg-ppx-primary-1\! {
     &[data-checked] {
       background-color: var(--color-ppx-primary-1) !important;
@@ -1877,6 +1882,13 @@
   .data-highlighted\:bg-ppx-primary-b-1 {
     &[data-highlighted] {
       background-color: var(--color-ppx-primary-b-1);
+    }
+  }
+  .data-highlighted\:not-data-checked\:bg-ppx-primary-b-1 {
+    &[data-highlighted] {
+      &:not(*[data-checked]) {
+        background-color: var(--color-ppx-primary-b-1);
+      }
     }
   }
   .data-invalid\:border-ppx-red-4 {

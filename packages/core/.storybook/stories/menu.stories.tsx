@@ -1,6 +1,7 @@
 import * as React from "react";
 import type { Meta, StoryObj } from "@storybook/react";
 import * as Menu from "../../src/components/menu";
+import { Button } from "../../src/components/button";
 
 const meta: Meta<typeof Menu> = {
   component: ExampleMenu,
@@ -144,6 +145,42 @@ export function ComplexExample() {
   return (
     <Menu.Root>
       <Menu.Trigger>View Options</Menu.Trigger>
+      <Menu.Content>
+        <Menu.Group>
+          <Menu.GroupLabel>Layout</Menu.GroupLabel>
+          <Menu.RadioGroup value={view} onValueChange={setView}>
+            <Menu.RadioItem value="grid">Grid View</Menu.RadioItem>
+            <Menu.RadioItem value="list">List View</Menu.RadioItem>
+            <Menu.RadioItem value="compact">Compact View</Menu.RadioItem>
+          </Menu.RadioGroup>
+        </Menu.Group>
+
+        <Menu.Separator />
+
+        <Menu.Group>
+          <Menu.GroupLabel>Sort By</Menu.GroupLabel>
+          <Menu.RadioGroup value={sortBy} onValueChange={setSortBy}>
+            <Menu.RadioItem value="date">Date Modified</Menu.RadioItem>
+            <Menu.RadioItem value="name">Name</Menu.RadioItem>
+            <Menu.RadioItem value="size">File Size</Menu.RadioItem>
+          </Menu.RadioGroup>
+        </Menu.Group>
+
+        <Menu.Separator />
+
+        <Menu.Item onClick={() => console.log("Refresh")}>Refresh</Menu.Item>
+      </Menu.Content>
+    </Menu.Root>
+  );
+}
+
+export function CustomTrigger() {
+  const [view, setView] = React.useState("grid");
+  const [sortBy, setSortBy] = React.useState("date");
+
+  return (
+    <Menu.Root>
+      <Menu.BaseTrigger render={<Button>View options</Button>} />
       <Menu.Content>
         <Menu.Group>
           <Menu.GroupLabel>Layout</Menu.GroupLabel>
