@@ -19,3 +19,7 @@ export { Popover };
 export { Combobox };
 export { Select };
 export { Menu };
+
+// Accessibility utilities
+export * from "./utils/accessibility";
+export * from "./accessibility/component-status";

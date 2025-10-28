@@ -4,7 +4,9 @@
   "version": "0.3.0",
   "packageManager": "pnpm@8.15.5",
   "devDependencies": {
+    "@axe-core/playwright": "^4.11.0",
     "@changesets/cli": "^2.29.3",
+    "@storybook/addon-a11y": "^8.6.12",
     "@storybook/addon-essentials": "8.6.12",
     "@storybook/builder-vite": "^8.6.12",
     "@storybook/react": "8.6.12",
@@ -15,6 +17,7 @@
     "@testing-library/react": "14.1.2",
     "@vitejs/plugin-react": "^4.4.1",
     "autoprefixer": "10.4.19",
+    "axe-core": "^4.11.0",
     "change-case": "^5.4.4",
     "concurrently": "^9.1.2",
     "eslint": "9.26.0",
@@ -22,10 +25,12 @@
     "husky": "9.1.7",
     "jsdom": "26.1.0",
     "lint-staged": "15.5.2",
+    "playwright": "^1.56.1",
     "plop": "^4.0.1",
     "prettier": "3.5.3",
     "prettier-plugin-tailwindcss": "^0.6.14",
     "rollup": "4.40.2",
+    "serve": "^14.2.5",
     "storybook": "^8.6.12",
     "tailwind-merge": "3.2.0",
     "tailwindcss": "4.1.5",
@@ -42,7 +47,9 @@
     "dev": "concurrently \"pnpm run watch:styles\" \"pnpm run storybook\"",
     "prepare": "husky install",
     "gen:component": "plop --plopfile generators/plopfile.mjs",
-    "watch:styles": "npx @tailwindcss/cli -i ./.storybook/tailwind.css -o ./.storybook/index.css --watch"
+    "watch:styles": "npx @tailwindcss/cli -i ./.storybook/tailwind.css -o ./.storybook/index.css --watch",
+    "test:a11y": "tsx scripts/test-accessibility.ts",
+    "test:a11y:ci": "npm run storybook & sleep 10 && npm run test:a11y && kill %1"
   },
   "dependencies": {
     "react": "19.2.0",
