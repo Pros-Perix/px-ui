@@ -27,6 +27,7 @@ interface A11yTestResult {
 }
 
 const STORYBOOK_URL = 'http://localhost:6969';
+const MAX_CONCURRENT_TESTS = 5; // Limit concurrent browser instances
 
 const COMPONENTS_TO_TEST = [
   'button--default',
@@ -83,25 +84,42 @@ async function testComponentAccessibility(componentId: string): Promise<A11yTest
   }
 }
 
-async function runAllTests(): Promise<A11yTestResult[]> {
-  console.log('🔍 Starting accessibility tests...');
+// Helper function to run tests in batches with concurrency limit
+async function runTestsInBatches(components: string[], batchSize: number): Promise<A11yTestResult[]> {
   const results: A11yTestResult[] = [];
   
-  for (const component of COMPONENTS_TO_TEST) {
-    try {
-      console.log(`Testing ${component}...`);
-      const result = await testComponentAccessibility(component);
-      results.push(result);
-      
-      const violationCount = result.violations.length;
-      const status = violationCount === 0 ? '✅' : '❌';
-      console.log(`${status} ${component}: ${violationCount} violations`);
-    } catch (error) {
-      console.error(`❌ Failed to test ${component}:`, error);
-    }
+  for (let i = 0; i < components.length; i += batchSize) {
+    const batch = components.slice(i, i + batchSize);
+    console.log(`Running batch ${Math.floor(i / batchSize) + 1}/${Math.ceil(components.length / batchSize)}: ${batch.join(', ')}`);
+    
+    const batchPromises = batch.map(async (component) => {
+      try {
+        console.log(`Testing ${component}...`);
+        const result = await testComponentAccessibility(component);
+        
+        const violationCount = result.violations.length;
+        const status = violationCount === 0 ? '✅' : '❌';
+        console.log(`${status} ${component}: ${violationCount} violations`);
+        
+        return result;
+      } catch (error) {
+        console.error(`❌ Failed to test ${component}:`, error);
+        return null;
+      }
+    });
+    
+    const batchResults = await Promise.all(batchPromises);
+    results.push(...batchResults.filter((result): result is A11yTestResult => result !== null));
   }
   
   return results;
+}
+
+async function runAllTests(): Promise<A11yTestResult[]> {
+  console.log('🔍 Starting accessibility tests...');
+  console.log(`Running ${COMPONENTS_TO_TEST.length} component tests with max ${MAX_CONCURRENT_TESTS} concurrent instances...`);
+  
+  return await runTestsInBatches(COMPONENTS_TO_TEST, MAX_CONCURRENT_TESTS);
 }
 
 async function generateReport(results: A11yTestResult[]): Promise<void> {
