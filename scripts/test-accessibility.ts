@@ -43,7 +43,8 @@ const COMPONENTS_TO_TEST = [
 
 async function testComponentAccessibility(componentId: string): Promise<A11yTestResult> {
   const browser = await chromium.launch({ headless: true });
-  const page = await browser.newPage();
+  const context = await browser.newContext();
+  const page = await context.newPage();
   
   try {
     const url = `${STORYBOOK_URL}/iframe.html?args=&id=${componentId}&viewMode=story`;
