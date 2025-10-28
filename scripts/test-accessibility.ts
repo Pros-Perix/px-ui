@@ -1,6 +1,6 @@
 #!/usr/bin/env tsx
 
-import { injectAxe, checkA11y } from '@axe-core/playwright';
+import AxeBuilder from '@axe-core/playwright';
 import { chromium } from 'playwright';
 import fs from 'fs/promises';
 import path from 'path';
@@ -49,17 +49,13 @@ async function testComponentAccessibility(componentId: string): Promise<A11yTest
     const url = `${STORYBOOK_URL}/iframe.html?args=&id=${componentId}&viewMode=story`;
     await page.goto(url, { waitUntil: 'networkidle' });
     
-    // Inject axe-core
-    await injectAxe(page);
-    
     // Wait for component to render
     await page.waitForTimeout(1000);
     
-    // Run accessibility checks
-    const results = await checkA11y(page, undefined, {
-      tags: ['wcag2a', 'wcag2aa', 'wcag21aa'],
-      reporter: 'raw'
-    });
+    // Run accessibility checks using AxeBuilder
+    const results = await new AxeBuilder({ page })
+      .withTags(['wcag2a', 'wcag2aa', 'wcag21aa'])
+      .analyze();
     
     return {
       component: componentId,
