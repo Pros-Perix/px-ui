@@ -1,9 +1,10 @@
 import * as React from "react";
 import type { Meta, StoryObj } from "@storybook/react";
 import * as Select from "../../src/components/select";
-import { Avatar } from "../../src/components/avatar";
+import { SelectedValue } from "../../src/components/select";
 
 const posts = [
+  { label: "Select post", value: "" },
   {
     label: "Understanding React Hooks and dependencies",
     value: "post-1",
@@ -24,15 +25,8 @@ const posts = [
   { label: "MongoDB Database Design", value: "post-15" },
 ];
 
-const fonts = [
-  { label: "Select font", value: null },
-  { label: "Sans-serif", value: "sans" },
-  { label: "Serif", value: "serif" },
-  { label: "Monospace", value: "mono" },
-  { label: "Cursive", value: "cursive" },
-];
-
 const users = [
+  { name: "Select user", userId: "" },
   { name: "Emma Thompson", userId: "user-1234" },
   { name: "Michael Chen", userId: "user-5678" },
   { name: "Sofia Rodriguez", userId: "user-9012" },
@@ -62,9 +56,12 @@ function ExampleSelect() {
   return (
     <>
       <Select.Root>
-        <Select.Trigger placeholder="Select font" />
+        <Select.Trigger>
+          <Select.Value />
+        </Select.Trigger>
         <Select.Content>
           <Select.List>
+            <Select.Item value="">Select post</Select.Item>
             <Select.Item value="sans">Sans-serif</Select.Item>
             <Select.Item value="serif">Serif</Select.Item>
             <Select.Item value="mono">Monospace</Select.Item>
@@ -80,7 +77,9 @@ export function WithCustomRendering() {
   return (
     <>
       <Select.Root>
-        <Select.Trigger placeholder="Select post" />
+        <Select.Trigger>
+          <Select.Value />
+        </Select.Trigger>
         <Select.Content>
           <Select.List>
             {posts.map((post) => (
@@ -95,57 +94,60 @@ export function WithCustomRendering() {
   );
 }
 
-export function WithAutoSize() {
-  return (
-    <>
-      <Select.Root>
-        <Select.Trigger size="auto" placeholder="Select font" />
-        <Select.Content>
-          <Select.List>
-            <Select.Item value="sans">Sans-serif</Select.Item>
-            <Select.Item value="serif">Serif</Select.Item>
-            <Select.Item value="mono">Monospace</Select.Item>
-            <Select.Item value="cursive">Cursive</Select.Item>
-          </Select.List>
-        </Select.Content>
-      </Select.Root>{" "}
-    </>
-  );
-}
-
 export function MultipleSelection() {
-  const [selected, setSelected] = React.useState<string[]>([]);
+  const [selected, setSelected] = React.useState<(typeof users)[number][]>([]);
 
   return (
     <>
       <Select.Root multiple value={selected} onValueChange={setSelected}>
-        <Select.Trigger placeholder="Select users">
-          {(selectedValue) => (
-            <Select.MultiSelectedValue
-              selectedValue={selectedValue}
-              maxItems={2}
-            />
-          )}
+        <Select.Trigger>
+          <Select.Value>
+            {(selectedValue: SelectedValue<typeof users>) => (
+              <Select.MultiSelectedValue
+                selectedValue={selectedValue?.map((value) => value.name)}
+                maxItems={2}
+              />
+            )}
+          </Select.Value>
         </Select.Trigger>
         <Select.Content>
           <Select.List>
-            <Select.MultiItem value="user-1234">Emma Thompson</Select.MultiItem>
-            <Select.MultiItem value="user-5678">Michael Chen</Select.MultiItem>
-            <Select.MultiItem value="user-9012">
-              Sofia Rodriguez
-            </Select.MultiItem>
-            <Select.MultiItem value="user-3456">James Wilson</Select.MultiItem>
-            <Select.MultiItem value="user-7890">Aisha Patel</Select.MultiItem>
-            <Select.MultiItem value="user-2345">
-              Lucas Anderson
-            </Select.MultiItem>
-            <Select.MultiItem value="user-6789">Maria Garcia</Select.MultiItem>
-            <Select.MultiItem value="user-0123">David Kim</Select.MultiItem>
-            <Select.MultiItem value="user-4567">Sarah Johnson</Select.MultiItem>
-            <Select.MultiItem value="user-8901">Omar Hassan</Select.MultiItem>
+            {users.map((user) => (
+              <Select.MultiItem key={user.userId} value={user}>
+                {user.name}
+              </Select.MultiItem>
+            ))}
           </Select.List>
         </Select.Content>
       </Select.Root>
     </>
+  );
+}
+
+export function WithCustomObjects() {
+  const [selected, setSelected] = React.useState<(typeof users)[number]>(
+    users[0],
+  );
+
+  return (
+    <Select.Root value={selected} onValueChange={setSelected}>
+      <Select.Trigger size="sm">
+        <Select.Value>
+          {(selectedValue: SelectedValue<(typeof users)[number]>) =>
+            selectedValue?.name
+          }
+        </Select.Value>
+      </Select.Trigger>
+
+      <Select.Content>
+        <Select.List>
+          {users.map((user) => (
+            <Select.Item key={user.userId} value={user}>
+              {user.name}
+            </Select.Item>
+          ))}
+        </Select.List>
+      </Select.Content>
+    </Select.Root>
   );
 }

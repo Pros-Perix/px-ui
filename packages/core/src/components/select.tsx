@@ -6,43 +6,9 @@ import {
   DROPDOWN_POPUP_CN,
   DROPDOWN_POSITIONER_CN,
 } from "../tw-styles/dropdown";
-
-const TRIGGER_ERROR_CN =
-  "data-invalid:border-ppx-red-4 data-invalid:focus-within:outline-ppx-red-2";
-
-function ChevronDownIcon(props: React.ComponentProps<"svg">) {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      {...props}
-      className={cn("size-4 shrink-0", props.className)}
-    >
-      <path d="M6 9l6 6 6-6" />
-    </svg>
-  );
-}
-
-function CheckIcon(props: React.ComponentProps<"svg">) {
-  return (
-    <svg
-      fill="currentcolor"
-      width="10"
-      height="10"
-      viewBox="0 0 10 10"
-      {...props}
-    >
-      <path d="M9.1603 1.12218C9.50684 1.34873 9.60427 1.81354 9.37792 2.16038L5.13603 8.66012C5.01614 8.8438 4.82192 8.96576 4.60451 8.99384C4.3871 9.02194 4.1683 8.95335 4.00574 8.80615L1.24664 6.30769C0.939709 6.02975 0.916013 5.55541 1.19372 5.24822C1.47142 4.94102 1.94536 4.91731 2.2523 5.19524L4.36085 7.10461L8.12299 1.33999C8.34934 0.993152 8.81376 0.895638 9.1603 1.12218Z" />
-    </svg>
-  );
-}
-
-export const List = Select.List;
+import CheckIcon from "../icons/check-icon";
+import ChevronDownIcon from "../icons/chevron-down-icon";
+import { cva, VariantProps } from "class-variance-authority";
 
 type SelectContextValues = {
   invalid?: boolean;
@@ -51,6 +17,10 @@ type SelectContextValues = {
 const SelectContext = React.createContext<SelectContextValues>(
   {} as SelectContextValues,
 );
+
+function useSelectContext() {
+  return React.useContext(SelectContext);
+}
 
 export function Root<
   Value = any,
@@ -100,6 +70,8 @@ export function Content({
   );
 }
 
+export const List = Select.List;
+
 export function Item({
   className,
   ...props
@@ -143,92 +115,39 @@ function ItemIndicator(props: { selected: boolean }) {
   );
 }
 
+export const triggerVariants = cva(
+  "min-w-input gap-2 text-ppx-sm bg-ppx-neutral-1 inline-flex items-center justify-between border border-ppx-neutral-5 text-ppx-foreground outline-transparent p-input data-invalid:border-ppx-red-4 focus-visible:outline-2 focus-visible:-outline-offset-1 focus-visible:outline-ppx-primary-2 data-disabled:cursor-not-allowed data-disabled:border-ppx-neutral-3 data-disabled:bg-ppx-neutral-3 data-disabled:text-ppx-neutral-11",
+  {
+    variants: {
+      size: {
+        default: "rounded-input h-input",
+        sm: "rounded-input-s h-input-s",
+      },
+    },
+    defaultVariants: {
+      size: "default",
+    },
+  },
+);
+
 export function Trigger({
-  size = "enforced",
+  size,
   ...props
-}: {
-  children?: React.ReactNode | ((selectedValue: any) => React.ReactNode);
-  className?: string;
-  placeholder?: string;
-  size?: "auto" | "enforced";
-}) {
+}: Select.Trigger.Props & VariantProps<typeof triggerVariants>) {
   const { invalid } = useSelectContext();
   return (
     <Select.Trigger
       aria-label="Open popup"
-      className={cn(
-        "h-10 gap-2 px-2 text-base bg-white flex items-center justify-between rounded-ppx-s border border-ppx-neutral-5 text-ppx-neutral-18 outline-none first:flex-1",
-        size === "enforced" && "w-2xs",
-        size === "auto" && "w-auto",
-        props.className,
-        TRIGGER_ERROR_CN,
-      )}
+      className={cn(triggerVariants({ size }), props.className)}
       data-invalid={invalid ?? undefined}
     >
-      <Select.Value
-        render={(valueProps, { value: selectedValue }) => {
-          const isSelectedValueEmpty =
-            selectedValue == null ||
-            (Array.isArray(selectedValue) && selectedValue.length === 0);
+      {props.children}
 
-          if (isSelectedValueEmpty && props.placeholder) {
-            return (
-              <span className="truncate text-ppx-neutral-10" {...valueProps}>
-                {props.placeholder}
-              </span>
-            );
-          }
-
-          if (props.children) {
-            const children =
-              typeof props.children === "function"
-                ? props.children(selectedValue)
-                : props.children;
-
-            if (typeof children === "string") {
-              return (
-                <span className="truncate" {...valueProps}>
-                  {children}
-                </span>
-              );
-            }
-
-            return <span {...valueProps}>{children}</span>;
-          }
-
-          if (typeof selectedValue === "string") {
-            return (
-              <span className="truncate" {...valueProps}>
-                {selectedValue}
-              </span>
-            );
-          }
-
-          if (
-            selectedValue &&
-            typeof selectedValue === "object" &&
-            "label" in selectedValue
-          ) {
-            return (
-              <span className="truncate" {...valueProps}>
-                {selectedValue.label}
-              </span>
-            );
-          }
-
-          return null as any;
-        }}
-      ></Select.Value>
-
-      <Select.Icon>
+      <Select.Icon className="shrink-0">
         <ChevronDownIcon />
       </Select.Icon>
     </Select.Trigger>
   );
-}
-
-function useSelectContext() {
-  return React.useContext(SelectContext);
 }
 
 export function MultiSelectedValue({
@@ -257,3 +176,15 @@ export function MultiSelectedValue({
     </div>
   );
 }
+
+export function Value({ children, className, ...props }: Select.Value.Props) {
+  return (
+    <Select.Value className={cn("truncate text-ppx-sm", className)} {...props}>
+      {children}
+    </Select.Value>
+  );
+}
+
+export type SelectedValue<TValue> = TValue | null | undefined;
+
+export const BaseSelect = Select;
