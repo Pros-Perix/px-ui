@@ -408,7 +408,9 @@ export function ChipsTrigger({
   );
 }
 
-export function Chip(props: React.ComponentProps<typeof Combobox.Chip>) {
+export function Chip(
+  props: React.ComponentProps<typeof Combobox.Chip> & { key: React.Key },
+) {
   return (
     <Combobox.Chip
       {...props}

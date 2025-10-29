@@ -247,7 +247,7 @@ function WithSearchOnPopupImpl() {
 export function WithCustomizableChipsTrigger() {
   return (
     <>
-      <Combobox.Root items={users} multiple autoHighlight={true}>
+      <Combobox.Root items={users} multiple>
         <Combobox.ChipsTrigger placeholder="Select users">
           {(item) => (
             <Combobox.Chip key={item.userId}>
@@ -261,6 +261,7 @@ export function WithCustomizableChipsTrigger() {
             </Combobox.Chip>
           )}
         </Combobox.ChipsTrigger>
+
         <Combobox.Content>
           <Combobox.List data-testid="list">
             {(item: (typeof users)[number]) => (
