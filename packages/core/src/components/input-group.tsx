@@ -5,7 +5,7 @@ import { cn } from "../utils";
 import { Button as ButtonComponent } from "./button";
 
 const inputGroupVariants = cva(
-  "group/input-group relative flex w-full items-center border border-ppx-neutral-5 bg-ppx-neutral-1 outline-transparent min-w-0 has-[[data-slot=input-group-control]:focus-visible]:outline-2 has-[[data-slot=input-group-control]:focus-visible]:-outline-offset-1 has-[[data-slot=input-group-control]:focus-visible]:bg-white has-[[data-slot=input-group-control]:focus-visible]:outline-ppx-primary-2 has-[[data-slot][aria-invalid=true]]:outline-ppx-red-4 has-[[data-slot][aria-invalid=true]]:outline has-[[data-slot][aria-invalid=true]]:-outline-offset-1 has-[[data-slot][aria-invalid=true]]:bg-ppx-red-1 has-[[data-slot=input-group-control]:disabled]:*:cursor-not-allowed has-[[data-slot=input-group-control]:disabled]:border-ppx-neutral-3 has-[[data-slot=input-group-control]:disabled]:bg-ppx-neutral-3 has-[[data-slot=input-group-control]:disabled]:text-ppx-neutral-11 has-[>[data-align=inline-start]]:[&>input]:pl-2 has-[>[data-align=inline-end]]:[&>input]:pr-2",
+  "group/input-group relative flex w-fit items-center border border-ppx-neutral-5 bg-ppx-neutral-1 outline-transparent min-w-input has-[[data-slot=input-group-control]:focus-visible]:outline-2 has-[[data-slot=input-group-control]:focus-visible]:-outline-offset-1 has-[[data-slot=input-group-control]:focus-visible]:bg-white has-[[data-slot=input-group-control]:focus-visible]:outline-ppx-primary-2 has-[[data-slot][aria-invalid=true]]:outline-ppx-red-4 has-[[data-slot][aria-invalid=true]]:outline has-[[data-slot][aria-invalid=true]]:-outline-offset-1 has-[[data-slot][aria-invalid=true]]:bg-ppx-red-1 has-[[data-slot=input-group-control]:disabled]:*:cursor-not-allowed has-[[data-slot=input-group-control]:disabled]:border-ppx-neutral-3 has-[[data-slot=input-group-control]:disabled]:bg-ppx-neutral-3 has-[[data-slot=input-group-control]:disabled]:text-ppx-neutral-11 has-[>[data-align=inline-start]]:[&>input]:pl-2 has-[>[data-align=inline-end]]:[&>input]:pr-2",
   {
     variants: {
       size: {
@@ -132,7 +132,7 @@ export function Input({
       data-slot="input-group-control"
       aria-invalid={invalid}
       className={cn(
-        "font-medium min-w-input flex-1 rounded-none border-0 bg-transparent p-input text-ppx-sm text-ppx-foreground placeholder:font-sans-light placeholder:text-ppx-sm placeholder:text-ppx-neutral-12 focus:outline-none disabled:placeholder:text-ppx-neutral-11",
+        "font-medium min-w-0 flex-1 rounded-none border-0 bg-transparent p-input text-ppx-sm text-ppx-foreground placeholder:font-sans-light placeholder:text-ppx-sm placeholder:text-ppx-neutral-12 focus:outline-none disabled:placeholder:text-ppx-neutral-11",
         props.type === "number" && "no-arrow-spin",
         className,
       )}

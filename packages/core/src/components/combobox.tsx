@@ -8,45 +8,18 @@ import {
   DROPDOWN_POPUP_CN,
   DROPDOWN_POSITIONER_CN,
 } from "../tw-styles/dropdown";
+import ClearIcon from "../icons/clear-icon";
+import ChevronDownIcon from "../icons/chevron-down-icon";
+import SearchIcon from "../icons/search-icon";
+import CheckIcon from "../icons/check-icon";
+import CloseIcon from "../icons/close-icon";
+import * as InputGroup from "./input-group";
 
 const TRIGGER_ERROR_CN =
   "data-invalid:border-ppx-red-4 data-invalid:focus-within:outline-ppx-red-2";
 
-function ClearIcon(props: React.ComponentProps<"svg">) {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      {...props}
-    >
-      <path d="M18 6L6 18" />
-      <path d="M6 6l12 12" />
-    </svg>
-  );
-}
-
-function ChevronDownIcon(props: React.ComponentProps<"svg">) {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      {...props}
-      className={cn("size-4 shrink-0", props.className)}
-    >
-      <path d="M6 9l6 6 6-6" />
-    </svg>
-  );
-}
+const SINGLE_TEXT_CONTENT_CN =
+  "px-4 py-2 text-ppx-sm min-h-11 flex items-center justify-center text-ppx-muted-foreground";
 
 export const List = Combobox.List;
 export const Input = Combobox.Input;
@@ -102,17 +75,6 @@ export function Root<
   );
 }
 
-export function Clear() {
-  return (
-    <Combobox.Clear
-      className="h-10 w-5 rounded flex items-center justify-center bg-transparent"
-      aria-label="Clear selection"
-    >
-      <ClearIcon className="size-4" />
-    </Combobox.Clear>
-  );
-}
-
 export function Content({
   empty = "No options",
   portalProps,
@@ -143,7 +105,15 @@ export function Content({
   return (
     <Combobox.Portal {...portalProps}>
       <Combobox.Positioner
-        sideOffset={6}
+        sideOffset={(config) => {
+          // TODO: This is a temporary hack to make increase offset when SearchableTrigger is used
+          // base-ui wants us to use just the Input element as trigger, but we want to use our own InputGroup component
+          // so we need to increase the offset to avoid the popup from being close to the trigger
+          if (config.anchor.width < 280 && config.anchor.width > 200) {
+            return 10;
+          }
+          return 6;
+        }}
         align="start"
         {...positionerProps}
         className={cn(DROPDOWN_POSITIONER_CN, positionerProps?.className)}
@@ -160,30 +130,33 @@ export function Content({
           {children}
 
           {!isLoading && !isError && (
-            <Combobox.Empty className="px-4 py-2 leading-4 text-sm min-h-11 flex items-center justify-center text-ppx-neutral-10 empty:hidden">
+            <Combobox.Empty
+              className={cn(SINGLE_TEXT_CONTENT_CN, "empty:hidden")}
+            >
               {empty}
             </Combobox.Empty>
           )}
 
           {isLoading && (
-            <div className="px-4 py-2 leading-4 text-sm min-h-11 flex items-center justify-center text-ppx-neutral-10">
+            <Combobox.Status className={SINGLE_TEXT_CONTENT_CN}>
               Loading...
-            </div>
+            </Combobox.Status>
           )}
 
           {isError && (
-            <Combobox.Status className="px-4 py-2 leading-4 text-sm min-h-11 flex items-center justify-center text-ppx-neutral-10">
+            <Combobox.Status className={SINGLE_TEXT_CONTENT_CN}>
               Error loading options
             </Combobox.Status>
           )}
 
           {hasMore && (
-            <div
+            <Combobox.Status
               ref={infiniteScrollRef}
               className="h-10 flex items-center justify-center"
+              aria-label="Loading more options"
             >
               <Spinner className="stroke-ppx-neutral-10" size="medium" />
-            </div>
+            </Combobox.Status>
           )}
         </Combobox.Popup>
       </Combobox.Positioner>
@@ -223,12 +196,12 @@ function ItemIndicator(props: { selected: boolean }) {
   return (
     <div
       className={cn(
-        "peer rounded-sm bg-white size-4 flex shrink-0 items-center justify-center border border-ppx-neutral-10 transition-colors duration-150 outline-none",
+        "peer rounded-sm size-4 flex shrink-0 items-center justify-center border border-ppx-neutral-10 bg-ppx-background transition-colors duration-150 outline-none",
         props.selected && "text-white border-ppx-primary-5 bg-ppx-primary-5",
       )}
     >
       <Combobox.ItemIndicator>
-        <CheckboxIcon />
+        <CheckIcon />
       </Combobox.ItemIndicator>
     </div>
   );
@@ -246,28 +219,58 @@ export function LoadingIndicator(props: { className?: string }) {
   );
 }
 
-export function SearchableTrigger() {
-  const { isLoading, invalid } = useComboboxContext();
+export function SearchableTrigger(props: {
+  placeholder?: string;
+  size?: React.ComponentProps<typeof InputGroup.Root>["size"];
+  className?: string;
+  addons?: React.ReactNode;
+}) {
+  const { invalid, disabled } = useComboboxContext();
   return (
-    <div className="gap-1 text-sm leading-5 font-medium relative flex w-fit flex-col text-ppx-neutral-17">
-      <Input
-        placeholder="e.g. Apple"
-        className={cn(
-          "h-10 min-w-75 max-w-75 font-normal pl-3.5 pr-14 text-base bg-white truncate rounded-ppx-s border border-ppx-neutral-5 text-ppx-neutral-17 focus:outline-2 focus:-outline-offset-1 focus:outline-ppx-primary-2",
-          TRIGGER_ERROR_CN,
+    <InputGroup.Root {...props} disabled={disabled}>
+      <Combobox.Input
+        render={(inputProps) => (
+          <InputGroup.Input
+            {...inputProps}
+            invalid={invalid}
+            placeholder={props.placeholder}
+          />
         )}
-        data-invalid={invalid ?? undefined}
       />
-      <div className="right-2 bottom-0 h-10 text-gray-600 gap-1 absolute flex items-center justify-center">
-        {isLoading ? <LoadingIndicator className="mr-0.5" /> : <Clear />}
-        <Combobox.Trigger
-          className="h-10 w-5 rounded flex items-center justify-center bg-transparent"
-          aria-label="Open popup"
-        >
-          <ChevronDownIcon />
-        </Combobox.Trigger>
-      </div>
-    </div>
+
+      {props.addons}
+      <SearchableTriggerDropdownAddon />
+    </InputGroup.Root>
+  );
+}
+
+export function SearchableTriggerDropdownAddon() {
+  const { isLoading } = useComboboxContext();
+  return (
+    <InputGroup.Addon align="inline-end" className="gap-0.5">
+      {isLoading && <LoadingIndicator className="mr-2" />}
+      {!isLoading && (
+        <Combobox.Clear
+          aria-label="Clear selection"
+          render={(clearProps) => (
+            <InputGroup.Button size="icon-xs" {...clearProps}>
+              <ClearIcon className="size-4" />
+            </InputGroup.Button>
+          )}
+        />
+      )}
+      <Combobox.Trigger
+        render={(triggerProps) => (
+          <InputGroup.Button
+            size="icon-xs"
+            aria-label="Open popup"
+            {...triggerProps}
+          >
+            <ChevronDownIcon />
+          </InputGroup.Button>
+        )}
+      />
+    </InputGroup.Addon>
   );
 }
 
@@ -420,65 +423,8 @@ export function Search({
         {...props}
       />
 
-      <SearchIcon />
+      <SearchIcon className="size-3.5 text-ppx-neutral-10" />
     </div>
-  );
-}
-
-function SearchIcon(props: React.ComponentProps<"svg">) {
-  return (
-    <svg
-      width="16"
-      height="16"
-      viewBox="0 0 16 16"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      className={cn("size-3.5 shrink-0 text-ppx-neutral-10", props.className)}
-    >
-      <path
-        d="M15.9038 14.9625L11.2623 10.321C12.1404 9.24234 12.6723 7.85136 12.6723 6.33612C12.6723 2.83678 9.83548 0 6.33612 0C2.83677 0 0 2.83677 0 6.33612C0 9.83547 2.83677 12.6723 6.33612 12.6723C7.85133 12.6723 9.24233 12.1404 10.3326 11.2532L10.321 11.2623L14.9613 15.9026C15.0215 15.9628 15.1047 16 15.1966 16C15.2885 16 15.3717 15.9628 15.4319 15.9026L15.9026 15.4319C15.9628 15.3716 16 15.2884 16 15.1965C16 15.1053 15.9633 15.0226 15.9038 14.9624L15.9038 14.9625L15.9038 14.9625ZM6.34922 11.341C6.34886 11.341 6.34842 11.341 6.34798 11.341C3.59045 11.341 1.35503 9.10555 1.35503 6.34802C1.35503 3.59048 3.59045 1.35506 6.34798 1.35506C9.10552 1.35506 11.3409 3.59048 11.3409 6.34802C11.3409 6.34845 11.3409 6.34887 11.3409 6.34931V6.34925C11.3374 9.10469 9.10467 11.3375 6.34955 11.341H6.3492L6.34922 11.341Z"
-        fill="currentColor"
-      />
-    </svg>
-  );
-}
-
-function CheckboxIcon() {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className="size-3"
-    >
-      <path d="M20 6 9 17l-5-5" />
-    </svg>
-  );
-}
-
-function CloseIcon(props: React.ComponentProps<"svg">) {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      {...props}
-    >
-      <path d="M18 6 6 18" />
-      <path d="m6 6 12 12" />
-    </svg>
   );
 }
 
