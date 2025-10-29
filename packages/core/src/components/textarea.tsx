@@ -4,12 +4,16 @@ import { cva, VariantProps } from "class-variance-authority";
 import { cn } from "../utils";
 
 const textareaVariants = cva(
-  "min-w-input font-medium shadow-xs border-ppx-neutral-5 bg-ppx-neutral-1 text-ppx-sm text-ppx-foreground outline-transparent focus:-outline-offset-1 focus:outline-2 placeholder:text-ppx-sm placeholder:text-ppx-neutral-12 focus:not-aria-invalid:outline-ppx-primary-2 focus:not-aria-invalid:bg-white disabled:cursor-not-allowed disabled:border-ppx-neutral-3 disabled:bg-ppx-neutral-3 disabled:text-ppx-neutral-11 disabled:placeholder:text-ppx-neutral-11 aria-invalid:outline-ppx-red-4 aria-invalid:bg-ppx-red-1 aria-invalid:outline aria-invalid:-outline-offset-1 placeholder:font-sans-light p-input border",
+  "font-medium shadow-xs border-ppx-neutral-5 bg-ppx-neutral-1 text-ppx-sm text-ppx-foreground outline-transparent focus:-outline-offset-1 focus:outline-2 placeholder:text-ppx-sm placeholder:text-ppx-neutral-12 focus:not-aria-invalid:outline-ppx-primary-2 focus:not-aria-invalid:bg-white disabled:cursor-not-allowed disabled:border-ppx-neutral-3 disabled:bg-ppx-neutral-3 disabled:text-ppx-neutral-11 disabled:placeholder:text-ppx-neutral-11 aria-invalid:outline-ppx-red-4 aria-invalid:bg-ppx-red-1 aria-invalid:outline aria-invalid:-outline-offset-1 placeholder:font-sans-light p-input border",
   {
     variants: {
       size: {
         default: "min-h-16 rounded-input",
         sm: "min-h-12 rounded-input-s",
+      },
+      widthVariant: {
+        enforced: "min-w-input",
+        full: "min-w-0 w-full",
       },
     },
     defaultVariants: {
@@ -22,13 +26,14 @@ function Textarea({
   className,
   size,
   invalid,
+  widthVariant,
   ...props
 }: React.ComponentProps<"textarea"> &
   VariantProps<typeof textareaVariants> & { invalid?: boolean }) {
   return (
     <textarea
       data-slot="textarea"
-      className={cn(textareaVariants({ size }), className)}
+      className={cn(textareaVariants({ size, widthVariant }), className)}
       aria-invalid={invalid}
       {...props}
     />

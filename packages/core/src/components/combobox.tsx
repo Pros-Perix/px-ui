@@ -14,6 +14,7 @@ import SearchIcon from "../icons/search-icon";
 import CheckIcon from "../icons/check-icon";
 import CloseIcon from "../icons/close-icon";
 import * as InputGroup from "./input-group";
+import { cva, VariantProps } from "class-variance-authority";
 
 const TRIGGER_ERROR_CN =
   "data-invalid:border-ppx-red-4 data-invalid:focus-within:outline-ppx-red-2";
@@ -22,7 +23,6 @@ const SINGLE_TEXT_CONTENT_CN =
   "px-4 py-2 text-ppx-sm min-h-11 flex items-center justify-center text-ppx-muted-foreground";
 
 export const List = Combobox.List;
-export const Input = Combobox.Input;
 
 type ComboboxContextValues = React.ComponentProps<
   typeof Combobox.Root<any, any, any>
@@ -222,6 +222,7 @@ export function LoadingIndicator(props: { className?: string }) {
 export function SearchableTrigger(props: {
   placeholder?: string;
   size?: React.ComponentProps<typeof InputGroup.Root>["size"];
+  widthVariant?: React.ComponentProps<typeof InputGroup.Root>["widthVariant"];
   className?: string;
   addons?: React.ReactNode;
 }) {
@@ -342,26 +343,43 @@ export function Trigger({
   );
 }
 
+const chipsTriggerVariants = cva(
+  "p-input text-ppx-sm bg-ppx-background inline-flex items-center justify-between border border-ppx-neutral-5 focus-within:outline-2 focus-within:-outline-offset-1 focus-within:outline-ppx-primary-2 aria-invalid:border-ppx-red-4 focus-within:aria-invalid:outline-transparent has-data-disabled:border-ppx-neutral-3 has-data-disabled:bg-ppx-neutral-3 has-data-disabled:text-ppx-neutral-11 has-data-disabled:cursor-not-allowed",
+  {
+    variants: {
+      size: {
+        default: "rounded-input min-h-input",
+        sm: "rounded-input-s min-h-input-s",
+      },
+      widthVariant: {
+        enforced: "min-w-input w-[var(--min-width-input)]",
+        full: "min-w-0 w-full",
+      },
+    },
+    defaultVariants: {
+      size: "default",
+      widthVariant: "enforced",
+    },
+  },
+);
+
 export function ChipsTrigger({
-  size = "enforced",
+  size,
+  widthVariant,
   ...props
 }: {
   children: React.ReactNode | ((selectedValue: any) => React.ReactNode);
   placeholder?: string;
-  size?: "auto" | "enforced";
   className?: string;
-}) {
+} & VariantProps<typeof chipsTriggerVariants>) {
   const { chipsContainerRef, isLoading, invalid } = useComboboxContext();
   return (
     <Combobox.Chips
       className={cn(
-        "pl-2 py-1 text-base bg-white flex w-fit items-center justify-between rounded-ppx-s border border-ppx-neutral-5 focus-within:outline-2 focus-within:-outline-offset-1 focus-within:outline-ppx-primary-2",
-        size === "enforced" && "w-75",
-        size === "auto" && "w-auto",
+        chipsTriggerVariants({ size, widthVariant }),
         props.className,
-        TRIGGER_ERROR_CN,
       )}
-      data-invalid={invalid ?? undefined}
+      aria-invalid={invalid ?? undefined}
       ref={chipsContainerRef}
     >
       <div className="gap-0.5 flex flex-1 flex-wrap items-center">
@@ -375,7 +393,7 @@ export function ChipsTrigger({
               })}
               <Combobox.Input
                 placeholder={value.length > 0 ? "" : props.placeholder}
-                className="min-w-12 h-8 pl-2 text-base flex-1 border-0 bg-transparent text-ppx-neutral-17 outline-none"
+                className="min-w-12 pl-2 flex-1 border-0 text-ppx-sm text-ppx-foreground outline-none"
               />
             </>
           )}
@@ -395,13 +413,13 @@ export function Chip(props: React.ComponentProps<typeof Combobox.Chip>) {
     <Combobox.Chip
       {...props}
       className={cn(
-        "gap-1 pl-2 pr-1 text-sm flex cursor-default items-center rounded-full bg-ppx-neutral-3 py-[0.2rem] text-ppx-neutral-17 outline-none",
+        "gap-1 pl-2 pr-1 text-sm flex cursor-default items-center rounded-full bg-ppx-neutral-3 py-[0.2rem] text-ppx-foreground outline-none",
         props.className,
       )}
     >
       {props.children}
       <Combobox.ChipRemove
-        className="size-5 hover:text-white flex shrink-0 items-center justify-center rounded-full border border-transparent text-inherit hover:border-ppx-neutral-4 hover:bg-ppx-neutral-5 active:bg-ppx-neutral-6"
+        className="size-5 flex shrink-0 items-center justify-center rounded-full border border-transparent text-inherit hover:border-ppx-neutral-4 hover:bg-ppx-neutral-5 hover:text-ppx-background active:bg-ppx-neutral-6"
         aria-label="Remove"
       >
         <CloseIcon className="size-3" />
@@ -415,7 +433,7 @@ export function Search({
   ...props
 }: React.ComponentProps<typeof Combobox.Input>) {
   return (
-    <div className="top-0 bg-white p-2 gap-2 sticky z-10 flex items-center justify-between border-b-[0.75px] border-ppx-neutral-7">
+    <div className="top-0 gap-2 sticky z-10 flex items-center justify-between border-b-[0.75px] border-ppx-neutral-7 bg-ppx-background p-input">
       <Combobox.Input
         placeholder={placeholder}
         className="text-sm flex-1 placeholder:text-ppx-neutral-7 focus:outline-none"

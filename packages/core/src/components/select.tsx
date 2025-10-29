@@ -116,30 +116,37 @@ function ItemIndicator(props: { selected: boolean }) {
 }
 
 export const triggerVariants = cva(
-  "min-w-input gap-2 text-ppx-sm bg-ppx-neutral-1 inline-flex items-center justify-between border border-ppx-neutral-5 text-ppx-foreground outline-transparent p-input data-invalid:border-ppx-red-4 focus-visible:outline-2 focus-visible:-outline-offset-1 focus-visible:outline-ppx-primary-2 data-disabled:cursor-not-allowed data-disabled:border-ppx-neutral-3 data-disabled:bg-ppx-neutral-3 data-disabled:text-ppx-neutral-11",
+  "gap-2 text-ppx-sm bg-ppx-neutral-1 inline-flex items-center justify-between border border-ppx-neutral-5 aria-invalid:border-ppx-red-4 text-ppx-foreground outline-transparent p-input focus-visible:outline-2 focus-visible:-outline-offset-1 focus-visible:outline-ppx-primary-2 focus-visible:aria-invalid:outline-transparent data-disabled:cursor-not-allowed data-disabled:border-ppx-neutral-3 data-disabled:bg-ppx-neutral-3 data-disabled:text-ppx-neutral-11",
   {
     variants: {
       size: {
         default: "rounded-input h-input",
         sm: "rounded-input-s h-input-s",
       },
+      widthVariant: {
+        enforced: "min-w-input w-[var(--min-width-input)]",
+        fit: "min-w-0 w-fit",
+        full: "min-w-0 w-full",
+      },
     },
     defaultVariants: {
       size: "default",
+      widthVariant: "enforced",
     },
   },
 );
 
 export function Trigger({
   size,
+  widthVariant,
   ...props
 }: Select.Trigger.Props & VariantProps<typeof triggerVariants>) {
   const { invalid } = useSelectContext();
   return (
     <Select.Trigger
       aria-label="Open popup"
-      className={cn(triggerVariants({ size }), props.className)}
-      data-invalid={invalid ?? undefined}
+      className={cn(triggerVariants({ size, widthVariant }), props.className)}
+      aria-invalid={invalid ?? undefined}
     >
       {props.children}
 

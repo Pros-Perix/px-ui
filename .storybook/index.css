@@ -41,11 +41,9 @@
     --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
       "Courier New", monospace;
     --color-blue-600: oklch(54.6% 0.245 262.881);
-    --color-gray-600: oklch(44.6% 0.03 256.802);
     --color-black: #000;
     --color-white: #fff;
     --spacing: 0.25rem;
-    --container-2xs: 18rem;
     --container-lg: 32rem;
     --text-xs: 0.75rem;
     --text-xs--line-height: calc(1 / 0.75);
@@ -56,7 +54,6 @@
     --text-lg: 1.125rem;
     --text-lg--line-height: calc(1.75 / 1.125);
     --font-weight-light: 300;
-    --font-weight-normal: 400;
     --font-weight-medium: 500;
     --font-weight-semibold: 600;
     --font-weight-bold: 700;
@@ -359,15 +356,6 @@
   .mt-2 {
     margin-top: calc(var(--spacing) * 2);
   }
-  .mr-0\.5 {
-    margin-right: calc(var(--spacing) * 0.5);
-  }
-  .mr-1 {
-    margin-right: calc(var(--spacing) * 1);
-  }
-  .mr-1\.5 {
-    margin-right: calc(var(--spacing) * 1.5);
-  }
   .mr-2 {
     margin-right: calc(var(--spacing) * 2);
   }
@@ -502,14 +490,23 @@
   .min-h-\[155px\] {
     min-height: 155px;
   }
+  .min-h-\[var\(--height-input\)\] {
+    min-height: var(--height-input);
+  }
+  .min-h-\[var\(--height-input-s\)\] {
+    min-height: var(--height-input-s);
+  }
+  .min-h-input {
+    min-height: var(--height-input);
+  }
+  .min-h-input-s {
+    min-height: var(--height-input-s);
+  }
   .w-1 {
     width: calc(var(--spacing) * 1);
   }
   .w-4 {
     width: calc(var(--spacing) * 4);
-  }
-  .w-5 {
-    width: calc(var(--spacing) * 5);
   }
   .w-6 {
     width: calc(var(--spacing) * 6);
@@ -553,6 +550,9 @@
   .w-\[var\(--active-tab-width\)\] {
     width: var(--active-tab-width);
   }
+  .w-\[var\(--min-width-input\)\] {
+    width: var(--min-width-input);
+  }
   .w-auto {
     width: auto;
   }
@@ -571,11 +571,8 @@
   .min-w-12 {
     min-width: calc(var(--spacing) * 12);
   }
-  .min-w-\[12rem\] {
-    min-width: 12rem;
-  }
-  .min-w-\[calc\(--min-w-input\,-2rem\)\] {
-    min-width: calc(--min - w - input, -2rem);
+  .min-w-full {
+    min-width: 100%;
   }
   .min-w-input {
     min-width: var(--min-width-input);
@@ -642,9 +639,6 @@
   }
   .justify-center {
     justify-content: center;
-  }
-  .gap-0 {
-    gap: calc(var(--spacing) * 0);
   }
   .gap-0\.5 {
     gap: calc(var(--spacing) * 0.5);
@@ -1306,6 +1300,20 @@
       }
     }
   }
+  .hover\:text-ppx-background {
+    &:hover {
+      @media (hover: hover) {
+        color: var(--color-ppx-background);
+      }
+    }
+  }
+  .hover\:text-ppx-foreground {
+    &:hover {
+      @media (hover: hover) {
+        color: var(--color-ppx-foreground);
+      }
+    }
+  }
   .hover\:text-ppx-neutral-12 {
     &:hover {
       @media (hover: hover) {
@@ -1656,6 +1664,26 @@
       border-color: var(--color-ppx-primary-5) !important;
     }
   }
+  .has-data-disabled\:cursor-not-allowed {
+    &:has(*[data-disabled]) {
+      cursor: not-allowed;
+    }
+  }
+  .has-data-disabled\:border-ppx-neutral-3 {
+    &:has(*[data-disabled]) {
+      border-color: var(--color-ppx-neutral-3);
+    }
+  }
+  .has-data-disabled\:bg-ppx-neutral-3 {
+    &:has(*[data-disabled]) {
+      background-color: var(--color-ppx-neutral-3);
+    }
+  }
+  .has-data-disabled\:text-ppx-neutral-11 {
+    &:has(*[data-disabled]) {
+      color: var(--color-ppx-neutral-11);
+    }
+  }
   .has-\[\[data-slot\=input-group-control\]\:disabled\]\:border-ppx-neutral-3 {
     &:has(*:is([data-slot=input-group-control]:disabled)) {
       border-color: var(--color-ppx-neutral-3);
@@ -1786,6 +1814,20 @@
       --tw-text-shadow-color: #ba0000;
       @supports (color: color-mix(in lab, red, red)) {
         --tw-text-shadow-color: color-mix(in oklab, var(--color-ppx-red-5) var(--tw-text-shadow-alpha), transparent);
+      }
+    }
+  }
+  .focus-within\:aria-invalid\:outline-transparent {
+    &:focus-within {
+      &[aria-invalid="true"] {
+        outline-color: transparent;
+      }
+    }
+  }
+  .focus-visible\:aria-invalid\:outline-transparent {
+    &:focus-visible {
+      &[aria-invalid="true"] {
+        outline-color: transparent;
       }
     }
   }

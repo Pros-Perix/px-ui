@@ -5,16 +5,22 @@ import { cn } from "../utils";
 import { Button as ButtonComponent } from "./button";
 
 const inputGroupVariants = cva(
-  "group/input-group relative flex w-fit items-center border border-ppx-neutral-5 bg-ppx-neutral-1 outline-transparent min-w-input has-[[data-slot=input-group-control]:focus-visible]:outline-2 has-[[data-slot=input-group-control]:focus-visible]:-outline-offset-1 has-[[data-slot=input-group-control]:focus-visible]:bg-white has-[[data-slot=input-group-control]:focus-visible]:outline-ppx-primary-2 has-[[data-slot][aria-invalid=true]]:outline-ppx-red-4 has-[[data-slot][aria-invalid=true]]:outline has-[[data-slot][aria-invalid=true]]:-outline-offset-1 has-[[data-slot][aria-invalid=true]]:bg-ppx-red-1 has-[[data-slot=input-group-control]:disabled]:*:cursor-not-allowed has-[[data-slot=input-group-control]:disabled]:border-ppx-neutral-3 has-[[data-slot=input-group-control]:disabled]:bg-ppx-neutral-3 has-[[data-slot=input-group-control]:disabled]:text-ppx-neutral-11 has-[>[data-align=inline-start]]:[&>input]:pl-2 has-[>[data-align=inline-end]]:[&>input]:pr-2",
+  "group/input-group relative flex items-center border border-ppx-neutral-5 bg-ppx-neutral-1 outline-transparent has-[[data-slot=input-group-control]:focus-visible]:outline-2 has-[[data-slot=input-group-control]:focus-visible]:-outline-offset-1 has-[[data-slot=input-group-control]:focus-visible]:bg-white has-[[data-slot=input-group-control]:focus-visible]:outline-ppx-primary-2 has-[[data-slot][aria-invalid=true]]:outline-ppx-red-4 has-[[data-slot][aria-invalid=true]]:outline has-[[data-slot][aria-invalid=true]]:-outline-offset-1 has-[[data-slot][aria-invalid=true]]:bg-ppx-red-1 has-[[data-slot=input-group-control]:disabled]:*:cursor-not-allowed has-[[data-slot=input-group-control]:disabled]:border-ppx-neutral-3 has-[[data-slot=input-group-control]:disabled]:bg-ppx-neutral-3 has-[[data-slot=input-group-control]:disabled]:text-ppx-neutral-11 has-[>[data-align=inline-start]]:[&>input]:pl-2 has-[>[data-align=inline-end]]:[&>input]:pr-2",
   {
     variants: {
       size: {
         default: "h-input rounded-input",
         sm: "h-input-s rounded-input-s",
       },
+      widthVariant: {
+        enforced: "min-w-input w-[var(--min-width-input)]",
+        fit: "min-w-0 w-fit",
+        full: "min-w-0 w-full",
+      },
     },
     defaultVariants: {
       size: "default",
+      widthVariant: "enforced",
     },
   },
 );
@@ -23,6 +29,7 @@ export function Root({
   className,
   size,
   disabled,
+  widthVariant,
   ...props
 }: React.ComponentProps<"div"> &
   VariantProps<typeof inputGroupVariants> & { disabled?: boolean }) {
@@ -30,7 +37,7 @@ export function Root({
     <div
       data-slot="input-group"
       role="group"
-      className={cn(inputGroupVariants({ size }), className)}
+      className={cn(inputGroupVariants({ size, widthVariant }), className)}
       data-disabled={disabled}
       {...props}
     />
