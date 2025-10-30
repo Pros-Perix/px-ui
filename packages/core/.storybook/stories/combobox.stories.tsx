@@ -176,7 +176,7 @@ export function WithOnlyIconWithNoSelectedValue() {
   return (
     <>
       <Combobox.Root items={posts}>
-        <Combobox.Trigger size="auto">
+        <Combobox.Trigger size="sm">
           <Avatar
             imgSrc="https://github.com/shadcn.png"
             name="John Doe"
@@ -208,17 +208,12 @@ export function WithSearchOnPopup() {
 }
 
 function WithSearchOnPopupImpl() {
-  const userLoader = useAsyncOptions(userOptions);
-  const [selected, setSelected] = React.useState<typeof userLoader.items>([]);
-
   return (
     <>
       <Combobox.Root
-        // multiple
-        // value={selected}
-        // onValueChange={setSelected}
+        multiple
         isItemEqualToValue={(item, selected) => item.id === selected.id}
-        {...userLoader}
+        asyncConfig={userOptionsConfig}
       >
         <Combobox.Trigger placeholder="Select user">
           {(item) => item?.firstName}
@@ -226,7 +221,7 @@ function WithSearchOnPopupImpl() {
         <Combobox.Content>
           <Combobox.Search />
           <Combobox.List>
-            {(item: (typeof userLoader.items)[number]) => (
+            {(item) => (
               <Combobox.MultiItem key={item.id} value={item}>
                 <Avatar
                   imgSrc={`https://placeholder.co/150x150/${item.firstName.replace(/ /g, "")}`}
@@ -290,7 +285,7 @@ export function WithAsyncLoading() {
   );
 }
 
-const userOptions = defineAsyncOptions({
+const userOptionsConfig = defineAsyncOptions({
   cacheKey: ["users"],
   loader: async ({ page, search }) => {
     const perPage = 20;
@@ -320,36 +315,20 @@ const userOptions = defineAsyncOptions({
 });
 
 function AsyncLoadingImpl() {
-  const asyncUserOptions = useAsyncOptions(userOptions);
-  const [selected, setSelected] = React.useState<typeof asyncUserOptions.items>(
-    [],
-  );
+  const [selected, setSelected] = React.useState<any>([]);
 
   return (
-    <Combobox.Root
-      multiple
-      value={selected}
-      onValueChange={setSelected}
-      isItemEqualToValue={(item, selected) => item.id === selected.id}
-      {...asyncUserOptions}
-    >
-      <Combobox.ChipsTrigger placeholder="Select users">
-        {(item) => (
-          <Combobox.Chip key={item.id}>
-            <Avatar
-              imgSrc={item.image}
-              name={`${item.firstName} ${item.lastName}`}
-              size="20px"
-              variant="rounded"
-            />
-            {`${item.firstName} ${item.lastName}`}
-          </Combobox.Chip>
-        )}
-      </Combobox.ChipsTrigger>
-      <Combobox.Content>
-        <Combobox.List>
-          {(item: (typeof asyncUserOptions.items)[number]) => (
-            <Combobox.MultiItem key={item.id} value={item}>
+    <>
+      <Combobox.Root
+        multiple
+        value={selected}
+        onValueChange={setSelected}
+        isItemEqualToValue={(item, selected) => item.id === selected.id}
+        asyncConfig={userOptionsConfig}
+      >
+        <Combobox.ChipsTrigger placeholder="Select users">
+          {(item) => (
+            <Combobox.Chip key={item.id}>
               <Avatar
                 imgSrc={item.image}
                 name={`${item.firstName} ${item.lastName}`}
@@ -357,37 +336,25 @@ function AsyncLoadingImpl() {
                 variant="rounded"
               />
               {`${item.firstName} ${item.lastName}`}
-            </Combobox.MultiItem>
+            </Combobox.Chip>
           )}
-        </Combobox.List>
-      </Combobox.Content>
-    </Combobox.Root>
+        </Combobox.ChipsTrigger>
+        <Combobox.Content>
+          <Combobox.List>
+            {(item: any) => (
+              <Combobox.MultiItem key={item.id} value={item}>
+                <Avatar
+                  imgSrc={item.image}
+                  name={`${item.firstName} ${item.lastName}`}
+                  size="20px"
+                  variant="rounded"
+                />
+                {`${item.firstName} ${item.lastName}`}
+              </Combobox.MultiItem>
+            )}
+          </Combobox.List>
+        </Combobox.Content>
+      </Combobox.Root>
+    </>
   );
 }
-
-/*
-<SearchableDropdown 
-{...userLoader} 
-placeholder="Select users" 
-getOptionLabel={(item) => `${item.firstName} ${item.lastName}`} 
-getOptionValue={(item) => item.id} 
-/>
-*/
-
-/*
-<ChipsDropdown 
-{...userLoader} 
-placeholder="Select users" 
-getOptionLabel={(item) => `${item.firstName} ${item.lastName}`} 
-getOptionValue={(item) => item.id} 
-/>
-*/
-
-/*
-<TriggerDropdown 
-{...userLoader} 
-placeholder="Select users" 
-getOptionLabel={(item) => `${item.firstName} ${item.lastName}`} 
-getOptionValue={(item) => item.id} 
-/>
-*/

@@ -15,9 +15,8 @@ import CheckIcon from "../icons/check-icon";
 import CloseIcon from "../icons/close-icon";
 import * as InputGroup from "./input-group";
 import { cva, VariantProps } from "class-variance-authority";
-
-const TRIGGER_ERROR_CN =
-  "data-invalid:border-ppx-red-4 data-invalid:focus-within:outline-ppx-red-2";
+import { useAsyncOptions } from "../hooks/use-async-options";
+import { AsyncOptionsConfig } from "../hooks/use-async-options";
 
 const SINGLE_TEXT_CONTENT_CN =
   "px-4 py-2 text-ppx-sm min-h-11 flex items-center justify-center text-ppx-muted-foreground";
@@ -58,17 +57,43 @@ export function Root<
     | "onLoadMore"
     | "hasMore"
     | "invalid"
-  >) {
+  > & { asyncConfig?: AsyncOptionsConfig<ItemValue> }) {
   const chipsContainerRef = React.useRef<HTMLDivElement>(null);
+  const [isOpen, setIsOpen] = React.useState(false);
+  const [inputValue, setInputValue] = React.useState("");
 
-  const value = React.useMemo(
-    () => ({ ...props, chipsContainerRef }),
-    [props, chipsContainerRef],
-  );
+  const fallbackProps = {
+    open: isOpen,
+    onOpenChange: setIsOpen,
+    inputValue,
+    onInputValueChange: setInputValue,
+  };
+
+  const mergedProps = {
+    ...fallbackProps,
+    ...props,
+  };
+
+  const asyncOptionsProps = props.asyncConfig
+    ? useAsyncOptions(props.asyncConfig, {
+        isOpen: mergedProps.open,
+        inputValue: mergedProps.inputValue as string,
+      })
+    : {};
+
+  const rootProps = {
+    ...asyncOptionsProps,
+    ...mergedProps,
+  };
+
+  const contextValues = {
+    ...rootProps,
+    chipsContainerRef,
+  };
 
   return (
-    <ComboboxContext.Provider value={value}>
-      <Combobox.Root autoHighlight {...props}>
+    <ComboboxContext.Provider value={contextValues}>
+      <Combobox.Root autoHighlight {...rootProps}>
         {children}
       </Combobox.Root>
     </ComboboxContext.Provider>
@@ -211,9 +236,9 @@ export function LoadingIndicator(props: { className?: string }) {
   return (
     <div className={cn("flex items-center justify-center", props.className)}>
       <div className="space-x-1 flex">
-        <div className="w-1 h-1 animate-bounce rounded-full bg-ppx-neutral-17 opacity-40 [animation-delay:-0.3s] [animation-name:bounce-color]"></div>
-        <div className="w-1 h-1 animate-bounce rounded-full bg-ppx-neutral-17 opacity-70 [animation-delay:-0.15s] [animation-name:bounce-color]"></div>
-        <div className="w-1 h-1 animate-bounce rounded-full bg-ppx-neutral-17 opacity-100 [animation-name:bounce-color]"></div>
+        <div className="w-1 h-1 animate-bounce rounded-full bg-ppx-foreground opacity-40 [animation-delay:-0.3s] [animation-name:bounce-color]"></div>
+        <div className="w-1 h-1 animate-bounce rounded-full bg-ppx-foreground opacity-70 [animation-delay:-0.15s] [animation-name:bounce-color]"></div>
+        <div className="w-1 h-1 animate-bounce rounded-full bg-ppx-foreground opacity-100 [animation-name:bounce-color]"></div>
       </div>
     </div>
   );
@@ -275,33 +300,48 @@ export function SearchableTriggerDropdownAddon() {
   );
 }
 
+export const triggerVariants = cva(
+  "gap-2 text-ppx-sm bg-ppx-neutral-1 inline-flex items-center justify-between border border-ppx-neutral-5 aria-invalid:border-ppx-red-4 text-ppx-foreground outline-transparent p-input focus-visible:outline-2 focus-visible:-outline-offset-1 focus-visible:outline-ppx-primary-2 focus-visible:aria-invalid:outline-transparent data-disabled:cursor-not-allowed data-disabled:border-ppx-neutral-3 data-disabled:bg-ppx-neutral-3 data-disabled:text-ppx-neutral-11",
+  {
+    variants: {
+      size: {
+        default: "rounded-input h-input",
+        sm: "rounded-input-s h-input-s",
+      },
+      widthVariant: {
+        enforced: "min-w-input w-[var(--min-width-input)]",
+        fit: "min-w-0 w-fit",
+        full: "min-w-0 w-full",
+      },
+    },
+    defaultVariants: {
+      size: "default",
+      widthVariant: "enforced",
+    },
+  },
+);
+
 export function Trigger({
-  size = "enforced",
+  size,
+  widthVariant,
   ...props
 }: {
   children?: React.ReactNode | ((selectedValue: any) => React.ReactNode);
   className?: string;
   placeholder?: string;
-  size?: "auto" | "enforced";
-}) {
+} & VariantProps<typeof triggerVariants>) {
   const { isLoading, invalid } = useComboboxContext();
   return (
     <Combobox.Trigger
       aria-label="Open popup"
-      className={cn(
-        "h-10 gap-2 px-2 text-base bg-white flex items-center justify-between rounded-ppx-s border border-ppx-neutral-5 text-ppx-neutral-18 outline-none first:flex-1",
-        size === "enforced" && "w-75",
-        size === "auto" && "w-auto",
-        props.className,
-        TRIGGER_ERROR_CN,
-      )}
-      data-invalid={invalid ?? undefined}
+      className={cn(triggerVariants({ size, widthVariant }), props.className)}
+      aria-invalid={invalid ?? undefined}
     >
       <Combobox.Value>
         {(selectedValue) => {
           if (selectedValue == null && props.placeholder) {
             return (
-              <span className="truncate text-ppx-neutral-10">
+              <span className="truncate text-ppx-foreground">
                 {props.placeholder}
               </span>
             );
@@ -331,6 +371,7 @@ export function Trigger({
           ) {
             return <span className="truncate">{selectedValue.label}</span>;
           }
+
           return null;
         }}
       </Combobox.Value>
@@ -344,7 +385,7 @@ export function Trigger({
 }
 
 const chipsTriggerVariants = cva(
-  "p-input text-ppx-sm bg-ppx-background inline-flex items-center justify-between border border-ppx-neutral-5 focus-within:outline-2 focus-within:-outline-offset-1 focus-within:outline-ppx-primary-2 aria-invalid:border-ppx-red-4 focus-within:aria-invalid:outline-transparent has-data-disabled:border-ppx-neutral-3 has-data-disabled:bg-ppx-neutral-3 has-data-disabled:text-ppx-neutral-11 has-data-disabled:cursor-not-allowed",
+  "p-input text-ppx-sm bg-ppx-neutral-1 inline-flex items-center justify-between border border-ppx-neutral-5 focus-within:outline-2 focus-within:-outline-offset-1 focus-within:outline-ppx-primary-2 aria-invalid:border-ppx-red-4 focus-within:aria-invalid:outline-transparent has-data-disabled:border-ppx-neutral-3 has-data-disabled:bg-ppx-neutral-3 has-data-disabled:text-ppx-neutral-11 has-data-disabled:cursor-not-allowed",
   {
     variants: {
       size: {
@@ -382,7 +423,7 @@ export function ChipsTrigger({
       aria-invalid={invalid ?? undefined}
       ref={chipsContainerRef}
     >
-      <div className="gap-0.5 flex flex-1 flex-wrap items-center">
+      <div className="gap-1 flex flex-1 flex-wrap items-center">
         <Combobox.Value>
           {(value: any[]) => (
             <>
@@ -393,17 +434,19 @@ export function ChipsTrigger({
               })}
               <Combobox.Input
                 placeholder={value.length > 0 ? "" : props.placeholder}
-                className="min-w-12 pl-2 flex-1 border-0 text-ppx-sm text-ppx-foreground outline-none"
+                className="min-w-12 flex-1 border-0 text-ppx-sm text-ppx-foreground outline-none"
               />
             </>
           )}
         </Combobox.Value>
       </div>
 
-      <Combobox.Trigger className="gap-2 px-2 flex h-stretch-available items-center">
+      <div className="gap-2 flex h-stretch-available items-center text-ppx-muted-foreground">
         {isLoading && <LoadingIndicator />}
-        <ChevronDownIcon />
-      </Combobox.Trigger>
+        <Combobox.Trigger className="h-full">
+          <ChevronDownIcon />
+        </Combobox.Trigger>
+      </div>
     </Combobox.Chips>
   );
 }

@@ -1,5 +1,6 @@
 import { useRef, useState } from "react";
 import { useInfiniteQuery, QueryKey } from "@tanstack/react-query";
+import useDebounce from "./use-debounce";
 
 type LoadOptionsData<TData> = {
   options: TData[];
@@ -17,34 +18,40 @@ type LoadOptionsFn<TData> = (params: {
   signal: AbortSignal;
 }) => Promise<LoadOptionsReturn<TData>>;
 
-export function useAsyncOptions<TData = any>(params: {
-  /**
-   * An unique key to identify the cache, used to cache the results.
-   * This must be unique
-   *
-   * @example
-   * ```ts
-   * const userOptions = defineAsyncOptions({
-   *   cacheKey: ["users"],
-   *   loader: async ({ page, search }) => {
-   *     // Your async loading logic here
-   *     return {
-   *       data: { options: [], hasMore: false },
-   *       error: null,
-   *     };
-   *   },
-   * }),
-   * const userOptions = useAsyncOptions(userOptions);
-   * ```
-   * });
-   */
-  cacheKey: QueryKey;
-  loader: LoadOptionsFn<TData>;
-}) {
-  const [isOpen, setIsOpen] = useState(false);
-  const [search, setSearch] = useState("");
-  const [debouncedSearch, setDebouncedSearch] = useState(search);
-  const timeout = useRef<NodeJS.Timeout | null>(null);
+export function useAsyncOptions<TData = any>(
+  params: {
+    /**
+     * An unique key to identify the cache, used to cache the results.
+     * This must be unique
+     *
+     * @example
+     * ```ts
+     * const userOptions = defineAsyncOptions({
+     *   cacheKey: ["users"],
+     *   loader: async ({ page, search }) => {
+     *     // Your async loading logic here
+     *     return {
+     *       data: { options: [], hasMore: false },
+     *       error: null,
+     *     };
+     *   },
+     * }),
+     * const userOptions = useAsyncOptions(userOptions);
+     * ```
+     * });
+     */
+    cacheKey: QueryKey;
+    loader: LoadOptionsFn<TData>;
+  },
+  {
+    isOpen,
+    inputValue,
+  }: {
+    isOpen: boolean;
+    inputValue: string;
+  },
+) {
+  const [debouncedSearch, setDebouncedSearch] = useState(inputValue);
   const isFetchedAfterMount = useRef(false);
 
   const query = useInfiniteQuery({
@@ -74,26 +81,19 @@ export function useAsyncOptions<TData = any>(params: {
     isFetchedAfterMount.current = true;
   }
 
+  if (inputValue === "" && debouncedSearch !== "" && isOpen) {
+    setDebouncedSearch("");
+  }
+
+  useDebounce(
+    () => {
+      setDebouncedSearch(inputValue);
+    },
+    300,
+    [inputValue],
+  );
+
   const items = query.data?.pages.flatMap((page) => page.options) ?? [];
-
-  const handleInputValueChange = (value: string) => {
-    setSearch(value);
-
-    if (timeout.current) {
-      clearTimeout(timeout.current);
-    }
-
-    if (value === "") {
-      setDebouncedSearch(value);
-      timeout.current = null;
-      return;
-    }
-
-    timeout.current = setTimeout(() => {
-      setDebouncedSearch(value);
-      timeout.current = null;
-    }, 300);
-  };
 
   const handleLoadMore = () => {
     query.fetchNextPage();
@@ -105,18 +105,18 @@ export function useAsyncOptions<TData = any>(params: {
     isLoadingMore: query.isFetchingNextPage,
     hasMore: query.hasNextPage,
     isError: query.isError,
-    open: isOpen,
-    onOpenChange: setIsOpen,
-    inputValue: search,
-    onInputValueChange: handleInputValueChange,
     onLoadMore: handleLoadMore,
     _query: query,
   };
 }
 
-export function defineAsyncOptions<TData = any>(options: {
+export type AsyncOptionsConfig<TData> = {
   cacheKey: QueryKey;
   loader: LoadOptionsFn<TData>;
-}) {
+};
+
+export function defineAsyncOptions<TData = any>(
+  options: AsyncOptionsConfig<TData>,
+) {
   return options;
 }
