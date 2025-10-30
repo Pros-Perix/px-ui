@@ -4,7 +4,7 @@ import { cva, VariantProps } from "class-variance-authority";
 import { cn } from "../utils";
 
 const textareaVariants = cva(
-  "font-medium shadow-xs border-ppx-neutral-5 bg-ppx-neutral-1 text-ppx-sm text-ppx-foreground outline-transparent focus:-outline-offset-1 focus:outline-2 placeholder:text-ppx-sm placeholder:text-ppx-neutral-12 focus:not-aria-invalid:outline-ppx-primary-2 focus:not-aria-invalid:bg-white disabled:cursor-not-allowed disabled:border-ppx-neutral-3 disabled:bg-ppx-neutral-3 disabled:text-ppx-neutral-11 disabled:placeholder:text-ppx-neutral-11 aria-invalid:outline-ppx-red-4 aria-invalid:bg-ppx-red-1 aria-invalid:outline aria-invalid:-outline-offset-1 placeholder:font-sans-light p-input border",
+  "font-medium shadow-xs border-ppx-neutral-5 bg-ppx-neutral-1 text-ppx-sm text-ppx-foreground outline-transparent focus:-outline-offset-1 focus:outline-2 placeholder:text-ppx-sm placeholder:text-ppx-neutral-12 focus:not-aria-invalid:outline-ppx-primary-2 focus:not-aria-invalid:bg-ppx-background disabled:cursor-not-allowed disabled:border-ppx-neutral-3 disabled:bg-ppx-neutral-3 disabled:text-ppx-neutral-11 disabled:placeholder:text-ppx-neutral-11 aria-invalid:outline-ppx-red-4 aria-invalid:bg-ppx-red-1 aria-invalid:outline aria-invalid:-outline-offset-1 placeholder:font-sans-light p-input border",
   {
     variants: {
       size: {

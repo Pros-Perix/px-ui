@@ -126,29 +126,6 @@ export const ButtonExample: StoryObj = {
   ),
 };
 
-// Tooltip example
-export const TooltipExample: StoryObj = {
-  render: () => (
-    <div className="w-[400px]">
-      <InputGroup.Root>
-        <InputGroup.Input placeholder="Enter password" type="password" />
-        <InputGroup.Addon align="inline-end">
-          <Tooltip.Root>
-            <Tooltip.Trigger>
-              <InputGroup.Button size="icon-xs" aria-label="Password info">
-                <InfoIcon />
-              </InputGroup.Button>
-            </Tooltip.Trigger>
-            <Tooltip.Content>
-              Password must be at least 8 characters
-            </Tooltip.Content>
-          </Tooltip.Root>
-        </InputGroup.Addon>
-      </InputGroup.Root>
-    </div>
-  ),
-};
-
 // Spinner example
 export const SpinnerExample: StoryObj = {
   render: () => {
@@ -218,23 +195,23 @@ export const LabelExample: StoryObj = {
 export const DropdownExample: StoryObj = {
   render: () => {
     return (
-      <div className="w-[400px]">
-        <InputGroup.Root>
-          <InputGroup.Input placeholder="example.com" />
-          <InputGroup.Addon>
-            <Select.Root defaultValue="https://">
-              <Select.Trigger className="h-6 gap-1 px-2 min-w-0 flex items-center rounded-input bg-transparent text-ppx-sm shadow-none hover:bg-ppx-neutral-2" />
-              <Select.Content>
-                <Select.List>
-                  <Select.Item value="https://">https://</Select.Item>
-                  <Select.Item value="http://">http://</Select.Item>
-                  <Select.Item value="ftp://">ftp://</Select.Item>
-                </Select.List>
-              </Select.Content>
-            </Select.Root>
-          </InputGroup.Addon>
-        </InputGroup.Root>
-      </div>
+      <InputGroup.Root>
+        <InputGroup.Input placeholder="example.com" />
+        <InputGroup.Addon>
+          <Select.Root defaultValue="https://">
+            <Select.Trigger widthVariant="fit" size="sm">
+              <Select.Value />
+            </Select.Trigger>
+            <Select.Content>
+              <Select.List>
+                <Select.Item value="https://">https://</Select.Item>
+                <Select.Item value="http://">http://</Select.Item>
+                <Select.Item value="ftp://">ftp://</Select.Item>
+              </Select.List>
+            </Select.Content>
+          </Select.Root>
+        </InputGroup.Addon>
+      </InputGroup.Root>
     );
   },
 };
