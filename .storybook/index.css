@@ -40,7 +40,6 @@
     --font-sans: "Lato R", system-ui, sans-serif;
     --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
       "Courier New", monospace;
-    --color-red-500: oklch(63.7% 0.237 25.331);
     --color-blue-600: oklch(54.6% 0.245 262.881);
     --color-black: #000;
     --color-white: #fff;
@@ -85,7 +84,6 @@
     --color-ppx-neutral-11: #6b788e;
     --color-ppx-neutral-12: #5d6b82;
     --color-ppx-neutral-13: #505f79;
-    --color-ppx-neutral-17: #15294b;
     --color-ppx-neutral-18: #091e42;
     --color-ppx-primary-1: #eaf8f1;
     --color-ppx-primary-2: #a7e1c6;
@@ -355,6 +353,9 @@
   .mt-2 {
     margin-top: calc(var(--spacing) * 2);
   }
+  .-mr-1\.5 {
+    margin-right: calc(var(--spacing) * -1.5);
+  }
   .mr-2 {
     margin-right: calc(var(--spacing) * 2);
   }
@@ -363,6 +364,9 @@
   }
   .mb-5 {
     margin-bottom: calc(var(--spacing) * 5);
+  }
+  .-ml-1 {
+    margin-left: calc(var(--spacing) * -1);
   }
   .ml-auto {
     margin-left: auto;
@@ -919,15 +923,6 @@
   .pr-10 {
     padding-right: calc(var(--spacing) * 10);
   }
-  .pr-\[calc\(var\(--padding-input\)\+2px\)\] {
-    padding-right: calc(var(--padding-input) + 2px);
-  }
-  .pr-\[calc\(var\(--padding-input\)\+4\)\] {
-    padding-right: calc(var(--padding-input) + 4);
-  }
-  .pr-\[calc\(var\(--padding-input\)\+4px\)\] {
-    padding-right: calc(var(--padding-input) + 4px);
-  }
   .pr-input {
     padding-right: var(--padding-input);
   }
@@ -939,15 +934,6 @@
   }
   .pl-10 {
     padding-left: calc(var(--spacing) * 10);
-  }
-  .pl-\[calc\(var\(--padding-input\)\+2px\)\] {
-    padding-left: calc(var(--padding-input) + 2px);
-  }
-  .pl-\[calc\(var\(--padding-input\)\+4\)\] {
-    padding-left: calc(var(--padding-input) + 4);
-  }
-  .pl-\[calc\(var\(--padding-input\)\+4px\)\] {
-    padding-left: calc(var(--padding-input) + 4px);
   }
   .pl-input {
     padding-left: var(--padding-input);
@@ -1262,13 +1248,6 @@
     &:hover {
       @media (hover: hover) {
         border-color: var(--color-ppx-neutral-4);
-      }
-    }
-  }
-  .hover\:bg-ppx-neutral-2 {
-    &:hover {
-      @media (hover: hover) {
-        background-color: var(--color-ppx-neutral-2);
       }
     }
   }
@@ -1706,11 +1685,6 @@
       background-color: var(--color-ppx-background);
     }
   }
-  .has-\[\[data-slot\=input-group-control\]\:focus-visible\]\:bg-white {
-    &:has(*:is([data-slot=input-group-control]:focus-visible)) {
-      background-color: var(--color-white);
-    }
-  }
   .has-\[\[data-slot\=input-group-control\]\:focus-visible\]\:outline-2 {
     &:has(*:is([data-slot=input-group-control]:focus-visible)) {
       outline-style: var(--tw-outline-style);
@@ -1746,16 +1720,6 @@
   .has-\[\[data-slot\]\[aria-invalid\=true\]\]\:outline-ppx-red-4 {
     &:has(*:is([data-slot][aria-invalid=true])) {
       outline-color: var(--color-ppx-red-4);
-    }
-  }
-  .has-\[\>button\]\:mr-\[-0\.45rem\] {
-    &:has(>button) {
-      margin-right: -0.45rem;
-    }
-  }
-  .has-\[\>button\]\:ml-\[-0\.45rem\] {
-    &:has(>button) {
-      margin-left: -0.45rem;
     }
   }
   .has-\[\>svg\]\:p-0 {

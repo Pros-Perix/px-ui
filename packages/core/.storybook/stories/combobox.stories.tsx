@@ -3,8 +3,9 @@ import type { Meta, StoryObj } from "@storybook/react";
 import * as Combobox from "../../src/components/combobox";
 import { Avatar } from "../../src/components/avatar";
 import {
-  defineAsyncOptions,
-  useAsyncOptions,
+  defineLoadOptions,
+  InferOption,
+  InferOptions,
 } from "../../src/hooks/use-async-options";
 import { QueryClient, QueryClientContext } from "@tanstack/react-query";
 
@@ -213,7 +214,7 @@ function WithSearchOnPopupImpl() {
       <Combobox.Root
         multiple
         isItemEqualToValue={(item, selected) => item.id === selected.id}
-        asyncConfig={userOptionsConfig}
+        loadOptions={loadUserOptions}
       >
         <Combobox.Trigger placeholder="Select user">
           {(item) => item?.firstName}
@@ -285,7 +286,7 @@ export function WithAsyncLoading() {
   );
 }
 
-const userOptionsConfig = defineAsyncOptions({
+const loadUserOptions = defineLoadOptions({
   cacheKey: ["users"],
   loader: async ({ page, search }) => {
     const perPage = 20;
@@ -315,7 +316,9 @@ const userOptionsConfig = defineAsyncOptions({
 });
 
 function AsyncLoadingImpl() {
-  const [selected, setSelected] = React.useState<any>([]);
+  const [selected, setSelected] = React.useState<
+    InferOptions<typeof loadUserOptions>
+  >([]);
 
   return (
     <>
@@ -324,10 +327,10 @@ function AsyncLoadingImpl() {
         value={selected}
         onValueChange={setSelected}
         isItemEqualToValue={(item, selected) => item.id === selected.id}
-        asyncConfig={userOptionsConfig}
+        loadOptions={loadUserOptions}
       >
         <Combobox.ChipsTrigger placeholder="Select users">
-          {(item) => (
+          {(item: InferOption<typeof loadUserOptions>) => (
             <Combobox.Chip key={item.id}>
               <Avatar
                 imgSrc={item.image}

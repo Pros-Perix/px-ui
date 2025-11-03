@@ -16,7 +16,7 @@ import CloseIcon from "../icons/close-icon";
 import * as InputGroup from "./input-group";
 import { cva, VariantProps } from "class-variance-authority";
 import { useAsyncOptions } from "../hooks/use-async-options";
-import { AsyncOptionsConfig } from "../hooks/use-async-options";
+import { LoadOptionsConfig } from "../hooks/use-async-options";
 
 const SINGLE_TEXT_CONTENT_CN =
   "px-4 py-2 text-ppx-sm min-h-11 flex items-center justify-center text-ppx-muted-foreground";
@@ -57,7 +57,7 @@ export function Root<
     | "onLoadMore"
     | "hasMore"
     | "invalid"
-  > & { asyncConfig?: AsyncOptionsConfig<ItemValue> }) {
+  > & { loadOptions?: LoadOptionsConfig<ItemValue> }) {
   const chipsContainerRef = React.useRef<HTMLDivElement>(null);
   const [isOpen, setIsOpen] = React.useState(false);
   const [inputValue, setInputValue] = React.useState("");
@@ -74,8 +74,8 @@ export function Root<
     ...props,
   };
 
-  const asyncOptionsProps = props.asyncConfig
-    ? useAsyncOptions(props.asyncConfig, {
+  const asyncOptionsProps = props.loadOptions
+    ? useAsyncOptions(props.loadOptions, {
         isOpen: mergedProps.open,
         inputValue: mergedProps.inputValue as string,
       })

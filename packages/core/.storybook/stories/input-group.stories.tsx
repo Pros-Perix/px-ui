@@ -23,7 +23,7 @@ export const Demo: StoryObj = {
         <InputGroup.Addon>
           <SearchIcon />
         </InputGroup.Addon>
-        <InputGroup.Addon align="inline-end">
+        <InputGroup.Addon align="inline-end" className="-mr-1.5">
           <InputGroup.Button>Search</InputGroup.Button>
         </InputGroup.Addon>
       </InputGroup.Root>
@@ -197,7 +197,7 @@ export const DropdownExample: StoryObj = {
     return (
       <InputGroup.Root>
         <InputGroup.Input placeholder="example.com" />
-        <InputGroup.Addon>
+        <InputGroup.Addon className="-ml-1">
           <Select.Root defaultValue="https://">
             <Select.Trigger widthVariant="fit" size="sm">
               <Select.Value />

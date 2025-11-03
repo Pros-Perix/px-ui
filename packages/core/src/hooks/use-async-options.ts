@@ -110,13 +110,18 @@ export function useAsyncOptions<TData = any>(
   };
 }
 
-export type AsyncOptionsConfig<TData> = {
+export type LoadOptionsConfig<TData> = {
   cacheKey: QueryKey;
   loader: LoadOptionsFn<TData>;
 };
 
-export function defineAsyncOptions<TData = any>(
-  options: AsyncOptionsConfig<TData>,
+export function defineLoadOptions<TData = any>(
+  loadOptions: LoadOptionsConfig<TData>,
 ) {
-  return options;
+  return loadOptions;
 }
+
+export type InferOption<T> =
+  T extends LoadOptionsConfig<infer TData> ? TData : never;
+export type InferOptions<T> =
+  T extends LoadOptionsConfig<infer TData> ? TData[] : never;
