@@ -136,7 +136,6 @@
     "access": "public"
   },
   "peerDependencies": {
-    "classnames": ">2.0.0",
     "react": ">=16.8.0",
     "react-dom": ">=16.8.0"
   },
@@ -144,7 +143,8 @@
     "@base-ui-components/react": "1.0.0-beta.4",
     "class-variance-authority": "^0.7.1",
     "tailwind-merge": "3.2.0",
-    "tw-animate-css": "^1.3.4"
+    "tw-animate-css": "^1.3.4",
+    "classnames": ">2.0.0"
   },
   "devDependencies": {
     "@tanstack/react-query": "^5.90.1",
