@@ -217,12 +217,12 @@ function WithSearchOnPopupImpl() {
         loadOptions={loadUserOptions}
       >
         <Combobox.Trigger placeholder="Select user">
-          {(item) => item?.firstName}
+          {(item: InferOption<typeof loadUserOptions>) => item?.firstName}
         </Combobox.Trigger>
         <Combobox.Content>
           <Combobox.Search />
           <Combobox.List>
-            {(item) => (
+            {(item: InferOption<typeof loadUserOptions>) => (
               <Combobox.MultiItem key={item.id} value={item}>
                 <Avatar
                   imgSrc={`https://placeholder.co/150x150/${item.firstName.replace(/ /g, "")}`}
@@ -344,7 +344,7 @@ function AsyncLoadingImpl() {
         </Combobox.ChipsTrigger>
         <Combobox.Content>
           <Combobox.List>
-            {(item: any) => (
+            {(item: InferOption<typeof loadUserOptions>) => (
               <Combobox.MultiItem key={item.id} value={item}>
                 <Avatar
                   imgSrc={item.image}

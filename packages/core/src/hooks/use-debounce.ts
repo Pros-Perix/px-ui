@@ -5,7 +5,7 @@ export default function useDebounce<T>(
   delay: number,
   deps: React.DependencyList,
 ) {
-  const timeout = useRef<NodeJS.Timeout | null>(null);
+  const timeout = useRef<ReturnType<typeof setTimeout> | null>(null);
   const cb = useEffectEvent(callback);
 
   useEffect(() => {

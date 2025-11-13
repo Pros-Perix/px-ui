@@ -1,6 +1,6 @@
 {
   "name": "@px-ui/core",
-  "version": "1.21.0",
+  "version": "1.23.0",
   "description": "A modern React component library built with Tailwind CSS",
   "type": "module",
   "module": "./dist/index.js",
@@ -14,10 +14,98 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
     },
-    "./styles": "./dist/px-ui-core.css",
-    "./components/*": {
-      "types": "./dist/components/*.d.ts",
-      "import": "./dist/components/*.js"
+    "./styles": "./dist/core.css",
+    "./button": {
+      "types": "./dist/components/button.d.ts",
+      "import": "./dist/components/button.js"
+    },
+    "./checkbox": {
+      "types": "./dist/components/checkbox.d.ts",
+      "import": "./dist/components/checkbox.js"
+    },
+    "./label": {
+      "types": "./dist/components/label.d.ts",
+      "import": "./dist/components/label.js"
+    },
+    "./text-input": {
+      "types": "./dist/components/text-input.d.ts",
+      "import": "./dist/components/text-input.js"
+    },
+    "./input": {
+      "types": "./dist/components/input.d.ts",
+      "import": "./dist/components/input.js"
+    },
+    "./input-group": {
+      "types": "./dist/components/input-group.d.ts",
+      "import": "./dist/components/input-group.js"
+    },
+    "./textarea": {
+      "types": "./dist/components/textarea.d.ts",
+      "import": "./dist/components/textarea.js"
+    },
+    "./avatar": {
+      "types": "./dist/components/avatar.d.ts",
+      "import": "./dist/components/avatar.js"
+    },
+    "./avatar-group": {
+      "types": "./dist/components/avatar-group.d.ts",
+      "import": "./dist/components/avatar-group.js"
+    },
+    "./user-avatar": {
+      "types": "./dist/components/user-avatar.d.ts",
+      "import": "./dist/components/user-avatar.js"
+    },
+    "./segmented-control": {
+      "types": "./dist/components/segmented-control.d.ts",
+      "import": "./dist/components/segmented-control.js"
+    },
+    "./dialog": {
+      "types": "./dist/components/dialog.d.ts",
+      "import": "./dist/components/dialog.js"
+    },
+    "./popover": {
+      "types": "./dist/components/popover.d.ts",
+      "import": "./dist/components/popover.js"
+    },
+    "./combobox": {
+      "types": "./dist/components/combobox.d.ts",
+      "import": "./dist/components/combobox.js"
+    },
+    "./select": {
+      "types": "./dist/components/select.d.ts",
+      "import": "./dist/components/select.js"
+    },
+    "./menu": {
+      "types": "./dist/components/menu.d.ts",
+      "import": "./dist/components/menu.js"
+    },
+    "./spinner": {
+      "types": "./dist/components/spinner.d.ts",
+      "import": "./dist/components/spinner.js"
+    },
+    "./switch": {
+      "types": "./dist/components/switch.d.ts",
+      "import": "./dist/components/switch.js"
+    },
+    "./tabs": {
+      "types": "./dist/components/tabs.d.ts",
+      "import": "./dist/components/tabs.js"
+    },
+    "./tooltip": {
+      "types": "./dist/components/tooltip.d.ts",
+      "import": "./dist/components/tooltip.js"
+    },
+    "./radio-group": {
+      "types": "./dist/components/radio-group.d.ts",
+      "import": "./dist/components/radio-group.js"
+    },
+    "./block-checkbox-group": {
+      "types": "./dist/components/block-checkbox-group.d.ts",
+      "import": "./dist/components/block-checkbox-group.js"
+    },
+    "./block-radio-group": {
+      "types": "./dist/components/block-radio-group.d.ts",
+      "import": "./dist/components/block-radio-group.js"
     }
   },
   "files": [
@@ -28,7 +116,7 @@
     "build": "vite build",
     "test": "vitest",
     "lint": "eslint src --ext .ts,.tsx",
-    "prepublishOnly": "npm run build"
+    "prepublishOnly": "pnpm build"
   },
   "keywords": [
     "react",
@@ -38,11 +126,14 @@
     "design-system"
   ],
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Pros-Perix/px-ui.git",
     "directory": "packages/core"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "peerDependencies": {
     "classnames": ">2.0.0",
