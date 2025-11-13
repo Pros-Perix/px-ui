@@ -106,6 +106,10 @@
     "./block-radio-group": {
       "types": "./dist/components/block-radio-group.d.ts",
       "import": "./dist/components/block-radio-group.js"
+    },
+    "./utils": {
+      "types": "./dist/utils/index.d.ts",
+      "import": "./dist/utils/index.js"
     }
   },
   "files": [
