@@ -12,65 +12,23 @@ const progressTrackVariants = cva(
         sm: "h-1.5",
         lg: "h-3",
       },
-      variant: {
-        default: "bg-ppx-neutral-3",
-        success: "bg-ppx-neutral-3",
-        warning: "bg-ppx-neutral-3",
-        error: "bg-ppx-neutral-3",
-      },
     },
     defaultVariants: {
       size: "default",
-      variant: "default",
     },
   },
 );
 
 const progressIndicatorVariants = cva(
-  "h-full w-full flex-1 transition-all duration-300 ease-in-out",
-  {
-    variants: {
-      variant: {
-        default: "bg-ppx-primary-b-5",
-        success: "bg-ppx-green-5",
-        warning: "bg-ppx-yellow-5",
-        error: "bg-ppx-red-5",
-      },
-    },
-    defaultVariants: {
-      variant: "default",
-    },
-  },
+  "h-full w-full flex-1 transition-all duration-300 ease-in-out bg-ppx-primary-b-5",
 );
 
 const progressLabelVariants = cva(
-  "text-ppx-sm font-medium text-ppx-foreground mb-2 block",
-  {
-    variants: {
-      showValue: {
-        true: "",
-        false: "",
-      },
-    },
-    defaultVariants: {
-      showValue: true,
-    },
-  },
+  "text-ppx-sm font-medium text-ppx-foreground",
 );
 
 const progressValueVariants = cva(
-  "text-ppx-sm font-medium text-ppx-muted-foreground",
-  {
-    variants: {
-      position: {
-        inline: "ml-2",
-        bottom: "block mt-1",
-      },
-    },
-    defaultVariants: {
-      position: "inline",
-    },
-  },
+  "text-ppx-sm font-medium text-ppx-muted-foreground flex-shrink-0",
 );
 
 export interface ProgressBarProps extends VariantProps<typeof progressTrackVariants> {
@@ -98,11 +56,6 @@ export interface ProgressBarProps extends VariantProps<typeof progressTrackVaria
    */
   showValue?: boolean;
   /**
-   * Position of the value text relative to the progress bar.
-   * @default "inline"
-   */
-  valuePosition?: "inline" | "bottom";
-  /**
    * Additional class name for the root element.
    */
   className?: string;
@@ -123,9 +76,7 @@ export function ProgressBar({
   min = 0,
   label,
   showValue = true,
-  valuePosition = "inline",
   size,
-  variant,
   className,
   indeterminate = false,
   formatOptions,
@@ -141,28 +92,27 @@ export function ProgressBar({
         min={min}
         format={formatOptions}
       >
-        {label && (
-          <Progress.Label className={cn(progressLabelVariants({ showValue }))}>
-            {label}
-            {showValue && valuePosition === "inline" && !indeterminate && (
+        {(label || (showValue && !indeterminate)) && (
+          <div className="flex items-center justify-between mb-2">
+            {label && (
+              <Progress.Label className={cn(progressLabelVariants())}>
+                {label}
+              </Progress.Label>
+            )}
+
+            {showValue && !indeterminate && (
               <Progress.Value
-                className={cn(progressValueVariants({ position: "inline" }))}
+                className={cn(progressValueVariants())}
               />
             )}
-          </Progress.Label>
+          </div>
         )}
 
-        <Progress.Track className={cn(progressTrackVariants({ size, variant }))}>
+        <Progress.Track className={cn(progressTrackVariants({ size }))}>
           <Progress.Indicator
-            className={cn(progressIndicatorVariants({ variant }))}
+            className={cn(progressIndicatorVariants())}
           />
         </Progress.Track>
-
-        {showValue && valuePosition === "bottom" && !indeterminate && (
-          <Progress.Value
-            className={cn(progressValueVariants({ position: "bottom" }))}
-          />
-        )}
       </Progress.Root>
     </div>
   );

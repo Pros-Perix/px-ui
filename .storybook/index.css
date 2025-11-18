@@ -353,9 +353,6 @@
   .my-1\.5 {
     margin-block: calc(var(--spacing) * 1.5);
   }
-  .mt-1 {
-    margin-top: calc(var(--spacing) * 1);
-  }
   .mt-2 {
     margin-top: calc(var(--spacing) * 2);
   }
@@ -377,9 +374,6 @@
   .-ml-1 {
     margin-left: calc(var(--spacing) * -1);
   }
-  .ml-2 {
-    margin-left: calc(var(--spacing) * 2);
-  }
   .ml-auto {
     margin-left: auto;
   }
@@ -391,9 +385,6 @@
   }
   .grid {
     display: grid;
-  }
-  .inline {
-    display: inline;
   }
   .inline-block {
     display: inline-block;
@@ -583,9 +574,6 @@
   .max-w-\[var\(--available-width\)\] {
     max-width: var(--available-width);
   }
-  .max-w-md {
-    max-width: var(--container-md);
-  }
   .min-w-0 {
     min-width: calc(var(--spacing) * 0);
   }
@@ -597,6 +585,9 @@
   }
   .flex-1 {
     flex: 1;
+  }
+  .flex-shrink-0 {
+    flex-shrink: 0;
   }
   .shrink-0 {
     flex-shrink: 0;
@@ -836,9 +827,6 @@
   .bg-ppx-foreground {
     background-color: var(--color-ppx-foreground);
   }
-  .bg-ppx-green-5 {
-    background-color: var(--color-ppx-green-5);
-  }
   .bg-ppx-neutral-1 {
     background-color: var(--color-ppx-neutral-1);
   }
@@ -859,9 +847,6 @@
   }
   .bg-ppx-red-5 {
     background-color: var(--color-ppx-red-5);
-  }
-  .bg-ppx-yellow-5 {
-    background-color: var(--color-ppx-yellow-5);
   }
   .bg-transparent {
     background-color: transparent;
