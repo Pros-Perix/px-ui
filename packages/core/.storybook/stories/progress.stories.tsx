@@ -6,7 +6,7 @@ const sizes = ["default", "sm", "lg"] as const;
 
 const meta: Meta<typeof ProgressBar> = {
   component: ProgressBar,
-  title: "Components/progress",
+  title: "Components/Progress",
   tags: ["autodocs"],
   argTypes: {
     size: {

@@ -28,7 +28,7 @@ const progressLabelVariants = cva(
 );
 
 const progressValueVariants = cva(
-  "text-ppx-sm font-medium text-ppx-muted-foreground flex-shrink-0",
+  "text-ppx-sm font-bold text-ppx-primary-b-5 flex-shrink-0",
 );
 
 export interface ProgressBarProps extends VariantProps<typeof progressTrackVariants> {
