@@ -122,3 +122,15 @@ export const WithoutValueDisplay: StoryObj<typeof ProgressBar> = {
     showValue: false,
   },
 };
+
+export const RichTextLabel: StoryObj<typeof ProgressBar> = {
+  args: {
+    value: 37,
+    label: (
+      <>
+        <span className="font-bold text-black">37</span> of{" "}
+        <span className="font-bold text-black">100</span> jobs processed
+      </>
+    ),
+  },
+};

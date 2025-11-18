@@ -49,7 +49,7 @@ export interface ProgressBarProps extends VariantProps<typeof progressTrackVaria
   /**
    * An accessible label for the progress bar.
    */
-  label?: string;
+  label?: React.ReactNode;
   /**
    * Whether to show the current value as text.
    * @default true

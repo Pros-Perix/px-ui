@@ -1085,6 +1085,9 @@
   .whitespace-nowrap {
     white-space: nowrap;
   }
+  .text-black {
+    color: var(--color-black);
+  }
   .text-inherit {
     color: inherit;
   }
