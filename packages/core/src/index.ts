@@ -25,6 +25,7 @@ export * from "./components/avatar-group";
 export * from "./components/spinner";
 export * from "./components/switch";
 export * from "./components/radio-group";
+export * from "./components/progress";
 
 // Hooks
 export * from "./hooks/use-debounce";
