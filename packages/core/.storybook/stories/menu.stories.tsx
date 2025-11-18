@@ -2,6 +2,7 @@ import * as React from "react";
 import type { Meta, StoryObj } from "@storybook/react";
 import * as Menu from "../../src/components/menu";
 import { Button } from "../../src/components/button";
+import ChevronDownIcon from "../../src/icons/chevron-down-icon";
 
 const meta: Meta<typeof Menu> = {
   component: ExampleMenu,
@@ -207,5 +208,49 @@ export function CustomTrigger() {
         <Menu.Item onClick={() => console.log("Refresh")}>Refresh</Menu.Item>
       </Menu.Content>
     </Menu.Root>
+  );
+}
+
+export function GroupWithIcons() {
+  const [view, setView] = React.useState("grid");
+  const [sortBy, setSortBy] = React.useState("date");
+
+  return (
+    <Menu.Root>
+      <Menu.Trigger className="bg-ppx-primary-b-5 text-ppx-background hover:bg-ppx-primary-b-4! data-popup-open:bg-ppx-primary-b-5">
+        Bulk Action
+      </Menu.Trigger>
+      <Menu.Content popupProps={{ className: "w-40 min-w-40!" }}>
+        <Menu.Group>
+          <Menu.GroupLabel className="uppercase">Change status</Menu.GroupLabel>
+          <MyItem disabled>Open</MyItem>
+          <MyItem>On Hold</MyItem>
+          <MyItem>Close</MyItem>
+        </Menu.Group>
+
+        <Menu.Separator />
+
+        <Menu.Group>
+          <Menu.GroupLabel>Sort By</Menu.GroupLabel>
+          <Menu.RadioGroup value={sortBy} onValueChange={setSortBy}>
+            <Menu.RadioItem value="date">Date Modified</Menu.RadioItem>
+            <Menu.RadioItem value="name">Name</Menu.RadioItem>
+            <Menu.RadioItem value="size">File Size</Menu.RadioItem>
+          </Menu.RadioGroup>
+        </Menu.Group>
+      </Menu.Content>
+    </Menu.Root>
+  );
+}
+
+function MyItem({
+  children,
+  ...props
+}: React.ComponentProps<typeof Menu.Item>) {
+  return (
+    <Menu.Item {...props}>
+      <ChevronDownIcon />
+      {children}
+    </Menu.Item>
   );
 }

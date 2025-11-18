@@ -70,8 +70,8 @@ export function Content({
         className={cn(DROPDOWN_POSITIONER_CN, positionerProps?.className)}
       >
         <Menu.Popup
-          className={cn(DROPDOWN_POPUP_CN, popupProps?.className)}
           {...popupProps}
+          className={cn(DROPDOWN_POPUP_CN, "min-w-auto", popupProps?.className)}
         >
           {children}
         </Menu.Popup>
@@ -117,7 +117,7 @@ export function GroupLabel({
   return (
     <Menu.GroupLabel
       className={cn(
-        "py-2 px-4 leading-4 cursor-default text-ppx-base text-ppx-muted-foreground select-none",
+        "py-2 px-4 leading-4 cursor-default text-ppx-sm text-ppx-muted-foreground select-none",
         className,
       )}
       {...props}
