@@ -7,6 +7,7 @@ export * as Popover from "./components/popover";
 export * as Combobox from "./components/combobox";
 export * as Select from "./components/select";
 export * as Menu from "./components/menu";
+export * as Progress from "./components/progress";
 export * as InputGroup from "./components/input-group";
 export * as SegmentedControl from "./components/segmented-control";
 export * as Tabs from "./components/tabs";
@@ -26,7 +27,6 @@ export * from "./components/avatar-group";
 export * from "./components/spinner";
 export * from "./components/switch";
 export * from "./components/radio-group";
-export * from "./components/progress";
 
 // Hooks
 export * from "./hooks/use-debounce";

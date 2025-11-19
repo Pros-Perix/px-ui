@@ -1,76 +1,83 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { ProgressBar } from "../../src/components/progress";
+import { Progress } from "../../src";
 import React, { useState, useEffect } from "react";
 
 const sizes = ["default", "sm", "lg"] as const;
 
-const meta: Meta<typeof ProgressBar> = {
-  component: ProgressBar,
+const meta: Meta = {
   title: "Components/Progress",
   tags: ["autodocs"],
-  argTypes: {
-    size: {
-      control: "select",
-      options: sizes,
-    },
-    value: {
-      control: { type: "range", min: 0, max: 100, step: 1 },
-    },
-    max: {
-      control: { type: "number", min: 1, max: 1000 },
-    },
-    showValue: {
-      control: "boolean",
-    },
-    indeterminate: {
-      control: "boolean",
+  parameters: {
+    docs: {
+      description: {
+        component: "A composable progress component that allows flexible positioning of labels and values.",
+      },
     },
   },
 };
 
 export default meta;
 
-export const Default: StoryObj<typeof ProgressBar> = {
-  args: {
-    value: 65,
-    label: "Progress",
-    showValue: true,
-  },
+export const Basic: StoryObj = {
+  render: () => (
+    <Progress.Root value={75} max={100}>
+      <div className="flex items-center justify-between mb-2">
+        <Progress.Label>Progress</Progress.Label>
+        <Progress.Value />
+      </div>
+      <Progress.Track>
+        <Progress.Indicator />
+      </Progress.Track>
+    </Progress.Root>
+  ),
 };
 
-export const WithoutLabel: StoryObj<typeof ProgressBar> = {
-  args: {
-    value: 45,
-    showValue: true,
-  },
+export const LabelInsideTrack: StoryObj = {
+  render: () => (
+    <Progress.Root value={60} max={100}>
+      <Progress.Track className="relative">
+        <Progress.Indicator />
+        <div className="absolute inset-0 flex items-center justify-center">
+          <Progress.Label className="text-white font-medium">60% Complete</Progress.Label>
+        </div>
+      </Progress.Track>
+    </Progress.Root>
+  ),
 };
 
-export const Sizes: StoryObj<typeof ProgressBar> = {
-  args: {
-    value: 75,
-    label: "Progress",
-    showValue: true,
-  },
-  render: (args) => (
+export const VerticalStack: StoryObj = {
+  render: () => (
+    <Progress.Root value={42} max={100}>
+      <div className="text-center mb-2">
+        <Progress.Label className="block">Upload Progress</Progress.Label>
+        <Progress.Value className="block text-2xl font-bold mt-1" />
+      </div>
+      <Progress.Track size="lg">
+        <Progress.Indicator />
+      </Progress.Track>
+    </Progress.Root>
+  ),
+};
+
+export const Sizes: StoryObj = {
+  render: () => (
     <div className="space-y-4">
       {sizes.map((size) => (
-        <div key={size}>
-          <ProgressBar {...args} size={size} label={`Size: ${size}`} />
-        </div>
+        <Progress.Root key={size} value={75} max={100}>
+          <div className="flex items-center justify-between mb-2">
+            <Progress.Label>Size: {size}</Progress.Label>
+            <Progress.Value />
+          </div>
+          <Progress.Track size={size as "default" | "sm" | "lg"}>
+            <Progress.Indicator />
+          </Progress.Track>
+        </Progress.Root>
       ))}
     </div>
   ),
 };
 
-
-export const Indeterminate: StoryObj<typeof ProgressBar> = {
-  args: {
-    indeterminate: true,
-    label: "Loading...",
-  },
-};
-
-function AnimatedProgressBar({ ...args }: React.ComponentProps<typeof ProgressBar>) {
+function AnimatedProgress() {
   const [value, setValue] = useState(0);
 
   useEffect(() => {
@@ -81,56 +88,49 @@ function AnimatedProgressBar({ ...args }: React.ComponentProps<typeof ProgressBa
     return () => clearInterval(interval);
   }, []);
 
-  return <ProgressBar {...args} value={value} />;
+  return (
+    <Progress.Root value={value} max={100}>
+      <div className="flex items-center justify-between mb-2">
+        <Progress.Label>Animated Progress</Progress.Label>
+        <Progress.Value />
+      </div>
+      <Progress.Track>
+        <Progress.Indicator />
+      </Progress.Track>
+    </Progress.Root>
+  );
 }
 
-export const Animated: StoryObj<typeof ProgressBar> = {
-  args: {
-    label: "Animated Progress",
-    showValue: true,
-  },
-  render: (args) => <AnimatedProgressBar {...args} />,
+export const Animated: StoryObj = {
+  render: () => <AnimatedProgress />,
 };
 
-export const CustomRange: StoryObj<typeof ProgressBar> = {
-  args: {
-    value: 750,
-    max: 1000,
-    min: 500,
-    label: "Custom Range (500-1000)",
-    showValue: true,
-  },
+export const WithPercentage: StoryObj = {
+  render: () => (
+    <Progress.Root value={42} max={100} format={{ style: "percent", minimumFractionDigits: 0 }}>
+      <div className="flex items-center justify-between mb-2">
+        <Progress.Label>Completion</Progress.Label>
+        <Progress.Value />
+      </div>
+      <Progress.Track>
+        <Progress.Indicator />
+      </Progress.Track>
+    </Progress.Root>
+  ),
 };
 
-export const WithPercentage: StoryObj<typeof ProgressBar> = {
-  args: {
-    value: 42,
-    max: 100,
-    label: "Completion",
-    showValue: true,
-    formatOptions: {
-      style: "percent",
-      minimumFractionDigits: 0,
-    },
-  },
-};
-
-export const WithoutValueDisplay: StoryObj<typeof ProgressBar> = {
-  args: {
-    value: 85,
-    label: "Silent Progress",
-    showValue: false,
-  },
-};
-
-export const RichTextLabel: StoryObj<typeof ProgressBar> = {
-  args: {
-    value: 37,
-    label: (
-      <>
-        <span className="font-bold text-black">37</span> of{" "}
-        <span className="font-bold text-black">100</span> jobs processed
-      </>
-    ),
-  },
+export const RichTextLabel: StoryObj = {
+  render: () => (
+    <Progress.Root value={37} max={100}>
+      <div className="flex items-center justify-between mb-2">
+        <Progress.Label>
+          <span className="font-bold">37</span> of <span className="font-bold">100</span> jobs processed
+        </Progress.Label>
+        <Progress.Value />
+      </div>
+      <Progress.Track>
+        <Progress.Indicator />
+      </Progress.Track>
+    </Progress.Root>
+  ),
 };
