@@ -212,43 +212,34 @@ export function CustomTrigger() {
 }
 
 export function GroupWithIcons() {
-  const [view, setView] = React.useState("grid");
-  const [sortBy, setSortBy] = React.useState("date");
+  const [selected, setSelected] = React.useState("closed");
 
   return (
     <Menu.Root>
       <Menu.Trigger className="bg-ppx-primary-b-5 text-ppx-background hover:bg-ppx-primary-b-4! data-popup-open:bg-ppx-primary-b-5">
         Bulk Action
       </Menu.Trigger>
-      <Menu.Content popupProps={{ className: "w-50 min-w-50!" }}>
+      <Menu.Content>
         <Menu.Group>
-          <Menu.GroupLabel className="uppercase font-bold">Change status</Menu.GroupLabel>
-          <MyItem>Open</MyItem>
-          <MyItem>On Hold</MyItem>
-          <MyItem>Close</MyItem>
+          <Menu.GroupLabel>Change status</Menu.GroupLabel>
+          <Menu.RadioGroup value={selected} onValueChange={setSelected}>
+            <Menu.RadioItem disabled value="open">
+              Open
+            </Menu.RadioItem>
+            <Menu.RadioItem value="on-hold">On Hold</Menu.RadioItem>
+            <Menu.RadioItem value="closed">Close</Menu.RadioItem>
+          </Menu.RadioGroup>
         </Menu.Group>
 
         <Menu.Separator />
 
         <Menu.Group>
-          <Menu.GroupLabel className="uppercase font-bold">Action</Menu.GroupLabel>
-          <MyItem>Re-open</MyItem>
-          <MyItem>Post Announcement</MyItem>
-          <MyItem>Snooze SLA</MyItem>
+          <Menu.GroupLabel>Action</Menu.GroupLabel>
+          <Menu.Item>Re-open</Menu.Item>
+          <Menu.Item>Post Announcement</Menu.Item>
+          <Menu.Item>Send Note</Menu.Item>
         </Menu.Group>
       </Menu.Content>
     </Menu.Root>
-  );
-}
-
-function MyItem({
-  children,
-  ...props
-}: React.ComponentProps<typeof Menu.Item>) {
-  return (
-    <Menu.Item {...props}>
-      <ChevronDownIcon className="text-ppx-primary-b-5 rotate-z-270" />
-      {children}
-    </Menu.Item>
   );
 }
