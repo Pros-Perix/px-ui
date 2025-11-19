@@ -212,9 +212,6 @@ export function CustomTrigger() {
 }
 
 export function GroupWithIcons() {
-  const [view, setView] = React.useState("grid");
-  const [sortBy, setSortBy] = React.useState("date");
-
   return (
     <Menu.Root>
       <Menu.Trigger className="bg-ppx-primary-b-5 text-ppx-background hover:bg-ppx-primary-b-4! data-popup-open:bg-ppx-primary-b-5">

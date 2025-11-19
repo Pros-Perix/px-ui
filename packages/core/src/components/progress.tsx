@@ -19,9 +19,6 @@ const progressTrackVariants = cva(
   },
 );
 
-
-
-
 export const Root = Progress.Root;
 
 export function Track({
@@ -76,4 +73,6 @@ export function Value({
     />
   );
 }
+
+export const BaseProgress = Progress;
 
