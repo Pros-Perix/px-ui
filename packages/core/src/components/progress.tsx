@@ -19,17 +19,8 @@ const progressTrackVariants = cva(
   },
 );
 
-const progressIndicatorVariants = cva(
-  "h-full w-full flex-1 transition-all duration-300 ease-in-out bg-ppx-primary-b-5",
-);
 
-const progressLabelVariants = cva(
-  "text-ppx-sm font-medium text-ppx-foreground",
-);
 
-const progressValueVariants = cva(
-  "text-ppx-sm font-bold text-ppx-primary-b-5 flex-shrink-0",
-);
 
 export const Root = Progress.Root;
 
@@ -56,7 +47,7 @@ export function Indicator({
 }: React.ComponentProps<typeof Progress.Indicator>) {
   return (
     <Progress.Indicator
-      className={cn(progressIndicatorVariants(), className)}
+      className={cn("h-full w-full flex-1 transition-all duration-300 ease-in-out bg-ppx-primary-b-5", className)}
       {...props}
     />
   );
@@ -68,7 +59,7 @@ export function Label({
 }: React.ComponentProps<typeof Progress.Label>) {
   return (
     <Progress.Label
-      className={cn(progressLabelVariants(), className)}
+      className={cn("text-ppx-sm font-medium text-ppx-foreground", className)}
       {...props}
     />
   );
@@ -80,7 +71,7 @@ export function Value({
 }: React.ComponentProps<typeof Progress.Value>) {
   return (
     <Progress.Value
-      className={cn(progressValueVariants(), className)}
+      className={cn("text-ppx-sm font-bold text-ppx-primary-b-5 flex-shrink-0", className)}
       {...props}
     />
   );
