@@ -99,6 +99,10 @@
       "types": "./dist/components/radio-group.d.ts",
       "import": "./dist/components/radio-group.js"
     },
+    "./progress": {
+      "types": "./dist/components/progress.d.ts",
+      "import": "./dist/components/progress.js"
+    },
     "./block-checkbox-group": {
       "types": "./dist/components/block-checkbox-group.d.ts",
       "import": "./dist/components/block-checkbox-group.js"

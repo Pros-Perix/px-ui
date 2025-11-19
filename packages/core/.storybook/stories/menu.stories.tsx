@@ -220,10 +220,10 @@ export function GroupWithIcons() {
       <Menu.Trigger className="bg-ppx-primary-b-5 text-ppx-background hover:bg-ppx-primary-b-4! data-popup-open:bg-ppx-primary-b-5">
         Bulk Action
       </Menu.Trigger>
-      <Menu.Content popupProps={{ className: "w-40 min-w-40!" }}>
+      <Menu.Content popupProps={{ className: "w-50 min-w-50!" }}>
         <Menu.Group>
-          <Menu.GroupLabel className="uppercase">Change status</Menu.GroupLabel>
-          <MyItem disabled>Open</MyItem>
+          <Menu.GroupLabel className="uppercase font-bold">Change status</Menu.GroupLabel>
+          <MyItem>Open</MyItem>
           <MyItem>On Hold</MyItem>
           <MyItem>Close</MyItem>
         </Menu.Group>
@@ -231,12 +231,10 @@ export function GroupWithIcons() {
         <Menu.Separator />
 
         <Menu.Group>
-          <Menu.GroupLabel>Sort By</Menu.GroupLabel>
-          <Menu.RadioGroup value={sortBy} onValueChange={setSortBy}>
-            <Menu.RadioItem value="date">Date Modified</Menu.RadioItem>
-            <Menu.RadioItem value="name">Name</Menu.RadioItem>
-            <Menu.RadioItem value="size">File Size</Menu.RadioItem>
-          </Menu.RadioGroup>
+          <Menu.GroupLabel className="uppercase font-bold">Action</Menu.GroupLabel>
+          <MyItem>Re-open</MyItem>
+          <MyItem>Post Announcement</MyItem>
+          <MyItem>Snooze SLA</MyItem>
         </Menu.Group>
       </Menu.Content>
     </Menu.Root>
@@ -249,7 +247,7 @@ function MyItem({
 }: React.ComponentProps<typeof Menu.Item>) {
   return (
     <Menu.Item {...props}>
-      <ChevronDownIcon />
+      <ChevronDownIcon className="text-ppx-primary-b-5 rotate-z-270" />
       {children}
     </Menu.Item>
   );
