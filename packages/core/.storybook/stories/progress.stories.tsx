@@ -18,7 +18,7 @@ const meta: Meta = {
 
 export default meta;
 
-export const Basic: StoryObj = {
+export const Default: StoryObj = {
   render: () => (
     <Progress.Root value={75} max={100}>
       <div className="flex items-center justify-between mb-2">
@@ -35,7 +35,7 @@ export const Basic: StoryObj = {
 export const LabelInsideTrack: StoryObj = {
   render: () => (
     <Progress.Root value={60} max={100}>
-      <Progress.Track className="relative">
+      <Progress.Track className="relative h-4">
         <Progress.Indicator />
         <div className="absolute inset-0 flex items-center justify-center">
           <Progress.Label className="text-white font-medium">60% Complete</Progress.Label>
