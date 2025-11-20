@@ -55,7 +55,7 @@ export const Default: StoryObj<typeof Select> = {
 function ExampleSelect() {
   return (
     <>
-      <Select.Root invalid>
+      <Select.Root>
         <Select.Trigger>
           <Select.Value />
         </Select.Trigger>

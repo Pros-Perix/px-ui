@@ -26,7 +26,8 @@ export const List = Combobox.List;
 type ComboboxContextValues = React.ComponentProps<
   typeof Combobox.Root<any, any, any>
 > & {
-  chipsContainerRef: React.RefObject<HTMLDivElement | null>;
+  chipsTriggerRef: React.RefObject<HTMLDivElement | null>;
+  searchableTriggerRef: React.RefObject<HTMLDivElement | null>;
   invalid?: boolean;
   isLoading?: boolean;
   isLoadingMore?: boolean;
@@ -38,6 +39,7 @@ type ComboboxContextValues = React.ComponentProps<
 const ComboboxContext = React.createContext<ComboboxContextValues>(
   {} as ComboboxContextValues,
 );
+
 
 export function Root<
   ItemValue,
@@ -58,7 +60,8 @@ export function Root<
     | "hasMore"
     | "invalid"
   > & { loadOptions?: LoadOptionsConfig<ItemValue> }) {
-  const chipsContainerRef = React.useRef<HTMLDivElement>(null);
+  const chipsTriggerRef = React.useRef<HTMLDivElement>(null);
+  const searchableTriggerRef = React.useRef<HTMLDivElement>(null);
   const [isOpen, setIsOpen] = React.useState(false);
   const [inputValue, setInputValue] = React.useState("");
 
@@ -88,7 +91,8 @@ export function Root<
 
   const contextValues = {
     ...rootProps,
-    chipsContainerRef,
+    chipsTriggerRef,
+    searchableTriggerRef,
   };
 
   return (
@@ -106,14 +110,17 @@ export function Content({
   positionerProps,
   popupProps,
   children,
+  widthVariant = "trigger",
 }: React.PropsWithChildren<{
   empty?: string;
   portalProps?: React.ComponentProps<typeof Combobox.Portal>;
   positionerProps?: React.ComponentProps<typeof Combobox.Positioner>;
   popupProps?: React.ComponentProps<typeof Combobox.Popup>;
+  widthVariant?: "trigger" | "fit" | "enforced";
 }>) {
   const {
-    chipsContainerRef,
+    chipsTriggerRef,
+    searchableTriggerRef,
     isLoading,
     isError,
     isLoadingMore,
@@ -130,24 +137,27 @@ export function Content({
   return (
     <Combobox.Portal {...portalProps}>
       <Combobox.Positioner
-        sideOffset={(config) => {
-          // TODO: This is a temporary hack to make increase offset when SearchableTrigger is used
-          // base-ui wants us to use just the Input element as trigger, but we want to use our own InputGroup component
-          // so we need to increase the offset to avoid the popup from being close to the trigger
-          if (config.anchor.width < 280 && config.anchor.width > 200) {
-            return 10;
-          }
-          return 6;
-        }}
+        sideOffset={6}
         align="start"
         {...positionerProps}
         className={cn(DROPDOWN_POSITIONER_CN, positionerProps?.className)}
-        anchor={positionerProps?.anchor ?? chipsContainerRef}
+        anchor={
+          positionerProps?.anchor ??
+          chipsTriggerRef.current ??
+          searchableTriggerRef.current
+        }
       >
         <Combobox.Popup
           className={cn(
             DROPDOWN_POPUP_CN,
             "scroll-pt-2 scroll-pb-2 overscroll-contain",
+            widthVariant === "trigger"
+              ? "w-[var(--anchor-width)]"
+              : widthVariant === "fit"
+                ? "w-fit"
+                : widthVariant === "enforced"
+                  ? "w-[var(--min-width-input)]"
+                  : "",
             popupProps?.className,
           )}
           {...popupProps}
@@ -251,9 +261,10 @@ export function SearchableTrigger(props: {
   className?: string;
   addons?: React.ReactNode;
 }) {
-  const { invalid, disabled } = useComboboxContext();
+  const { invalid, disabled, searchableTriggerRef } = useComboboxContext();
+
   return (
-    <InputGroup.Root {...props} disabled={disabled}>
+    <InputGroup.Root {...props} disabled={disabled} ref={searchableTriggerRef}>
       <Combobox.Input
         render={(inputProps) => (
           <InputGroup.Input
@@ -413,7 +424,7 @@ export function ChipsTrigger({
   placeholder?: string;
   className?: string;
 } & VariantProps<typeof chipsTriggerVariants>) {
-  const { chipsContainerRef, isLoading, invalid } = useComboboxContext();
+  const { chipsTriggerRef, isLoading, invalid } = useComboboxContext();
   return (
     <Combobox.Chips
       className={cn(
@@ -421,7 +432,7 @@ export function ChipsTrigger({
         props.className,
       )}
       aria-invalid={invalid ?? undefined}
-      ref={chipsContainerRef}
+      ref={chipsTriggerRef}
     >
       <div className="gap-1 flex flex-1 flex-wrap items-center">
         <Combobox.Value>
@@ -491,6 +502,6 @@ export function Search({
   );
 }
 
-function useComboboxContext() {
+export function useComboboxContext() {
   return React.useContext(ComboboxContext);
 }

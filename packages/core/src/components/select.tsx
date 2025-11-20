@@ -46,10 +46,12 @@ export function Content({
   positionerProps,
   popupProps,
   children,
+  widthVariant = 'trigger',
 }: React.PropsWithChildren<{
   portalProps?: React.ComponentProps<typeof Select.Portal>;
   positionerProps?: React.ComponentProps<typeof Select.Positioner>;
   popupProps?: React.ComponentProps<typeof Select.Popup>;
+  widthVariant?: "trigger" | "fit" | "enforced";
 }>) {
   return (
     <Select.Portal {...portalProps}>
@@ -60,7 +62,18 @@ export function Content({
         alignItemWithTrigger={false}
       >
         <Select.Popup
-          className={cn(DROPDOWN_POPUP_CN, popupProps?.className)}
+          className={cn(
+            DROPDOWN_POPUP_CN,
+            "py-1",
+            widthVariant === "trigger"
+              ? "w-[var(--anchor-width)]"
+              : widthVariant === "fit"
+                ? "w-fit"
+                : widthVariant === "enforced"
+                  ? "w-[var(--min-width-input)]"
+                  : "",
+            popupProps?.className,
+          )}
           {...popupProps}
         >
           {children}
