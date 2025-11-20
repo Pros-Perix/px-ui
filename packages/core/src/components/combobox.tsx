@@ -7,6 +7,7 @@ import {
   DROPDOWN_ITEM_CN,
   DROPDOWN_POPUP_CN,
   DROPDOWN_POSITIONER_CN,
+  triggerVariants,
 } from "../tw-styles/dropdown";
 import ClearIcon from "../icons/clear-icon";
 import ChevronDownIcon from "../icons/chevron-down-icon";
@@ -26,7 +27,8 @@ export const List = Combobox.List;
 type ComboboxContextValues = React.ComponentProps<
   typeof Combobox.Root<any, any, any>
 > & {
-  chipsContainerRef: React.RefObject<HTMLDivElement | null>;
+  chipsTriggerRef: React.RefObject<HTMLDivElement | null>;
+  searchableTriggerRef: React.RefObject<HTMLDivElement | null>;
   invalid?: boolean;
   isLoading?: boolean;
   isLoadingMore?: boolean;
@@ -38,6 +40,7 @@ type ComboboxContextValues = React.ComponentProps<
 const ComboboxContext = React.createContext<ComboboxContextValues>(
   {} as ComboboxContextValues,
 );
+
 
 export function Root<
   ItemValue,
@@ -58,7 +61,8 @@ export function Root<
     | "hasMore"
     | "invalid"
   > & { loadOptions?: LoadOptionsConfig<ItemValue> }) {
-  const chipsContainerRef = React.useRef<HTMLDivElement>(null);
+  const chipsTriggerRef = React.useRef<HTMLDivElement>(null);
+  const searchableTriggerRef = React.useRef<HTMLDivElement>(null);
   const [isOpen, setIsOpen] = React.useState(false);
   const [inputValue, setInputValue] = React.useState("");
 
@@ -88,7 +92,8 @@ export function Root<
 
   const contextValues = {
     ...rootProps,
-    chipsContainerRef,
+    chipsTriggerRef,
+    searchableTriggerRef,
   };
 
   return (
@@ -106,14 +111,17 @@ export function Content({
   positionerProps,
   popupProps,
   children,
+  widthVariant = "trigger",
 }: React.PropsWithChildren<{
   empty?: string;
   portalProps?: React.ComponentProps<typeof Combobox.Portal>;
   positionerProps?: React.ComponentProps<typeof Combobox.Positioner>;
   popupProps?: React.ComponentProps<typeof Combobox.Popup>;
+  widthVariant?: "trigger" | "fit" | "enforced";
 }>) {
   const {
-    chipsContainerRef,
+    chipsTriggerRef,
+    searchableTriggerRef,
     isLoading,
     isError,
     isLoadingMore,
@@ -130,24 +138,27 @@ export function Content({
   return (
     <Combobox.Portal {...portalProps}>
       <Combobox.Positioner
-        sideOffset={(config) => {
-          // TODO: This is a temporary hack to make increase offset when SearchableTrigger is used
-          // base-ui wants us to use just the Input element as trigger, but we want to use our own InputGroup component
-          // so we need to increase the offset to avoid the popup from being close to the trigger
-          if (config.anchor.width < 280 && config.anchor.width > 200) {
-            return 10;
-          }
-          return 6;
-        }}
+        sideOffset={6}
         align="start"
         {...positionerProps}
         className={cn(DROPDOWN_POSITIONER_CN, positionerProps?.className)}
-        anchor={positionerProps?.anchor ?? chipsContainerRef}
+        anchor={
+          positionerProps?.anchor ??
+          chipsTriggerRef.current ??
+          searchableTriggerRef.current
+        }
       >
         <Combobox.Popup
           className={cn(
             DROPDOWN_POPUP_CN,
             "scroll-pt-2 scroll-pb-2 overscroll-contain",
+            widthVariant === "trigger"
+              ? "w-[var(--anchor-width)]"
+              : widthVariant === "fit"
+                ? "w-fit"
+                : widthVariant === "enforced"
+                  ? "w-[var(--min-width-input)]"
+                  : "",
             popupProps?.className,
           )}
           {...popupProps}
@@ -251,9 +262,10 @@ export function SearchableTrigger(props: {
   className?: string;
   addons?: React.ReactNode;
 }) {
-  const { invalid, disabled } = useComboboxContext();
+  const { invalid, disabled, searchableTriggerRef } = useComboboxContext();
+
   return (
-    <InputGroup.Root {...props} disabled={disabled}>
+    <InputGroup.Root {...props} disabled={disabled} ref={searchableTriggerRef}>
       <Combobox.Input
         render={(inputProps) => (
           <InputGroup.Input
@@ -299,27 +311,6 @@ export function SearchableTriggerDropdownAddon() {
     </InputGroup.Addon>
   );
 }
-
-export const triggerVariants = cva(
-  "gap-2 text-ppx-sm bg-ppx-neutral-1 inline-flex items-center justify-between border border-ppx-neutral-5 aria-invalid:border-ppx-red-4 text-ppx-foreground outline-transparent p-input focus-visible:outline-2 focus-visible:-outline-offset-1 focus-visible:outline-ppx-primary-2 focus-visible:aria-invalid:outline-transparent data-disabled:cursor-not-allowed data-disabled:border-ppx-neutral-3 data-disabled:bg-ppx-neutral-3 data-disabled:text-ppx-neutral-11",
-  {
-    variants: {
-      size: {
-        default: "rounded-input h-input",
-        sm: "rounded-input-s h-input-s",
-      },
-      widthVariant: {
-        enforced: "min-w-input w-[var(--min-width-input)]",
-        fit: "min-w-0 w-fit",
-        full: "min-w-0 w-full",
-      },
-    },
-    defaultVariants: {
-      size: "default",
-      widthVariant: "enforced",
-    },
-  },
-);
 
 export function Trigger({
   size,
@@ -413,7 +404,7 @@ export function ChipsTrigger({
   placeholder?: string;
   className?: string;
 } & VariantProps<typeof chipsTriggerVariants>) {
-  const { chipsContainerRef, isLoading, invalid } = useComboboxContext();
+  const { chipsTriggerRef, isLoading, invalid } = useComboboxContext();
   return (
     <Combobox.Chips
       className={cn(
@@ -421,7 +412,7 @@ export function ChipsTrigger({
         props.className,
       )}
       aria-invalid={invalid ?? undefined}
-      ref={chipsContainerRef}
+      ref={chipsTriggerRef}
     >
       <div className="gap-1 flex flex-1 flex-wrap items-center">
         <Combobox.Value>
@@ -491,6 +482,6 @@ export function Search({
   );
 }
 
-function useComboboxContext() {
+export function useComboboxContext() {
   return React.useContext(ComboboxContext);
 }

@@ -19,6 +19,30 @@ const customTwMerge = extendTailwindMerge({
           ],
         },
       ],
+      // Add custom height utilities
+      h: [{ h: ["stretch-available", "input", "input-s"] }],
+      // Add custom min-height utilities
+      "min-h": [{ "min-h": ["input", "input-s"] }],
+      // Add custom min-width utilities
+      "min-w": [{ "min-w": ["input"] }],
+      // Add custom padding utilities
+      p: [{ p: ["input"] }],
+      // Add custom border radius utilities
+      rounded: [
+        {
+          rounded: [
+            "ppx-xs",
+            "ppx-s",
+            "ppx-m",
+            "ppx-l",
+            "ppx-xl",
+            "input",
+            "input-s",
+          ],
+        },
+      ],
+      // Add custom font family utilities
+      "font-family": [{ font: ["sans-light", "sans-sb", "sans-b"] }],
     },
   },
 });

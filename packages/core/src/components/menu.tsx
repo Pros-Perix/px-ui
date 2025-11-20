@@ -56,10 +56,12 @@ export function Content({
   positionerProps,
   popupProps,
   children,
+  widthVariant = "fit",
 }: React.PropsWithChildren<{
   portalProps?: React.ComponentProps<typeof Menu.Portal>;
   positionerProps?: React.ComponentProps<typeof Menu.Positioner>;
   popupProps?: React.ComponentProps<typeof Menu.Popup>;
+  widthVariant?: "trigger" | "fit" | "enforced";
 }>) {
   return (
     <Menu.Portal {...portalProps}>
@@ -71,7 +73,18 @@ export function Content({
       >
         <Menu.Popup
           {...popupProps}
-          className={cn(DROPDOWN_POPUP_CN, "min-w-auto", popupProps?.className)}
+          className={cn(
+            DROPDOWN_POPUP_CN,
+            "py-1",
+            widthVariant === "trigger"
+              ? "w-[var(--anchor-width)]"
+              : widthVariant === "fit"
+                ? "w-fit"
+                : widthVariant === "enforced"
+                  ? "w-[var(--min-width-input)]"
+                  : "",
+            popupProps?.className,
+          )}
         >
           {children}
         </Menu.Popup>
@@ -117,7 +130,7 @@ export function GroupLabel({
   return (
     <Menu.GroupLabel
       className={cn(
-        "py-2 px-4 leading-4 cursor-default text-ppx-sm text-ppx-muted-foreground select-none",
+        "py-2 px-4 leading-4 cursor-default font-sans-sb text-ppx-sm text-ppx-muted-foreground uppercase select-none",
         className,
       )}
       {...props}
@@ -132,7 +145,11 @@ export function RadioItem({
   ...props
 }: React.ComponentProps<typeof Menu.RadioItem>) {
   return (
-    <Menu.RadioItem className={cn(DROPDOWN_ITEM_CN, className)} {...props} />
+    <Menu.RadioItem
+      className={cn(DROPDOWN_ITEM_CN, className)}
+      closeOnClick
+      {...props}
+    />
   );
 }
 
