@@ -7,6 +7,7 @@ import {
   DROPDOWN_ITEM_CN,
   DROPDOWN_POPUP_CN,
   DROPDOWN_POSITIONER_CN,
+  triggerVariants,
 } from "../tw-styles/dropdown";
 import ClearIcon from "../icons/clear-icon";
 import ChevronDownIcon from "../icons/chevron-down-icon";
@@ -310,27 +311,6 @@ export function SearchableTriggerDropdownAddon() {
     </InputGroup.Addon>
   );
 }
-
-export const triggerVariants = cva(
-  "gap-2 text-ppx-sm bg-ppx-neutral-1 inline-flex items-center justify-between border border-ppx-neutral-5 aria-invalid:border-ppx-red-4 text-ppx-foreground outline-transparent p-input focus-visible:outline-2 focus-visible:-outline-offset-1 focus-visible:outline-ppx-primary-2 focus-visible:aria-invalid:outline-transparent data-disabled:cursor-not-allowed data-disabled:border-ppx-neutral-3 data-disabled:bg-ppx-neutral-3 data-disabled:text-ppx-neutral-11",
-  {
-    variants: {
-      size: {
-        default: "rounded-input h-input",
-        sm: "rounded-input-s h-input-s",
-      },
-      widthVariant: {
-        enforced: "min-w-input w-[var(--min-width-input)]",
-        fit: "min-w-0 w-fit",
-        full: "min-w-0 w-full",
-      },
-    },
-    defaultVariants: {
-      size: "default",
-      widthVariant: "enforced",
-    },
-  },
-);
 
 export function Trigger({
   size,

@@ -20,7 +20,8 @@ const buttonVariants = cva(
         link: "text-ppx-neutral-12 underline-offset-4 underline cursor-pointer not-disabled:hover:bg-ppx-neutral-2 not-disabled:active:bg-ppx-neutral-3 disabled:opacity-70",
       },
       size: {
-        default: "px-5 py-3 text-ppx-base font-medium rounded-ppx-m",
+        default: "px-5 py-3 text-ppx-base font-medium rounded-ppx-s",
+        xs: "gap-1.5 px-4 py-2 text-ppx-sm font-medium rounded-ppx-s",
         sm: "gap-1.5 px-4 py-2 text-ppx-sm font-medium rounded-ppx-s",
         lg: "px-6 py-4 text-ppx-base font-bold rounded-ppx-l",
         icon: "size-9 rounded-ppx-s",
