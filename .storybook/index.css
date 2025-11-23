@@ -70,7 +70,6 @@
     --default-mono-font-family: var(--font-mono);
     --font-sans-light: "Lato L", system-ui, sans-serif;
     --font-sans-sb: "Lato SB", system-ui, sans-serif;
-    --font-sans-b: "Lato B", system-ui, sans-serif;
     --color-ppx-red-1: #f8e6e6;
     --color-ppx-red-2: #e39696;
     --color-ppx-red-4: #c62b2b;
@@ -105,7 +104,6 @@
     --min-width-input: 18rem;
     --radius-ppx-s: 0.5rem;
     --radius-ppx-m: 0.75rem;
-    --radius-ppx-l: 1rem;
     --radius-input: var(--radius-ppx-s);
     --radius-input-s: var(--radius-ppx-s);
   }
@@ -757,9 +755,6 @@
   .rounded-none {
     border-radius: 0;
   }
-  .rounded-ppx-l {
-    border-radius: var(--radius-ppx-l);
-  }
   .rounded-ppx-m {
     border-radius: var(--radius-ppx-m);
   }
@@ -926,12 +921,6 @@
   }
   .py-2 {
     padding-block: calc(var(--spacing) * 2);
-  }
-  .py-3 {
-    padding-block: calc(var(--spacing) * 3);
-  }
-  .py-4 {
-    padding-block: calc(var(--spacing) * 4);
   }
   .py-\[0\.2rem\] {
     padding-block: 0.2rem;

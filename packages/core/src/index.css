@@ -111,6 +111,12 @@
 }
 
 @utility text-ppx-xs {
+  font-size: 0.75rem;
+  line-height: 0.75rem;
+}
+
+
+@utility text-ppx-xxs {
   font-size: 0.64rem;
   line-height: 0.75rem;
 }
