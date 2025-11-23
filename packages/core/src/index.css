@@ -1,4 +1,5 @@
-:root {}
+:root {
+}
 
 @theme {
   --font-sans-light: "Lato L", system-ui, sans-serif;
@@ -64,6 +65,12 @@
   --color-ppx-muted-foreground: var(--color-ppx-neutral-13);
   --color-ppx-border: var(--color-ppx-neutral-3);
 
+  --breakpoint-ppx-sm: 40rem;
+  --breakpoint-ppx-md: 48rem;
+  --breakpoint-ppx-lg: 64rem;
+  --breakpoint-ppx-xl: 80rem;
+  --breakpoint-ppx-2xl: 96rem;
+
   --padding-input: 0.5rem;
 
   --height-input: 2.5rem;
@@ -115,7 +122,6 @@
   line-height: 0.75rem;
 }
 
-
 @utility text-ppx-xxs {
   font-size: 0.64rem;
   line-height: 0.75rem;
@@ -144,9 +150,7 @@
   isolation: isolate;
 }
 
-
 @keyframes bounce-color {
-
   0%,
   100% {
     transform: translateY(0);
@@ -160,3 +164,4 @@
 }
 
 @source "./**/*.{js,jsx,ts,tsx}";
+
