@@ -116,7 +116,7 @@ export function HeaderIcon({
   return (
     <div
       className={cn(
-        "size-12 flex shrink-0 items-center justify-center rounded-full bg-ppx-neutral-2",
+        "size-12 flex shrink-0 items-center justify-center rounded-full bg-ppx-neutral-2 text-ppx-muted-foreground",
         className,
       )}
       {...props}
