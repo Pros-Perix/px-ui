@@ -57,7 +57,7 @@ export function Content({
         data-slot="dialog-content"
         className={cn(
           "fixed z-50 grid w-full bg-ppx-background text-ppx-foreground ppx-sm:max-w-[calc(100%-2rem)]",
-          "gap-4 p-6 shadow-lg ppx-sm:max-w-lg rounded-ppx-m rounded-b-none border border-ppx-neutral-5 duration-200 outline-none ppx-sm:scale-[calc(1-0.1*var(--nested-dialogs))] ppx-sm:rounded-b-ppx-m",
+          "gap-8 p-6 shadow-lg ppx-sm:max-w-lg rounded-ppx-m rounded-b-none border border-ppx-neutral-5 duration-200 outline-none ppx-sm:scale-[calc(1-0.1*var(--nested-dialogs))] ppx-sm:rounded-b-ppx-m",
           "bottom-0 fixed w-full ppx-sm:top-[50%] ppx-sm:bottom-auto ppx-sm:left-[50%] ppx-sm:translate-x-[-50%] ppx-sm:translate-y-[-50%]",
           "duration-200",
           "data-[starting-style]:translate-y-full data-[starting-style]:opacity-0",
