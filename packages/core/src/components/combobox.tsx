@@ -41,7 +41,6 @@ const ComboboxContext = React.createContext<ComboboxContextValues>(
   {} as ComboboxContextValues,
 );
 
-
 export function Root<
   ItemValue,
   SelectedValue = ItemValue,
@@ -315,63 +314,61 @@ export function SearchableTriggerDropdownAddon() {
 export function Trigger({
   size,
   widthVariant,
+  children,
+  className,
   ...props
-}: {
-  children?: React.ReactNode | ((selectedValue: any) => React.ReactNode);
-  className?: string;
-  placeholder?: string;
-} & VariantProps<typeof triggerVariants>) {
+}: Combobox.Trigger.Props & VariantProps<typeof triggerVariants>) {
   const { isLoading, invalid } = useComboboxContext();
   return (
     <Combobox.Trigger
       aria-label="Open popup"
-      className={cn(triggerVariants({ size, widthVariant }), props.className)}
       aria-invalid={invalid ?? undefined}
+      className={cn(triggerVariants({ size, widthVariant }), className)}
+      {...props}
     >
-      <Combobox.Value>
-        {(selectedValue) => {
-          if (selectedValue == null && props.placeholder) {
-            return (
-              <span className="truncate text-ppx-foreground">
-                {props.placeholder}
-              </span>
-            );
-          }
-
-          if (props.children) {
-            const children =
-              typeof props.children === "function"
-                ? props.children(selectedValue)
-                : props.children;
-
-            if (typeof children === "string") {
-              return <span className="truncate">{children}</span>;
-            }
-
-            return children;
-          }
-
-          if (typeof selectedValue === "string") {
-            return <span className="truncate">{selectedValue}</span>;
-          }
-
-          if (
-            selectedValue &&
-            typeof selectedValue === "object" &&
-            "label" in selectedValue
-          ) {
-            return <span className="truncate">{selectedValue.label}</span>;
-          }
-
-          return null;
-        }}
-      </Combobox.Value>
-
+      {children}
       <div className="gap-2 flex items-center">
         {isLoading && <LoadingIndicator />}
         <ChevronDownIcon />
       </div>
     </Combobox.Trigger>
+  );
+}
+
+/**
+ * Renders the value, if `value` is a string or an object with `label` property in it,
+ * then renders that value else you should provide a render function to render your custom value
+ * **/
+export function Value({
+  children,
+  className,
+  placeholder,
+  ...props
+}: {
+  placeholder?: string;
+  children: React.ReactNode | ((selectedValue: any) => React.ReactNode);
+  className?: string;
+}) {
+  return (
+    <span className={cn("truncate text-ppx-sm", className)} {...props}>
+      <Combobox.Value>
+        {(value) => {
+          if (value == null && placeholder) {
+            return placeholder;
+          }
+
+          if (children) {
+            return typeof children === "function" ? children(value) : children;
+          }
+
+          if (value && typeof value === "object" && "label" in value) {
+            return value.label;
+          }
+
+          return value;
+        }}
+      </Combobox.Value>
+    </span>
   );
 }
 
@@ -485,3 +482,5 @@ export function Search({
 export function useComboboxContext() {
   return React.useContext(ComboboxContext);
 }
+
+export const BaseCombobox = Combobox;

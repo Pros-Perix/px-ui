@@ -47,7 +47,7 @@ export function Content({
   positionerProps,
   popupProps,
   children,
-  widthVariant = 'trigger',
+  widthVariant = "trigger",
 }: React.PropsWithChildren<{
   portalProps?: React.ComponentProps<typeof Select.Portal>;
   positionerProps?: React.ComponentProps<typeof Select.Positioner>;
@@ -177,10 +177,33 @@ export function MultiSelectedValue({
   );
 }
 
-export function Value({ children, className, ...props }: Select.Value.Props) {
+/**
+ * Renders the value, if `value` is a string or an object with `label` property in it,
+ * then renders that value else you should provide a render function to render your custom value
+ * **/
+export function Value({
+  children,
+  className,
+  placeholder,
+  ...props
+}: Select.Value.Props & { placeholder?: string }) {
   return (
     <Select.Value className={cn("truncate text-ppx-sm", className)} {...props}>
-      {children}
+      {(value) => {
+        if (value == null && placeholder) {
+          return placeholder;
+        }
+
+        if (children) {
+          return typeof children === "function" ? children(value) : children;
+        }
+
+        if (value && typeof value === "object" && "label" in value) {
+          return value.label;
+        }
+
+        return value;
+      }}
     </Select.Value>
   );
 }

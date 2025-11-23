@@ -145,18 +145,20 @@ export function WithCustomizableOnlyTrigger() {
   return (
     <>
       <Combobox.Root items={posts}>
-        <Combobox.Trigger placeholder="Select post">
-          {(selectedValue) => (
-            <div className="gap-2 flex items-center truncate">
-              <Avatar
-                imgSrc="https://github.com/shadcn.png"
-                name="John Doe"
-                size="20px"
-                variant="rounded"
-              />
-              <span className="flex-1 truncate">{selectedValue?.label}</span>
-            </div>
-          )}
+        <Combobox.Trigger>
+          <Combobox.Value placeholder="Select post">
+            {(selectedValue) => (
+              <div className="gap-2 flex items-center truncate">
+                <Avatar
+                  imgSrc="https://github.com/shadcn.png"
+                  name="John Doe"
+                  size="20px"
+                  variant="rounded"
+                />
+                <span className="flex-1 truncate">{selectedValue?.label}</span>
+              </div>
+            )}
+          </Combobox.Value>
         </Combobox.Trigger>
         <Combobox.Content>
           <Combobox.Search />
@@ -177,7 +179,7 @@ export function WithOnlyIconWithNoSelectedValue() {
   return (
     <>
       <Combobox.Root items={posts}>
-        <Combobox.Trigger size="sm">
+        <Combobox.Trigger widthVariant="fit">
           <Avatar
             imgSrc="https://github.com/shadcn.png"
             name="John Doe"
@@ -185,7 +187,7 @@ export function WithOnlyIconWithNoSelectedValue() {
             variant="rounded"
           />
         </Combobox.Trigger>
-        <Combobox.Content>
+        <Combobox.Content widthVariant="enforced">
           <Combobox.Search />
           <Combobox.List>
             {(item: (typeof posts)[number]) => (
@@ -216,9 +218,21 @@ function WithSearchOnPopupImpl() {
         isItemEqualToValue={(item, selected) => item.id === selected.id}
         loadOptions={loadUserOptions}
       >
-        <Combobox.Trigger placeholder="Select user">
-          {(item: InferOption<typeof loadUserOptions>) => item?.firstName}
+        <Combobox.Trigger className="h-auto">
+          <Combobox.Value>
+            {(selectedValue) => (
+              <ul className="gap-1 flex flex-wrap">
+                {selectedValue.map((item, i) => (
+                  <li key={item.id}>
+                    {item.firstName}
+                    {i < selectedValue.length - 1 ? ", " : ""}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </Combobox.Value>
         </Combobox.Trigger>
+
         <Combobox.Content>
           <Combobox.Search />
           <Combobox.List>

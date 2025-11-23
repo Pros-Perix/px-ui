@@ -52,20 +52,39 @@ export const Default: StoryObj<typeof Select> = {
   render: () => <ExampleSelect />,
 };
 
+const fonts = [
+  {
+    label: "Sans-serif",
+    value: "sans-serif",
+  },
+  {
+    label: "Serif",
+    value: "serif",
+  },
+  {
+    label: "Monospace",
+    value: "monospace",
+  },
+  {
+    label: "Cursive",
+    value: "cursive",
+  },
+];
+
 function ExampleSelect() {
   return (
     <>
       <Select.Root>
         <Select.Trigger>
-          <Select.Value />
+          <Select.Value placeholder="Select a font" />
         </Select.Trigger>
         <Select.Content>
           <Select.List>
-            <Select.Item value="">Select post</Select.Item>
-            <Select.Item value="sans">Sans-serif</Select.Item>
-            <Select.Item value="serif">Serif</Select.Item>
-            <Select.Item value="mono">Monospace</Select.Item>
-            <Select.Item value="cursive">Cursive</Select.Item>
+            {fonts.map((font) => (
+              <Select.Item value={font} key={font.value}>
+                {font.label}
+              </Select.Item>
+            ))}
           </Select.List>
         </Select.Content>
       </Select.Root>
