@@ -19,8 +19,22 @@ export const Default: StoryObj<typeof Dialog.Root> = {
         <Dialog.Trigger render={<Button>Open Dialog</Button>} />
         <Dialog.Content>
           <Dialog.Header>
-            <Dialog.Title>Dialog Title</Dialog.Title>
-            <Dialog.Description>Dialog Description</Dialog.Description>
+            <Dialog.HeaderIcon>
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
+                <path d="M10 0L12.5 7.5L20 7.5L14 12L16 20L10 15L4 20L6 12L0 7.5L7.5 7.5L10 0Z" />
+              </svg>
+            </Dialog.HeaderIcon>
+            <Dialog.HeaderContent>
+              <Dialog.Title>Dialog Title</Dialog.Title>
+              <Dialog.Description>
+                You are about to open this job to public, are you sure?
+              </Dialog.Description>
+            </Dialog.HeaderContent>
           </Dialog.Header>
           <div>
             <p>Dialog Content</p>

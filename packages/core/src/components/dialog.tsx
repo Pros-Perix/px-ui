@@ -56,14 +56,14 @@ export function Content({
       <BaseDialog.Popup
         data-slot="dialog-content"
         className={cn(
-          "sm:max-w-[calc(100%-2rem)] fixed z-50 grid w-full bg-ppx-background text-ppx-foreground",
-          "gap-4 p-6 shadow-lg sm:max-w-lg sm:scale-[calc(1-0.1*var(--nested-dialogs))] sm:rounded-b-ppx-m rounded-ppx-m rounded-b-none border border-ppx-neutral-5 duration-200 outline-none",
-          "bottom-0 sm:top-[50%] sm:bottom-auto sm:left-[50%] sm:translate-x-[-50%] sm:translate-y-[-50%] fixed w-full",
+          "fixed z-50 grid w-full bg-ppx-background text-ppx-foreground ppx-sm:max-w-[calc(100%-2rem)]",
+          "gap-4 p-6 shadow-lg ppx-sm:max-w-lg rounded-ppx-m rounded-b-none border border-ppx-neutral-5 duration-200 outline-none ppx-sm:scale-[calc(1-0.1*var(--nested-dialogs))] ppx-sm:rounded-b-ppx-m",
+          "bottom-0 fixed w-full ppx-sm:top-[50%] ppx-sm:bottom-auto ppx-sm:left-[50%] ppx-sm:translate-x-[-50%] ppx-sm:translate-y-[-50%]",
           "duration-200",
           "data-[starting-style]:translate-y-full data-[starting-style]:opacity-0",
           "data-[ending-style]:translate-y-full data-[ending-style]:opacity-0",
-          "data-[starting-style]:sm:translate-y-[-50%] data-[starting-style]:sm:scale-95",
-          "data-[ending-style]:sm:translate-y-[-50%] data-[ending-style]:sm:scale-95",
+          "data-[starting-style]:ppx-sm:translate-y-[-50%] data-[starting-style]:ppx-sm:scale-95",
+          "data-[ending-style]:ppx-sm:translate-y-[-50%] data-[ending-style]:ppx-sm:scale-95",
           className,
         )}
         {...props}
@@ -87,9 +87,42 @@ export function Header({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       data-slot="dialog-header"
-      className={cn("gap-2 sm:text-left flex flex-col text-center", className)}
+      className={cn("gap-3 flex", className)}
       {...props}
     />
+  );
+}
+
+export function HeaderContent({
+  className,
+  children,
+  ...props
+}: React.ComponentProps<"div">) {
+  return (
+    <div
+      className={cn("gap-2 flex flex-col self-center", className)}
+      {...props}
+    >
+      {children}
+    </div>
+  );
+}
+
+export function HeaderIcon({
+  className,
+  children,
+  ...props
+}: React.ComponentProps<"div">) {
+  return (
+    <div
+      className={cn(
+        "size-12 flex shrink-0 items-center justify-center rounded-full bg-ppx-neutral-2",
+        className,
+      )}
+      {...props}
+    >
+      {children}
+    </div>
   );
 }
 
@@ -98,7 +131,7 @@ export function Footer({ className, ...props }: React.ComponentProps<"div">) {
     <div
       data-slot="dialog-footer"
       className={cn(
-        "gap-2 sm:flex-row sm:justify-end flex flex-col-reverse",
+        "gap-2 flex flex-col-reverse ppx-sm:flex-row ppx-sm:justify-end",
         className,
       )}
       {...props}
