@@ -327,7 +327,7 @@ export function Trigger({
       {...props}
     >
       {children}
-      <div className="gap-2 flex items-center">
+      <div className="gap-2 flex shrink-0 items-center">
         {isLoading && <LoadingIndicator />}
         <ChevronDownIcon />
       </div>

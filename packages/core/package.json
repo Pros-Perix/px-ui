@@ -145,7 +145,8 @@
   },
   "peerDependencies": {
     "react": ">=16.8.0",
-    "react-dom": ">=16.8.0"
+    "react-dom": ">=16.8.0",
+    "@tanstack/react-query": ">=5.0.0"
   },
   "dependencies": {
     "@base-ui-components/react": "1.0.0-beta.4",
