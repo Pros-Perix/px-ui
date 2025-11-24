@@ -18,6 +18,7 @@ const textareaVariants = cva(
     },
     defaultVariants: {
       size: "default",
+      widthVariant: "enforced",
     },
   },
 );

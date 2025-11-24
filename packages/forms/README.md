@@ -12,7 +12,7 @@ pnpm add @px-ui/forms
 
 ```tsx
 import { Form, FormField, FormGroup } from "@px-ui/forms";
-import { TextInput, Button } from "@px-ui/core";
+import { Input, Button } from "@px-ui/core";
 
 function MyForm() {
   const handleSubmit = async (values) => {
@@ -29,11 +29,11 @@ function MyForm() {
           required
           helperText="Enter your first name"
         >
-          <TextInput placeholder="John" />
+          <Input placeholder="John" />
         </FormField>
 
         <FormField name="email" label="Email" required>
-          <TextInput type="email" placeholder="john@example.com" />
+          <Input type="email" placeholder="john@example.com" />
         </FormField>
       </FormGroup>
 
