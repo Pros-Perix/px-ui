@@ -133,11 +133,7 @@ export interface TriggerProps
   extends Select.Trigger.Props,
     VariantProps<typeof triggerVariants> {}
 
-export function Trigger({
-  size,
-  widthVariant,
-  ...props
-}: TriggerProps) {
+export function Trigger({ size, widthVariant, ...props }: TriggerProps) {
   const { invalid } = useSelectContext();
   return (
     <Select.Trigger
