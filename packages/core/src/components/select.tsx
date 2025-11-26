@@ -129,11 +129,15 @@ function ItemIndicator(props: { selected: boolean }) {
   );
 }
 
+export interface TriggerProps
+  extends Select.Trigger.Props,
+    VariantProps<typeof triggerVariants> {}
+
 export function Trigger({
   size,
   widthVariant,
   ...props
-}: Select.Trigger.Props & VariantProps<typeof triggerVariants>) {
+}: TriggerProps) {
   const { invalid } = useSelectContext();
   return (
     <Select.Trigger

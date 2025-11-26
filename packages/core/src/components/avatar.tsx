@@ -92,11 +92,11 @@ export function Avatar(props: AvatarProps) {
   );
 }
 
-export function AvatarImpl(
-  props: Omit<AvatarProps, "hideTooltip"> & {
-    avatarRootProps?: React.ComponentProps<typeof AvatarBase.Root>;
-  },
-) {
+type AvatarImplProps = Omit<AvatarProps, "hideTooltip"> & {
+  avatarRootProps?: React.ComponentProps<typeof AvatarBase.Root>;
+};
+
+export function AvatarImpl(props: AvatarImplProps) {
   const { variant = "squared", size = "100px", avatarRootProps } = props;
   const name = props.name ?? "";
   const nameInitial = useMemo(() => generateNameInitials(name), [name]);

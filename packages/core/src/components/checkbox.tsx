@@ -24,11 +24,11 @@ const checkboxVariants = cva(
   },
 );
 
-function Checkbox({
-  className,
-  ...props
-}: React.ComponentProps<typeof BaseCheckbox.Root> &
-  VariantProps<typeof checkboxVariants>) {
+interface CheckboxProps
+  extends React.ComponentProps<typeof BaseCheckbox.Root>,
+    VariantProps<typeof checkboxVariants> {}
+
+function Checkbox({ className, ...props }: CheckboxProps) {
   return (
     <BaseCheckbox.Root
       data-slot="checkbox"

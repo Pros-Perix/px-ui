@@ -311,13 +311,17 @@ export function SearchableTriggerDropdownAddon() {
   );
 }
 
+interface TriggerProps
+  extends Combobox.Trigger.Props,
+    VariantProps<typeof triggerVariants> {}
+
 export function Trigger({
   size,
   widthVariant,
   children,
   className,
   ...props
-}: Combobox.Trigger.Props & VariantProps<typeof triggerVariants>) {
+}: TriggerProps) {
   const { isLoading, invalid } = useComboboxContext();
   return (
     <Combobox.Trigger

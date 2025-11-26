@@ -59,11 +59,15 @@ const inputGroupAddonVariants = cva(
   },
 );
 
+interface AddonProps
+  extends React.ComponentProps<"div">,
+    VariantProps<typeof inputGroupAddonVariants> {}
+
 export function Addon({
   className,
   align = "inline-start",
   ...props
-}: React.ComponentProps<"div"> & VariantProps<typeof inputGroupAddonVariants>) {
+}: AddonProps) {
   return (
     <div
       role="group"

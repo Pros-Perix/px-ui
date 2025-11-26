@@ -4,35 +4,31 @@ import { cn } from "../utils";
 import CloseIcon from "../icons/close-icon";
 import { Button } from "./button";
 
-export function Root({
-  ...props
-}: React.ComponentProps<typeof BasePopover.Root>) {
+export function Root(props: React.ComponentProps<typeof BasePopover.Root>) {
   return <BasePopover.Root data-slot="popover" {...props} />;
 }
 
-function Portal({ ...props }: React.ComponentProps<typeof BasePopover.Portal>) {
+function Portal(props: React.ComponentProps<typeof BasePopover.Portal>) {
   return <BasePopover.Portal data-slot="popover-portal" {...props} />;
 }
 
-export function Trigger({
-  ...props
-}: React.ComponentProps<typeof BasePopover.Trigger>) {
+export function Trigger(
+  props: React.ComponentProps<typeof BasePopover.Trigger>,
+) {
   return <BasePopover.Trigger data-slot="popover-trigger" {...props} />;
 }
 
-export function Close({
-  ...props
-}: React.ComponentProps<typeof BasePopover.Close>) {
+export function Close(props: React.ComponentProps<typeof BasePopover.Close>) {
   return <BasePopover.Close data-slot="popover-close" {...props} />;
 }
 
-function Arrow({ ...props }: React.ComponentProps<typeof BasePopover.Arrow>) {
+function Arrow(props: React.ComponentProps<typeof BasePopover.Arrow>) {
   return <BasePopover.Arrow data-slot="popover-arrow" {...props} />;
 }
 
-function Positioner({
-  ...props
-}: React.ComponentProps<typeof BasePopover.Positioner>) {
+function Positioner(
+  props: React.ComponentProps<typeof BasePopover.Positioner>,
+) {
   return <BasePopover.Positioner data-slot="popover-positioner" {...props} />;
 }
 
