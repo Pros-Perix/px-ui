@@ -18,9 +18,16 @@ const textareaVariants = cva(
     },
     defaultVariants: {
       size: "default",
+      widthVariant: "enforced",
     },
   },
 );
+
+export interface TextareaProps
+  extends React.ComponentProps<"textarea">,
+    VariantProps<typeof textareaVariants> {
+  invalid?: boolean;
+}
 
 function Textarea({
   className,
@@ -28,8 +35,7 @@ function Textarea({
   invalid,
   widthVariant,
   ...props
-}: React.ComponentProps<"textarea"> &
-  VariantProps<typeof textareaVariants> & { invalid?: boolean }) {
+}: TextareaProps) {
   return (
     <textarea
       data-slot="textarea"

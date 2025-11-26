@@ -22,14 +22,19 @@ const inputVariants = cva(
   },
 );
 
+interface InputProps
+  extends Omit<React.ComponentProps<"input">, "size">,
+    VariantProps<typeof inputVariants> {
+  invalid?: boolean;
+}
+
 function Input({
   className,
   size,
   invalid,
   widthVariant,
   ...props
-}: React.ComponentProps<"input"> &
-  VariantProps<typeof inputVariants> & { invalid?: boolean }) {
+}: InputProps) {
   return (
     <input
       data-slot="input"

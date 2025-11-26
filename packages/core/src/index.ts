@@ -19,7 +19,6 @@ export * as BlockRadioGroup from "./components/block-radio-group";
 export * from "./components/button";
 export * from "./components/checkbox";
 export * from "./components/label";
-export * from "./components/text-input";
 export * from "./components/input";
 export * from "./components/textarea";
 export * from "./components/avatar";

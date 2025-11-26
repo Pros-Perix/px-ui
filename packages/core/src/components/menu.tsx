@@ -6,29 +6,9 @@ import {
   DROPDOWN_ITEM_CN,
   DROPDOWN_POPUP_CN,
   DROPDOWN_POSITIONER_CN,
+  triggerVariants,
 } from "../tw-styles/dropdown";
 import { cva, VariantProps } from "class-variance-authority";
-
-export const triggerVariants = cva(
-  "gap-2 p-input text-ppx-sm bg-ppx-neutral-1 inline-flex items-center justify-between border border-ppx-neutral-5 text-ppx-foreground not-disabled:not-data-popup-open:hover:bg-ppx-neutral-2 focus-visible:outline-2 focus-visible:-outline-offset-1 focus-visible:outline-ppx-primary-2 data-popup-open:bg-ppx-neutral-3 disabled:opacity-50 disabled:cursor-not-allowed",
-  {
-    variants: {
-      size: {
-        default: "h-input rounded-input",
-        sm: "h-input-s rounded-input-s",
-      },
-      widthVariant: {
-        enforced: "min-w-input w-[var(--min-width-input)]",
-        fit: "min-w-0 w-fit",
-        full: "min-w-0 w-full",
-      },
-    },
-    defaultVariants: {
-      size: "default",
-      widthVariant: "fit",
-    },
-  },
-);
 
 export const Root = Menu.Root;
 
@@ -36,7 +16,7 @@ export function Trigger({
   className,
   children,
   size,
-  widthVariant,
+  widthVariant = "fit",
   ...props
 }: React.ComponentProps<typeof Menu.Trigger> &
   VariantProps<typeof triggerVariants>) {

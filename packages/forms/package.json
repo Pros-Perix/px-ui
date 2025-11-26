@@ -58,6 +58,7 @@
     "react-dom": "19.2.0",
     "vite-plugin-dts": "^4.5.4",
     "@px-ui/core": "workspace:*",
-    "@hookform/resolvers": "^5.1.1"
+    "@hookform/resolvers": "^5.1.1",
+    "@tanstack/react-query": "^5.90.1"
   }
 }

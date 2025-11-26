@@ -4,7 +4,7 @@ import { Avatar, AvatarImpl } from "./avatar";
 import * as Popover from "./popover";
 import * as Tooltip from "./tooltip";
 
-export interface AvatarGroupProps {
+interface AvatarGroupProps {
   avatars: React.ComponentProps<typeof Avatar>[];
   max?: number;
   className?: string;
@@ -72,7 +72,10 @@ export function AvatarGroup({ max = 4, avatars, className }: AvatarGroupProps) {
                 </div>
               </Popover.Trigger>
 
-              <Popover.Content className="w-80" align="start" side="top">
+              <Popover.Content
+                className="w-80"
+                positionerProps={{ align: "start", side: "top" }}
+              >
                 <div className="space-y-2 max-h-64 overflow-y-auto">
                   {overflowAvatars.map((avatar) => (
                     <div

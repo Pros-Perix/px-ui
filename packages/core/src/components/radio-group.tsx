@@ -38,13 +38,16 @@ const radioVariants = cva(
   },
 );
 
+export interface RadioGroupItemProps
+  extends React.ComponentProps<typeof Radio.Root>,
+    VariantProps<typeof radioVariants> {}
+
 function RadioGroupItem({
   className,
   variant,
   size,
   ...props
-}: React.ComponentProps<typeof Radio.Root> &
-  VariantProps<typeof radioVariants>) {
+}: RadioGroupItemProps) {
   return (
     <Radio.Root
       data-slot="radio-group-item"
