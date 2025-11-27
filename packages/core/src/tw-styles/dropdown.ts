@@ -9,7 +9,7 @@ export const DROPDOWN_POPUP_CN =
 export const DROPDOWN_POSITIONER_CN = "z-10 outline-none";
 
 export const triggerVariants = cva(
-  "gap-2 text-ppx-sm bg-ppx-neutral-1 inline-flex items-center justify-between border border-ppx-neutral-5 aria-invalid:border-ppx-red-4 text-ppx-foreground outline-transparent p-input focus-visible:outline-2 focus-visible:-outline-offset-1 focus-visible:outline-ppx-primary-2 focus-visible:aria-invalid:outline-transparent data-disabled:cursor-not-allowed data-disabled:border-ppx-neutral-3 data-disabled:bg-ppx-neutral-3 data-disabled:text-ppx-neutral-11 data-popup-open:brightness-97",
+  "gap-2 text-ppx-sm bg-ppx-neutral-1 inline-flex items-center justify-between border border-ppx-neutral-5 aria-invalid:border-ppx-red-4 text-ppx-foreground outline-transparent p-input focus-visible:outline-2 focus-visible:-outline-offset-1 focus-visible:outline-ppx-neutral-6 focus-visible:aria-invalid:outline-transparent data-disabled:cursor-not-allowed data-disabled:border-ppx-neutral-3 data-disabled:bg-ppx-neutral-3 data-disabled:text-ppx-neutral-11 data-popup-open:brightness-97",
   {
     variants: {
       size: {

@@ -1,5 +1,10 @@
 import * as React from "react";
-import { DayButton, DayPicker, getDefaultClassNames } from "react-day-picker";
+import {
+  DayButton,
+  DayPicker,
+  getDefaultClassNames,
+  DayPickerProps,
+} from "react-day-picker";
 
 import { cn } from "../utils";
 import { Button, buttonVariants } from "./button";
@@ -10,14 +15,12 @@ function Calendar({
   classNames,
   showOutsideDays = true,
   captionLayout = "label",
-  buttonVariant = "ghost",
   formatters,
   components,
   ...props
-}: React.ComponentProps<typeof DayPicker> & {
-  buttonVariant?: React.ComponentProps<typeof Button>["variant"];
-}) {
+}: DayPickerProps) {
   const defaultClassNames = getDefaultClassNames();
+  const buttonVariant = "ghost";
 
   return (
     <DayPicker

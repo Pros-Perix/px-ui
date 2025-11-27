@@ -109,6 +109,7 @@
     --color-ppx-primary-2: #a7e1c6;
     --color-ppx-primary-4: #4dc28c;
     --color-ppx-primary-5: #28b674;
+    --color-ppx-primary-7: #186f47;
     --color-ppx-primary-b-1: #ecf4fe;
     --color-ppx-primary-b-4: #60a2f3;
     --color-ppx-primary-b-5: #408ff0;
@@ -611,6 +612,9 @@
   .w-96 {
     width: calc(var(--spacing) * 96);
   }
+  .w-\[280px\] {
+    width: 280px;
+  }
   .w-\[400px\] {
     width: 400px;
   }
@@ -758,6 +762,9 @@
   .justify-end {
     justify-content: flex-end;
   }
+  .justify-start {
+    justify-content: flex-start;
+  }
   .gap-0\.5 {
     gap: calc(var(--spacing) * 0.5);
   }
@@ -769,6 +776,9 @@
   }
   .gap-2 {
     gap: calc(var(--spacing) * 2);
+  }
+  .gap-2\.5 {
+    gap: calc(var(--spacing) * 2.5);
   }
   .gap-3 {
     gap: calc(var(--spacing) * 3);
@@ -937,6 +947,9 @@
   .border-ppx-primary-5 {
     border-color: var(--color-ppx-primary-5);
   }
+  .border-ppx-primary-7 {
+    border-color: var(--color-ppx-primary-7);
+  }
   .border-purple-200 {
     border-color: var(--color-purple-200);
   }
@@ -979,8 +992,14 @@
   .bg-ppx-neutral-11 {
     background-color: var(--color-ppx-neutral-11);
   }
+  .bg-ppx-primary-1 {
+    background-color: var(--color-ppx-primary-1);
+  }
   .bg-ppx-primary-5 {
     background-color: var(--color-ppx-primary-5);
+  }
+  .bg-ppx-primary-7 {
+    background-color: var(--color-ppx-primary-7);
   }
   .bg-ppx-primary-b-1 {
     background-color: var(--color-ppx-primary-b-1);
@@ -1133,6 +1152,9 @@
   }
   .text-center {
     text-align: center;
+  }
+  .text-left {
+    text-align: left;
   }
   .font-sans-sb {
     font-family: var(--font-sans-sb);
@@ -1720,6 +1742,26 @@
       outline-offset: calc(1px * -1);
     }
   }
+  .focus-visible\:outline-ppx-neutral-3 {
+    &:focus-visible {
+      outline-color: var(--color-ppx-neutral-3);
+    }
+  }
+  .focus-visible\:outline-ppx-neutral-5 {
+    &:focus-visible {
+      outline-color: var(--color-ppx-neutral-5);
+    }
+  }
+  .focus-visible\:outline-ppx-neutral-6 {
+    &:focus-visible {
+      outline-color: var(--color-ppx-neutral-6);
+    }
+  }
+  .focus-visible\:outline-ppx-neutral-10 {
+    &:focus-visible {
+      outline-color: var(--color-ppx-neutral-10);
+    }
+  }
   .focus-visible\:outline-ppx-primary-2 {
     &:focus-visible {
       outline-color: var(--color-ppx-primary-2);
@@ -2178,6 +2220,11 @@
   .data-\[disabled\]\:opacity-50 {
     &[data-disabled] {
       opacity: 50%;
+    }
+  }
+  .data-\[empty\=true\]\:text-ppx-muted-foreground {
+    &[data-empty="true"] {
+      color: var(--color-ppx-muted-foreground);
     }
   }
   .data-\[ending-style\]\:translate-y-full {
