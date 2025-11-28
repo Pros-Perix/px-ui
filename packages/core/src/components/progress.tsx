@@ -68,7 +68,7 @@ export function Value({
 }: React.ComponentProps<typeof Progress.Value>) {
   return (
     <Progress.Value
-      className={cn("text-ppx-sm font-bold text-ppx-primary-b-5 flex-shrink-0", className)}
+      className={cn("text-ppx-h4 font-sans-b text-ppx-primary-b-5 flex-shrink-0", className)}
       {...props}
     />
   );
