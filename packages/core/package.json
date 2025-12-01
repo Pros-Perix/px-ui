@@ -1,23 +1,168 @@
 {
   "name": "@px-ui/core",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "version": "1.29.0",
+  "description": "A modern React component library built with Tailwind CSS",
+  "type": "module",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "sideEffects": [
+    "**/*.css",
+    "./dist/index.js"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./styles": "./dist/core.css",
+    "./button": {
+      "types": "./dist/components/button.d.ts",
+      "import": "./dist/components/button.js"
+    },
+    "./checkbox": {
+      "types": "./dist/components/checkbox.d.ts",
+      "import": "./dist/components/checkbox.js"
+    },
+    "./label": {
+      "types": "./dist/components/label.d.ts",
+      "import": "./dist/components/label.js"
+    },
+    "./text-input": {
+      "types": "./dist/components/text-input.d.ts",
+      "import": "./dist/components/text-input.js"
+    },
+    "./input": {
+      "types": "./dist/components/input.d.ts",
+      "import": "./dist/components/input.js"
+    },
+    "./input-group": {
+      "types": "./dist/components/input-group.d.ts",
+      "import": "./dist/components/input-group.js"
+    },
+    "./textarea": {
+      "types": "./dist/components/textarea.d.ts",
+      "import": "./dist/components/textarea.js"
+    },
+    "./avatar": {
+      "types": "./dist/components/avatar.d.ts",
+      "import": "./dist/components/avatar.js"
+    },
+    "./avatar-group": {
+      "types": "./dist/components/avatar-group.d.ts",
+      "import": "./dist/components/avatar-group.js"
+    },
+    "./user-avatar": {
+      "types": "./dist/components/user-avatar.d.ts",
+      "import": "./dist/components/user-avatar.js"
+    },
+    "./segmented-control": {
+      "types": "./dist/components/segmented-control.d.ts",
+      "import": "./dist/components/segmented-control.js"
+    },
+    "./dialog": {
+      "types": "./dist/components/dialog.d.ts",
+      "import": "./dist/components/dialog.js"
+    },
+    "./popover": {
+      "types": "./dist/components/popover.d.ts",
+      "import": "./dist/components/popover.js"
+    },
+    "./combobox": {
+      "types": "./dist/components/combobox.d.ts",
+      "import": "./dist/components/combobox.js"
+    },
+    "./select": {
+      "types": "./dist/components/select.d.ts",
+      "import": "./dist/components/select.js"
+    },
+    "./menu": {
+      "types": "./dist/components/menu.d.ts",
+      "import": "./dist/components/menu.js"
+    },
+    "./spinner": {
+      "types": "./dist/components/spinner.d.ts",
+      "import": "./dist/components/spinner.js"
+    },
+    "./switch": {
+      "types": "./dist/components/switch.d.ts",
+      "import": "./dist/components/switch.js"
+    },
+    "./tabs": {
+      "types": "./dist/components/tabs.d.ts",
+      "import": "./dist/components/tabs.js"
+    },
+    "./tooltip": {
+      "types": "./dist/components/tooltip.d.ts",
+      "import": "./dist/components/tooltip.js"
+    },
+    "./radio-group": {
+      "types": "./dist/components/radio-group.d.ts",
+      "import": "./dist/components/radio-group.js"
+    },
+    "./progress": {
+      "types": "./dist/components/progress.d.ts",
+      "import": "./dist/components/progress.js"
+    },
+    "./block-checkbox-group": {
+      "types": "./dist/components/block-checkbox-group.d.ts",
+      "import": "./dist/components/block-checkbox-group.js"
+    },
+    "./block-radio-group": {
+      "types": "./dist/components/block-radio-group.d.ts",
+      "import": "./dist/components/block-radio-group.js"
+    },
+    "./utils": {
+      "types": "./dist/utils/index.d.ts",
+      "import": "./dist/utils/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
   "scripts": {
     "build": "vite build",
-    "dev": "vite",
     "test": "vitest",
     "lint": "eslint src --ext .ts,.tsx",
-    "watch:styles": "npx @tailwindcss/cli -i ./src/index.css -o ./dist/core.css --watch"
+    "prepublishOnly": "pnpm build"
   },
-  "keywords": [],
+  "keywords": [
+    "react",
+    "components",
+    "ui",
+    "tailwind",
+    "design-system"
+  ],
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Pros-Perix/px-ui.git",
+    "directory": "packages/core"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "peerDependencies": {
+    "@tanstack/react-query": ">=5.0.0",
+    "react": ">=16.8.0",
+    "react-dom": ">=16.8.0"
+  },
+  "dependencies": {
+    "@base-ui-components/react": "1.0.0-beta.4",
+    "class-variance-authority": "^0.7.1",
+    "classnames": ">2.0.0",
+    "date-fns": "^4.1.0",
+    "react-day-picker": "^9.11.2",
+    "tailwind-merge": "3.2.0",
+    "tw-animate-css": "^1.3.4"
+  },
   "devDependencies": {
-    "@tailwindcss/cli": "^4.1.5",
-    "@tailwindcss/postcss": "^4.1.5",
-    "autoprefixer": "10.4.19",
-    "postcss": "8.5.3",
-    "tailwindcss": "4.1.5"
+    "@tanstack/react-query": "^5.90.1",
+    "@types/react": "^19.2.0",
+    "@types/react-dom": "^19.2.0",
+    "react": "19.2.0",
+    "react-dom": "19.2.0",
+    "vite-plugin-dts": "^4.5.4"
   }
 }

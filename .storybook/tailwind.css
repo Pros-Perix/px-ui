@@ -1,0 +1,7 @@
+@import './fonts/fonts.css' layer(base);
+@import "tailwindcss";
+@import "../packages/core/src/index.css";
+
+body {
+  font-family: var(--font-sans);
+}

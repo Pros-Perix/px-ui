@@ -14,12 +14,12 @@ export default defineConfig({
   build: {
     lib: {
       entry: path.resolve(__dirname, "src/index.ts"),
-      name: "PxUICore",
+      name: "PxUIForms",
       fileName: () => `index.js`,
       formats: ["es"],
     },
     rollupOptions: {
-      external: ["react", "react-dom"],
+      external: ["react", "react-dom", "@px-ui/core"],
       output: {
         preserveModules: true,
         preserveModulesRoot: "src",
