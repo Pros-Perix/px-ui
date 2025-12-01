@@ -34,7 +34,9 @@ export const InputFields: Story = {
     return (
       <Field.Group>
         <Field.Root>
-          <Field.Label htmlFor={usernameId}>Username</Field.Label>
+          <Field.Label htmlFor={usernameId} className="required">
+            Username
+          </Field.Label>
           <Input id={usernameId} placeholder="Enter your username" />
           <Field.Description>
             This is your public display name. It can be your real name or a
@@ -109,7 +111,7 @@ export const FieldsetWithGroups: Story = {
     return (
       <Field.Set>
         <Field.Legend>Address Information</Field.Legend>
-        <div className="gap-4 grid grid-cols-2">
+        <div className="grid grid-cols-2 gap-4">
           <Field.Root>
             <Field.Label htmlFor="street">Street Address</Field.Label>
             <Input id="street" placeholder="123 Main St" />
@@ -187,8 +189,8 @@ export const CheckboxFields: Story = {
 export const RadioFields: Story = {
   render: () => {
     return (
-      <Field.Root>
-        <Field.Title>Subscription Plan</Field.Title>
+      <Field.Set>
+        <Field.Label>Subscription Plan</Field.Label>
         <Field.Description>
           Choose the plan that works best for you.
         </Field.Description>
@@ -219,7 +221,7 @@ export const RadioFields: Story = {
             </Field.Content>
           </Field.Root>
         </RadioGroup>
-      </Field.Root>
+      </Field.Set>
     );
   },
 };
@@ -327,11 +329,11 @@ export const FieldGroupsWithSeparators: Story = {
 export const ResponsiveLayout: Story = {
   render: () => {
     return (
-      <form className="max-w-2xl">
+      <form className="mx-auto max-w-md">
         <Field.Group>
           <Field.Root orientation="responsive">
             <Field.Label htmlFor="name">Full Name</Field.Label>
-            <Input id="name" placeholder="John Doe" />
+            <Input id="name" widthVariant="enforced" placeholder="John Doe" />
           </Field.Root>
 
           <Field.Root orientation="responsive">
@@ -340,6 +342,7 @@ export const ResponsiveLayout: Story = {
               id="email-primary"
               type="email"
               placeholder="john@example.com"
+              widthVariant="enforced"
             />
           </Field.Root>
 
@@ -349,6 +352,7 @@ export const ResponsiveLayout: Story = {
               id="bio"
               placeholder="Tell us about yourself..."
               rows={3}
+              widthVariant="enforced"
             />
           </Field.Root>
 
@@ -464,13 +468,13 @@ export const JobApplicationForm: Story = {
   render: () => {
     const [startDate, setStartDate] = React.useState<Date>();
     return (
-      <form className="max-w-3xl mx-auto">
+      <form className="mx-auto max-w-3xl">
         <Field.Group>
           {/* Personal Information */}
           <Field.Set>
             <Field.Legend>Personal Information</Field.Legend>
             <Field.Group>
-              <div className="gap-4 grid grid-cols-2">
+              <div className="grid grid-cols-2 gap-4">
                 <Field.Root>
                   <Field.Label htmlFor="firstName">First Name</Field.Label>
                   <Input id="firstName" placeholder="John" required />
@@ -760,7 +764,7 @@ export const JobApplicationForm: Story = {
           <Field.Set>
             <Field.Legend>Availability & Preferences</Field.Legend>
             <Field.Group>
-              <div className="gap-4 grid grid-cols-2">
+              <div className="grid grid-cols-2 gap-4">
                 <Field.Root>
                   <Field.Label htmlFor="startDate">
                     Available Start Date
@@ -858,7 +862,7 @@ export const JobApplicationForm: Story = {
           </Field.Root>
 
           {/* Submit */}
-          <div className="gap-3 flex justify-end">
+          <div className="flex justify-end gap-3">
             <Button type="button" variant="outline">
               Save Draft
             </Button>

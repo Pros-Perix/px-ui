@@ -164,4 +164,11 @@
   }
 }
 
+@utility required {
+  &::after {
+    content: "*";
+    @apply text-ppx-red-5 text-ppx-base -ml-1;
+  }
+}
+
 @source "./**/*.{js,jsx,ts,tsx}";
