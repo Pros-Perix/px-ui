@@ -217,7 +217,7 @@ export function GroupWithIcons() {
   return (
     <Menu.Root>
       <Menu.Trigger className="bg-ppx-primary-b-5 text-ppx-background hover:bg-ppx-primary-b-4! data-popup-open:bg-ppx-primary-b-5">
-        Bulk Action
+        Bulk Actions
       </Menu.Trigger>
       <Menu.Content>
         <Menu.Group>

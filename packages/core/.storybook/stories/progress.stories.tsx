@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { Progress } from "../../src";
+import * as Progress from "../../src/components/progress";
 import React, { useState, useEffect } from "react";
 
 const sizes = ["default", "sm", "lg"] as const;
