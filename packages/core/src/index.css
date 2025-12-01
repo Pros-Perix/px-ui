@@ -64,6 +64,7 @@
   --color-ppx-muted-background: #dfe2e6;
   --color-ppx-muted-foreground: var(--color-ppx-neutral-13);
   --color-ppx-border: var(--color-ppx-neutral-3);
+  --color-ppx-primary-focus: var(--color-ppx-green-3);
 
   --breakpoint-ppx-sm: 40rem;
   --breakpoint-ppx-md: 48rem;
@@ -164,4 +165,3 @@
 }
 
 @source "./**/*.{js,jsx,ts,tsx}";
-

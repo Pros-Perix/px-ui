@@ -1,11 +1,3 @@
-export { SelectField, type InferSelectItem } from "./components/select-field";
-export type { SelectFieldProps } from "./components/select-field";
-
-export {
-  ComboboxField,
-  type InferComboboxItem,
-} from "./components/combobox-field";
-export type { ComboboxFieldProps } from "./components/combobox-field";
-
-// Re-export types
-export * from "./types";
+export { SelectField } from "./components/select-field";
+export { ComboboxField } from "./components/combobox-field";
+export * as Field from "./components/field";

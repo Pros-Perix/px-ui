@@ -178,7 +178,7 @@ importers:
         version: 19.2.0(react@19.2.0)
       vite-plugin-dts:
         specifier: ^4.5.4
-        version: 4.5.4(rollup@4.40.2)(typescript@5.8.3)(vite@6.3.5)
+        version: 4.5.4(typescript@5.8.3)
 
 packages:
 
@@ -1362,6 +1362,20 @@ packages:
     requiresBuild: true
     dev: true
     optional: true
+
+  /@rollup/pluginutils@5.1.4:
+    resolution: {integrity: sha512-USm05zrsFxYLPdWWq+K3STlWiT/3ELn3RcV5hJMghpeAIhxfsUIg6mt12CBJBInWMV4VneoV7SfGv8xIwo2qNQ==}
+    engines: {node: '>=14.0.0'}
+    peerDependencies:
+      rollup: ^1.20.0||^2.0.0||^3.0.0||^4.0.0
+    peerDependenciesMeta:
+      rollup:
+        optional: true
+    dependencies:
+      '@types/estree': 1.0.7
+      estree-walker: 2.0.2
+      picomatch: 4.0.2
+    dev: true
 
   /@rollup/pluginutils@5.1.4(rollup@4.40.2):
     resolution: {integrity: sha512-USm05zrsFxYLPdWWq+K3STlWiT/3ELn3RcV5hJMghpeAIhxfsUIg6mt12CBJBInWMV4VneoV7SfGv8xIwo2qNQ==}
@@ -6611,6 +6625,31 @@ packages:
       magic-string: 0.30.17
       typescript: 5.8.3
       vite: 6.3.5
+    transitivePeerDependencies:
+      - '@types/node'
+      - rollup
+      - supports-color
+    dev: true
+
+  /vite-plugin-dts@4.5.4(typescript@5.8.3):
+    resolution: {integrity: sha512-d4sOM8M/8z7vRXHHq/ebbblfaxENjogAAekcfcDCCwAyvGqnPrc7f4NZbvItS+g4WTgerW0xDwSz5qz11JT3vg==}
+    peerDependencies:
+      typescript: '*'
+      vite: '*'
+    peerDependenciesMeta:
+      vite:
+        optional: true
+    dependencies:
+      '@microsoft/api-extractor': 7.52.8
+      '@rollup/pluginutils': 5.1.4
+      '@volar/typescript': 2.4.17
+      '@vue/language-core': 2.2.0(typescript@5.8.3)
+      compare-versions: 6.1.1
+      debug: 4.4.0
+      kolorist: 1.8.0
+      local-pkg: 1.1.1
+      magic-string: 0.30.17
+      typescript: 5.8.3
     transitivePeerDependencies:
       - '@types/node'
       - rollup

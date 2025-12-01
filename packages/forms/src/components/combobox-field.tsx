@@ -1,11 +1,5 @@
 import * as React from "react";
 import { Combobox } from "@px-ui/core";
-import type { LoadOptionsConfig } from "@px-ui/core";
-
-/**
- * Infer the item type from the items array
- */
-type InferItemType<T> = T extends ReadonlyArray<infer Item> ? Item : never;
 
 type AllRootProps<
   TItem = any,
@@ -33,7 +27,7 @@ type RootProps<
   | "readOnly"
 >;
 
-export interface ComboboxFieldProps<
+interface ComboboxFieldProps<
   TItem = any,
   TSelectedValue = TItem,
   TMultiple extends boolean | undefined = false,
@@ -317,14 +311,3 @@ export function ComboboxField<
     </Combobox.Root>
   );
 }
-
-/**
- * Type helper to infer the item type from items array
- *
- * @example
- * ```tsx
- * const items = [{ id: 1, name: 'Item 1' }] as const;
- * type Item = InferComboboxItem<typeof items>; // { id: 1, name: 'Item 1' }
- * ```
- */
-export type InferComboboxItem<T extends ReadonlyArray<any>> = InferItemType<T>;

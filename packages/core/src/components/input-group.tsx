@@ -5,7 +5,7 @@ import { cn } from "../utils";
 import { Button as ButtonComponent } from "./button";
 
 const inputGroupVariants = cva(
-  "group/input-group relative flex items-center border border-ppx-neutral-5 bg-ppx-neutral-1 outline-transparent has-[[data-slot=input-group-control]:focus-visible]:outline-2 has-[[data-slot=input-group-control]:focus-visible]:-outline-offset-1 has-[[data-slot=input-group-control]:focus-visible]:bg-ppx-background has-[[data-slot=input-group-control]:focus-visible]:outline-ppx-primary-2 has-[[data-slot][aria-invalid=true]]:outline-ppx-red-4 has-[[data-slot][aria-invalid=true]]:outline has-[[data-slot][aria-invalid=true]]:-outline-offset-1 has-[[data-slot][aria-invalid=true]]:bg-ppx-red-1 has-[[data-slot=input-group-control]:disabled]:*:cursor-not-allowed has-[[data-slot=input-group-control]:disabled]:border-ppx-neutral-3 has-[[data-slot=input-group-control]:disabled]:bg-ppx-neutral-3 has-[[data-slot=input-group-control]:disabled]:text-ppx-neutral-11 has-[>[data-align=inline-start]]:[&>input]:pl-input has-[>[data-align=inline-end]]:[&>input]:pr-input",
+  "group/input-group relative flex items-center border border-ppx-neutral-5 bg-ppx-neutral-1 outline-transparent has-[[data-slot=input-group-control]:focus-visible]:outline-2 has-[[data-slot=input-group-control]:focus-visible]:-outline-offset-1 has-[[data-slot=input-group-control]:focus-visible]:bg-ppx-background has-[[data-slot=input-group-control]:focus-visible]:outline-ppx-primary-focus has-[[data-slot][aria-invalid=true]]:outline-ppx-red-4 has-[[data-slot][aria-invalid=true]]:outline has-[[data-slot][aria-invalid=true]]:-outline-offset-1 has-[[data-slot][aria-invalid=true]]:bg-ppx-red-1 has-[[data-slot=input-group-control]:disabled]:*:cursor-not-allowed has-[[data-slot=input-group-control]:disabled]:border-ppx-neutral-3 has-[[data-slot=input-group-control]:disabled]:bg-ppx-neutral-3 has-[[data-slot=input-group-control]:disabled]:text-ppx-neutral-11 has-[>[data-align=inline-start]]:[&>input]:pl-input has-[>[data-align=inline-end]]:[&>input]:pr-input",
   {
     variants: {
       size: {
@@ -20,7 +20,7 @@ const inputGroupVariants = cva(
     },
     defaultVariants: {
       size: "default",
-      widthVariant: "enforced",
+      widthVariant: "full",
     },
   },
 );

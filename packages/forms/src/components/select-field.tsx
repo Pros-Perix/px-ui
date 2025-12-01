@@ -1,11 +1,6 @@
 import * as React from "react";
 import { Select } from "@px-ui/core";
 
-/**
- * Infer the item type from the items array
- */
-type InferItemType<T> = T extends ReadonlyArray<infer Item> ? Item : never;
-
 type AllRootProps<
   TItem = any,
   TMultiple extends boolean | undefined = false,
@@ -27,7 +22,7 @@ type RootProps<
   | "name"
 >;
 
-export interface SelectFieldProps<
+interface SelectFieldProps<
   TItem = any,
   TMultiple extends boolean | undefined = false,
 > extends RootProps<TItem, TMultiple> {
@@ -221,14 +216,3 @@ export function SelectField<
     </Select.Root>
   );
 }
-
-/**
- * Type helper to infer the item type from items array
- *
- * @example
- * ```tsx
- * const items = [{ id: 1, name: 'Item 1' }] as const;
- * type Item = InferSelectItem<typeof items>; // { id: 1, name: 'Item 1' }
- * ```
- */
-export type InferSelectItem<T extends ReadonlyArray<any>> = InferItemType<T>;

@@ -377,7 +377,7 @@ export function Value({
 }
 
 const chipsTriggerVariants = cva(
-  "p-input text-ppx-sm bg-ppx-neutral-1 inline-flex items-center justify-between border border-ppx-neutral-5 focus-within:outline-2 focus-within:-outline-offset-1 focus-within:outline-ppx-primary-2 aria-invalid:border-ppx-red-4 focus-within:aria-invalid:outline-transparent has-data-disabled:border-ppx-neutral-3 has-data-disabled:bg-ppx-neutral-3 has-data-disabled:text-ppx-neutral-11 has-data-disabled:cursor-not-allowed",
+  "p-input text-ppx-sm bg-ppx-neutral-1 inline-flex items-center justify-between border border-ppx-neutral-5 focus-within:outline-2 focus-within:-outline-offset-1 focus-within:outline-ppx-primary-focus aria-invalid:border-ppx-red-4 focus-within:aria-invalid:outline-transparent has-data-disabled:border-ppx-neutral-3 has-data-disabled:bg-ppx-neutral-3 has-data-disabled:text-ppx-neutral-11 has-data-disabled:cursor-not-allowed",
   {
     variants: {
       size: {
