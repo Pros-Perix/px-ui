@@ -1,4 +1,4 @@
-@import './fonts/fonts.css' layer(base);
+@import "./fonts/fonts.css";
 @import "tailwindcss";
 @import "../packages/core/src/index.css";
 

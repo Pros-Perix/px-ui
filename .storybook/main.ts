@@ -18,10 +18,6 @@ const config: StorybookConfig = {
   },
   staticDirs: ["./public"],
   viteFinal: async (config) => {
-    // Set base path for GitHub Pages deployment
-    if (process.env.NODE_ENV === "production") {
-      config.base = "/px-ui/";
-    }
     return config;
   },
 };
