@@ -65,7 +65,9 @@ export function DatePicker({
         aria-invalid={invalid}
         aria-label="Open date picker"
       >
-        {renderFormattedDate(calendarProps, format) || placeholder}
+        {renderTriggerContent ||
+          renderFormattedDate(calendarProps, format) ||
+          placeholder}
 
         {trailingIcon ?? (
           <CalenderIcon
