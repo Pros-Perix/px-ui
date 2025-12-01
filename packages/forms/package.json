@@ -27,7 +27,7 @@
     "build": "vite build",
     "test": "vitest",
     "lint": "eslint src --ext .ts,.tsx",
-    "prepublishOnly": "npm run build"
+    "prepublishOnly": "pnpm build"
   },
   "keywords": [
     "react",
@@ -37,7 +37,7 @@
     "design-system"
   ],
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Pros-Perix/px-ui.git",

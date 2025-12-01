@@ -1,39 +1,39 @@
 @font-face {
   font-family: "Ubuntu L";
-  src: url("/Ubuntu-Light.ttf");
+  src: url("./Ubuntu-Light.ttf");
 }
 
 @font-face {
   font-family: "Ubuntu R";
-  src: url("/Ubuntu-Regular.ttf");
+  src: url("./Ubuntu-Regular.ttf");
 }
 
 @font-face {
   font-family: "Ubuntu B";
-  src: url("/Ubuntu-Bold.ttf");
+  src: url("./Ubuntu-Bold.ttf");
 }
 
 @font-face {
   font-family: "Lato L";
-  src: url("/Lato-Light.ttf");
+  src: url("./Lato-Light.ttf");
 }
 
 @font-face {
   font-family: "Lato R";
-  src: url("/Lato-Regular.ttf");
+  src: url("./Lato-Regular.ttf");
 }
 
 @font-face {
   font-family: "Lato B";
-  src: url("/Lato-Bold.ttf");
+  src: url("./Lato-Bold.ttf");
 }
 
 @font-face {
   font-family: "Lato SB";
-  src: url("/Lato-SemiBold.ttf");
+  src: url("./Lato-SemiBold.ttf");
 }
 
 @font-face {
   font-family: "Cedarville Cursive";
-  src: url("/CedarvilleCursive-Regular.ttf");
+  src: url("./CedarvilleCursive-Regular.ttf");
 }
