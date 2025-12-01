@@ -111,9 +111,6 @@ importers:
       classnames:
         specifier: '>2.0.0'
         version: 2.5.1
-      date-fns:
-        specifier: ^4.1.0
-        version: 4.1.0
       react-day-picker:
         specifier: ^9.11.2
         version: 9.11.2(react@19.2.0)
@@ -133,6 +130,9 @@ importers:
       '@types/react-dom':
         specifier: ^19.2.0
         version: 19.2.0(@types/react@19.2.0)
+      date-fns:
+        specifier: ^4.1.0
+        version: 4.1.0
       react:
         specifier: 19.2.0
         version: 19.2.0
@@ -144,16 +144,6 @@ importers:
         version: 4.5.4(rollup@4.40.2)(typescript@5.8.3)(vite@6.3.5)
 
   packages/forms:
-    dependencies:
-      classnames:
-        specifier: '>2.0.0'
-        version: 2.5.1
-      react-hook-form:
-        specifier: '>=7.0.0'
-        version: 7.65.0(react@19.2.0)
-      zod:
-        specifier: '>=3.0.0'
-        version: 3.24.4
     devDependencies:
       '@hookform/resolvers':
         specifier: ^5.1.1
@@ -176,9 +166,15 @@ importers:
       react-dom:
         specifier: 19.2.0
         version: 19.2.0(react@19.2.0)
+      react-hook-form:
+        specifier: '>=7.0.0'
+        version: 7.65.0(react@19.2.0)
       vite-plugin-dts:
         specifier: ^4.5.4
-        version: 4.5.4(typescript@5.8.3)
+        version: 4.5.4(rollup@4.40.2)(typescript@5.8.3)(vite@6.3.5)
+      zod:
+        specifier: '>=3.0.0'
+        version: 3.24.4
 
 packages:
 
@@ -1362,20 +1358,6 @@ packages:
     requiresBuild: true
     dev: true
     optional: true
-
-  /@rollup/pluginutils@5.1.4:
-    resolution: {integrity: sha512-USm05zrsFxYLPdWWq+K3STlWiT/3ELn3RcV5hJMghpeAIhxfsUIg6mt12CBJBInWMV4VneoV7SfGv8xIwo2qNQ==}
-    engines: {node: '>=14.0.0'}
-    peerDependencies:
-      rollup: ^1.20.0||^2.0.0||^3.0.0||^4.0.0
-    peerDependenciesMeta:
-      rollup:
-        optional: true
-    dependencies:
-      '@types/estree': 1.0.7
-      estree-walker: 2.0.2
-      picomatch: 4.0.2
-    dev: true
 
   /@rollup/pluginutils@5.1.4(rollup@4.40.2):
     resolution: {integrity: sha512-USm05zrsFxYLPdWWq+K3STlWiT/3ELn3RcV5hJMghpeAIhxfsUIg6mt12CBJBInWMV4VneoV7SfGv8xIwo2qNQ==}
@@ -3037,7 +3019,6 @@ packages:
 
   /date-fns@4.1.0:
     resolution: {integrity: sha512-Ukq0owbQXxa/U3EGtsdVBkR1w7KOQ5gIBqdH2hkvknzZPYvBxb/aa6E8L7tmjFtkwZBu3UXBbjIgPo/Ez4xaNg==}
-    dev: false
 
   /de-indent@1.0.2:
     resolution: {integrity: sha512-e/1zu3xH5MQryN2zdVaF0OrdNLUbvWxzMbi+iNA6Bky7l1RoP8a2fIbRocyHclXt/arDrrR6lL3TqFD9pMQTsg==}
@@ -5716,6 +5697,7 @@ packages:
       react: ^16.8.0 || ^17 || ^18 || ^19
     dependencies:
       react: 19.2.0
+    dev: true
 
   /react-is@17.0.2:
     resolution: {integrity: sha512-w2GsyukL62IJnlaff/nRegPQR94C/XXamvMWmSHRJ4y7Ts/4ocGRmTHvOs8PSE6pB3dWOrD/nueuU5sduBsQ4w==}
@@ -6631,31 +6613,6 @@ packages:
       - supports-color
     dev: true
 
-  /vite-plugin-dts@4.5.4(typescript@5.8.3):
-    resolution: {integrity: sha512-d4sOM8M/8z7vRXHHq/ebbblfaxENjogAAekcfcDCCwAyvGqnPrc7f4NZbvItS+g4WTgerW0xDwSz5qz11JT3vg==}
-    peerDependencies:
-      typescript: '*'
-      vite: '*'
-    peerDependenciesMeta:
-      vite:
-        optional: true
-    dependencies:
-      '@microsoft/api-extractor': 7.52.8
-      '@rollup/pluginutils': 5.1.4
-      '@volar/typescript': 2.4.17
-      '@vue/language-core': 2.2.0(typescript@5.8.3)
-      compare-versions: 6.1.1
-      debug: 4.4.0
-      kolorist: 1.8.0
-      local-pkg: 1.1.1
-      magic-string: 0.30.17
-      typescript: 5.8.3
-    transitivePeerDependencies:
-      - '@types/node'
-      - rollup
-      - supports-color
-    dev: true
-
   /vite@6.3.5:
     resolution: {integrity: sha512-cZn6NDFE7wdTpINgs++ZJ4N49W2vRp8LCKrn3Ob1kYNtOo21vfDoaV5GzBfLU4MovSAB8uNRm4jgzVQZ+mBzPQ==}
     engines: {node: ^18.0.0 || ^20.0.0 || >=22.0.0}
@@ -7003,3 +6960,4 @@ packages:
 
   /zod@3.24.4:
     resolution: {integrity: sha512-OdqJE9UDRPwWsrHjLN2F8bPxvwJBK22EHLWtanu0LSYr5YqzsaaW3RMgmjwr8Rypg5k+meEJdSPXJZXE/yqOMg==}
+    dev: true
