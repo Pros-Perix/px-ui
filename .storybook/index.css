@@ -1,37 +1,5 @@
 /*! tailwindcss v4.1.5 | MIT License | https://tailwindcss.com */
 @layer properties;
-@font-face {
-  font-family: "Ubuntu L";
-  src: url("/Ubuntu-Light.ttf");
-}
-@font-face {
-  font-family: "Ubuntu R";
-  src: url("/Ubuntu-Regular.ttf");
-}
-@font-face {
-  font-family: "Ubuntu B";
-  src: url("/Ubuntu-Bold.ttf");
-}
-@font-face {
-  font-family: "Lato L";
-  src: url("/Lato-Light.ttf");
-}
-@font-face {
-  font-family: "Lato R";
-  src: url("/Lato-Regular.ttf");
-}
-@font-face {
-  font-family: "Lato B";
-  src: url("/Lato-Bold.ttf");
-}
-@font-face {
-  font-family: "Lato SB";
-  src: url("/Lato-SemiBold.ttf");
-}
-@font-face {
-  font-family: "Cedarville Cursive";
-  src: url("/CedarvilleCursive-Regular.ttf");
-}
 @layer theme, base, components, utilities;
 @layer theme {
   :root, :host {
