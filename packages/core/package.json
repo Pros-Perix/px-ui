@@ -1,6 +1,6 @@
 {
   "name": "@px-ui/core",
-  "version": "1.29.2",
+  "version": "1.29.3",
   "description": "A modern React component library built with Tailwind CSS",
   "type": "module",
   "module": "./dist/index.js",
