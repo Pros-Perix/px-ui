@@ -5,7 +5,8 @@ import tsConfigPaths from 'vite-tsconfig-paths';
 import tailwindcss from '@tailwindcss/vite';
 import mdx from 'fumadocs-mdx/vite';
 
-export default defineConfig({
+export default defineConfig(({ mode }) => ({
+  base: mode === 'production' ? '/px-ui/' : '/',
   server: {
     port: 3000,
   },
@@ -36,4 +37,4 @@ export default defineConfig({
     }),
     react(),
   ],
-});
+}));
