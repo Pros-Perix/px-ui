@@ -1,7 +1,7 @@
 import { Checkbox as BaseCheckbox } from "@base-ui-components/react/checkbox";
 
 import { cn } from "../utils";
-import { cva, VariantProps } from "class-variance-authority";
+import { cva, type VariantProps } from "class-variance-authority";
 
 const checkboxVariants = cva(
   "peer aria-invalid:border-ppx-red-5 aria-invalid:text-shadow-ppx-red-5 flex items-center justify-center rounded-sm border transition-colors duration-150 outline-none focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-50",
