@@ -14,6 +14,8 @@ export * as Tabs from "./components/tabs";
 export * as Tooltip from "./components/tooltip";
 export * as BlockCheckboxGroup from "./components/block-checkbox-group";
 export * as BlockRadioGroup from "./components/block-radio-group";
+export * as Breadcrumbs from "./components/breadcrumbs";
+export { Calendar } from "./components/calendar";
 
 // Simple components - export directly
 export * from "./components/button";

@@ -1,7 +1,7 @@
 import { useEffect, useEffectEvent } from "react";
 import {
   useIntersectionObserver,
-  UseIntersectionObserverOptions,
+  type UseIntersectionObserverOptions,
 } from "./use-intersection-observer";
 
 const DEFAULT_DELAY_IN_MS = 100;

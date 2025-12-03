@@ -1,5 +1,5 @@
 import { cn } from "../utils";
-import { RadioGroupItem } from "./radio-group";
+import { Item as RadioGroupItemPrimitive } from "./radio-group";
 import { RadioGroup as BaseRadioGroup } from "@base-ui-components/react/radio-group";
 
 export function Group({
@@ -9,7 +9,7 @@ export function Group({
   return (
     <BaseRadioGroup
       data-slot="radio-group"
-      className={cn("gap-4 flex", className)}
+      className={cn("flex gap-4", className)}
       {...props}
     />
   );
@@ -20,19 +20,21 @@ export function Item({
   invalid,
   children,
   ...rest
-}: React.PropsWithChildren<React.ComponentProps<typeof RadioGroupItem>> & {
+}: React.PropsWithChildren<
+  React.ComponentProps<typeof RadioGroupItemPrimitive>
+> & {
   className?: string;
   invalid?: boolean;
 }) {
   return (
     <label
       className={cn(
-        "gap-2 p-5 flex min-h-[155px] justify-between rounded-ppx-s border-2 border-ppx-neutral-3 shadow-[0px_0px_12px_#0000001F] transition-colors duration-300 has-not-disabled:hover:border-ppx-neutral-6 has-disabled:cursor-not-allowed has-disabled:opacity-60 has-disabled:hover:border-ppx-neutral-3 has-aria-invalid:shadow-ppx-red-2 has-data-checked:border-ppx-primary-5!",
+        "rounded-ppx-s border-ppx-neutral-3 has-not-disabled:hover:border-ppx-neutral-6 has-disabled:cursor-not-allowed has-disabled:opacity-60 has-disabled:hover:border-ppx-neutral-3 has-aria-invalid:shadow-ppx-red-2 has-data-checked:border-ppx-primary-5! flex min-h-[155px] justify-between gap-2 border-2 p-5 shadow-[0px_0px_12px_#0000001F] transition-colors duration-300",
         className,
       )}
     >
       <div className="flex-1">{children}</div>
-      <RadioGroupItem
+      <RadioGroupItemPrimitive
         {...rest}
         className={"ml-auto shrink-0 self-start"}
         size="lg"
@@ -44,7 +46,7 @@ export function Item({
 
 export function Header(props: React.PropsWithChildren<{ className?: string }>) {
   return (
-    <div className={cn("mb-5 gap-2 flex items-center", props.className)}>
+    <div className={cn("mb-5 flex items-center gap-2", props.className)}>
       {props.children}
     </div>
   );
@@ -69,7 +71,7 @@ export function Description(
   return (
     <p
       className={cn(
-        "mb-5 text-ppx-sm text-ppx-muted-foreground",
+        "text-ppx-sm text-ppx-muted-foreground mb-5",
         props.className,
       )}
     >

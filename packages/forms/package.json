@@ -1,37 +1,29 @@
 {
   "name": "@px-ui/forms",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Form components built on top of px-ui-core",
   "type": "module",
   "module": "./dist/index.js",
+  "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
-  "sideEffects": [
-    "**/*.css",
-    "./dist/index.js"
-  ],
   "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js"
-    },
-    "./components/*": {
-      "types": "./dist/components/*.d.ts",
-      "import": "./dist/components/*.js"
-    }
+    ".": "./dist/index.js"
   },
   "files": [
-    "dist",
-    "README.md"
+    "dist"
   ],
   "scripts": {
-    "build": "vite build",
-    "test": "vitest",
     "lint": "eslint src --ext .ts,.tsx",
-    "prepublishOnly": "pnpm build"
+    "build": "tsdown",
+    "dev": "tsdown --watch",
+    "test": "vitest",
+    "typecheck": "tsc --noEmit",
+    "release": "bumpp && pnpm publish",
+    "prepublishOnly": "pnpm run build"
   },
   "keywords": [
     "react",
-    "forms",
+    "components",
     "ui",
     "tailwind",
     "design-system"
@@ -43,23 +35,38 @@
     "url": "git+https://github.com/Pros-Perix/px-ui.git",
     "directory": "packages/forms"
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "peerDependencies": {
+    "react": ">=19.0.0",
+    "react-dom": ">=19.0.0",
     "@px-ui/core": "workspace:*",
-    "react": ">=16.8.0",
-    "react-dom": ">=16.8.0",
     "react-hook-form": ">=7.0.0",
-    "zod": ">=3.0.0"
+    "@hookform/resolvers": ">=5.0.0",
+    "zod": ">=3.0.0",
+    "@tanstack/react-query": ">=5.0.0"
   },
   "devDependencies": {
-    "react-hook-form": ">=7.0.0",
+    "react-hook-form": "7.0.0",
     "@hookform/resolvers": "^5.1.1",
     "@px-ui/core": "workspace:*",
-    "zod": ">=3.0.0",
+    "zod": "4.0.0",
     "@tanstack/react-query": "^5.90.1",
-    "@types/react": "^19.2.0",
-    "@types/react-dom": "^19.2.0",
     "react": "19.2.0",
     "react-dom": "19.2.0",
-    "vite-plugin-dts": "^4.5.4"
+    "@types/react": "^19.2.0",
+    "@types/react-dom": "^19.2.0",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.0",
+    "@tsconfig/strictest": "^2.0.8",
+    "@types/node": "^24.10.1",
+    "@vitejs/plugin-react": "^5.1.1",
+    "bumpp": "^10.3.1",
+    "happy-dom": "^20.0.10",
+    "tsdown": "^0.16.4",
+    "typescript": "^5.9.3",
+    "vite": "npm:rolldown-vite@^7.2.5",
+    "vitest": "^4.0.9"
   }
 }
