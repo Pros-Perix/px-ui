@@ -1,10 +1,10 @@
 {
-  "name": "documentation",
+  "name": "@px-ui/docs",
   "private": true,
   "sideEffects": false,
   "type": "module",
   "scripts": {
-    "dev": "vite dev",
+    "dev": "vite dev --port 6869",
     "build": "vite build",
     "start": "serve dist/client",
     "types:check": "fumadocs-mdx && tsc --noEmit",
@@ -42,4 +42,3 @@
     "@biomejs/biome": "^2.3.8"
   }
 }
-

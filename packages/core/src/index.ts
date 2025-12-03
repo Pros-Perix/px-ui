@@ -1,4 +1,4 @@
-// We need to export all the
+// This tells the bundler to include the CSS file on the build output
 import "./index.css";
 
 // Components with namespace conflicts - export as namespaces

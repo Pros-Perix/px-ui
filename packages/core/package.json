@@ -8,7 +8,8 @@
   "types": "./dist/index.d.ts",
   "exports": {
     ".": "./dist/index.js",
-    "./styles": "./dist/index.css"
+    "./styles.css": "./dist/index.css",
+    "./fonts.css": "./dist/assets/fonts.css"
   },
   "files": [
     "dist"
