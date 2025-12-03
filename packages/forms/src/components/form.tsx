@@ -1,12 +1,12 @@
 import {
   Controller,
-  ControllerProps,
-  FieldPath,
-  FieldValues,
+  type ControllerProps,
+  type FieldPath,
+  type FieldValues,
 } from "react-hook-form";
 import * as Field from "./field";
-import { ReactNode } from "react";
-import { Textarea, Checkbox, Input, RadioGroupItem } from "@px-ui/core";
+import { type ReactNode } from "react";
+import { Textarea, Checkbox, Input } from "@px-ui/core";
 
 type FormControlProps<
   TFieldValues extends FieldValues = FieldValues,
