@@ -2,6 +2,7 @@
 import "./index.css";
 
 // Components with namespace conflicts - export as namespaces
+export * as Card from "./components/card";
 export * as Dialog from "./components/dialog";
 export * as Popover from "./components/popover";
 export * as Combobox from "./components/combobox";
@@ -28,6 +29,7 @@ export * from "./components/switch";
 export * from "./components/radio-group";
 export * from "./components/separator";
 export * from "./components/date-picker";
+export * from "./components/dnd-grid";
 
 // Hooks
 export * from "./hooks/use-debounce";

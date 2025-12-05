@@ -1,0 +1,78 @@
+{
+  "name": "@px-ui/charts",
+  "version": "1.0.0",
+  "description": "Chart components built on Apache ECharts",
+  "type": "module",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "sideEffects": [
+    "**/*.css",
+    "./dist/index.js"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./bar-chart": {
+      "types": "./dist/components/bar-chart.d.ts",
+      "import": "./dist/components/bar-chart.js"
+    },
+    "./pie-chart": {
+      "types": "./dist/components/pie-chart.d.ts",
+      "import": "./dist/components/pie-chart.js"
+    },
+    "./line-chart": {
+      "types": "./dist/components/line-chart.d.ts",
+      "import": "./dist/components/line-chart.js"
+    },
+    "./numeric-widget": {
+      "types": "./dist/components/numeric-widget.d.ts",
+      "import": "./dist/components/numeric-widget.js"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "vite build",
+    "test": "vitest",
+    "lint": "eslint src --ext .ts,.tsx",
+    "prepublishOnly": "pnpm build"
+  },
+  "keywords": [
+    "react",
+    "charts",
+    "echarts",
+    "ui",
+    "design-system"
+  ],
+  "author": "",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Pros-Perix/px-ui.git",
+    "directory": "packages/charts"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "peerDependencies": {
+    "@px-ui/core": "workspace:*",
+    "react": ">=16.8.0",
+    "react-dom": ">=16.8.0"
+  },
+  "dependencies": {
+    "echarts": "^5.6.0",
+    "echarts-for-react": "^3.0.5"
+  },
+  "devDependencies": {
+    "@px-ui/core": "workspace:*",
+    "@types/react": "^19.2.0",
+    "@types/react-dom": "^19.2.0",
+    "react": "19.2.0",
+    "react-dom": "19.2.0",
+    "vite-plugin-dts": "^4.5.4"
+  }
+}

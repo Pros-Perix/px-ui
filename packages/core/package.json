@@ -15,6 +15,10 @@
       "import": "./dist/index.js"
     },
     "./styles": "./dist/core.css",
+    "./card": {
+      "types": "./dist/components/card.d.ts",
+      "import": "./dist/components/card.js"
+    },
     "./button": {
       "types": "./dist/components/button.d.ts",
       "import": "./dist/components/button.js"
@@ -111,6 +115,10 @@
       "types": "./dist/components/block-radio-group.d.ts",
       "import": "./dist/components/block-radio-group.js"
     },
+    "./dnd-grid": {
+      "types": "./dist/components/dnd-grid.d.ts",
+      "import": "./dist/components/dnd-grid.js"
+    },
     "./utils": {
       "types": "./dist/utils/index.d.ts",
       "import": "./dist/utils/index.js"
@@ -151,6 +159,10 @@
   },
   "dependencies": {
     "@base-ui-components/react": "1.0.0-beta.4",
+    "@dnd-kit/core": "^6.3.1",
+    "@dnd-kit/modifiers": "^9.0.0",
+    "@dnd-kit/sortable": "^10.0.0",
+    "@dnd-kit/utilities": "^3.2.2",
     "class-variance-authority": "^0.7.1",
     "classnames": ">2.0.0",
     "react-day-picker": "^9.11.2",
@@ -161,9 +173,9 @@
     "@tanstack/react-query": "^5.90.1",
     "@types/react": "^19.2.0",
     "@types/react-dom": "^19.2.0",
+    "date-fns": "^4.1.0",
     "react": "19.2.0",
     "react-dom": "19.2.0",
-    "date-fns": "^4.1.0",
     "vite-plugin-dts": "^4.5.4"
   }
 }
