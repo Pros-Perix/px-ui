@@ -3,7 +3,7 @@ import {
   DayButton,
   DayPicker,
   getDefaultClassNames,
-  DayPickerProps,
+  type DayPickerProps,
 } from "react-day-picker";
 
 import { cn } from "../utils";
@@ -26,7 +26,7 @@ function Calendar({
     <DayPicker
       showOutsideDays={showOutsideDays}
       className={cn(
-        "group/calendar p-3 [--cell-size:--spacing(8)] bg-ppx-background [[data-slot=card-content]_&]:bg-transparent [[data-slot=popover-content]_&]:bg-transparent",
+        "group/calendar bg-ppx-background p-3 [--cell-size:--spacing(8)] [[data-slot=card-content]_&]:bg-transparent [[data-slot=popover-content]_&]:bg-transparent",
         String.raw`rtl:**:[.rdp-button\_next>svg]:rotate-180`,
         String.raw`rtl:**:[.rdp-button\_previous>svg]:rotate-180`,
         className,
@@ -160,7 +160,7 @@ function Calendar({
         WeekNumber: ({ children, ...props }) => {
           return (
             <td {...props}>
-              <div className="flex size-(--cell-size) items-center justify-center text-center">
+              <div className="size-(--cell-size) flex items-center justify-center text-center">
                 {children}
               </div>
             </td>
@@ -202,17 +202,17 @@ function CalendarDayButton({
       data-range-end={modifiers.range_end}
       data-range-middle={modifiers.range_middle}
       className={cn(
-        "gap-1 font-normal flex aspect-square size-auto w-full min-w-(--cell-size) flex-col leading-none [&>span]:text-[0.75rem] [&>span]:opacity-70",
+        "min-w-(--cell-size) flex aspect-square size-auto w-full flex-col gap-1 font-normal leading-none [&>span]:text-[0.75rem] [&>span]:opacity-70",
         // Focus styles
-        "ring-ppx-neutral-3 group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:ring-[3px] group-data-[focused=true]/day:ring-ppx-primary-5/50",
+        "ring-ppx-neutral-3 group-data-[focused=true]/day:ring-ppx-primary-5/50 group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:ring-[3px]",
         // Single date selection
-        "data-[selected-single=true]:text-white data-[selected-single=true]:hover:text-white data-[selected-single=true]:bg-ppx-primary-5 data-[selected-single=true]:hover:bg-ppx-primary-5",
+        "data-[selected-single=true]:bg-ppx-primary-5 data-[selected-single=true]:hover:bg-ppx-primary-5 data-[selected-single=true]:text-white data-[selected-single=true]:hover:text-white",
         // Range start
-        "data-[range-start=true]:text-white data-[range-start=true]:rounded-ppx-s data-[range-start=true]:rounded-l-ppx-s data-[range-start=true]:bg-ppx-primary-5 data-[range-start=true]:hover:bg-ppx-primary-5",
+        "data-[range-start=true]:rounded-ppx-s data-[range-start=true]:rounded-l-ppx-s data-[range-start=true]:bg-ppx-primary-5 data-[range-start=true]:hover:bg-ppx-primary-5 data-[range-start=true]:text-white",
         // Range end
-        "data-[range-end=true]:text-white data-[range-end=true]:rounded-ppx-s data-[range-end=true]:rounded-r-ppx-s data-[range-end=true]:bg-ppx-primary-5 data-[range-end=true]:hover:bg-ppx-primary-5",
+        "data-[range-end=true]:rounded-ppx-s data-[range-end=true]:rounded-r-ppx-s data-[range-end=true]:bg-ppx-primary-5 data-[range-end=true]:hover:bg-ppx-primary-5 data-[range-end=true]:text-white",
         // Range middle
-        "data-[range-middle=true]:rounded-none data-[range-middle=true]:bg-ppx-primary-b-1 data-[range-middle=true]:text-ppx-foreground data-[range-middle=true]:hover:bg-ppx-primary-b-1",
+        "data-[range-middle=true]:bg-ppx-primary-b-1 data-[range-middle=true]:text-ppx-foreground data-[range-middle=true]:hover:bg-ppx-primary-b-1 data-[range-middle=true]:rounded-none",
         defaultClassNames.day,
         className,
       )}

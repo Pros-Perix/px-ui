@@ -3,16 +3,16 @@ import { Radio } from "@base-ui-components/react/radio";
 import { RadioGroup as BaseRadioGroup } from "@base-ui-components/react/radio-group";
 
 import { cn } from "../utils";
-import { cva, VariantProps } from "class-variance-authority";
+import { cva, type VariantProps } from "class-variance-authority";
 
-function RadioGroup({
+export function Group({
   className,
   ...props
 }: React.ComponentProps<typeof BaseRadioGroup>) {
   return (
     <BaseRadioGroup
       data-slot="radio-group"
-      className={cn("gap-3 flex flex-col", className)}
+      className={cn("flex flex-col gap-3", className)}
       {...props}
     />
   );
@@ -38,11 +38,11 @@ const radioVariants = cva(
   },
 );
 
-export interface RadioGroupItemProps
+interface RadioGroupItemProps
   extends React.ComponentProps<typeof Radio.Root>,
     VariantProps<typeof radioVariants> {}
 
-function RadioGroupItem({
+export function Item({
   className,
   variant,
   size,
@@ -69,7 +69,7 @@ function RadioGroupItem({
           strokeLinecap="round"
           strokeLinejoin="round"
           className={cn(
-            "absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2",
+            "absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2",
             size === "sm" && "size-2",
             size === undefined && "size-3",
             size === "lg" && "size-3.5",
@@ -81,5 +81,3 @@ function RadioGroupItem({
     </Radio.Root>
   );
 }
-
-export { RadioGroup, RadioGroupItem };

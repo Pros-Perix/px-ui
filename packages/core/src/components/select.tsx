@@ -9,7 +9,7 @@ import {
 } from "../tw-styles/dropdown";
 import CheckIcon from "../icons/check-icon";
 import ChevronDownIcon from "../icons/chevron-down-icon";
-import { cva, VariantProps } from "class-variance-authority";
+import { cva, type VariantProps } from "class-variance-authority";
 
 type SelectContextValues = {
   invalid?: boolean;
@@ -118,8 +118,8 @@ function ItemIndicator(props: { selected: boolean }) {
   return (
     <div
       className={cn(
-        "peer rounded-sm bg-white size-4 flex shrink-0 items-center justify-center border border-ppx-neutral-10 transition-colors duration-150 outline-none",
-        props.selected && "text-white border-ppx-primary-5 bg-ppx-primary-5",
+        "border-ppx-neutral-10 peer flex size-4 shrink-0 items-center justify-center rounded-sm border bg-white outline-none transition-colors duration-150",
+        props.selected && "border-ppx-primary-5 bg-ppx-primary-5 text-white",
       )}
     >
       <Select.ItemIndicator>
@@ -164,7 +164,7 @@ export function MultiSelectedValue({
     return null;
   }
   return (
-    <div className="gap-1 flex items-center">
+    <div className="flex items-center gap-1">
       <span className="truncate">
         {selectedValue.slice(0, maxItems).join(", ")}
       </span>
@@ -188,7 +188,7 @@ export function Value({
   ...props
 }: Select.Value.Props & { placeholder?: string }) {
   return (
-    <Select.Value className={cn("truncate text-ppx-sm", className)} {...props}>
+    <Select.Value className={cn("text-ppx-sm truncate", className)} {...props}>
       {(value) => {
         if (value == null && placeholder) {
           return placeholder;

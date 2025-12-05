@@ -1,6 +1,6 @@
 import * as React from "react";
 import { cn } from "../utils";
-import { cva, VariantProps } from "class-variance-authority";
+import { cva, type VariantProps } from "class-variance-authority";
 import { Progress } from "@base-ui-components/react/progress";
 
 const progressTrackVariants = cva(
@@ -44,7 +44,10 @@ export function Indicator({
 }: React.ComponentProps<typeof Progress.Indicator>) {
   return (
     <Progress.Indicator
-      className={cn("h-full w-full flex-1 transition-all duration-300 ease-in-out bg-ppx-primary-b-5", className)}
+      className={cn(
+        "bg-ppx-primary-b-5 h-full w-full flex-1 transition-all duration-300 ease-in-out",
+        className,
+      )}
       {...props}
     />
   );
@@ -56,7 +59,7 @@ export function Label({
 }: React.ComponentProps<typeof Progress.Label>) {
   return (
     <Progress.Label
-      className={cn("text-ppx-sm font-medium text-ppx-foreground", className)}
+      className={cn("text-ppx-sm text-ppx-foreground font-medium", className)}
       {...props}
     />
   );
@@ -68,11 +71,13 @@ export function Value({
 }: React.ComponentProps<typeof Progress.Value>) {
   return (
     <Progress.Value
-      className={cn("text-ppx-h4 font-sans-b text-ppx-primary-b-5 flex-shrink-0", className)}
+      className={cn(
+        "text-ppx-h4 font-sans-b text-ppx-primary-b-5 flex-shrink-0",
+        className,
+      )}
       {...props}
     />
   );
 }
 
 export const BaseProgress = Progress;
-

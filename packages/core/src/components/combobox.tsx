@@ -15,9 +15,9 @@ import SearchIcon from "../icons/search-icon";
 import CheckIcon from "../icons/check-icon";
 import CloseIcon from "../icons/close-icon";
 import * as InputGroup from "./input-group";
-import { cva, VariantProps } from "class-variance-authority";
+import { cva, type VariantProps } from "class-variance-authority";
 import { useAsyncOptions } from "../hooks/use-async-options";
-import { LoadOptionsConfig } from "../hooks/use-async-options";
+import { type LoadOptionsConfig } from "../hooks/use-async-options";
 
 const SINGLE_TEXT_CONTENT_CN =
   "px-4 py-2 text-ppx-sm min-h-11 flex items-center justify-center text-ppx-muted-foreground";
@@ -150,7 +150,7 @@ export function Content({
         <Combobox.Popup
           className={cn(
             DROPDOWN_POPUP_CN,
-            "scroll-pt-2 scroll-pb-2 overscroll-contain",
+            "scroll-pb-2 scroll-pt-2 overscroll-contain",
             widthVariant === "trigger"
               ? "w-[var(--anchor-width)]"
               : widthVariant === "fit"
@@ -187,7 +187,7 @@ export function Content({
           {hasMore && (
             <Combobox.Status
               ref={infiniteScrollRef}
-              className="h-10 flex items-center justify-center"
+              className="flex h-10 items-center justify-center"
               aria-label="Loading more options"
             >
               <Spinner className="stroke-ppx-neutral-10" size="medium" />
@@ -231,8 +231,8 @@ function ItemIndicator(props: { selected: boolean }) {
   return (
     <div
       className={cn(
-        "peer rounded-sm size-4 flex shrink-0 items-center justify-center border border-ppx-neutral-10 bg-ppx-background transition-colors duration-150 outline-none",
-        props.selected && "text-white border-ppx-primary-5 bg-ppx-primary-5",
+        "border-ppx-neutral-10 bg-ppx-background peer flex size-4 shrink-0 items-center justify-center rounded-sm border outline-none transition-colors duration-150",
+        props.selected && "border-ppx-primary-5 bg-ppx-primary-5 text-white",
       )}
     >
       <Combobox.ItemIndicator>
@@ -245,10 +245,10 @@ function ItemIndicator(props: { selected: boolean }) {
 export function LoadingIndicator(props: { className?: string }) {
   return (
     <div className={cn("flex items-center justify-center", props.className)}>
-      <div className="space-x-1 flex">
-        <div className="w-1 h-1 animate-bounce rounded-full bg-ppx-foreground opacity-40 [animation-delay:-0.3s] [animation-name:bounce-color]"></div>
-        <div className="w-1 h-1 animate-bounce rounded-full bg-ppx-foreground opacity-70 [animation-delay:-0.15s] [animation-name:bounce-color]"></div>
-        <div className="w-1 h-1 animate-bounce rounded-full bg-ppx-foreground opacity-100 [animation-name:bounce-color]"></div>
+      <div className="flex space-x-1">
+        <div className="bg-ppx-foreground h-1 w-1 animate-bounce rounded-full opacity-40 [animation-delay:-0.3s] [animation-name:bounce-color]"></div>
+        <div className="bg-ppx-foreground h-1 w-1 animate-bounce rounded-full opacity-70 [animation-delay:-0.15s] [animation-name:bounce-color]"></div>
+        <div className="bg-ppx-foreground h-1 w-1 animate-bounce rounded-full opacity-100 [animation-name:bounce-color]"></div>
       </div>
     </div>
   );
@@ -331,7 +331,7 @@ export function Trigger({
       {...props}
     >
       {children}
-      <div className="gap-2 flex shrink-0 items-center">
+      <div className="flex shrink-0 items-center gap-2">
         {isLoading && <LoadingIndicator />}
         <ChevronDownIcon />
       </div>
@@ -354,7 +354,7 @@ export function Value({
   className?: string;
 }) {
   return (
-    <span className={cn("truncate text-ppx-sm", className)} {...props}>
+    <span className={cn("text-ppx-sm truncate", className)} {...props}>
       <Combobox.Value>
         {(value) => {
           if (value == null && placeholder) {
@@ -415,7 +415,7 @@ export function ChipsTrigger({
       aria-invalid={invalid ?? undefined}
       ref={chipsTriggerRef}
     >
-      <div className="gap-1 flex flex-1 flex-wrap items-center">
+      <div className="flex flex-1 flex-wrap items-center gap-1">
         <Combobox.Value>
           {(value: any[]) => (
             <>
@@ -426,14 +426,14 @@ export function ChipsTrigger({
               })}
               <Combobox.Input
                 placeholder={value.length > 0 ? "" : props.placeholder}
-                className="min-w-12 flex-1 border-0 text-ppx-sm text-ppx-foreground outline-none"
+                className="text-ppx-sm text-ppx-foreground min-w-12 flex-1 border-0 outline-none"
               />
             </>
           )}
         </Combobox.Value>
       </div>
 
-      <div className="gap-2 flex h-stretch-available items-center text-ppx-muted-foreground">
+      <div className="h-stretch-available text-ppx-muted-foreground flex items-center gap-2">
         {isLoading && <LoadingIndicator />}
         <Combobox.Trigger className="h-full">
           <ChevronDownIcon />
@@ -450,13 +450,13 @@ export function Chip(
     <Combobox.Chip
       {...props}
       className={cn(
-        "gap-1 pl-2 pr-1 text-sm flex cursor-default items-center rounded-full bg-ppx-neutral-3 py-[0.2rem] text-ppx-foreground outline-none",
+        "bg-ppx-neutral-3 text-ppx-foreground flex cursor-default items-center gap-1 rounded-full py-[0.2rem] pl-2 pr-1 text-sm outline-none",
         props.className,
       )}
     >
       {props.children}
       <Combobox.ChipRemove
-        className="size-5 flex shrink-0 items-center justify-center rounded-full border border-transparent text-inherit hover:border-ppx-neutral-4 hover:bg-ppx-neutral-5 hover:text-ppx-background active:bg-ppx-neutral-6"
+        className="hover:border-ppx-neutral-4 hover:bg-ppx-neutral-5 hover:text-ppx-background active:bg-ppx-neutral-6 flex size-5 shrink-0 items-center justify-center rounded-full border border-transparent text-inherit"
         aria-label="Remove"
       >
         <CloseIcon className="size-3" />
@@ -470,15 +470,15 @@ export function Search({
   ...props
 }: React.ComponentProps<typeof Combobox.Input>) {
   return (
-    <div className="top-0 gap-2 sticky z-10 flex items-center justify-between border-b-[0.75px] border-ppx-neutral-7 bg-ppx-background p-input">
+    <div className="border-ppx-neutral-7 bg-ppx-background p-input sticky top-0 z-10 flex items-center justify-between gap-2 border-b-[0.75px]">
       <Combobox.Input
         placeholder={placeholder}
-        className="text-sm flex-1 placeholder:text-ppx-neutral-7 focus:outline-none"
+        className="placeholder:text-ppx-neutral-7 flex-1 text-sm focus:outline-none"
         data-popup-search
         {...props}
       />
 
-      <SearchIcon className="size-3.5 text-ppx-neutral-10" />
+      <SearchIcon className="text-ppx-neutral-10 size-3.5" />
     </div>
   );
 }

@@ -31,7 +31,7 @@ export function useIntersectionObserver(
       if (node?.nodeType === Node.ELEMENT_NODE) {
         const observer = new IntersectionObserver(
           ([entry]: IntersectionObserverEntry[]) => {
-            setEntry(entry);
+            setEntry(entry ?? null);
           },
           { threshold, root, rootMargin },
         );

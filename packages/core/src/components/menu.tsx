@@ -8,7 +8,7 @@ import {
   DROPDOWN_POSITIONER_CN,
   triggerVariants,
 } from "../tw-styles/dropdown";
-import { cva, VariantProps } from "class-variance-authority";
+import { type VariantProps } from "class-variance-authority";
 
 export const Root = Menu.Root;
 
@@ -95,7 +95,7 @@ export function Separator({
 }: React.ComponentProps<typeof Menu.Separator>) {
   return (
     <Menu.Separator
-      className={cn("my-1.5 mx-2 h-px bg-ppx-neutral-5", className)}
+      className={cn("bg-ppx-neutral-5 mx-2 my-1.5 h-px", className)}
       {...props}
     />
   );
@@ -110,7 +110,7 @@ export function GroupLabel({
   return (
     <Menu.GroupLabel
       className={cn(
-        "py-2 px-4 leading-4 cursor-default font-sans-sb text-ppx-sm text-ppx-muted-foreground uppercase select-none",
+        "font-sans-sb text-ppx-sm text-ppx-muted-foreground cursor-default select-none px-4 py-2 uppercase leading-4",
         className,
       )}
       {...props}

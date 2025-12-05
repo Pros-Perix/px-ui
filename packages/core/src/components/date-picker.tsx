@@ -6,7 +6,7 @@ import * as Popover from "./popover";
 import { triggerVariants } from "../tw-styles/dropdown";
 import type { VariantProps } from "class-variance-authority";
 import CalenderIcon from "../icons/calendar-icon";
-import { OnSelectHandler } from "react-day-picker";
+import { type OnSelectHandler } from "react-day-picker";
 
 type CalendarProps = React.ComponentProps<typeof Calendar>;
 
@@ -72,7 +72,7 @@ export function DatePicker({
         {trailingIcon ?? (
           <CalenderIcon
             className={cn(
-              "size-5 shrink-0 text-ppx-foreground",
+              "text-ppx-foreground size-5 shrink-0",
               triggerProps?.disabled && "opacity-50",
             )}
           />

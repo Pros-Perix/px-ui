@@ -1,4 +1,4 @@
-import classnames, { ArgumentArray } from "classnames";
+import classnames, { type ArgumentArray } from "classnames";
 import { extendTailwindMerge } from "tailwind-merge";
 
 // Create a custom tailwind-merge instance that knows about our custom utilities
