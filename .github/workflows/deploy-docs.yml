@@ -1,4 +1,4 @@
-name: Deploy Storybook to GitHub Pages
+name: Deploy Documentation to GitHub Pages
 
 on:
   push:
@@ -38,8 +38,8 @@ jobs:
       - name: Build packages
         run: pnpm run build
 
-      - name: Build Storybook
-        run: pnpm run build-storybook
+      - name: Build Documentation
+        run: pnpm --filter documentation run build
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
@@ -47,7 +47,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./storybook-static
+          path: ./apps/documentation/dist/client
 
       - name: Deploy to GitHub Pages
         id: deployment
