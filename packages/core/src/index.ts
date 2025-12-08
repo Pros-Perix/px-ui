@@ -30,6 +30,7 @@ export * from "./components/switch";
 export * from "./components/radio-group";
 export * from "./components/separator";
 export * from "./components/date-picker";
+export * from "./components/file-upload";
 
 // Hooks
 export * from "./hooks/use-debounce";
