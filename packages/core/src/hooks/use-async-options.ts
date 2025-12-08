@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import { useInfiniteQuery, QueryKey } from "@tanstack/react-query";
+import { useInfiniteQuery, type QueryKey } from "@tanstack/react-query";
 import useDebounce from "./use-debounce";
 
 type LoadOptionsData<TData> = {

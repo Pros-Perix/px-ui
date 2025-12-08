@@ -1,6 +1,3 @@
-:root {
-}
-
 @theme {
   --font-sans-light: "Lato L", system-ui, sans-serif;
   --font-sans: "Lato R", system-ui, sans-serif;
@@ -137,14 +134,21 @@
   height: stretch;
 }
 
-.no-arrow-spin {
+@utility no-arrow-spin {
   -moz-appearance: textfield;
+
+  &::-webkit-outer-spin-button,
+  &::-webkit-inner-spin-button {
+    margin: 0;
+    -webkit-appearance: none;
+  }
 }
 
-.no-arrow-spin::-webkit-outer-spin-button,
-.no-arrow-spin::-webkit-inner-spin-button {
-  margin: 0;
-  -webkit-appearance: none;
+@utility required {
+  &::after {
+    content: "*";
+    @apply text-ppx-red-5 text-ppx-base -ml-1;
+  }
 }
 
 .root {
@@ -164,10 +168,11 @@
   }
 }
 
-@utility required {
-  &::after {
-    content: "*";
-    @apply text-ppx-red-5 text-ppx-base -ml-1;
+@layer base {
+  :root,
+  html,
+  body {
+    @apply bg-ppx-background text-ppx-foreground border-ppx-border font-sans text-base;
   }
 }
 

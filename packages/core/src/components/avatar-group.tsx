@@ -36,7 +36,7 @@ export function AvatarGroup({ max = 4, avatars, className }: AvatarGroupProps) {
                     }}
                     {...tooltipProps}
                   >
-                    <AvatarImpl {...avatar} className="ring-white ring-2" />
+                    <AvatarImpl {...avatar} className="ring-2 ring-white" />
                   </div>
                 )}
               />
@@ -57,7 +57,7 @@ export function AvatarGroup({ max = 4, avatars, className }: AvatarGroupProps) {
               <Popover.Trigger>
                 <div
                   className={cn(
-                    "font-medium flex cursor-pointer items-center justify-center bg-ppx-neutral-3 text-ppx-neutral-18 transition-colors hover:bg-ppx-neutral-4",
+                    "bg-ppx-neutral-3 text-ppx-neutral-18 hover:bg-ppx-neutral-4 flex cursor-pointer items-center justify-center font-medium transition-colors",
                     avatars[0].variant === "rounded"
                       ? "rounded-full"
                       : "rounded-ppx-s",
@@ -76,14 +76,14 @@ export function AvatarGroup({ max = 4, avatars, className }: AvatarGroupProps) {
                 className="w-80"
                 positionerProps={{ align: "start", side: "top" }}
               >
-                <div className="space-y-2 max-h-64 overflow-y-auto">
+                <div className="max-h-64 space-y-2 overflow-y-auto">
                   {overflowAvatars.map((avatar) => (
                     <div
                       key={avatar.name}
-                      className="gap-3 p-2 rounded-md flex items-center"
+                      className="flex items-center gap-3 rounded-md p-2"
                     >
                       <Avatar {...avatar} size="24px" hideTooltip />
-                      <span className="text-sm font-medium text-ppx-neutral-18">
+                      <span className="text-ppx-neutral-18 text-sm font-medium">
                         {avatar.name}
                       </span>
                     </div>

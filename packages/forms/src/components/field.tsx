@@ -2,7 +2,7 @@ import { useMemo } from "react";
 import {
   cn,
   cva,
-  VariantProps,
+  type VariantProps,
   Label as LabelPrimitive,
   Separator as SeperatorPrimitive,
 } from "@px-ui/core";
