@@ -37,6 +37,7 @@ export * from "./hooks/use-debounce";
 export * from "./hooks/use-async-options";
 export * from "./hooks/use-infinite-scroll";
 export * from "./hooks/use-intersection-observer";
+export * from "./hooks/use-s3-upload";
 
 // Utils
 export * from "./utils";
