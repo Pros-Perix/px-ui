@@ -4,14 +4,13 @@ description: A composable, accessible file upload component with drag-and-drop, 
 icon: Upload
 ---
 
-import { FileUpload, formatFileSize } from '@px-ui/core';
-import { ComponentPreview } from '../../../src/components/component-preview';
+import { FileUpload, formatFileSize } from "@px-ui/core";
+import { ComponentPreview } from "../../../src/components/component-preview";
+import { FileUploadProgressDemo } from "../../../src/components/file-upload-progress-demo";
 
 ## Overview
 
 The FileUpload component provides a flexible, composable API for building file upload experiences. It supports drag-and-drop, paste, file validation, progress tracking, and various layouts including file lists and image grids.
-
-Built following the compound component pattern (similar to [coss.com/origin/file-upload](https://coss.com/origin/file-upload)), you can mix and match parts to create custom upload UIs.
 
 ## Installation
 
@@ -22,7 +21,7 @@ npm install @px-ui/core
 ## Import
 
 ```tsx
-import { FileUpload, formatFileSize } from '@px-ui/core';
+import { FileUpload, formatFileSize } from "@px-ui/core";
 ```
 
 ## Basic Usage
@@ -87,34 +86,34 @@ import { FileUpload, formatFileSize } from '@px-ui/core';
 
 The FileUpload component is composed of multiple parts that can be combined:
 
-| Component | Description |
-|-----------|-------------|
-| `FileUpload.Root` | Context provider, manages state and validation |
-| `FileUpload.Dropzone` | Drag-and-drop area with default UI |
-| `FileUpload.Trigger` | Standalone button to open file picker |
-| `FileUpload.ItemList` | Container for file items |
-| `FileUpload.Item` | Individual file item wrapper |
-| `FileUpload.ItemPreview` | Thumbnail/preview for files |
-| `FileUpload.ItemName` | File name display |
-| `FileUpload.ItemSize` | File size display |
-| `FileUpload.ItemRemove` | Remove file button |
-| `FileUpload.ItemProgress` | Progress bar for uploads |
-| `FileUpload.ClearButton` | Remove all files button |
-| `FileUpload.ImageGrid` | Grid layout for images |
-| `FileUpload.ImageGridItem` | Image grid item with remove |
+| Component                  | Description                                    |
+| -------------------------- | ---------------------------------------------- |
+| `FileUpload.Root`          | Context provider, manages state and validation |
+| `FileUpload.Dropzone`      | Drag-and-drop area with default UI             |
+| `FileUpload.Trigger`       | Standalone button to open file picker          |
+| `FileUpload.ItemList`      | Container for file items                       |
+| `FileUpload.Item`          | Individual file item wrapper                   |
+| `FileUpload.ItemPreview`   | Thumbnail/preview for files                    |
+| `FileUpload.ItemName`      | File name display                              |
+| `FileUpload.ItemSize`      | File size display                              |
+| `FileUpload.ItemRemove`    | Remove file button                             |
+| `FileUpload.ItemProgress`  | Progress bar for uploads                       |
+| `FileUpload.ClearButton`   | Remove all files button                        |
+| `FileUpload.ImageGrid`     | Grid layout for images                         |
+| `FileUpload.ImageGridItem` | Image grid item with remove                    |
 
 ## Image Upload with Grid
 
 <ComponentPreview>
-  <FileUpload.Root 
-    multiple 
-    accept="image/*" 
+  <FileUpload.Root
+    multiple
+    accept="image/*"
     maxFiles={8}
     onValueChange={(files) => console.log(files)}
   >
-    <FileUpload.Dropzone 
-      dropzoneText="Drop your images here" 
-      browseText="Select Images" 
+    <FileUpload.Dropzone
+      dropzoneText="Drop your images here"
+      browseText="Select Images"
       size="sm"
     />
     <FileUpload.ImageGrid className="grid-cols-4">
@@ -129,8 +128,8 @@ The FileUpload component is composed of multiple parts that can be combined:
 
 ```tsx
 <FileUpload.Root multiple accept="image/*" maxFiles={8}>
-  <FileUpload.Dropzone 
-    dropzoneText="Drop your images here" 
+  <FileUpload.Dropzone
+    dropzoneText="Drop your images here"
     browseText="Select Images"
   />
   <FileUpload.ImageGrid>
@@ -145,32 +144,32 @@ The FileUpload component is composed of multiple parts that can be combined:
 
 ## File Upload with Progress
 
+<ComponentPreview>
+  <FileUploadProgressDemo />
+</ComponentPreview>
+
 ```tsx
-import { FileUpload, useFileUpload } from '@px-ui/core';
+import { FileUpload, useFileUpload } from "@px-ui/core";
 
 function UploadWithProgress() {
   const [files, setFiles] = React.useState([]);
-  
+
   const handleUpload = async (newFiles) => {
     setFiles(newFiles);
-    
+
     // Simulate upload progress
     for (const file of newFiles) {
       for (let progress = 0; progress <= 100; progress += 10) {
-        await new Promise(r => setTimeout(r, 100));
-        setFiles(prev => 
-          prev.map(f => f.id === file.id ? { ...f, progress } : f)
+        await new Promise((r) => setTimeout(r, 100));
+        setFiles((prev) =>
+          prev.map((f) => (f.id === file.id ? { ...f, progress } : f)),
         );
       }
     }
   };
 
   return (
-    <FileUpload.Root 
-      value={files} 
-      onValueChange={handleUpload}
-      multiple
-    >
+    <FileUpload.Root value={files} onValueChange={handleUpload} multiple>
       <FileUpload.Dropzone />
       <FileUpload.ItemList>
         {(files) =>
@@ -199,8 +198,8 @@ You can fully customize the dropzone content:
 <FileUpload.Root>
   <FileUpload.Dropzone hideDefaultContent>
     <div className="text-center">
-      <UploadIcon className="mx-auto size-12 text-ppx-neutral-8" />
-      <p className="mt-2 text-ppx-sm text-ppx-neutral-12">
+      <UploadIcon className="text-ppx-neutral-8 mx-auto size-12" />
+      <p className="text-ppx-sm text-ppx-neutral-12 mt-2">
         Drag & drop or click to browse
       </p>
       <p className="text-ppx-xs text-ppx-neutral-10">
@@ -217,9 +216,7 @@ Use just a button without a dropzone:
 
 ```tsx
 <FileUpload.Root accept="image/*">
-  <FileUpload.Trigger variant="primary">
-    Upload Image
-  </FileUpload.Trigger>
+  <FileUpload.Trigger variant="primary">Upload Image</FileUpload.Trigger>
   <FileUpload.ItemList>
     {(files) =>
       files.map((file) => (
@@ -239,7 +236,7 @@ Use just a button without a dropzone:
 ### File Type Restriction
 
 ```tsx
-<FileUpload.Root 
+<FileUpload.Root
   accept="image/*,.pdf"
   onError={(error) => console.error(error.message)}
 >
@@ -250,7 +247,7 @@ Use just a button without a dropzone:
 ### File Size Limit
 
 ```tsx
-<FileUpload.Root 
+<FileUpload.Root
   maxSize={5 * 1024 * 1024} // 5MB
   onError={(error) => console.error(error.message)}
 >
@@ -261,8 +258,8 @@ Use just a button without a dropzone:
 ### Max Files Limit
 
 ```tsx
-<FileUpload.Root 
-  multiple 
+<FileUpload.Root
+  multiple
   maxFiles={5}
   onError={(error) => console.error(error.message)}
 >
@@ -282,12 +279,14 @@ function ControlledUpload() {
     <FileUpload.Root value={files} onValueChange={setFiles}>
       <FileUpload.Dropzone />
       <FileUpload.ItemList>
-        {(files) => files.map((file) => (
-          <FileUpload.Item key={file.id} file={file}>
-            <FileUpload.ItemName />
-            <FileUpload.ItemRemove />
-          </FileUpload.Item>
-        ))}
+        {(files) =>
+          files.map((file) => (
+            <FileUpload.Item key={file.id} file={file}>
+              <FileUpload.ItemName />
+              <FileUpload.ItemRemove />
+            </FileUpload.Item>
+          ))
+        }
       </FileUpload.ItemList>
       <FileUpload.ClearButton />
     </FileUpload.Root>
@@ -300,14 +299,14 @@ function ControlledUpload() {
 Access the file upload context with `useFileUpload`:
 
 ```tsx
-import { FileUpload, useFileUpload } from '@px-ui/core';
+import { FileUpload, useFileUpload } from "@px-ui/core";
 
 function CustomUploadButton() {
   const { openFilePicker, files, disabled } = useFileUpload();
-  
+
   return (
     <button onClick={openFilePicker} disabled={disabled}>
-      {files.length > 0 ? `${files.length} files selected` : 'Select files'}
+      {files.length > 0 ? `${files.length} files selected` : "Select files"}
     </button>
   );
 }
@@ -315,33 +314,33 @@ function CustomUploadButton() {
 // Usage
 <FileUpload.Root>
   <CustomUploadButton />
-</FileUpload.Root>
+</FileUpload.Root>;
 ```
 
 ## API Reference
 
 ### FileUpload.Root
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `value` | `FileUploadFile[]` | - | Controlled files state |
-| `defaultValue` | `FileUploadFile[]` | `[]` | Default files (uncontrolled) |
-| `onValueChange` | `(files: FileUploadFile[]) => void` | - | Called when files change |
-| `accept` | `string` | - | Accepted file types |
-| `multiple` | `boolean` | `false` | Allow multiple files |
-| `maxSize` | `number` | - | Max file size in bytes |
-| `maxFiles` | `number` | - | Max number of files |
-| `disabled` | `boolean` | `false` | Disable the upload |
-| `onError` | `(error: FileUploadError) => void` | - | Validation error callback |
+| Prop            | Type                                | Default | Description                  |
+| --------------- | ----------------------------------- | ------- | ---------------------------- |
+| `value`         | `FileUploadFile[]`                  | -       | Controlled files state       |
+| `defaultValue`  | `FileUploadFile[]`                  | `[]`    | Default files (uncontrolled) |
+| `onValueChange` | `(files: FileUploadFile[]) => void` | -       | Called when files change     |
+| `accept`        | `string`                            | -       | Accepted file types          |
+| `multiple`      | `boolean`                           | `false` | Allow multiple files         |
+| `maxSize`       | `number`                            | -       | Max file size in bytes       |
+| `maxFiles`      | `number`                            | -       | Max number of files          |
+| `disabled`      | `boolean`                           | `false` | Disable the upload           |
+| `onError`       | `(error: FileUploadError) => void`  | -       | Validation error callback    |
 
 ### FileUpload.Dropzone
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `size` | `'sm' \| 'default' \| 'lg'` | `'default'` | Dropzone size |
-| `dropzoneText` | `string` | `'Paste Or Drag & Drop Files Here'` | Dropzone text |
-| `browseText` | `string` | `'Browse for files'` | Browse button text |
-| `hideDefaultContent` | `boolean` | `false` | Hide default content |
+| Prop                 | Type                        | Default                             | Description          |
+| -------------------- | --------------------------- | ----------------------------------- | -------------------- |
+| `size`               | `'sm' \| 'default' \| 'lg'` | `'default'`                         | Dropzone size        |
+| `dropzoneText`       | `string`                    | `'Paste Or Drag & Drop Files Here'` | Dropzone text        |
+| `browseText`         | `string`                    | `'Browse for files'`                | Browse button text   |
+| `hideDefaultContent` | `boolean`                   | `false`                             | Hide default content |
 
 ### FileUploadFile Type
 
@@ -350,7 +349,7 @@ interface FileUploadFile {
   id: string;
   file: File;
   progress?: number;
-  status?: 'idle' | 'uploading' | 'success' | 'error';
+  status?: "idle" | "uploading" | "success" | "error";
   preview?: string; // Auto-generated for images
 }
 ```
@@ -359,9 +358,150 @@ interface FileUploadFile {
 
 ```tsx
 interface FileUploadError {
-  type: 'file-too-large' | 'too-many-files' | 'invalid-type';
+  type: "file-too-large" | "too-many-files" | "invalid-type";
   message: string;
   files?: File[];
+}
+```
+
+## S3 Signed URL Upload
+
+For uploading to S3 with signed URLs, use the `useS3Upload` hook. Pass your API functions directly:
+
+```tsx
+import { FileUpload, useS3Upload, type FileUploadFile } from "@px-ui/core";
+import { GetSignedUrl } from "../Api/Rest/Global";
+import { Upload } from "../Api/Requestor";
+
+function S3FileUpload() {
+  const [files, setFiles] = React.useState<FileUploadFile[]>([]);
+
+  const { uploadFiles, uploadedFiles } = useS3Upload({
+    // Pass your API functions directly
+    getSignedUrl: GetSignedUrl,
+    uploadToS3: Upload,
+
+    onUploadComplete: (file) => {
+      console.log("Uploaded:", file.path);
+    },
+
+    onUploadError: (error, file) => {
+      Toast.ApiErr(error, "Error uploading file");
+    },
+  });
+
+  const handleFilesChange = async (newFiles: FileUploadFile[]) => {
+    setFiles(newFiles);
+
+    // Find new files that need uploading
+    const filesToUpload = newFiles.filter(
+      (f) => !uploadedFiles.some((u) => u.id === f.id),
+    );
+
+    if (filesToUpload.length > 0) {
+      await uploadFiles(filesToUpload);
+    }
+  };
+
+  return (
+    <FileUpload.Root
+      value={files}
+      onValueChange={handleFilesChange}
+      multiple
+      accept="image/*,.pdf"
+      maxSize={10 * 1024 * 1024}
+    >
+      <FileUpload.Dropzone />
+      <FileUpload.ItemList>
+        {(files) =>
+          files.map((file) => (
+            <FileUpload.Item key={file.id} file={file}>
+              <FileUpload.ItemPreview />
+              <div className="flex min-w-0 flex-1 flex-col gap-1">
+                <FileUpload.ItemName />
+                <FileUpload.ItemSize />
+                <FileUpload.ItemProgress />
+              </div>
+              <FileUpload.ItemRemove />
+            </FileUpload.Item>
+          ))
+        }
+      </FileUpload.ItemList>
+    </FileUpload.Root>
+  );
+}
+```
+
+### useS3Upload API
+
+```tsx
+// Pass your existing API functions directly
+const { uploadFiles, uploadedFiles, isUploading } = useS3Upload({
+  getSignedUrl: GetSignedUrl, // or PostInboxSignedUrl
+  uploadToS3: Upload,
+  forResume: false, // Optional
+  onUploadComplete: (file) => {}, // Optional
+  onUploadError: (err, file) => {}, // Optional
+  onAllUploadsComplete: (files) => {}, // Optional
+});
+
+// Returns
+uploadFiles(files); // Upload multiple FileUploadFile[]
+uploadFile(file); // Upload single FileUploadFile
+isUploading; // boolean
+uploadingFiles; // Map<id, { file, progress }>
+uploadedFiles; // S3UploadedFile[]
+failedFiles; // Array<{ file, error }>
+reset(); // Clear state
+```
+
+### S3UploadedFile Type
+
+```tsx
+interface S3UploadedFile {
+  id: string;
+  name: string;
+  title: string; // Filename without extension
+  path: string; // S3 path without query params
+  format: string; // File format from MIME type
+  fullPath: string; // Full S3 URL
+  size: number;
+  type?: string; // MIME type
+}
+```
+
+### Parallel Uploads
+
+For faster uploads, use `useS3ParallelUpload`:
+
+```tsx
+import { useS3ParallelUpload } from "@px-ui/core";
+
+const { uploadFiles } = useS3ParallelUpload({
+  maxConcurrent: 3, // Upload 3 files at a time
+  getSignedUrl,
+  uploadToS3,
+});
+```
+
+### Integration with Existing API
+
+Pass your API functions directly - no wrapper needed:
+
+```tsx
+import { FileUpload, useS3Upload } from "@px-ui/core";
+import { GetSignedUrl, PostInboxSignedUrl } from "../Api/Rest";
+import { Upload } from "../Api/Requestor";
+
+function MyUpload({ fromInbox = false }) {
+  const { uploadFiles, isUploading } = useS3Upload({
+    // Pass API functions directly
+    getSignedUrl: fromInbox ? PostInboxSignedUrl : GetSignedUrl,
+    uploadToS3: Upload,
+    forResume: false,
+  });
+
+  // ... rest of component
 }
 ```
 
