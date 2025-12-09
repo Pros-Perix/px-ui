@@ -1,15 +1,17 @@
 ---
 title: File Upload
-description: A drag-and-drop file upload component with paste support and validation.
+description: A composable, accessible file upload component with drag-and-drop, validation, and progress support.
 icon: Upload
 ---
 
-import { FileUpload } from '@px-ui/core';
+import { FileUpload, formatFileSize } from '@px-ui/core';
 import { ComponentPreview } from '../../../src/components/component-preview';
 
 ## Overview
 
-The FileUpload component provides a user-friendly interface for uploading files through drag-and-drop, paste, or traditional file browsing. It supports file validation for type, size, and quantity.
+The FileUpload component provides a flexible, composable API for building file upload experiences. It supports drag-and-drop, paste, file validation, progress tracking, and various layouts including file lists and image grids.
+
+Built following the compound component pattern (similar to [coss.com/origin/file-upload](https://coss.com/origin/file-upload)), you can mix and match parts to create custom upload UIs.
 
 ## Installation
 
@@ -20,271 +22,340 @@ npm install @px-ui/core
 ## Import
 
 ```tsx
-import { FileUpload } from '@px-ui/core';
+import { FileUpload, formatFileSize } from '@px-ui/core';
 ```
 
-## Usage
+## Basic Usage
 
-### Basic Example
+### Simple Dropzone
 
 <ComponentPreview>
-  <FileUpload onFilesSelect={(files) => console.log(files)} />
+  <FileUpload.Root onValueChange={(files) => console.log(files)}>
+    <FileUpload.Dropzone />
+  </FileUpload.Root>
 </ComponentPreview>
 
 ```tsx
-<FileUpload onFilesSelect={(files) => console.log(files)} />
+<FileUpload.Root onValueChange={(files) => console.log(files)}>
+  <FileUpload.Dropzone />
+</FileUpload.Root>
 ```
 
-## Features
-
-The FileUpload component supports three ways to add files:
-
-1. **Drag & Drop**: Drag files directly onto the dropzone
-2. **Paste**: Paste files from clipboard (Ctrl/Cmd + V when focused)
-3. **Browse**: Click the button to open the native file picker
-
-## Sizes
-
-The FileUpload component comes in three sizes to fit different layouts.
+### With File List
 
 <ComponentPreview>
-  <div style={{ display: 'flex', flexDirection: 'column', gap: '24px', width: '100%' }}>
-    <FileUpload size="sm" onFilesSelect={(files) => console.log(files)} />
-  </div>
+  <FileUpload.Root multiple onValueChange={(files) => console.log(files)}>
+    <FileUpload.Dropzone />
+    <FileUpload.ItemList>
+      {(files) =>
+        files.map((file) => (
+          <FileUpload.Item key={file.id} file={file}>
+            <FileUpload.ItemPreview />
+            <div className="flex min-w-0 flex-col">
+              <FileUpload.ItemName />
+              <FileUpload.ItemSize />
+            </div>
+            <FileUpload.ItemRemove />
+          </FileUpload.Item>
+        ))
+      }
+    </FileUpload.ItemList>
+  </FileUpload.Root>
 </ComponentPreview>
 
 ```tsx
-<FileUpload size="sm" />
-<FileUpload size="default" />
-<FileUpload size="lg" />
+<FileUpload.Root multiple onValueChange={(files) => console.log(files)}>
+  <FileUpload.Dropzone />
+  <FileUpload.ItemList>
+    {(files) =>
+      files.map((file) => (
+        <FileUpload.Item key={file.id} file={file}>
+          <FileUpload.ItemPreview />
+          <div className="flex min-w-0 flex-col">
+            <FileUpload.ItemName />
+            <FileUpload.ItemSize />
+          </div>
+          <FileUpload.ItemRemove />
+        </FileUpload.Item>
+      ))
+    }
+  </FileUpload.ItemList>
+</FileUpload.Root>
 ```
 
-### Small
+## Component Parts
 
-```tsx
-<FileUpload size="sm" />
-```
+The FileUpload component is composed of multiple parts that can be combined:
 
-### Default
+| Component | Description |
+|-----------|-------------|
+| `FileUpload.Root` | Context provider, manages state and validation |
+| `FileUpload.Dropzone` | Drag-and-drop area with default UI |
+| `FileUpload.Trigger` | Standalone button to open file picker |
+| `FileUpload.ItemList` | Container for file items |
+| `FileUpload.Item` | Individual file item wrapper |
+| `FileUpload.ItemPreview` | Thumbnail/preview for files |
+| `FileUpload.ItemName` | File name display |
+| `FileUpload.ItemSize` | File size display |
+| `FileUpload.ItemRemove` | Remove file button |
+| `FileUpload.ItemProgress` | Progress bar for uploads |
+| `FileUpload.ClearButton` | Remove all files button |
+| `FileUpload.ImageGrid` | Grid layout for images |
+| `FileUpload.ImageGridItem` | Image grid item with remove |
 
-```tsx
-<FileUpload size="default" />
-```
-
-### Large
-
-```tsx
-<FileUpload size="lg" />
-```
-
-## File Type Restrictions
-
-Use the `accept` prop to restrict which file types can be uploaded.
+## Image Upload with Grid
 
 <ComponentPreview>
-  <FileUpload 
-    accept="image/*,.pdf" 
-    onFilesSelect={(files) => console.log(files)}
-    onError={(error) => alert(error.message)}
-  />
-</ComponentPreview>
-
-```tsx
-// Accept only images
-<FileUpload accept="image/*" />
-
-// Accept images and PDFs
-<FileUpload accept="image/*,.pdf" />
-
-// Accept specific formats
-<FileUpload accept=".jpg,.png,.gif,.pdf" />
-```
-
-## Multiple Files
-
-Enable multiple file selection with the `multiple` prop.
-
-<ComponentPreview>
-  <FileUpload 
+  <FileUpload.Root 
     multiple 
-    onFilesSelect={(files) => console.log(`Selected ${files.length} files`)}
-  />
+    accept="image/*" 
+    maxFiles={8}
+    onValueChange={(files) => console.log(files)}
+  >
+    <FileUpload.Dropzone 
+      dropzoneText="Drop your images here" 
+      browseText="Select Images" 
+      size="sm"
+    />
+    <FileUpload.ImageGrid className="grid-cols-4">
+      {(files) =>
+        files.map((file) => (
+          <FileUpload.ImageGridItem key={file.id} file={file} />
+        ))
+      }
+    </FileUpload.ImageGrid>
+  </FileUpload.Root>
 </ComponentPreview>
 
 ```tsx
-<FileUpload multiple onFilesSelect={(files) => console.log(files)} />
-```
-
-## File Size Limit
-
-Set a maximum file size in bytes using the `maxSize` prop.
-
-<ComponentPreview>
-  <FileUpload 
-    maxSize={5 * 1024 * 1024}
-    onFilesSelect={(files) => console.log(files)}
-    onError={(error) => alert(error.message)}
-  />
-</ComponentPreview>
-
-```tsx
-// 5MB limit
-<FileUpload 
-  maxSize={5 * 1024 * 1024} 
-  onError={(error) => console.error(error.message)}
-/>
-```
-
-## Max Files Limit
-
-Limit the number of files that can be selected with `maxFiles`.
-
-<ComponentPreview>
-  <FileUpload 
-    multiple
-    maxFiles={3}
-    onFilesSelect={(files) => console.log(files)}
-    onError={(error) => alert(error.message)}
-  />
-</ComponentPreview>
-
-```tsx
-<FileUpload 
-  multiple 
-  maxFiles={3}
-  onError={(error) => console.error(error.message)}
-/>
-```
-
-## Custom Text
-
-Customize the dropzone text and button label.
-
-<ComponentPreview>
-  <FileUpload 
-    dropzoneText="Drop your images here"
+<FileUpload.Root multiple accept="image/*" maxFiles={8}>
+  <FileUpload.Dropzone 
+    dropzoneText="Drop your images here" 
     browseText="Select Images"
-    accept="image/*"
-    onFilesSelect={(files) => console.log(files)}
   />
-</ComponentPreview>
-
-```tsx
-<FileUpload 
-  dropzoneText="Drop your images here"
-  browseText="Select Images"
-/>
+  <FileUpload.ImageGrid>
+    {(files) =>
+      files.map((file) => (
+        <FileUpload.ImageGridItem key={file.id} file={file} />
+      ))
+    }
+  </FileUpload.ImageGrid>
+</FileUpload.Root>
 ```
 
-## Disabled State
-
-<ComponentPreview>
-  <FileUpload disabled />
-</ComponentPreview>
+## File Upload with Progress
 
 ```tsx
-<FileUpload disabled />
-```
+import { FileUpload, useFileUpload } from '@px-ui/core';
 
-## Error Handling
-
-The `onError` callback receives detailed error information when validation fails.
-
-```tsx
-import { FileUpload, type FileUploadError } from '@px-ui/core';
-
-function MyUploader() {
-  const handleError = (error: FileUploadError) => {
-    switch (error.type) {
-      case 'file-too-large':
-        console.error('Files too large:', error.files);
-        break;
-      case 'too-many-files':
-        console.error('Too many files selected');
-        break;
-      case 'invalid-type':
-        console.error('Invalid file type:', error.files);
-        break;
+function UploadWithProgress() {
+  const [files, setFiles] = React.useState([]);
+  
+  const handleUpload = async (newFiles) => {
+    setFiles(newFiles);
+    
+    // Simulate upload progress
+    for (const file of newFiles) {
+      for (let progress = 0; progress <= 100; progress += 10) {
+        await new Promise(r => setTimeout(r, 100));
+        setFiles(prev => 
+          prev.map(f => f.id === file.id ? { ...f, progress } : f)
+        );
+      }
     }
   };
 
   return (
-    <FileUpload
-      accept="image/*"
-      maxSize={10 * 1024 * 1024}
-      maxFiles={5}
+    <FileUpload.Root 
+      value={files} 
+      onValueChange={handleUpload}
       multiple
-      onFilesSelect={(files) => console.log('Valid files:', files)}
-      onError={handleError}
-    />
+    >
+      <FileUpload.Dropzone />
+      <FileUpload.ItemList>
+        {(files) =>
+          files.map((file) => (
+            <FileUpload.Item key={file.id} file={file}>
+              <FileUpload.ItemPreview />
+              <div className="flex min-w-0 flex-1 flex-col gap-1">
+                <FileUpload.ItemName />
+                <FileUpload.ItemProgress />
+              </div>
+              <FileUpload.ItemRemove />
+            </FileUpload.Item>
+          ))
+        }
+      </FileUpload.ItemList>
+    </FileUpload.Root>
   );
 }
 ```
 
-## Complete Example
+## Custom Dropzone Content
 
-Here's a complete example with file handling:
+You can fully customize the dropzone content:
 
 ```tsx
-import { FileUpload, formatFileSize } from '@px-ui/core';
-import { useState } from 'react';
+<FileUpload.Root>
+  <FileUpload.Dropzone hideDefaultContent>
+    <div className="text-center">
+      <UploadIcon className="mx-auto size-12 text-ppx-neutral-8" />
+      <p className="mt-2 text-ppx-sm text-ppx-neutral-12">
+        Drag & drop or click to browse
+      </p>
+      <p className="text-ppx-xs text-ppx-neutral-10">
+        Max 10MB • PNG, JPG, PDF
+      </p>
+    </div>
+  </FileUpload.Dropzone>
+</FileUpload.Root>
+```
 
-function FileUploadExample() {
-  const [files, setFiles] = useState<File[]>([]);
-  const [error, setError] = useState<string | null>(null);
+## Trigger Button Only
+
+Use just a button without a dropzone:
+
+```tsx
+<FileUpload.Root accept="image/*">
+  <FileUpload.Trigger variant="primary">
+    Upload Image
+  </FileUpload.Trigger>
+  <FileUpload.ItemList>
+    {(files) =>
+      files.map((file) => (
+        <FileUpload.Item key={file.id} file={file}>
+          <FileUpload.ItemPreview />
+          <FileUpload.ItemName />
+          <FileUpload.ItemRemove />
+        </FileUpload.Item>
+      ))
+    }
+  </FileUpload.ItemList>
+</FileUpload.Root>
+```
+
+## Validation
+
+### File Type Restriction
+
+```tsx
+<FileUpload.Root 
+  accept="image/*,.pdf"
+  onError={(error) => console.error(error.message)}
+>
+  <FileUpload.Dropzone />
+</FileUpload.Root>
+```
+
+### File Size Limit
+
+```tsx
+<FileUpload.Root 
+  maxSize={5 * 1024 * 1024} // 5MB
+  onError={(error) => console.error(error.message)}
+>
+  <FileUpload.Dropzone />
+</FileUpload.Root>
+```
+
+### Max Files Limit
+
+```tsx
+<FileUpload.Root 
+  multiple 
+  maxFiles={5}
+  onError={(error) => console.error(error.message)}
+>
+  <FileUpload.Dropzone />
+</FileUpload.Root>
+```
+
+## Controlled Mode
+
+Control the files state externally:
+
+```tsx
+function ControlledUpload() {
+  const [files, setFiles] = React.useState([]);
 
   return (
-    <div>
-      <FileUpload
-        multiple
-        accept="image/*,.pdf,.doc,.docx"
-        maxSize={10 * 1024 * 1024} // 10MB
-        maxFiles={5}
-        onFilesSelect={(newFiles) => {
-          setFiles((prev) => [...prev, ...newFiles]);
-          setError(null);
-        }}
-        onError={(err) => setError(err.message)}
-      />
-      
-      {error && (
-        <p className="text-ppx-red-5 mt-2">{error}</p>
-      )}
-      
-      {files.length > 0 && (
-        <ul className="mt-4 space-y-2">
-          {files.map((file, index) => (
-            <li key={index} className="flex justify-between">
-              <span>{file.name}</span>
-              <span className="text-ppx-neutral-10">
-                {formatFileSize(file.size)}
-              </span>
-            </li>
-          ))}
-        </ul>
-      )}
-    </div>
+    <FileUpload.Root value={files} onValueChange={setFiles}>
+      <FileUpload.Dropzone />
+      <FileUpload.ItemList>
+        {(files) => files.map((file) => (
+          <FileUpload.Item key={file.id} file={file}>
+            <FileUpload.ItemName />
+            <FileUpload.ItemRemove />
+          </FileUpload.Item>
+        ))}
+      </FileUpload.ItemList>
+      <FileUpload.ClearButton />
+    </FileUpload.Root>
   );
 }
 ```
 
-## Props
+## Using the Hook
+
+Access the file upload context with `useFileUpload`:
+
+```tsx
+import { FileUpload, useFileUpload } from '@px-ui/core';
+
+function CustomUploadButton() {
+  const { openFilePicker, files, disabled } = useFileUpload();
+  
+  return (
+    <button onClick={openFilePicker} disabled={disabled}>
+      {files.length > 0 ? `${files.length} files selected` : 'Select files'}
+    </button>
+  );
+}
+
+// Usage
+<FileUpload.Root>
+  <CustomUploadButton />
+</FileUpload.Root>
+```
+
+## API Reference
+
+### FileUpload.Root
 
 | Prop | Type | Default | Description |
-| --- | --- | --- | --- |
-| `size` | `'sm' \| 'default' \| 'lg'` | `'default'` | The size of the dropzone |
-| `onFilesSelect` | `(files: File[]) => void` | - | Callback when valid files are selected |
-| `accept` | `string` | - | Accepted file types (e.g., `"image/*,.pdf"`) |
-| `multiple` | `boolean` | `false` | Allow multiple file selection |
-| `maxSize` | `number` | - | Maximum file size in bytes |
-| `maxFiles` | `number` | - | Maximum number of files |
-| `disabled` | `boolean` | `false` | Disable the upload component |
-| `dropzoneText` | `string` | `"Paste Or Drag & Drop Files Here"` | Custom dropzone text |
-| `browseText` | `string` | `"Browse for files"` | Custom browse button text |
-| `onError` | `(error: FileUploadError) => void` | - | Callback when validation fails |
-| `className` | `string` | - | Additional CSS classes |
+|------|------|---------|-------------|
+| `value` | `FileUploadFile[]` | - | Controlled files state |
+| `defaultValue` | `FileUploadFile[]` | `[]` | Default files (uncontrolled) |
+| `onValueChange` | `(files: FileUploadFile[]) => void` | - | Called when files change |
+| `accept` | `string` | - | Accepted file types |
+| `multiple` | `boolean` | `false` | Allow multiple files |
+| `maxSize` | `number` | - | Max file size in bytes |
+| `maxFiles` | `number` | - | Max number of files |
+| `disabled` | `boolean` | `false` | Disable the upload |
+| `onError` | `(error: FileUploadError) => void` | - | Validation error callback |
 
-## FileUploadError Type
+### FileUpload.Dropzone
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `size` | `'sm' \| 'default' \| 'lg'` | `'default'` | Dropzone size |
+| `dropzoneText` | `string` | `'Paste Or Drag & Drop Files Here'` | Dropzone text |
+| `browseText` | `string` | `'Browse for files'` | Browse button text |
+| `hideDefaultContent` | `boolean` | `false` | Hide default content |
+
+### FileUploadFile Type
+
+```tsx
+interface FileUploadFile {
+  id: string;
+  file: File;
+  progress?: number;
+  status?: 'idle' | 'uploading' | 'success' | 'error';
+  preview?: string; // Auto-generated for images
+}
+```
+
+### FileUploadError Type
 
 ```tsx
 interface FileUploadError {
@@ -294,33 +365,18 @@ interface FileUploadError {
 }
 ```
 
-## Utility Functions
-
-### formatFileSize
-
-A utility function to format bytes into human-readable file sizes.
-
-```tsx
-import { formatFileSize } from '@px-ui/core';
-
-formatFileSize(1024);       // "1 KB"
-formatFileSize(1048576);    // "1 MB"
-formatFileSize(1073741824); // "1 GB"
-```
-
 ## Accessibility
 
-- The component is keyboard accessible with Enter/Space to trigger file browsing
-- Includes proper ARIA attributes (`role="button"`, `aria-disabled`, `aria-label`)
-- Hidden file input is properly accessible to screen readers
-- Focus states are clearly visible
-- Disabled state prevents all interactions
+- Keyboard navigation with Enter/Space to open file picker
+- `aria-live` announcements for file selections and errors
+- Proper ARIA attributes on all interactive elements
+- Focus management and visible focus indicators
+- Screen reader instructions for usage
 
 ## Best Practices
 
-- **Provide clear file type guidance**: Use `accept` and communicate allowed types to users
-- **Set reasonable size limits**: Prevent server issues with `maxSize` validation
-- **Handle errors gracefully**: Use `onError` to show user-friendly error messages
-- **Show upload progress**: Combine with Progress component for large file uploads
-- **Preview selected files**: Show users what they've selected before upload
-
+- **Provide clear constraints**: Display accepted types and size limits
+- **Show progress**: Use `ItemProgress` for upload feedback
+- **Handle errors**: Implement `onError` for user-friendly messages
+- **Preview images**: The component auto-generates previews for images
+- **Clean up**: Previews are automatically cleaned up on unmount
