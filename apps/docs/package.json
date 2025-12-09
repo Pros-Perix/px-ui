@@ -6,7 +6,7 @@
     "dev": "vite dev",
     "build": "pnpm --filter forms --filter core build && vite build",
     "preview": "vite preview",
-    "deploy-app": "pnpm build && wrangler deploy",
+    "deploy": "pnpm build && wrangler deploy",
     "cf-typegen": "wrangler types",
     "types:check": "fumadocs-mdx && tsc --noEmit",
     "postinstall": "fumadocs-mdx"

@@ -17,9 +17,3 @@ jobs:
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           workingDirectory: "apps/docs"
           packageManager: pnpm
-          preCommands: |
-            echo "Installing dependencies"
-            pnpm install
-
-            echo "Building the app"
-            pnpm run build
