@@ -39,6 +39,18 @@ importers:
 
   apps/docs:
     dependencies:
+      '@hookform/resolvers':
+        specifier: ^5.1.1
+        version: 5.2.2(react-hook-form@7.67.0)
+      '@px-ui/core':
+        specifier: workspace:*
+        version: link:../../packages/core
+      '@px-ui/forms':
+        specifier: workspace:*
+        version: link:../../packages/forms
+      '@tanstack/react-query':
+        specifier: ^5.90.1
+        version: 5.90.11(react@19.2.1)
       '@tanstack/react-router':
         specifier: 1.136.18
         version: 1.136.18(react-dom@19.2.1)(react@19.2.1)
@@ -48,15 +60,18 @@ importers:
       '@tanstack/react-start':
         specifier: 1.136.18
         version: 1.136.18(react-dom@19.2.1)(react@19.2.1)(vite@7.2.7)
+      date-fns:
+        specifier: ^4.1.0
+        version: 4.1.0
       fumadocs-core:
         specifier: 16.2.4
-        version: 16.2.4(@tanstack/react-router@1.136.18)(@types/react@19.2.7)(lucide-react@0.556.0)(react-dom@19.2.1)(react@19.2.1)(zod@3.25.76)
+        version: 16.2.4(@tanstack/react-router@1.136.18)(@types/react@19.2.7)(lucide-react@0.556.0)(react-dom@19.2.1)(react@19.2.1)(zod@4.0.0)
       fumadocs-mdx:
         specifier: 14.1.0
         version: 14.1.0(fumadocs-core@16.2.4)(react@19.2.1)(vite@7.2.7)
       fumadocs-ui:
         specifier: 16.2.4
-        version: 16.2.4(@tanstack/react-router@1.136.18)(@types/react-dom@19.2.3)(@types/react@19.2.7)(lucide-react@0.556.0)(react-dom@19.2.1)(react@19.2.1)(tailwindcss@4.1.17)(zod@3.25.76)
+        version: 16.2.4(@tanstack/react-router@1.136.18)(@types/react-dom@19.2.3)(@types/react@19.2.7)(lucide-react@0.556.0)(react-dom@19.2.1)(react@19.2.1)(tailwindcss@4.1.17)(zod@4.0.0)
       lucide-react:
         specifier: ^0.556.0
         version: 0.556.0(react@19.2.1)
@@ -66,12 +81,18 @@ importers:
       react-dom:
         specifier: ^19.2.1
         version: 19.2.1(react@19.2.1)
+      react-hook-form:
+        specifier: ^7.67.0
+        version: 7.67.0(react@19.2.1)
       tailwind-merge:
         specifier: ^3.4.0
         version: 3.4.0
       vite:
         specifier: ^7.2.7
         version: 7.2.7(@types/node@24.10.2)
+      zod:
+        specifier: 4.0.0
+        version: 4.0.0
     devDependencies:
       '@cloudflare/vite-plugin':
         specifier: ^1.17.0
@@ -1702,8 +1723,7 @@ packages:
       react-hook-form: ^7.55.0
     dependencies:
       '@standard-schema/utils': 0.3.0
-      react-hook-form: 7.67.0(react@19.2.0)
-    dev: true
+      react-hook-form: 7.67.0(react@19.2.1)
 
   /@humanfs/core@0.19.1:
     resolution: {integrity: sha512-5DyQ4+1JEUzejeK1JGICcideyfUbGixgS9jNgex5nqkW+cY7WZhxBigmieN5Qnw9ZosSNVC9KQKyb+GUaGyKUA==}
@@ -3559,7 +3579,6 @@ packages:
 
   /@standard-schema/utils@0.3.0:
     resolution: {integrity: sha512-e7Mew686owMaPJVNNLs55PUvgz371nKgwsc4vxE49zsODpJEnxgxRo2y/OKrqueavXgZNMDVj3DdHFlaSAeU8g==}
-    dev: true
 
   /@tailwindcss/node@4.1.17:
     resolution: {integrity: sha512-csIkHIgLb3JisEFQ0vxr2Y57GUNYh447C8xzwj89U/8fdW8LhProdxvnVH6U8M2Y73QKiTIH+LWbK3V2BBZsAg==}
@@ -3747,7 +3766,6 @@ packages:
 
   /@tanstack/query-core@5.90.11:
     resolution: {integrity: sha512-f9z/nXhCgWDF4lHqgIE30jxLe4sYv15QodfdPDKYAk7nAEjNcndy4dHz3ezhdUaR23BpWa4I2EH4/DZ0//Uf8A==}
-    dev: true
 
   /@tanstack/react-query@5.90.11(react@19.2.0):
     resolution: {integrity: sha512-3uyzz01D1fkTLXuxF3JfoJoHQMU2fxsfJwE+6N5hHy0dVNoZOvwKP8Z2k7k1KDeD54N20apcJnG75TBAStIrBA==}
@@ -3757,6 +3775,15 @@ packages:
       '@tanstack/query-core': 5.90.11
       react: 19.2.0
     dev: true
+
+  /@tanstack/react-query@5.90.11(react@19.2.1):
+    resolution: {integrity: sha512-3uyzz01D1fkTLXuxF3JfoJoHQMU2fxsfJwE+6N5hHy0dVNoZOvwKP8Z2k7k1KDeD54N20apcJnG75TBAStIrBA==}
+    peerDependencies:
+      react: ^18 || ^19
+    dependencies:
+      '@tanstack/query-core': 5.90.11
+      react: 19.2.1
+    dev: false
 
   /@tanstack/react-router-devtools@1.136.18(@tanstack/react-router@1.136.18)(@tanstack/router-core@1.140.0)(@types/node@24.10.2)(csstype@3.2.3)(react-dom@19.2.1)(react@19.2.1)(solid-js@1.9.10):
     resolution: {integrity: sha512-yf/xZ978P3kVPh9i/lThydShnb2PG5hzXVor1GPCQ9UEjHC0zjDngz1VqWww9zNhTA2k9p9T7QCH8SVyOWG6rA==}
@@ -5842,7 +5869,7 @@ packages:
     requiresBuild: true
     optional: true
 
-  /fumadocs-core@16.2.4(@tanstack/react-router@1.136.18)(@types/react@19.2.7)(lucide-react@0.556.0)(react-dom@19.2.1)(react@19.2.1)(zod@3.25.76):
+  /fumadocs-core@16.2.4(@tanstack/react-router@1.136.18)(@types/react@19.2.7)(lucide-react@0.556.0)(react-dom@19.2.1)(react@19.2.1)(zod@4.0.0):
     resolution: {integrity: sha512-vCxmRdZz8jNSXao4UF0+KgQQ4HgXww5LFGF883PemyJxHrgYuBbCslkSZP0mgpVWWcJWRE52gChUl4hI9YAxBQ==}
     peerDependencies:
       '@mixedbread/sdk': ^0.19.0
@@ -5906,7 +5933,7 @@ packages:
       scroll-into-view-if-needed: 3.1.0
       shiki: 3.19.0
       unist-util-visit: 5.0.0
-      zod: 3.25.76
+      zod: 4.0.0
     transitivePeerDependencies:
       - supports-color
     dev: false
@@ -5935,7 +5962,7 @@ packages:
       chokidar: 5.0.0
       esbuild: 0.27.1
       estree-util-value-to-estree: 3.5.0
-      fumadocs-core: 16.2.4(@tanstack/react-router@1.136.18)(@types/react@19.2.7)(lucide-react@0.556.0)(react-dom@19.2.1)(react@19.2.1)(zod@3.25.76)
+      fumadocs-core: 16.2.4(@tanstack/react-router@1.136.18)(@types/react@19.2.7)(lucide-react@0.556.0)(react-dom@19.2.1)(react@19.2.1)(zod@4.0.0)
       js-yaml: 4.1.1
       mdast-util-to-markdown: 2.1.2
       picocolors: 1.1.1
@@ -5954,7 +5981,7 @@ packages:
       - supports-color
     dev: false
 
-  /fumadocs-ui@16.2.4(@tanstack/react-router@1.136.18)(@types/react-dom@19.2.3)(@types/react@19.2.7)(lucide-react@0.556.0)(react-dom@19.2.1)(react@19.2.1)(tailwindcss@4.1.17)(zod@3.25.76):
+  /fumadocs-ui@16.2.4(@tanstack/react-router@1.136.18)(@types/react-dom@19.2.3)(@types/react@19.2.7)(lucide-react@0.556.0)(react-dom@19.2.1)(react@19.2.1)(tailwindcss@4.1.17)(zod@4.0.0):
     resolution: {integrity: sha512-oUFbPbn15GENfMcUqklQiEA3JcBvHXbGteuuPCWHvFzoxR3j+V4dOrwfgXZVZ3zL0G7/g20K0v9YBuB67hA3mg==}
     peerDependencies:
       '@types/react': '*'
@@ -5982,7 +6009,7 @@ packages:
       '@radix-ui/react-tabs': 1.1.13(@types/react-dom@19.2.3)(@types/react@19.2.7)(react-dom@19.2.1)(react@19.2.1)
       '@types/react': 19.2.7
       class-variance-authority: 0.7.1
-      fumadocs-core: 16.2.4(@tanstack/react-router@1.136.18)(@types/react@19.2.7)(lucide-react@0.556.0)(react-dom@19.2.1)(react@19.2.1)(zod@3.25.76)
+      fumadocs-core: 16.2.4(@tanstack/react-router@1.136.18)(@types/react@19.2.7)(lucide-react@0.556.0)(react-dom@19.2.1)(react@19.2.1)(zod@4.0.0)
       lodash.merge: 4.6.2
       next-themes: 0.4.6(react-dom@19.2.1)(react@19.2.1)
       postcss-selector-parser: 7.1.1
@@ -8016,6 +8043,14 @@ packages:
       react: 19.2.0
     dev: true
 
+  /react-hook-form@7.67.0(react@19.2.1):
+    resolution: {integrity: sha512-E55EOwKJHHIT/I6J9DmQbCWToAYSw9nN5R57MZw9rMtjh+YQreMDxRLfdjfxQbiJ3/qbg3Z02wGzBX4M+5fMtQ==}
+    engines: {node: '>=18.0.0'}
+    peerDependencies:
+      react: ^16.8.0 || ^17 || ^18 || ^19
+    dependencies:
+      react: 19.2.1
+
   /react-is@17.0.2:
     resolution: {integrity: sha512-w2GsyukL62IJnlaff/nRegPQR94C/XXamvMWmSHRJ4y7Ts/4ocGRmTHvOs8PSE6pB3dWOrD/nueuU5sduBsQ4w==}
     dev: true
@@ -8093,7 +8128,6 @@ packages:
   /react@19.2.1:
     resolution: {integrity: sha512-DGrYcCWK7tvYMnWh79yrPHt+vdx9tY+1gPZa7nJQtO/p8bLTDaHp4dzwEhQB7pZ4Xe3ok4XKuEPrVuc+wlpkmw==}
     engines: {node: '>=0.10.0'}
-    dev: false
 
   /read-yaml-file@1.1.0:
     resolution: {integrity: sha512-VIMnQi/Z4HT2Fxuwg5KrY174U1VdUIASQVWXXyqtNRtxSr9IYkn1rsI6Tb6HsrHCmB7gVpNwX6JxPTHcH6IoTA==}
@@ -9752,7 +9786,6 @@ packages:
 
   /zod@4.0.0:
     resolution: {integrity: sha512-9diLdTPc/L7w/5jI4C3gHYNiGHDV9IZYxo1e5LSD8cabi65WVTWWb+g2BGPEpUUCOxR4D+6O5B0AzyMdUAXwrw==}
-    dev: true
 
   /zod@4.1.13:
     resolution: {integrity: sha512-AvvthqfqrAhNH9dnfmrfKzX5upOdjUVJYFqNSlkmGf64gRaTzlPwz99IHYnVs28qYAybvAlBV+H7pn0saFY4Ig==}
