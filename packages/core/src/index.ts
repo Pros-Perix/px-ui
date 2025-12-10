@@ -31,13 +31,14 @@ export * from "./components/switch";
 export * from "./components/separator";
 export * from "./components/date-picker";
 export * from "./components/file-upload";
+export * from "./components/file-upload-simple";
 
 // Hooks
 export * from "./hooks/use-debounce";
+export * from "./hooks/use-file-upload";
 export * from "./hooks/use-async-options";
 export * from "./hooks/use-infinite-scroll";
 export * from "./hooks/use-intersection-observer";
-export * from "./hooks/use-s3-upload";
 
 // Utils
 export * from "./utils";

@@ -1,8 +1,11 @@
 import * as React from "react";
 import {
   FileUpload,
+  FileUploadSimple,
   formatFileSize,
   type FileUploadFile,
+  type FileWithUploadStatus,
+  type FileWithPreview,
   Button,
 } from "@px-ui/core";
 
@@ -682,4 +685,145 @@ function FileTypeIcon({
 
 function getFileExtension(filename: string): string {
   return filename.split(".").pop() || "";
+}
+
+// ============================================================================
+// FileUploadSimple Demos
+// ============================================================================
+
+// Mock upload functions for demos
+const mockGetPresignedUrl = async ({
+  filename,
+  contentType,
+}: {
+  filename: string;
+  contentType: string;
+  size: number;
+}) => {
+  // Simulate API delay
+  await new Promise((r) => setTimeout(r, 500));
+  return {
+    result: {
+      url: `https://example-bucket.s3.amazonaws.com/uploads/${Date.now()}-${filename}`,
+      fullPath: `https://cdn.example.com/uploads/${Date.now()}-${filename}`,
+    },
+  };
+};
+
+const mockUploadFile = async (
+  url: string,
+  file: File,
+  presignedData: { url: string; fullPath: string },
+  onProgress?: (progress: number) => void,
+) => {
+  // Simulate upload with progress
+  for (let i = 0; i <= 100; i += 10) {
+    await new Promise((r) => setTimeout(r, 100));
+    onProgress?.(i);
+  }
+  return { result: { url: presignedData.fullPath } };
+};
+
+export function SimpleUploadDemo() {
+  return (
+    <div className="w-full max-w-md">
+      <FileUploadSimple
+        accept="image/*,.pdf,.doc,.docx"
+        maxSize={10 * 1024 * 1024}
+        onFilesChange={(files: FileWithUploadStatus[]) =>
+          console.log("Files changed:", files)
+        }
+      />
+    </div>
+  );
+}
+
+export function SimpleUploadWithS3Demo() {
+  const [uploadedCount, setUploadedCount] = React.useState(0);
+
+  return (
+    <div className="w-full max-w-md">
+      <FileUploadSimple
+        accept="image/*,.pdf"
+        multiple
+        maxFiles={5}
+        maxSize={5 * 1024 * 1024}
+        upload={{
+          getPresignedUrl: mockGetPresignedUrl,
+          uploadFile: mockUploadFile,
+          onUploadComplete: (file: FileWithUploadStatus) => {
+            console.log("Uploaded:", file);
+          },
+          onAllUploadsComplete: (files: FileWithUploadStatus[]) => {
+            setUploadedCount(files.length);
+            console.log("All uploads complete:", files);
+          },
+        }}
+        onFilesChange={(files: FileWithUploadStatus[]) =>
+          console.log("Files:", files)
+        }
+      />
+      {uploadedCount > 0 && (
+        <div className="mt-4">
+          <p className="text-ppx-neutral-10 text-sm">
+            {uploadedCount} file(s) uploaded successfully
+          </p>
+        </div>
+      )}
+    </div>
+  );
+}
+
+export function SimpleButtonVariantDemo() {
+  return (
+    <div className="flex flex-col gap-6">
+      <div>
+        <p className="text-ppx-neutral-10 mb-2 text-xs font-medium">
+          Button Variant
+        </p>
+        <FileUploadSimple
+          variant="button"
+          buttonText="Upload Files"
+          multiple
+          upload={{
+            getPresignedUrl: mockGetPresignedUrl,
+            uploadFile: mockUploadFile,
+          }}
+        />
+      </div>
+      <div>
+        <p className="text-ppx-neutral-10 mb-2 text-xs font-medium">
+          Compact Variant
+        </p>
+        <FileUploadSimple
+          variant="compact"
+          accept=".pdf,.doc,.docx"
+          upload={{
+            getPresignedUrl: mockGetPresignedUrl,
+            uploadFile: mockUploadFile,
+          }}
+        />
+      </div>
+    </div>
+  );
+}
+
+export function SimpleImageGridDemo() {
+  return (
+    <div className="w-full max-w-md">
+      <FileUploadSimple
+        accept="image/*"
+        multiple
+        maxFiles={8}
+        showImageGrid
+        size="sm"
+        dropzoneText="Drop images here"
+        buttonText="Select images"
+        upload={{
+          getPresignedUrl: mockGetPresignedUrl,
+          uploadFile: mockUploadFile,
+        }}
+      />
+    </div>
+  );
 }
