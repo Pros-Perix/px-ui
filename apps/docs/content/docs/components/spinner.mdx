@@ -1,13 +1,13 @@
 ---
 title: Spinner
-description: Loading indicator with size variants
+description: A loading spinner component for indicating async operations
 ---
 
 ## Overview
 
-The Spinner component displays an animated loading indicator to show that content or an action is in progress.
+The Spinner component displays a rotating loading indicator. It's commonly used to show that an operation is in progress.
 
-## Installation
+## Import
 
 ```tsx
 import { Spinner } from "@px-ui/core";
@@ -15,42 +15,80 @@ import { Spinner } from "@px-ui/core";
 
 ## Usage
 
-### Basic Usage
+<Preview>
+  <Spinner />
+</Preview>
 
+<CodeBlock>
 ```tsx
 <Spinner />
 ```
+</CodeBlock>
+
+## Examples
 
 ### Sizes
 
+<Preview>
+  <div className="flex items-center gap-4">
+    <Spinner size="small" />
+    <Spinner size="medium" />
+    <Spinner size="large" />
+  </div>
+</Preview>
+
+<CodeBlock>
 ```tsx
-<Spinner size="small" />   // 16x16px
-<Spinner size="medium" />  // 24x24px
-<Spinner size="large" />   // 32x32px
+<Spinner size="small" />
+<Spinner size="medium" />
+<Spinner size="large" />
 ```
+</CodeBlock>
 
-### With Button
+### In Button
 
-Commonly used in buttons during loading states:
+<Preview>
+  <div className="flex flex-wrap gap-4">
+    <Button disabled>
+      <Spinner size="small" />
+      Loading...
+    </Button>
+    <Button variant="primary" disabled>
+      <Spinner size="small" />
+      Saving...
+    </Button>
+  </div>
+</Preview>
 
+<CodeBlock>
 ```tsx
-import { Button, Spinner } from "@px-ui/core";
+<Button disabled>
+  <Spinner size="small" />
+  Loading...
+</Button>
 
 <Button variant="primary" disabled>
   <Spinner size="small" />
   Saving...
 </Button>
 ```
+</CodeBlock>
 
-### Custom Color
+### In Container
 
-The spinner inherits the current text color:
+<Preview>
+  <div className="flex items-center justify-center p-8 border rounded-lg">
+    <Spinner size="large" />
+  </div>
+</Preview>
 
+<CodeBlock>
 ```tsx
-<div className="text-ppx-primary-5">
-  <Spinner />
+<div className="flex items-center justify-center p-8">
+  <Spinner size="large" />
 </div>
 ```
+</CodeBlock>
 
 ## Props
 
@@ -58,73 +96,3 @@ The spinner inherits the current text color:
 |------|------|---------|-------------|
 | `size` | `"small" \| "medium" \| "large"` | `"small"` | Size of the spinner |
 | `className` | `string` | - | Additional CSS classes |
-
-## Accessibility
-
-The spinner includes:
-- `role="status"` for screen readers
-- `aria-label="Loading"` to describe the loading state
-
-## Examples
-
-### Loading Button
-
-```tsx
-import { useState } from "react";
-import { Button, Spinner } from "@px-ui/core";
-
-function SubmitButton() {
-  const [loading, setLoading] = useState(false);
-
-  const handleClick = async () => {
-    setLoading(true);
-    await saveData();
-    setLoading(false);
-  };
-
-  return (
-    <Button
-      variant="primary"
-      disabled={loading}
-      onClick={handleClick}
-    >
-      {loading ? (
-        <>
-          <Spinner size="small" />
-          Saving...
-        </>
-      ) : (
-        "Save"
-      )}
-    </Button>
-  );
-}
-```
-
-### Full Page Loading
-
-```tsx
-import { Spinner } from "@px-ui/core";
-
-function LoadingPage() {
-  return (
-    <div className="flex h-screen items-center justify-center">
-      <div className="flex flex-col items-center gap-4">
-        <Spinner size="large" />
-        <p className="text-ppx-muted-foreground">Loading...</p>
-      </div>
-    </div>
-  );
-}
-```
-
-### Inline Loading
-
-```tsx
-import { Spinner } from "@px-ui/core";
-
-<p className="flex items-center gap-2">
-  <Spinner size="small" />
-  Fetching data...
-</p>
-```

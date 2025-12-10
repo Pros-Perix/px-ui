@@ -1,94 +1,195 @@
 ---
 title: Avatar
-description: Display user or entity profile images with fallback initials
+description: Display user profile pictures with fallback to initials
+apiReference: https://base-ui.com/react/components/avatar.md
 ---
 
 ## Overview
 
-The Avatar component displays a user's profile picture with automatic fallback to initials when an image is unavailable. It includes built-in tooltip support and color generation based on the user's name.
+The Avatar component displays user profile pictures with automatic fallback to colored initials when an image is not available. It's built on top of Base UI's Avatar component and includes tooltip support.
 
-## Installation
+## Import
 
 ```tsx
 import { Avatar } from "@px-ui/core";
 ```
 
-## Base-UI Reference
-
-This component is built on top of [Base UI Avatar](https://base-ui.com/react/components/avatar).
-
 ## Usage
 
-### Basic Usage
+<Preview>
+  <Avatar
+    imgSrc="https://github.com/shadcn.png"
+    name="John Doe"
+    size="40px"
+  />
+</Preview>
 
+<CodeBlock>
 ```tsx
 <Avatar
-  imgSrc="https://example.com/user.jpg"
+  imgSrc="https://github.com/shadcn.png"
   name="John Doe"
   size="40px"
 />
 ```
+</CodeBlock>
 
-### With Fallback Initials
-
-When no image is provided, the avatar automatically displays initials derived from the name:
-
-```tsx
-<Avatar name="John Doe" size="40px" />
-```
+## Examples
 
 ### Variants
 
-The avatar supports two shape variants:
+<Preview>
+  <div className="flex flex-wrap items-center gap-4">
+    <Avatar
+      imgSrc="https://github.com/shadcn.png"
+      name="Acme Inc"
+      size="40px"
+      variant="squared"
+    />
+    <Avatar
+      imgSrc="https://github.com/shadcn.png"
+      name="John Doe"
+      size="40px"
+      variant="rounded"
+    />
+  </div>
+</Preview>
 
-```tsx
-// Squared (default)
-<Avatar name="Acme Inc" size="40px" variant="squared" />
-
-// Rounded (circular)
-<Avatar name="John Doe" size="40px" variant="rounded" />
-```
-
-### Custom Size
-
+<CodeBlock>
 ```tsx
 <Avatar
-  imgSrc="https://example.com/user.jpg"
+  imgSrc="https://github.com/shadcn.png"
+  name="Acme Inc"
+  size="40px"
+  variant="squared"
+/>
+
+<Avatar
+  imgSrc="https://github.com/shadcn.png"
   name="John Doe"
-  size="60px"
+  size="40px"
+  variant="rounded"
 />
 ```
+</CodeBlock>
 
-### Hide Tooltip
+### Without Image
 
-By default, the avatar shows a tooltip with the name on hover. You can disable this:
+<Preview>
+  <div className="flex flex-wrap items-center gap-4">
+    <Avatar
+      name="John Doe"
+      size="40px"
+      variant="rounded"
+    />
+    <Avatar
+      name="Jane Smith"
+      size="50px"
+      variant="squared"
+    />
+  </div>
+</Preview>
 
+<CodeBlock>
 ```tsx
 <Avatar
   name="John Doe"
   size="40px"
+  variant="rounded"
+/>
+
+<Avatar
+  name="Jane Smith"
+  size="50px"
+  variant="squared"
+/>
+```
+</CodeBlock>
+
+### Custom Sizes
+
+<Preview>
+  <div className="flex flex-wrap items-center gap-4">
+    <Avatar
+      imgSrc="https://github.com/shadcn.png"
+      name="John Doe"
+      size="32px"
+      variant="rounded"
+    />
+    <Avatar
+      imgSrc="https://github.com/shadcn.png"
+      name="John Doe"
+      size="40px"
+      variant="rounded"
+    />
+    <Avatar
+      imgSrc="https://github.com/shadcn.png"
+      name="John Doe"
+      size="60px"
+      variant="rounded"
+    />
+  </div>
+</Preview>
+
+<CodeBlock>
+```tsx
+<Avatar
+  imgSrc="https://github.com/shadcn.png"
+  name="John Doe"
+  size="32px"
+  variant="rounded"
+/>
+
+<Avatar
+  imgSrc="https://github.com/shadcn.png"
+  name="John Doe"
+  size="40px"
+  variant="rounded"
+/>
+
+<Avatar
+  imgSrc="https://github.com/shadcn.png"
+  name="John Doe"
+  size="60px"
+  variant="rounded"
+/>
+```
+</CodeBlock>
+
+### Hide Tooltip
+
+<Preview>
+  <div className="flex flex-wrap items-center gap-4">
+    <Avatar
+      imgSrc="https://github.com/shadcn.png"
+      name="John Doe"
+      size="40px"
+      variant="rounded"
+      hideTooltip
+    />
+  </div>
+</Preview>
+
+<CodeBlock>
+```tsx
+<Avatar
+  imgSrc="https://github.com/shadcn.png"
+  name="John Doe"
+  size="40px"
+  variant="rounded"
   hideTooltip
 />
 ```
+</CodeBlock>
 
 ## Props
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `imgSrc` | `string \| null \| undefined` | - | URL of the avatar image |
-| `name` | `string \| null \| undefined` | - | Name used for fallback initials and tooltip |
-| `variant` | `"squared" \| "rounded"` | `"squared"` | Shape of the avatar |
-| `size` | `` `${number}px` `` | `"100px"` | Size of the avatar |
+| `imgSrc` | `string \| null \| undefined` | - | Image source URL for the avatar |
+| `name` | `string \| null \| undefined` | - | Name used for initials fallback and tooltip |
+| `variant` | `"squared" \| "rounded"` | `"squared"` | Visual style variant |
+| `size` | `` `${number}px` `` | `"100px"` | Size of the avatar in pixels |
 | `className` | `string` | - | Additional CSS classes |
-| `hideTooltip` | `boolean` | `false` | Hide the name tooltip on hover |
 | `children` | `ReactNode` | - | Additional content to render inside the avatar |
-
-## Features
-
-### Automatic Color Generation
-
-When displaying initials, the avatar automatically generates a background color based on the user's name, ensuring consistent colors for the same name across your application.
-
-### Image URL Size Replacement
-
-The component automatically adjusts image URLs that contain `/SIZE/` placeholder with the actual requested size (e.g., `/40x40/`).
+| `hideTooltip` | `boolean` | `false` | Hide the tooltip that shows the name |

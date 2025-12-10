@@ -1,0 +1,250 @@
+---
+title: Block Checkbox Group
+description: A checkbox group with card-style items for selecting multiple options
+apiReference: https://base-ui.com/react/components/checkbox-group.md
+---
+
+## Overview
+
+The BlockCheckboxGroup component displays checkboxes in card-style blocks, perfect for selecting multiple options with rich content like titles and descriptions. It's built on top of Base UI's CheckboxGroup component.
+
+## Import
+
+```tsx
+import { BlockCheckboxGroup } from "@px-ui/core";
+```
+
+## Usage
+
+<Preview>
+  <BlockCheckboxGroup.Group>
+    <BlockCheckboxGroup.Item value="1">
+      <BlockCheckboxGroup.Header>
+        <BlockCheckboxGroup.Title>Contractor</BlockCheckboxGroup.Title>
+      </BlockCheckboxGroup.Header>
+      <BlockCheckboxGroup.Description>
+        A self-employed person or entity that works with the company on a contractual basis.
+      </BlockCheckboxGroup.Description>
+    </BlockCheckboxGroup.Item>
+    <BlockCheckboxGroup.Item value="2">
+      <BlockCheckboxGroup.Header>
+        <BlockCheckboxGroup.Title>Direct hire (Employee)</BlockCheckboxGroup.Title>
+      </BlockCheckboxGroup.Header>
+      <BlockCheckboxGroup.Description>
+        A team member on the company payroll where the business sets the working timings and schedule.
+      </BlockCheckboxGroup.Description>
+    </BlockCheckboxGroup.Item>
+  </BlockCheckboxGroup.Group>
+</Preview>
+
+<CodeBlock>
+```tsx
+<BlockCheckboxGroup.Group>
+  <BlockCheckboxGroup.Item value="1">
+    <BlockCheckboxGroup.Header>
+      <BlockCheckboxGroup.Title>Contractor</BlockCheckboxGroup.Title>
+    </BlockCheckboxGroup.Header>
+    <BlockCheckboxGroup.Description>
+      A self-employed person or entity that works with the company on a contractual basis.
+    </BlockCheckboxGroup.Description>
+  </BlockCheckboxGroup.Item>
+  <BlockCheckboxGroup.Item value="2">
+    <BlockCheckboxGroup.Header>
+      <BlockCheckboxGroup.Title>Direct hire (Employee)</BlockCheckboxGroup.Title>
+    </BlockCheckboxGroup.Header>
+    <BlockCheckboxGroup.Description>
+      A team member on the company payroll where the business sets the working timings and schedule.
+    </BlockCheckboxGroup.Description>
+  </BlockCheckboxGroup.Item>
+</BlockCheckboxGroup.Group>
+```
+</CodeBlock>
+
+## Examples
+
+### Controlled Selection
+
+<Preview>
+  <BlockCheckboxGroup.Group
+    allValues={["1", "2", "3", "4"]}
+    value={["1", "2"]}
+    onValueChange={(values) => console.log(values)}
+  >
+    <BlockCheckboxGroup.Item value="1">
+      <BlockCheckboxGroup.Header>
+        <BlockCheckboxGroup.Title>Option 1</BlockCheckboxGroup.Title>
+      </BlockCheckboxGroup.Header>
+      <BlockCheckboxGroup.Description>Description for option 1</BlockCheckboxGroup.Description>
+    </BlockCheckboxGroup.Item>
+    <BlockCheckboxGroup.Item value="2">
+      <BlockCheckboxGroup.Header>
+        <BlockCheckboxGroup.Title>Option 2</BlockCheckboxGroup.Title>
+      </BlockCheckboxGroup.Header>
+      <BlockCheckboxGroup.Description>Description for option 2</BlockCheckboxGroup.Description>
+    </BlockCheckboxGroup.Item>
+  </BlockCheckboxGroup.Group>
+</Preview>
+
+<CodeBlock>
+```tsx
+<BlockCheckboxGroup.Group
+  allValues={["1", "2", "3", "4"]}
+  value={["1", "2"]}
+  onValueChange={(values) => console.log(values)}
+>
+  <BlockCheckboxGroup.Item value="1">
+    <BlockCheckboxGroup.Header>
+      <BlockCheckboxGroup.Title>Option 1</BlockCheckboxGroup.Title>
+    </BlockCheckboxGroup.Header>
+    <BlockCheckboxGroup.Description>Description for option 1</BlockCheckboxGroup.Description>
+  </BlockCheckboxGroup.Item>
+  <BlockCheckboxGroup.Item value="2">
+    <BlockCheckboxGroup.Header>
+      <BlockCheckboxGroup.Title>Option 2</BlockCheckboxGroup.Title>
+    </BlockCheckboxGroup.Header>
+    <BlockCheckboxGroup.Description>Description for option 2</BlockCheckboxGroup.Description>
+  </BlockCheckboxGroup.Item>
+</BlockCheckboxGroup.Group>
+```
+</CodeBlock>
+
+### With Select All
+
+<Preview>
+  <BlockCheckboxGroup.Group
+    allValues={["1", "2", "3"]}
+    value={["1"]}
+    onValueChange={(values) => console.log(values)}
+  >
+    <BlockCheckboxGroup.Item
+      parent
+      indeterminate={true}
+    >
+      <BlockCheckboxGroup.Header>
+        <BlockCheckboxGroup.Title>Select All</BlockCheckboxGroup.Title>
+      </BlockCheckboxGroup.Header>
+      <BlockCheckboxGroup.Description>Select all items in the group</BlockCheckboxGroup.Description>
+    </BlockCheckboxGroup.Item>
+    <BlockCheckboxGroup.Item value="1">
+      <BlockCheckboxGroup.Header>
+        <BlockCheckboxGroup.Title>Option 1</BlockCheckboxGroup.Title>
+      </BlockCheckboxGroup.Header>
+    </BlockCheckboxGroup.Item>
+    <BlockCheckboxGroup.Item value="2">
+      <BlockCheckboxGroup.Header>
+        <BlockCheckboxGroup.Title>Option 2</BlockCheckboxGroup.Title>
+      </BlockCheckboxGroup.Header>
+    </BlockCheckboxGroup.Item>
+  </BlockCheckboxGroup.Group>
+</Preview>
+
+<CodeBlock>
+```tsx
+<BlockCheckboxGroup.Group
+  allValues={["1", "2", "3"]}
+  value={["1"]}
+  onValueChange={(values) => console.log(values)}
+>
+  <BlockCheckboxGroup.Item
+    parent
+    indeterminate={true}
+  >
+    <BlockCheckboxGroup.Header>
+      <BlockCheckboxGroup.Title>Select All</BlockCheckboxGroup.Title>
+    </BlockCheckboxGroup.Header>
+    <BlockCheckboxGroup.Description>Select all items in the group</BlockCheckboxGroup.Description>
+  </BlockCheckboxGroup.Item>
+  <BlockCheckboxGroup.Item value="1">
+    <BlockCheckboxGroup.Header>
+      <BlockCheckboxGroup.Title>Option 1</BlockCheckboxGroup.Title>
+    </BlockCheckboxGroup.Header>
+  </BlockCheckboxGroup.Item>
+</BlockCheckboxGroup.Group>
+```
+</CodeBlock>
+
+### Grid Layout
+
+<Preview>
+  <BlockCheckboxGroup.Group className="grid grid-cols-2 gap-4">
+    <BlockCheckboxGroup.Item value="1">
+      <BlockCheckboxGroup.Header>
+        <BlockCheckboxGroup.Title>Option 1</BlockCheckboxGroup.Title>
+      </BlockCheckboxGroup.Header>
+      <BlockCheckboxGroup.Description>Description</BlockCheckboxGroup.Description>
+    </BlockCheckboxGroup.Item>
+    <BlockCheckboxGroup.Item value="2">
+      <BlockCheckboxGroup.Header>
+        <BlockCheckboxGroup.Title>Option 2</BlockCheckboxGroup.Title>
+      </BlockCheckboxGroup.Header>
+      <BlockCheckboxGroup.Description>Description</BlockCheckboxGroup.Description>
+    </BlockCheckboxGroup.Item>
+  </BlockCheckboxGroup.Group>
+</Preview>
+
+<CodeBlock>
+```tsx
+<BlockCheckboxGroup.Group className="grid grid-cols-2 gap-4">
+  <BlockCheckboxGroup.Item value="1">
+    <BlockCheckboxGroup.Header>
+      <BlockCheckboxGroup.Title>Option 1</BlockCheckboxGroup.Title>
+    </BlockCheckboxGroup.Header>
+    <BlockCheckboxGroup.Description>Description</BlockCheckboxGroup.Description>
+  </BlockCheckboxGroup.Item>
+  <BlockCheckboxGroup.Item value="2">
+    <BlockCheckboxGroup.Header>
+      <BlockCheckboxGroup.Title>Option 2</BlockCheckboxGroup.Title>
+    </BlockCheckboxGroup.Header>
+    <BlockCheckboxGroup.Description>Description</BlockCheckboxGroup.Description>
+  </BlockCheckboxGroup.Item>
+</BlockCheckboxGroup.Group>
+```
+</CodeBlock>
+
+## Props
+
+### BlockCheckboxGroup.Group
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `allValues` | `string[]` | - | All possible values in the group |
+| `value` | `string[]` | - | Controlled selected values |
+| `defaultValue` | `string[]` | - | Uncontrolled default selected values |
+| `onValueChange` | `(values: string[]) => void` | - | Callback when values change |
+| `disabled` | `boolean` | - | Disable all items |
+| `className` | `string` | - | Additional CSS classes |
+
+### BlockCheckboxGroup.Item
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `value` | `string` | - | Value of the checkbox item |
+| `parent` | `boolean` | - | Mark as parent checkbox (for select all) |
+| `indeterminate` | `boolean` | - | Indeterminate state |
+| `invalid` | `boolean` | - | Invalid state |
+| `disabled` | `boolean` | - | Disable the item |
+| `className` | `string` | - | Additional CSS classes |
+| `children` | `ReactNode` | - | Item content (typically Header and Description) |
+
+### BlockCheckboxGroup.Header
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `className` | `string` | - | Additional CSS classes |
+| `children` | `ReactNode` | - | Header content |
+
+### BlockCheckboxGroup.Title
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `className` | `string` | - | Additional CSS classes |
+| `children` | `ReactNode` | - | Title text |
+
+### BlockCheckboxGroup.Description
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `className` | `string` | - | Additional CSS classes |
+| `children` | `ReactNode` | - | Description text |
+
+Plus all standard Base UI CheckboxGroup props.

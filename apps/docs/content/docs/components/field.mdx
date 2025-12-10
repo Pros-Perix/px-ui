@@ -1,0 +1,287 @@
+---
+title: Field
+description: A field component for building accessible forms with labels, descriptions, and error handling
+---
+
+## Overview
+
+The Field component provides a structured way to build accessible form fields with labels, descriptions, error messages, and flexible layouts. It supports vertical, horizontal, and responsive orientations.
+
+## Import
+
+```tsx
+import { Field } from "@px-ui/forms";
+```
+
+## Usage
+
+<Preview>
+  <Field.Root>
+    <Field.Label htmlFor="username">Username</Field.Label>
+    <Input id="username" placeholder="Enter your username" />
+    <Field.Description>
+      This is your public display name.
+    </Field.Description>
+  </Field.Root>
+</Preview>
+
+<CodeBlock>
+```tsx
+<Field.Root>
+  <Field.Label htmlFor="username">Username</Field.Label>
+  <Input id="username" placeholder="Enter your username" />
+  <Field.Description>
+    This is your public display name.
+  </Field.Description>
+</Field.Root>
+```
+</CodeBlock>
+
+## Examples
+
+### Horizontal Orientation
+
+<Preview>
+  <Field.Root orientation="horizontal">
+    <Field.Content>
+      <Field.Label htmlFor="switch1">Enable notifications</Field.Label>
+      <Field.Description>
+        Receive notifications about updates.
+      </Field.Description>
+    </Field.Content>
+    <Switch id="switch1" />
+  </Field.Root>
+</Preview>
+
+<CodeBlock>
+```tsx
+<Field.Root orientation="horizontal">
+  <Field.Content>
+    <Field.Label htmlFor="switch1">Enable notifications</Field.Label>
+    <Field.Description>
+      Receive notifications about updates.
+    </Field.Description>
+  </Field.Content>
+  <Switch id="switch1" />
+</Field.Root>
+```
+</CodeBlock>
+
+### With Error
+
+<Preview>
+  <Field.Root>
+    <Field.Label htmlFor="email">Email</Field.Label>
+    <Input id="email" type="email" invalid />
+    <Field.Description>
+      We'll never share your email.
+    </Field.Description>
+    <Field.Error errors={[{ message: "Please enter a valid email address" }]} />
+  </Field.Root>
+</Preview>
+
+<CodeBlock>
+```tsx
+<Field.Root>
+  <Field.Label htmlFor="email">Email</Field.Label>
+  <Input id="email" type="email" invalid />
+  <Field.Description>
+    We'll never share your email.
+  </Field.Description>
+  <Field.Error errors={[{ message: "Please enter a valid email address" }]} />
+</Field.Root>
+```
+</CodeBlock>
+
+### Field Group
+
+<Preview>
+  <Field.Group>
+    <Field.Root>
+      <Field.Label htmlFor="name">Name</Field.Label>
+      <Input id="name" placeholder="Enter your name" />
+    </Field.Root>
+    <Field.Root>
+      <Field.Label htmlFor="email2">Email</Field.Label>
+      <Input id="email2" type="email" placeholder="Enter your email" />
+    </Field.Root>
+  </Field.Group>
+</Preview>
+
+<CodeBlock>
+```tsx
+<Field.Group>
+  <Field.Root>
+    <Field.Label htmlFor="name">Name</Field.Label>
+    <Input id="name" placeholder="Enter your name" />
+  </Field.Root>
+  <Field.Root>
+    <Field.Label htmlFor="email2">Email</Field.Label>
+    <Input id="email2" type="email" placeholder="Enter your email" />
+  </Field.Root>
+</Field.Group>
+```
+</CodeBlock>
+
+### Fieldset
+
+<Preview>
+  <Field.Set>
+    <Field.Legend>Address Information</Field.Legend>
+    <Field.Group>
+      <Field.Root>
+        <Field.Label htmlFor="street">Street</Field.Label>
+        <Input id="street" placeholder="123 Main St" />
+      </Field.Root>
+      <Field.Root>
+        <Field.Label htmlFor="city">City</Field.Label>
+        <Input id="city" placeholder="New York" />
+      </Field.Root>
+    </Field.Group>
+  </Field.Set>
+</Preview>
+
+<CodeBlock>
+```tsx
+<Field.Set>
+  <Field.Legend>Address Information</Field.Legend>
+  <Field.Group>
+    <Field.Root>
+      <Field.Label htmlFor="street">Street</Field.Label>
+      <Input id="street" placeholder="123 Main St" />
+    </Field.Root>
+    <Field.Root>
+      <Field.Label htmlFor="city">City</Field.Label>
+      <Input id="city" placeholder="New York" />
+    </Field.Root>
+  </Field.Group>
+</Field.Set>
+```
+</CodeBlock>
+
+### With Separator
+
+<Preview>
+  <Field.Group>
+    <Field.Root orientation="horizontal">
+      <Field.Content>
+        <Field.Title>Email Notifications</Field.Title>
+        <Field.Description>
+          Receive emails about your account activity.
+        </Field.Description>
+      </Field.Content>
+      <Switch defaultChecked />
+    </Field.Root>
+    <Field.Separator />
+    <Field.Root orientation="horizontal">
+      <Field.Content>
+        <Field.Title>Push Notifications</Field.Title>
+        <Field.Description>
+          Receive push notifications on your devices.
+        </Field.Description>
+      </Field.Content>
+      <Switch />
+    </Field.Root>
+  </Field.Group>
+</Preview>
+
+<CodeBlock>
+```tsx
+<Field.Group>
+  <Field.Root orientation="horizontal">
+    <Field.Content>
+      <Field.Title>Email Notifications</Field.Title>
+      <Field.Description>
+        Receive emails about your account activity.
+      </Field.Description>
+    </Field.Content>
+    <Switch defaultChecked />
+  </Field.Root>
+  <Field.Separator />
+  <Field.Root orientation="horizontal">
+    <Field.Content>
+      <Field.Title>Push Notifications</Field.Title>
+      <Field.Description>
+        Receive push notifications on your devices.
+      </Field.Description>
+    </Field.Content>
+    <Switch />
+  </Field.Root>
+</Field.Group>
+```
+</CodeBlock>
+
+## Props
+
+### Field.Root
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `orientation` | `"vertical" \| "horizontal" \| "responsive"` | `"vertical"` | Layout orientation |
+| `className` | `string` | - | Additional CSS classes |
+| `children` | `ReactNode` | - | Field content |
+
+### Field.Label
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `htmlFor` | `string` | - | Associates label with form control |
+| `className` | `string` | - | Additional CSS classes |
+| `children` | `ReactNode` | - | Label text |
+
+### Field.Title
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `className` | `string` | - | Additional CSS classes |
+| `children` | `ReactNode` | - | Title text |
+
+### Field.Description
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `className` | `string` | - | Additional CSS classes |
+| `children` | `ReactNode` | - | Description text |
+
+### Field.Error
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `errors` | `Array<{ message?: string }>` | - | Array of error objects |
+| `className` | `string` | - | Additional CSS classes |
+
+### Field.Content
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `className` | `string` | - | Additional CSS classes |
+| `children` | `ReactNode` | - | Content (Label/Title and Description) |
+
+### Field.Group
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `className` | `string` | - | Additional CSS classes |
+| `children` | `ReactNode` | - | Group of fields |
+
+### Field.Set
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `className` | `string` | - | Additional CSS classes |
+| `children` | `ReactNode` | - | Fieldset content |
+
+### Field.Legend
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `variant` | `"legend" \| "label"` | `"legend"` | Visual style variant |
+| `className` | `string` | - | Additional CSS classes |
+| `children` | `ReactNode` | - | Legend text |
+
+### Field.Separator
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `className` | `string` | - | Additional CSS classes |
+| `children` | `ReactNode` | - | Optional separator content |

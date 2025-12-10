@@ -1,0 +1,138 @@
+---
+title: Segmented Control
+description: A segmented control component for selecting a single option from multiple choices
+apiReference: https://base-ui.com/react/components/radio-group.md
+---
+
+## Overview
+
+The SegmentedControl component displays a group of options as segments in a single control. It's built on top of Base UI's RadioGroup component and provides a modern, iOS-style segmented control interface.
+
+## Import
+
+```tsx
+import { SegmentedControl } from "@px-ui/core";
+```
+
+## Usage
+
+<Preview>
+  <SegmentedControl.Root>
+    <SegmentedControl.Item value="option1">Option 1</SegmentedControl.Item>
+    <SegmentedControl.Item value="option2">Option 2</SegmentedControl.Item>
+    <SegmentedControl.Item value="option3">Option 3</SegmentedControl.Item>
+  </SegmentedControl.Root>
+</Preview>
+
+<CodeBlock>
+```tsx
+<SegmentedControl.Root>
+  <SegmentedControl.Item value="option1">Option 1</SegmentedControl.Item>
+  <SegmentedControl.Item value="option2">Option 2</SegmentedControl.Item>
+  <SegmentedControl.Item value="option3">Option 3</SegmentedControl.Item>
+</SegmentedControl.Root>
+```
+</CodeBlock>
+
+## Examples
+
+### Controlled Selection
+
+<Preview>
+  <SegmentedControl.Root value="option2" onValueChange={(value) => console.log(value)}>
+    <SegmentedControl.Item value="option1">Option 1</SegmentedControl.Item>
+    <SegmentedControl.Item value="option2">Option 2</SegmentedControl.Item>
+    <SegmentedControl.Item value="option3">Option 3</SegmentedControl.Item>
+  </SegmentedControl.Root>
+</Preview>
+
+<CodeBlock>
+```tsx
+<SegmentedControl.Root value="option2" onValueChange={(value) => console.log(value)}>
+  <SegmentedControl.Item value="option1">Option 1</SegmentedControl.Item>
+  <SegmentedControl.Item value="option2">Option 2</SegmentedControl.Item>
+  <SegmentedControl.Item value="option3">Option 3</SegmentedControl.Item>
+</SegmentedControl.Root>
+```
+</CodeBlock>
+
+### Sizes
+
+<Preview>
+  <div className="flex flex-col gap-4">
+    <SegmentedControl.Root>
+      <SegmentedControl.Item value="sm1" size="sm">Small</SegmentedControl.Item>
+      <SegmentedControl.Item value="sm2" size="sm">Small 2</SegmentedControl.Item>
+    </SegmentedControl.Root>
+    <SegmentedControl.Root>
+      <SegmentedControl.Item value="default1">Default</SegmentedControl.Item>
+      <SegmentedControl.Item value="default2">Default 2</SegmentedControl.Item>
+    </SegmentedControl.Root>
+    <SegmentedControl.Root>
+      <SegmentedControl.Item value="lg1" size="lg">Large</SegmentedControl.Item>
+      <SegmentedControl.Item value="lg2" size="lg">Large 2</SegmentedControl.Item>
+    </SegmentedControl.Root>
+  </div>
+</Preview>
+
+<CodeBlock>
+```tsx
+<SegmentedControl.Root>
+  <SegmentedControl.Item value="sm1" size="sm">Small</SegmentedControl.Item>
+  <SegmentedControl.Item value="sm2" size="sm">Small 2</SegmentedControl.Item>
+</SegmentedControl.Root>
+
+<SegmentedControl.Root>
+  <SegmentedControl.Item value="default1">Default</SegmentedControl.Item>
+  <SegmentedControl.Item value="default2">Default 2</SegmentedControl.Item>
+</SegmentedControl.Root>
+
+<SegmentedControl.Root>
+  <SegmentedControl.Item value="lg1" size="lg">Large</SegmentedControl.Item>
+  <SegmentedControl.Item value="lg2" size="lg">Large 2</SegmentedControl.Item>
+</SegmentedControl.Root>
+```
+</CodeBlock>
+
+### Disabled
+
+<Preview>
+  <SegmentedControl.Root>
+    <SegmentedControl.Item value="option1" disabled>Disabled</SegmentedControl.Item>
+    <SegmentedControl.Item value="option2">Enabled</SegmentedControl.Item>
+  </SegmentedControl.Root>
+</Preview>
+
+<CodeBlock>
+```tsx
+<SegmentedControl.Root>
+  <SegmentedControl.Item value="option1" disabled>Disabled</SegmentedControl.Item>
+  <SegmentedControl.Item value="option2">Enabled</SegmentedControl.Item>
+</SegmentedControl.Root>
+```
+</CodeBlock>
+
+## Props
+
+### SegmentedControl.Root
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `value` | `string` | - | Controlled selected value |
+| `defaultValue` | `string` | - | Uncontrolled default selected value |
+| `onValueChange` | `(value: string) => void` | - | Callback when value changes |
+| `disabled` | `boolean` | - | Disable all items |
+| `className` | `string` | - | Additional CSS classes |
+
+### SegmentedControl.Item
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `value` | `string` | - | Item value |
+| `disabled` | `boolean` | - | Disable the item |
+| `size` | `"default" \| "sm" \| "lg"` | `"default"` | Size of the item |
+| `variant` | `"default"` | `"default"` | Visual style variant |
+| `className` | `string` | - | Additional CSS classes |
+| `children` | `ReactNode` | - | Item content |
+
+Plus all standard Base UI RadioGroup props.

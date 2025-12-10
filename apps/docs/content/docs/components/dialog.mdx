@@ -1,0 +1,243 @@
+---
+title: Dialog
+description: A modal dialog component for displaying content in an overlay
+apiReference: https://base-ui.com/react/components/dialog.md
+---
+
+## Overview
+
+The Dialog component displays modal content in an overlay. It's built on top of Base UI's Dialog component and supports nested dialogs, custom headers with icons, and flexible content layouts.
+
+## Import
+
+```tsx
+import { Dialog } from "@px-ui/core";
+```
+
+## Usage
+
+<Preview>
+  <Dialog.Root>
+    <Dialog.Trigger render={<Button>Open Dialog</Button>} />
+    <Dialog.Content>
+      <Dialog.Header>
+        <Dialog.HeaderContent>
+          <Dialog.Title>Dialog Title</Dialog.Title>
+          <Dialog.Description>
+            This is a dialog description.
+          </Dialog.Description>
+        </Dialog.HeaderContent>
+      </Dialog.Header>
+      <div className="space-y-4">
+        <p>Dialog content goes here.</p>
+      </div>
+      <Dialog.Footer>
+        <Dialog.Close render={<Button variant="outline">Cancel</Button>} />
+        <Button>Confirm</Button>
+      </Dialog.Footer>
+    </Dialog.Content>
+  </Dialog.Root>
+</Preview>
+
+<CodeBlock>
+```tsx
+<Dialog.Root>
+  <Dialog.Trigger render={<Button>Open Dialog</Button>} />
+  <Dialog.Content>
+    <Dialog.Header>
+      <Dialog.HeaderContent>
+        <Dialog.Title>Dialog Title</Dialog.Title>
+        <Dialog.Description>
+          This is a dialog description.
+        </Dialog.Description>
+      </Dialog.HeaderContent>
+    </Dialog.Header>
+    <div className="space-y-4">
+      <p>Dialog content goes here.</p>
+    </div>
+    <Dialog.Footer>
+      <Dialog.Close render={<Button variant="outline">Cancel</Button>} />
+      <Button>Confirm</Button>
+    </Dialog.Footer>
+  </Dialog.Content>
+</Dialog.Root>
+```
+</CodeBlock>
+
+## Examples
+
+### With Header Icon
+
+<Preview>
+  <Dialog.Root>
+    <Dialog.Trigger render={<Button>Open Dialog</Button>} />
+    <Dialog.Content>
+      <Dialog.Header>
+        <Dialog.HeaderIcon>
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+            <path d="M10 2L12.5 8.5L19 9.5L14.5 14L15.5 20.5L10 17.5L4.5 20.5L5.5 14L1 9.5L7.5 8.5L10 2Z" />
+          </svg>
+        </Dialog.HeaderIcon>
+        <Dialog.HeaderContent>
+          <Dialog.Title>Success!</Dialog.Title>
+          <Dialog.Description>
+            Your changes have been saved successfully.
+          </Dialog.Description>
+        </Dialog.HeaderContent>
+      </Dialog.Header>
+      <Dialog.Footer>
+        <Dialog.Close render={<Button>Continue</Button>} />
+      </Dialog.Footer>
+    </Dialog.Content>
+  </Dialog.Root>
+</Preview>
+
+<CodeBlock>
+```tsx
+<Dialog.Root>
+  <Dialog.Trigger render={<Button>Open Dialog</Button>} />
+  <Dialog.Content>
+    <Dialog.Header>
+      <Dialog.HeaderIcon>
+        <Icon />
+      </Dialog.HeaderIcon>
+      <Dialog.HeaderContent>
+        <Dialog.Title>Success!</Dialog.Title>
+        <Dialog.Description>
+          Your changes have been saved successfully.
+        </Dialog.Description>
+      </Dialog.HeaderContent>
+    </Dialog.Header>
+    <Dialog.Footer>
+      <Dialog.Close render={<Button>Continue</Button>} />
+    </Dialog.Footer>
+  </Dialog.Content>
+</Dialog.Root>
+```
+</CodeBlock>
+
+### Confirmation Dialog
+
+<Preview>
+  <Dialog.Root>
+    <Dialog.Trigger render={<Button variant="destructive">Delete</Button>} />
+    <Dialog.Content>
+      <Dialog.Header>
+        <Dialog.HeaderIcon>
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2">
+            <path d="M10 6V10M10 14H10.01M19 10C19 14.9706 14.9706 19 10 19C5.02944 19 1 14.9706 1 10C1 5.02944 5.02944 1 10 1C14.9706 1 19 5.02944 19 10Z" />
+          </svg>
+        </Dialog.HeaderIcon>
+        <Dialog.HeaderContent>
+          <Dialog.Title>Delete Account</Dialog.Title>
+          <Dialog.Description>
+            Are you sure you want to delete your account? This action cannot be undone.
+          </Dialog.Description>
+        </Dialog.HeaderContent>
+      </Dialog.Header>
+      <Dialog.Footer>
+        <Dialog.Close render={<Button variant="outline">Cancel</Button>} />
+        <Button variant="destructive">Delete Account</Button>
+      </Dialog.Footer>
+    </Dialog.Content>
+  </Dialog.Root>
+</Preview>
+
+<CodeBlock>
+```tsx
+<Dialog.Root>
+  <Dialog.Trigger render={<Button variant="destructive">Delete</Button>} />
+  <Dialog.Content>
+    <Dialog.Header>
+      <Dialog.HeaderIcon>
+        <WarningIcon />
+      </Dialog.HeaderIcon>
+      <Dialog.HeaderContent>
+        <Dialog.Title>Delete Account</Dialog.Title>
+        <Dialog.Description>
+          Are you sure you want to delete your account? This action cannot be undone.
+        </Dialog.Description>
+      </Dialog.HeaderContent>
+    </Dialog.Header>
+    <Dialog.Footer>
+      <Dialog.Close render={<Button variant="outline">Cancel</Button>} />
+      <Button variant="destructive">Delete Account</Button>
+    </Dialog.Footer>
+  </Dialog.Content>
+</Dialog.Root>
+```
+</CodeBlock>
+
+## Props
+
+### Dialog.Root
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `open` | `boolean` | - | Controlled open state |
+| `defaultOpen` | `boolean` | - | Uncontrolled default open state |
+| `onOpenChange` | `(open: boolean) => void` | - | Callback when open state changes |
+| `modal` | `boolean` | `true` | Whether the dialog is modal |
+
+### Dialog.Trigger
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `render` | `ReactNode \| ComponentProps` | - | Custom trigger element or render props |
+
+### Dialog.Content
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `className` | `string` | - | Additional CSS classes |
+| `children` | `ReactNode` | - | Dialog content |
+
+### Dialog.Header
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `className` | `string` | - | Additional CSS classes |
+| `children` | `ReactNode` | - | Header content |
+
+### Dialog.HeaderIcon
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `className` | `string` | - | Additional CSS classes |
+| `children` | `ReactNode` | - | Icon content |
+
+### Dialog.HeaderContent
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `className` | `string` | - | Additional CSS classes |
+| `children` | `ReactNode` | - | Header content (Title and Description) |
+
+### Dialog.Title
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `className` | `string` | - | Additional CSS classes |
+| `children` | `ReactNode` | - | Title text |
+
+### Dialog.Description
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `className` | `string` | - | Additional CSS classes |
+| `children` | `ReactNode` | - | Description text |
+
+### Dialog.Footer
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `className` | `string` | - | Additional CSS classes |
+| `children` | `ReactNode` | - | Footer content |
+
+### Dialog.Close
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `render` | `ReactNode \| ComponentProps` | - | Custom close element or render props |
+
+Plus all standard Base UI Dialog props.
