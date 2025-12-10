@@ -1,5 +1,10 @@
 import * as React from "react";
-import { FileUpload, formatFileSize, type FileUploadFile, Button } from "@px-ui/core";
+import {
+  FileUpload,
+  formatFileSize,
+  type FileUploadFile,
+  Button,
+} from "@px-ui/core";
 
 // ============================================================================
 // Basic Dropzone
@@ -7,11 +12,9 @@ import { FileUpload, formatFileSize, type FileUploadFile, Button } from "@px-ui/
 
 export function BasicDropzoneDemo() {
   return (
-    <div className="w-full max-w-lg">
-      <FileUpload.Root onValueChange={(files) => console.log(files)}>
-        <FileUpload.Dropzone />
-      </FileUpload.Root>
-    </div>
+    <FileUpload.Root onValueChange={(files) => console.log(files)}>
+      <FileUpload.Dropzone />
+    </FileUpload.Root>
   );
 }
 
@@ -41,7 +44,7 @@ export function SingleImageUploadDemo() {
             <img
               src={files[0].preview}
               alt={files[0].file.name}
-              className="h-48 w-full rounded-ppx-m object-cover"
+              className="rounded-ppx-m h-48 w-full object-cover"
             />
             <button
               onClick={() => setFiles([])}
@@ -49,7 +52,7 @@ export function SingleImageUploadDemo() {
             >
               <CloseIcon className="size-4" />
             </button>
-            <div className="absolute bottom-0 left-0 right-0 rounded-b-ppx-m bg-gradient-to-t from-black/60 to-transparent p-3">
+            <div className="rounded-b-ppx-m absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-3">
               <p className="truncate text-sm font-medium text-white">
                 {files[0].file.name}
               </p>
@@ -60,7 +63,7 @@ export function SingleImageUploadDemo() {
           </div>
         )}
       </FileUpload.Root>
-      <p className="mt-2 text-center text-xs text-ppx-neutral-10">
+      <p className="text-ppx-neutral-10 mt-2 text-center text-xs">
         Max size: 5MB • PNG, JPG, GIF
       </p>
     </div>
@@ -82,7 +85,10 @@ export function AvatarUploadDemo() {
         accept="image/*"
         maxSize={2 * 1024 * 1024}
       >
-        <FileUpload.Dropzone hideDefaultContent className="size-32 min-h-0 rounded-full p-0">
+        <FileUpload.Dropzone
+          hideDefaultContent
+          className="size-32 min-h-0 rounded-full p-0"
+        >
           {files.length > 0 ? (
             <img
               src={files[0].preview}
@@ -90,14 +96,14 @@ export function AvatarUploadDemo() {
               className="size-full rounded-full object-cover"
             />
           ) : (
-            <div className="flex flex-col items-center justify-center text-ppx-neutral-10">
+            <div className="text-ppx-neutral-10 flex flex-col items-center justify-center">
               <UserIcon className="size-10" />
               <span className="mt-1 text-xs">Upload</span>
             </div>
           )}
         </FileUpload.Dropzone>
       </FileUpload.Root>
-      <p className="text-xs text-ppx-neutral-10">
+      <p className="text-ppx-neutral-10 text-xs">
         Click or drag to upload avatar
       </p>
     </div>
@@ -129,7 +135,7 @@ export function MultipleImagesGridDemo() {
         {files.length > 0 && (
           <div className="mt-4">
             <div className="mb-2 flex items-center justify-between">
-              <span className="text-sm font-medium text-ppx-neutral-14">
+              <span className="text-ppx-neutral-14 text-sm font-medium">
                 Uploaded ({files.length}/8)
               </span>
               <FileUpload.ClearButton className="text-xs">
@@ -173,10 +179,10 @@ export function MultipleFilesListDemo() {
         {files.length > 0 && (
           <div className="mt-4">
             <div className="mb-2 flex items-center justify-between">
-              <span className="text-sm font-medium text-ppx-neutral-14">
+              <span className="text-ppx-neutral-14 text-sm font-medium">
                 Files ({files.length})
               </span>
-              <FileUpload.ClearButton className="text-xs text-ppx-red-5 hover:text-ppx-red-6">
+              <FileUpload.ClearButton className="text-ppx-red-5 hover:text-ppx-red-6 text-xs">
                 Remove all
               </FileUpload.ClearButton>
             </div>
@@ -184,7 +190,9 @@ export function MultipleFilesListDemo() {
               {(files) =>
                 files.map((file) => (
                   <FileUpload.Item key={file.id} file={file}>
-                    <FileUpload.ItemPreview fallback={<FileTypeIcon type={file.file.type} />} />
+                    <FileUpload.ItemPreview
+                      fallback={<FileTypeIcon type={file.file.type} />}
+                    />
                     <div className="flex min-w-0 flex-1 flex-col">
                       <FileUpload.ItemName />
                       <FileUpload.ItemSize />
@@ -222,7 +230,7 @@ export function CompactUploadDemo() {
             Upload document
           </FileUpload.Trigger>
           {files.length > 0 && (
-            <span className="text-sm text-ppx-neutral-12">
+            <span className="text-ppx-neutral-12 text-sm">
               {files[0].file.name}
             </span>
           )}
@@ -244,7 +252,7 @@ export function UploadWithProgressDemo() {
 
     for (const file of newFiles) {
       if (file.progress !== undefined) continue;
-      
+
       for (let progress = 0; progress <= 100; progress += 5) {
         await new Promise((r) => setTimeout(r, 100));
         setFiles((prev) =>
@@ -271,12 +279,16 @@ export function UploadWithProgressDemo() {
             {(files) =>
               files.map((file) => (
                 <FileUpload.Item key={file.id} file={file}>
-                  <FileUpload.ItemPreview fallback={<FileTypeIcon type={file.file.type} />} />
+                  <FileUpload.ItemPreview
+                    fallback={<FileTypeIcon type={file.file.type} />}
+                  />
                   <div className="flex min-w-0 flex-1 flex-col gap-1.5">
                     <div className="flex items-center justify-between">
                       <FileUpload.ItemName />
-                      <span className="shrink-0 text-xs text-ppx-neutral-10">
-                        {file.progress !== undefined ? `${file.progress}%` : "Pending"}
+                      <span className="text-ppx-neutral-10 shrink-0 text-xs">
+                        {file.progress !== undefined
+                          ? `${file.progress}%`
+                          : "Pending"}
                       </span>
                     </div>
                     <FileUpload.ItemProgress />
@@ -312,7 +324,7 @@ export function InlineImageUploadDemo() {
           {files.map((file) => (
             <div
               key={file.id}
-              className="group relative size-16 overflow-hidden rounded-ppx-s"
+              className="rounded-ppx-s group relative size-16 overflow-hidden"
             >
               <img
                 src={file.preview}
@@ -332,9 +344,9 @@ export function InlineImageUploadDemo() {
           {files.length < 4 && (
             <FileUpload.Dropzone
               hideDefaultContent
-              className="size-16 min-h-0 cursor-pointer rounded-ppx-s border-2 border-dashed border-ppx-neutral-5 p-0 hover:border-ppx-primary-5 hover:bg-ppx-primary-1"
+              className="rounded-ppx-s border-ppx-neutral-5 hover:border-ppx-primary-5 hover:bg-ppx-primary-1 size-16 min-h-0 cursor-pointer border-2 border-dashed p-0"
             >
-              <PlusIcon className="size-6 text-ppx-neutral-8" />
+              <PlusIcon className="text-ppx-neutral-8 size-6" />
             </FileUpload.Dropzone>
           )}
         </div>
@@ -360,45 +372,51 @@ export function FilesTableDemo() {
       >
         <FileUpload.Dropzone size="sm" />
         {files.length > 0 && (
-          <div className="mt-4 overflow-hidden rounded-ppx-s border border-ppx-neutral-4">
-            <div className="flex items-center justify-between bg-ppx-neutral-2 px-4 py-2">
-              <span className="text-sm font-medium text-ppx-neutral-14">
+          <div className="rounded-ppx-s border-ppx-neutral-4 mt-4 overflow-hidden border">
+            <div className="bg-ppx-neutral-2 flex items-center justify-between px-4 py-2">
+              <span className="text-ppx-neutral-14 text-sm font-medium">
                 Files ({files.length})
               </span>
               <div className="flex gap-2">
                 <FileUpload.Trigger size="sm" variant="ghost">
                   Add files
                 </FileUpload.Trigger>
-                <FileUpload.ClearButton size="sm" variant="ghost" className="text-ppx-red-5">
+                <FileUpload.ClearButton
+                  size="sm"
+                  variant="ghost"
+                  className="text-ppx-red-5"
+                >
                   Remove all
                 </FileUpload.ClearButton>
               </div>
             </div>
             <table className="w-full">
-              <thead className="border-b border-ppx-neutral-4 bg-ppx-neutral-1">
-                <tr className="text-left text-xs font-medium text-ppx-neutral-12">
+              <thead className="border-ppx-neutral-4 bg-ppx-neutral-1 border-b">
+                <tr className="text-ppx-neutral-12 text-left text-xs font-medium">
                   <th className="px-4 py-2">Name</th>
                   <th className="px-4 py-2">Type</th>
                   <th className="px-4 py-2">Size</th>
                   <th className="px-4 py-2 text-right">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-ppx-neutral-3">
+              <tbody className="divide-ppx-neutral-3 divide-y">
                 {files.map((file) => (
                   <tr key={file.id} className="text-sm">
-                    <td className="max-w-[200px] truncate px-4 py-2 font-medium text-ppx-neutral-14">
+                    <td className="text-ppx-neutral-14 max-w-[200px] truncate px-4 py-2 font-medium">
                       {file.file.name}
                     </td>
-                    <td className="px-4 py-2 text-ppx-neutral-10">
+                    <td className="text-ppx-neutral-10 px-4 py-2">
                       {getFileExtension(file.file.name).toUpperCase()}
                     </td>
-                    <td className="px-4 py-2 text-ppx-neutral-10">
+                    <td className="text-ppx-neutral-10 px-4 py-2">
                       {formatFileSize(file.file.size)}
                     </td>
                     <td className="px-4 py-2 text-right">
                       <button
                         onClick={() =>
-                          setFiles((prev) => prev.filter((f) => f.id !== file.id))
+                          setFiles((prev) =>
+                            prev.filter((f) => f.id !== file.id),
+                          )
                         }
                         className="text-ppx-red-5 hover:text-ppx-red-6"
                       >
@@ -430,7 +448,7 @@ export function MixedContentCardsDemo() {
         {files.length > 0 && (
           <div className="mt-4">
             <div className="mb-2 flex items-center justify-between">
-              <span className="text-sm font-medium text-ppx-neutral-14">
+              <span className="text-ppx-neutral-14 text-sm font-medium">
                 Files ({files.length})
               </span>
               <FileUpload.ClearButton className="text-xs">
@@ -441,7 +459,7 @@ export function MixedContentCardsDemo() {
               {files.map((file) => (
                 <div
                   key={file.id}
-                  className="group relative overflow-hidden rounded-ppx-s border border-ppx-neutral-4 bg-ppx-neutral-1"
+                  className="rounded-ppx-s border-ppx-neutral-4 bg-ppx-neutral-1 group relative overflow-hidden border"
                 >
                   {file.preview ? (
                     <img
@@ -450,15 +468,15 @@ export function MixedContentCardsDemo() {
                       className="h-24 w-full object-cover"
                     />
                   ) : (
-                    <div className="flex h-24 w-full items-center justify-center bg-ppx-neutral-2">
+                    <div className="bg-ppx-neutral-2 flex h-24 w-full items-center justify-center">
                       <FileTypeIcon type={file.file.type} className="size-10" />
                     </div>
                   )}
                   <div className="p-2">
-                    <p className="truncate text-xs font-medium text-ppx-neutral-14">
+                    <p className="text-ppx-neutral-14 truncate text-xs font-medium">
                       {file.file.name}
                     </p>
-                    <p className="text-xs text-ppx-neutral-10">
+                    <p className="text-ppx-neutral-10 text-xs">
                       {formatFileSize(file.file.size)}
                     </p>
                   </div>
@@ -488,19 +506,19 @@ export function DropzoneSizesDemo() {
   return (
     <div className="flex w-full flex-col gap-6">
       <div>
-        <p className="mb-2 text-xs font-medium text-ppx-neutral-10">Small</p>
+        <p className="text-ppx-neutral-10 mb-2 text-xs font-medium">Small</p>
         <FileUpload.Root>
           <FileUpload.Dropzone size="sm" />
         </FileUpload.Root>
       </div>
       <div>
-        <p className="mb-2 text-xs font-medium text-ppx-neutral-10">Default</p>
+        <p className="text-ppx-neutral-10 mb-2 text-xs font-medium">Default</p>
         <FileUpload.Root>
           <FileUpload.Dropzone size="default" />
         </FileUpload.Root>
       </div>
       <div>
-        <p className="mb-2 text-xs font-medium text-ppx-neutral-10">Large</p>
+        <p className="text-ppx-neutral-10 mb-2 text-xs font-medium">Large</p>
         <FileUpload.Root>
           <FileUpload.Dropzone size="lg" />
         </FileUpload.Root>
@@ -617,7 +635,7 @@ function FileTypeIcon({
       </svg>
     );
   }
-  
+
   // Image
   if (type.startsWith("image/")) {
     return (
@@ -626,7 +644,7 @@ function FileTypeIcon({
       </svg>
     );
   }
-  
+
   // Audio
   if (type.startsWith("audio/")) {
     return (
@@ -635,7 +653,7 @@ function FileTypeIcon({
       </svg>
     );
   }
-  
+
   // Video
   if (type.startsWith("video/")) {
     return (
@@ -644,7 +662,7 @@ function FileTypeIcon({
       </svg>
     );
   }
-  
+
   // Archive/ZIP
   if (type.includes("zip") || type.includes("archive")) {
     return (
@@ -653,7 +671,7 @@ function FileTypeIcon({
       </svg>
     );
   }
-  
+
   // Default file
   return (
     <svg viewBox="0 0 24 24" fill="currentColor" className={className}>
@@ -665,4 +683,3 @@ function FileTypeIcon({
 function getFileExtension(filename: string): string {
   return filename.split(".").pop() || "";
 }
-
