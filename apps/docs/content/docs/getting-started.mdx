@@ -1,0 +1,118 @@
+---
+title: Getting Started
+description: Install and set up PX-UI in your React project
+---
+
+## Installation
+
+Install the packages using your preferred package manager:
+
+```bash
+pnpm add @px-ui/core @px-ui/forms
+```
+
+Or with npm:
+
+```bash
+npm install @px-ui/core @px-ui/forms
+```
+
+## Peer Dependencies
+
+PX-UI requires the following peer dependencies to be installed in your project.
+
+### For @px-ui/core
+
+```bash
+pnpm add @tanstack/react-query date-fns
+```
+
+### For @px-ui/forms
+
+The forms package depends on `@px-ui/core`, so you'll need all the core dependencies plus:
+
+```bash
+pnpm add zod react-hook-form @hookform/resolvers
+```
+
+### Complete Installation
+
+To install everything at once:
+
+```bash
+pnpm add @px-ui/core @px-ui/forms @tanstack/react-query date-fns zod react-hook-form @hookform/resolvers
+```
+
+## CSS Setup
+
+Import the PX-UI styles in your main CSS file (e.g., `globals.css` or `app.css`):
+
+```css
+@import "@px-ui/core/fonts.css";
+@import "@px-ui/core/styles.css";
+```
+
+This will inject:
+- **fonts.css**: The Lato font family used throughout the components
+- **styles.css**: All component styles and design tokens (colors, spacing, typography)
+
+## Quick Start
+
+Here's a simple example using the Button component:
+
+```tsx
+import { Button } from "@px-ui/core";
+
+function App() {
+  return (
+    <div>
+      <Button variant="primary">Click me</Button>
+    </div>
+  );
+}
+```
+
+## Using with Forms
+
+For form handling with validation, use the `@px-ui/forms` package:
+
+```tsx
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { Button, Input } from "@px-ui/core";
+import * as Field from "@px-ui/forms";
+
+const schema = z.object({
+  email: z.string().email(),
+});
+
+function LoginForm() {
+  const { register, handleSubmit, formState: { errors } } = useForm({
+    resolver: zodResolver(schema),
+  });
+
+  return (
+    <form onSubmit={handleSubmit(console.log)}>
+      <Field.Root>
+        <Field.Label>Email</Field.Label>
+        <Field.Content>
+          <Input {...register("email")} />
+          {errors.email && (
+            <Field.Error>{errors.email.message}</Field.Error>
+          )}
+        </Field.Content>
+      </Field.Root>
+      <Button type="submit" variant="primary">
+        Submit
+      </Button>
+    </form>
+  );
+}
+```
+
+## Next Steps
+
+- Browse the [Button](/docs/components/button) component to see available variants
+- Explore all [Components](/docs/components/avatar) in the sidebar
+- Check out [Form Fields](/docs/forms/field) for form building

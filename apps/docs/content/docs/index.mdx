@@ -1,34 +1,51 @@
 ---
-title: Hello World
-description: Your favourite docs framework.
-icon: Rocket
+title: Introduction
+description: A modern React component library built on Base UI
 ---
 
-Hey there! Fumadocs is the docs framework that also works on Tanstack Start!
+PX-UI is a comprehensive React component library that provides beautifully designed, accessible components for building modern web applications.
 
-## Heading
+## Features
 
-Hello World!
+- **Built on Base UI**: Leverages the unstyled, accessible primitives from [Base UI](https://base-ui.com) for solid foundations
+- **Tailwind CSS**: All components are styled using Tailwind CSS with custom design tokens
+- **Form Integration**: First-class support for react-hook-form with Zod validation
+- **TypeScript**: Full TypeScript support with comprehensive type definitions
+
+## Packages
+
+### @px-ui/core
+
+The core package includes all fundamental UI components:
+
+- **Inputs**: Button, Input, Textarea, Checkbox, Switch, RadioGroup
+- **Selection**: Select, Combobox, Menu
+- **Overlays**: Dialog, Popover, Tooltip
+- **Navigation**: Tabs, Breadcrumbs, SegmentedControl
+- **Feedback**: Progress, Spinner
+- **Layout**: Avatar, AvatarGroup, Separator, InputGroup
+- **Data Display**: Calendar, DatePicker
+
+### @px-ui/forms
+
+The forms package provides form-specific components that integrate with react-hook-form:
+
+- **Field**: Composable field components for building forms
+- **SelectField**: Pre-built select field with validation
+- **ComboboxField**: Pre-built combobox field with validation
+- **Form Primitives**: FormInput, FormTextarea, FormCheckbox
+
+## Quick Links
 
 <Cards>
   <Card
-    title="Learn more about Tanstack Start"
-    href="https://tanstack.com/start"
+    title="Getting Started"
+    description="Install and set up PX-UI in your project"
+    href="/docs/getting-started"
   />
-  <Card title="Learn more about Fumadocs" href="https://fumadocs.dev" />
+  <Card
+    title="Components"
+    description="Browse all available components"
+    href="/docs/components/button"
+  />
 </Cards>
-
-### CodeBlock
-
-```ts
-console.log('Hello World');
-```
-
-#### Table
-
-| Head                            | Description                         |
-| ------------------------------- | ----------------------------------- |
-| `hello`                         | Hello World                         |
-| very **important**              | Hey                                 |
-| _Surprisingly_                  | Fumadocs                            |
-| very long text that looks weird | hello world hello world hello world |

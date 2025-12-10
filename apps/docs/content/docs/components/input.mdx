@@ -1,0 +1,138 @@
+---
+title: Input
+description: Text input field with size and width variants
+---
+
+## Overview
+
+The Input component is a styled text input field that supports different sizes, width behaviors, and validation states.
+
+## Installation
+
+```tsx
+import { Input } from "@px-ui/core";
+```
+
+## Usage
+
+### Basic Usage
+
+```tsx
+<Input placeholder="Enter text..." />
+```
+
+### With Value
+
+```tsx
+<Input defaultValue="Hello World" placeholder="Enter text..." />
+```
+
+### Sizes
+
+```tsx
+<Input size="default" placeholder="Default size" />
+<Input size="sm" placeholder="Small size" />
+```
+
+### Width Variants
+
+Control how the input handles its width:
+
+```tsx
+// Full width (default) - takes available space
+<Input widthVariant="full" placeholder="Full width" />
+
+// Enforced - uses minimum width (18rem)
+<Input widthVariant="enforced" placeholder="Enforced width" />
+```
+
+### Input Types
+
+```tsx
+<Input type="text" placeholder="Text input" />
+<Input type="email" placeholder="Email address" />
+<Input type="password" placeholder="Password" />
+<Input type="number" placeholder="Number" />
+<Input type="search" placeholder="Search..." />
+<Input type="tel" placeholder="+1 (555) 000-0000" />
+<Input type="url" placeholder="https://example.com" />
+```
+
+### Disabled State
+
+```tsx
+<Input disabled placeholder="Disabled input" />
+<Input disabled defaultValue="Disabled with value" />
+```
+
+### Invalid State
+
+Use the `invalid` prop to show validation errors:
+
+```tsx
+<Input invalid placeholder="Invalid input" />
+<Input invalid defaultValue="invalid@example" />
+```
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `size` | `"default" \| "sm"` | `"default"` | Size of the input |
+| `widthVariant` | `"enforced" \| "full"` | `"full"` | Width behavior |
+| `invalid` | `boolean` | `false` | Show invalid/error state |
+| `disabled` | `boolean` | `false` | Disable the input |
+| `type` | `string` | `"text"` | Input type (text, email, password, etc.) |
+| `placeholder` | `string` | - | Placeholder text |
+| `className` | `string` | - | Additional CSS classes |
+
+Plus all standard HTML input attributes.
+
+## Features
+
+### Number Input Arrow Removal
+
+When using `type="number"`, the spinner arrows are automatically hidden for a cleaner appearance.
+
+### Validation Styling
+
+The input automatically styles itself based on the `invalid` prop:
+- Invalid inputs have a red outline and light red background
+- Focus states are adjusted accordingly
+
+## Examples
+
+### Form Field
+
+```tsx
+import { Input, Label } from "@px-ui/core";
+
+<div className="flex flex-col gap-2">
+  <Label htmlFor="email">Email</Label>
+  <Input id="email" type="email" placeholder="you@example.com" />
+</div>
+```
+
+### With Error
+
+```tsx
+import { Input } from "@px-ui/core";
+import * as Field from "@px-ui/forms";
+
+<Field.Root>
+  <Field.Label>Email</Field.Label>
+  <Field.Content>
+    <Input invalid placeholder="Email address" />
+    <Field.Error>Please enter a valid email address</Field.Error>
+  </Field.Content>
+</Field.Root>
+```
+
+### Search Input
+
+```tsx
+<div className="relative">
+  <Input type="search" placeholder="Search..." className="pl-10" />
+  <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2" />
+</div>
+```

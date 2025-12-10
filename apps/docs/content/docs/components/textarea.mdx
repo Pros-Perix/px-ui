@@ -1,0 +1,135 @@
+---
+title: Textarea
+description: Multi-line text input with size and width variants
+---
+
+## Overview
+
+The Textarea component provides a styled multi-line text input area with support for different sizes, width behaviors, and validation states.
+
+## Installation
+
+```tsx
+import { Textarea } from "@px-ui/core";
+```
+
+## Usage
+
+### Basic Usage
+
+```tsx
+<Textarea placeholder="Enter your message..." />
+```
+
+### With Default Value
+
+```tsx
+<Textarea defaultValue="Hello World" placeholder="Enter text..." />
+```
+
+### Sizes
+
+```tsx
+<Textarea size="default" placeholder="Default size (min-height: 4rem)" />
+<Textarea size="sm" placeholder="Small size (min-height: 3rem)" />
+```
+
+### Width Variants
+
+Control how the textarea handles its width:
+
+```tsx
+// Full width (default) - takes available space
+<Textarea widthVariant="full" placeholder="Full width" />
+
+// Enforced - uses minimum width (18rem)
+<Textarea widthVariant="enforced" placeholder="Enforced width" />
+```
+
+### Disabled State
+
+```tsx
+<Textarea disabled placeholder="Disabled textarea" />
+```
+
+### Invalid State
+
+Use the `invalid` prop to show validation errors:
+
+```tsx
+<Textarea invalid placeholder="Invalid textarea" />
+```
+
+### Custom Rows
+
+```tsx
+<Textarea rows={6} placeholder="Larger textarea..." />
+```
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `size` | `"default" \| "sm"` | `"default"` | Size of the textarea |
+| `widthVariant` | `"enforced" \| "full"` | `"full"` | Width behavior |
+| `invalid` | `boolean` | `false` | Show invalid/error state |
+| `disabled` | `boolean` | `false` | Disable the textarea |
+| `placeholder` | `string` | - | Placeholder text |
+| `rows` | `number` | - | Number of visible text lines |
+| `className` | `string` | - | Additional CSS classes |
+
+Plus all standard HTML textarea attributes.
+
+## Examples
+
+### Form Field
+
+```tsx
+import { Textarea, Label } from "@px-ui/core";
+
+<div className="flex flex-col gap-2">
+  <Label htmlFor="message">Message</Label>
+  <Textarea id="message" placeholder="Enter your message..." rows={4} />
+</div>
+```
+
+### With Character Count
+
+```tsx
+import { useState } from "react";
+import { Textarea } from "@px-ui/core";
+
+function TextareaWithCount() {
+  const [value, setValue] = useState("");
+  const maxLength = 500;
+
+  return (
+    <div className="flex flex-col gap-1">
+      <Textarea
+        value={value}
+        onChange={(e) => setValue(e.target.value)}
+        maxLength={maxLength}
+        placeholder="Enter description..."
+      />
+      <span className="text-sm text-ppx-muted-foreground text-right">
+        {value.length}/{maxLength}
+      </span>
+    </div>
+  );
+}
+```
+
+### With Error
+
+```tsx
+import { Textarea } from "@px-ui/core";
+import * as Field from "@px-ui/forms";
+
+<Field.Root>
+  <Field.Label>Description</Field.Label>
+  <Field.Content>
+    <Textarea invalid placeholder="Enter description" />
+    <Field.Error>Description is required</Field.Error>
+  </Field.Content>
+</Field.Root>
+```

@@ -9,20 +9,34 @@ export const Route = createFileRoute("/")({
 
 function Home() {
   return (
-    <HomeLayout {...baseOptions()}>
-      <div className="flex flex-1 flex-col justify-center px-4 py-8 text-center">
-        <h1 className="mb-4 text-xl font-medium">
-          Fumadocs on Tanstack Start.
+    <HomeLayout {...baseOptions()} themeSwitch={{ enabled: false }}>
+      <div className="-mt-40 flex flex-1 flex-col items-center justify-center px-4 py-16">
+        <h1 className="text-ppx-h1 font-sans-b text-ppx-foreground mb-4">
+          PX-UI
         </h1>
-        <Link
-          to="/docs/$"
-          params={{
-            _splat: "",
-          }}
-          className={buttonVariants({ className: "mx-auto w-fit" })}
-        >
-          Open Docs
-        </Link>
+        <p className="text-ppx-base text-ppx-muted-foreground mb-8 max-w-md text-center">
+          A modern React component library built on Base UI
+        </p>
+        <div className="flex gap-4">
+          <Link
+            className={buttonVariants({ size: "lg", variant: "primary" })}
+            to="/docs/$"
+            params={{ _splat: "getting-started" }}
+          >
+            Get Started
+          </Link>
+          <Link
+            to="/docs/$"
+            className={buttonVariants({
+              variant: "outline",
+              size: "lg",
+              className: "px-3!",
+            })}
+            params={{ _splat: "components/button" }}
+          >
+            Browse Components
+          </Link>
+        </div>
       </div>
     </HomeLayout>
   );

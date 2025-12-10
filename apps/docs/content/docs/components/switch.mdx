@@ -1,0 +1,157 @@
+---
+title: Switch
+description: Toggle switch for boolean settings
+---
+
+## Overview
+
+The Switch component is a toggle control for switching between two states, typically on/off. It provides a more visual alternative to a checkbox for settings.
+
+## Installation
+
+```tsx
+import { Switch } from "@px-ui/core";
+```
+
+## Base-UI Reference
+
+This component is built on top of [Base UI Switch](https://base-ui.com/react/components/switch).
+
+## Usage
+
+### Basic Usage
+
+```tsx
+<Switch />
+```
+
+### Controlled State
+
+```tsx
+import { useState } from "react";
+
+function Example() {
+  const [enabled, setEnabled] = useState(false);
+
+  return (
+    <Switch
+      checked={enabled}
+      onCheckedChange={setEnabled}
+    />
+  );
+}
+```
+
+### Sizes
+
+```tsx
+<Switch size="sm" />  // Small: 32x16px
+<Switch />            // Default: 40x20px
+<Switch size="lg" />  // Large: 48x24px
+```
+
+### With Label
+
+```tsx
+import { Switch, Label } from "@px-ui/core";
+
+<div className="flex items-center gap-3">
+  <Switch id="notifications" />
+  <Label htmlFor="notifications">Enable notifications</Label>
+</div>
+```
+
+### Disabled State
+
+```tsx
+<Switch disabled />
+<Switch disabled checked />
+```
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `checked` | `boolean` | - | Controlled checked state |
+| `defaultChecked` | `boolean` | - | Initial checked state (uncontrolled) |
+| `onCheckedChange` | `(checked: boolean) => void` | - | Callback when state changes |
+| `size` | `"sm" \| "lg"` | - | Size variant (default is medium) |
+| `disabled` | `boolean` | `false` | Disable the switch |
+| `name` | `string` | - | Form field name |
+| `value` | `string` | - | Form field value |
+| `className` | `string` | - | Additional CSS classes |
+
+## Examples
+
+### Settings Panel
+
+```tsx
+import { Switch, Label } from "@px-ui/core";
+
+function SettingsPanel() {
+  return (
+    <div className="flex flex-col gap-4">
+      <div className="flex items-center justify-between">
+        <div className="flex flex-col">
+          <Label>Dark mode</Label>
+          <span className="text-sm text-ppx-muted-foreground">
+            Enable dark theme
+          </span>
+        </div>
+        <Switch />
+      </div>
+
+      <div className="flex items-center justify-between">
+        <div className="flex flex-col">
+          <Label>Notifications</Label>
+          <span className="text-sm text-ppx-muted-foreground">
+            Receive push notifications
+          </span>
+        </div>
+        <Switch defaultChecked />
+      </div>
+
+      <div className="flex items-center justify-between">
+        <div className="flex flex-col">
+          <Label>Auto-save</Label>
+          <span className="text-sm text-ppx-muted-foreground">
+            Automatically save changes
+          </span>
+        </div>
+        <Switch />
+      </div>
+    </div>
+  );
+}
+```
+
+### Form Integration
+
+```tsx
+import { useForm, Controller } from "react-hook-form";
+import { Switch, Label } from "@px-ui/core";
+
+function PreferencesForm() {
+  const { control, handleSubmit } = useForm({
+    defaultValues: { emailUpdates: false },
+  });
+
+  return (
+    <form onSubmit={handleSubmit(console.log)}>
+      <Controller
+        name="emailUpdates"
+        control={control}
+        render={({ field }) => (
+          <div className="flex items-center gap-3">
+            <Switch
+              checked={field.value}
+              onCheckedChange={field.onChange}
+            />
+            <Label>Email updates</Label>
+          </div>
+        )}
+      />
+    </form>
+  );
+}
+```

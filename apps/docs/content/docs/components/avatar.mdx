@@ -1,0 +1,94 @@
+---
+title: Avatar
+description: Display user or entity profile images with fallback initials
+---
+
+## Overview
+
+The Avatar component displays a user's profile picture with automatic fallback to initials when an image is unavailable. It includes built-in tooltip support and color generation based on the user's name.
+
+## Installation
+
+```tsx
+import { Avatar } from "@px-ui/core";
+```
+
+## Base-UI Reference
+
+This component is built on top of [Base UI Avatar](https://base-ui.com/react/components/avatar).
+
+## Usage
+
+### Basic Usage
+
+```tsx
+<Avatar
+  imgSrc="https://example.com/user.jpg"
+  name="John Doe"
+  size="40px"
+/>
+```
+
+### With Fallback Initials
+
+When no image is provided, the avatar automatically displays initials derived from the name:
+
+```tsx
+<Avatar name="John Doe" size="40px" />
+```
+
+### Variants
+
+The avatar supports two shape variants:
+
+```tsx
+// Squared (default)
+<Avatar name="Acme Inc" size="40px" variant="squared" />
+
+// Rounded (circular)
+<Avatar name="John Doe" size="40px" variant="rounded" />
+```
+
+### Custom Size
+
+```tsx
+<Avatar
+  imgSrc="https://example.com/user.jpg"
+  name="John Doe"
+  size="60px"
+/>
+```
+
+### Hide Tooltip
+
+By default, the avatar shows a tooltip with the name on hover. You can disable this:
+
+```tsx
+<Avatar
+  name="John Doe"
+  size="40px"
+  hideTooltip
+/>
+```
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `imgSrc` | `string \| null \| undefined` | - | URL of the avatar image |
+| `name` | `string \| null \| undefined` | - | Name used for fallback initials and tooltip |
+| `variant` | `"squared" \| "rounded"` | `"squared"` | Shape of the avatar |
+| `size` | `` `${number}px` `` | `"100px"` | Size of the avatar |
+| `className` | `string` | - | Additional CSS classes |
+| `hideTooltip` | `boolean` | `false` | Hide the name tooltip on hover |
+| `children` | `ReactNode` | - | Additional content to render inside the avatar |
+
+## Features
+
+### Automatic Color Generation
+
+When displaying initials, the avatar automatically generates a background color based on the user's name, ensuring consistent colors for the same name across your application.
+
+### Image URL Size Replacement
+
+The component automatically adjusts image URLs that contain `/SIZE/` placeholder with the actual requested size (e.g., `/40x40/`).

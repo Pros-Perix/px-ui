@@ -1,0 +1,186 @@
+---
+title: Button
+description: Interactive button component with multiple variants and sizes
+---
+
+## Overview
+
+The Button component is a versatile, styled button that supports multiple visual variants and sizes. It's built using class-variance-authority for type-safe variant management.
+
+## Installation
+
+```tsx
+import { Button, buttonVariants } from "@px-ui/core";
+```
+
+## Usage
+
+### Basic Usage
+
+```tsx
+<Button>Click me</Button>
+```
+
+### Variants
+
+The button supports seven visual variants:
+
+```tsx
+<Button variant="default">Default</Button>
+<Button variant="primary">Primary</Button>
+<Button variant="destructive">Destructive</Button>
+<Button variant="outline">Outline</Button>
+<Button variant="primary-outline">Primary Outline</Button>
+<Button variant="ghost">Ghost</Button>
+<Button variant="link">Link</Button>
+```
+
+### Sizes
+
+Five size options are available:
+
+```tsx
+<Button size="sm">Small</Button>
+<Button size="default">Default</Button>
+<Button size="lg">Large</Button>
+<Button size="icon">Icon</Button>
+<Button size="icon-sm">Icon Small</Button>
+```
+
+### With Icons
+
+Buttons can include icons on either side:
+
+```tsx
+// Icon on the left
+<Button variant="primary">
+  <PlusIcon />
+  Add New
+</Button>
+
+// Icon on the right
+<Button>
+  Next
+  <ArrowRightIcon />
+</Button>
+```
+
+### Icon-Only Buttons
+
+For icon-only buttons, use the `icon` or `icon-sm` size:
+
+```tsx
+<Button size="icon" variant="ghost">
+  <StarIcon />
+</Button>
+```
+
+### Loading State
+
+Combine with the Spinner component for loading states:
+
+```tsx
+import { Button, Spinner } from "@px-ui/core";
+
+<Button variant="primary" disabled>
+  <Spinner size="small" />
+  Saving...
+</Button>
+```
+
+### Full Width
+
+```tsx
+<Button variant="primary" className="w-full">
+  Full Width Button
+</Button>
+```
+
+### Disabled State
+
+```tsx
+<Button disabled>Disabled Button</Button>
+<Button variant="primary" disabled>Disabled Primary</Button>
+```
+
+## Using buttonVariants
+
+The `buttonVariants` function can be used to apply button styles to other elements:
+
+```tsx
+import { buttonVariants } from "@px-ui/core";
+import { Link } from "your-router";
+
+<Link
+  to="/dashboard"
+  className={buttonVariants({ variant: "primary", size: "lg" })}
+>
+  Go to Dashboard
+</Link>
+```
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `variant` | `"default" \| "primary" \| "destructive" \| "outline" \| "primary-outline" \| "ghost" \| "link"` | `"default"` | Visual style variant |
+| `size` | `"default" \| "sm" \| "lg" \| "icon" \| "icon-sm"` | `"default"` | Size of the button |
+| `disabled` | `boolean` | `false` | Disable the button |
+| `className` | `string` | - | Additional CSS classes |
+| `children` | `ReactNode` | - | Button content |
+
+Plus all standard HTML button attributes.
+
+## Examples
+
+### Button Group
+
+```tsx
+<div className="flex gap-2">
+  <Button variant="outline">Cancel</Button>
+  <Button variant="primary">Save</Button>
+</div>
+```
+
+### Dialog Actions
+
+```tsx
+<div className="flex justify-end gap-3">
+  <Button variant="ghost">Cancel</Button>
+  <Button variant="destructive">Delete Account</Button>
+</div>
+```
+
+### Form Submit
+
+```tsx
+<div className="flex items-center justify-between">
+  <Button variant="ghost">
+    <ArrowLeftIcon />
+    Back
+  </Button>
+  <div className="flex gap-3">
+    <Button variant="outline">Save as Draft</Button>
+    <Button variant="primary">
+      Publish
+      <CheckIcon />
+    </Button>
+  </div>
+</div>
+```
+
+### Toolbar
+
+```tsx
+<div className="flex gap-1 rounded-lg border p-1">
+  <Button variant="ghost" size="icon-sm">
+    <MenuIcon />
+  </Button>
+  <Button variant="ghost" size="icon-sm">
+    <SettingsIcon />
+  </Button>
+  <Button variant="ghost" size="icon-sm">
+    <StarIcon />
+  </Button>
+</div>
+```

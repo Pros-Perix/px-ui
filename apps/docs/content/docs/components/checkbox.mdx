@@ -1,0 +1,163 @@
+---
+title: Checkbox
+description: Interactive checkbox input with support for checked and indeterminate states
+---
+
+## Overview
+
+The Checkbox component provides a styled checkbox input with support for checked, unchecked, and indeterminate states.
+
+## Installation
+
+```tsx
+import { Checkbox } from "@px-ui/core";
+```
+
+## Base-UI Reference
+
+This component is built on top of [Base UI Checkbox](https://base-ui.com/react/components/checkbox).
+
+## Usage
+
+### Basic Usage
+
+```tsx
+<Checkbox />
+```
+
+### Controlled State
+
+```tsx
+import { useState } from "react";
+
+function Example() {
+  const [checked, setChecked] = useState(false);
+
+  return (
+    <Checkbox
+      checked={checked}
+      onCheckedChange={setChecked}
+    />
+  );
+}
+```
+
+### Sizes
+
+```tsx
+<Checkbox size="sm" />   // 16px
+<Checkbox size="default" /> // 20px
+<Checkbox size="lg" />   // 24px
+```
+
+### Indeterminate State
+
+Used for "select all" checkboxes when only some items are selected:
+
+```tsx
+<Checkbox indeterminate />
+```
+
+### With Label
+
+```tsx
+import { Checkbox, Label } from "@px-ui/core";
+
+<div className="flex items-center gap-2">
+  <Checkbox id="terms" />
+  <Label htmlFor="terms">Accept terms and conditions</Label>
+</div>
+```
+
+### Disabled State
+
+```tsx
+<Checkbox disabled />
+<Checkbox disabled checked />
+```
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `checked` | `boolean` | - | Controlled checked state |
+| `defaultChecked` | `boolean` | - | Initial checked state (uncontrolled) |
+| `onCheckedChange` | `(checked: boolean) => void` | - | Callback when checked state changes |
+| `indeterminate` | `boolean` | `false` | Show indeterminate state (minus icon) |
+| `size` | `"default" \| "sm" \| "lg"` | `"default"` | Size of the checkbox |
+| `disabled` | `boolean` | `false` | Disable the checkbox |
+| `name` | `string` | - | Form field name |
+| `value` | `string` | - | Form field value |
+| `className` | `string` | - | Additional CSS classes |
+
+## Examples
+
+### Checkbox Group
+
+```tsx
+import { Checkbox, Label } from "@px-ui/core";
+
+function Preferences() {
+  return (
+    <div className="flex flex-col gap-3">
+      <div className="flex items-center gap-2">
+        <Checkbox id="email" />
+        <Label htmlFor="email">Email notifications</Label>
+      </div>
+      <div className="flex items-center gap-2">
+        <Checkbox id="sms" />
+        <Label htmlFor="sms">SMS notifications</Label>
+      </div>
+      <div className="flex items-center gap-2">
+        <Checkbox id="push" />
+        <Label htmlFor="push">Push notifications</Label>
+      </div>
+    </div>
+  );
+}
+```
+
+### Select All Pattern
+
+```tsx
+import { useState } from "react";
+import { Checkbox, Label } from "@px-ui/core";
+
+function SelectAllExample() {
+  const [items, setItems] = useState([false, false, false]);
+
+  const allChecked = items.every(Boolean);
+  const someChecked = items.some(Boolean);
+
+  return (
+    <div className="flex flex-col gap-2">
+      <div className="flex items-center gap-2">
+        <Checkbox
+          checked={allChecked}
+          indeterminate={someChecked && !allChecked}
+          onCheckedChange={(checked) => {
+            setItems(items.map(() => checked));
+          }}
+        />
+        <Label>Select all</Label>
+      </div>
+
+      <div className="ml-6 flex flex-col gap-2">
+        {items.map((checked, i) => (
+          <div key={i} className="flex items-center gap-2">
+            <Checkbox
+              checked={checked}
+              onCheckedChange={(newChecked) => {
+                const newItems = [...items];
+                newItems[i] = newChecked;
+                setItems(newItems);
+              }}
+            />
+            <Label>Item {i + 1}</Label>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+```

@@ -1,0 +1,172 @@
+---
+title: AvatarGroup
+description: Display a group of avatars with overflow handling
+---
+
+## Overview
+
+The AvatarGroup component displays multiple avatars in a stacked layout with automatic overflow handling. When there are more avatars than the maximum display count, a popover shows the remaining avatars.
+
+## Installation
+
+```tsx
+import { AvatarGroup } from "@px-ui/core";
+```
+
+## Usage
+
+### Basic Usage
+
+```tsx
+<AvatarGroup
+  avatars={[
+    { name: "John Doe", imgSrc: "/avatars/john.jpg", size: "40px" },
+    { name: "Jane Smith", imgSrc: "/avatars/jane.jpg", size: "40px" },
+    { name: "Bob Wilson", imgSrc: "/avatars/bob.jpg", size: "40px" },
+  ]}
+/>
+```
+
+### With Overflow
+
+When there are more avatars than the `max` prop allows, the remaining count is shown:
+
+```tsx
+<AvatarGroup
+  max={3}
+  avatars={[
+    { name: "John Doe", imgSrc: "/avatars/john.jpg", size: "40px" },
+    { name: "Jane Smith", imgSrc: "/avatars/jane.jpg", size: "40px" },
+    { name: "Bob Wilson", imgSrc: "/avatars/bob.jpg", size: "40px" },
+    { name: "Alice Brown", imgSrc: "/avatars/alice.jpg", size: "40px" },
+    { name: "Charlie Davis", imgSrc: "/avatars/charlie.jpg", size: "40px" },
+  ]}
+/>
+// Displays: [John] [Jane] [Bob] [+2]
+```
+
+### Custom Maximum
+
+```tsx
+// Show more avatars before overflow
+<AvatarGroup
+  max={6}
+  avatars={avatars}
+/>
+
+// Show fewer
+<AvatarGroup
+  max={2}
+  avatars={avatars}
+/>
+```
+
+### Different Variants
+
+The avatar group inherits the variant from the first avatar:
+
+```tsx
+// Rounded avatars
+<AvatarGroup
+  avatars={[
+    { name: "John", imgSrc: "/john.jpg", size: "32px", variant: "rounded" },
+    { name: "Jane", imgSrc: "/jane.jpg", size: "32px", variant: "rounded" },
+  ]}
+/>
+
+// Squared avatars (default)
+<AvatarGroup
+  avatars={[
+    { name: "Company A", imgSrc: "/a.jpg", size: "32px", variant: "squared" },
+    { name: "Company B", imgSrc: "/b.jpg", size: "32px", variant: "squared" },
+  ]}
+/>
+```
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `avatars` | `AvatarProps[]` | - | Array of avatar props (name, imgSrc, size, variant) |
+| `max` | `number` | `4` | Maximum number of avatars to display before overflow |
+| `className` | `string` | - | Additional CSS classes |
+
+### Avatar Props
+
+Each item in the `avatars` array accepts the same props as the Avatar component:
+
+| Prop | Type | Description |
+|------|------|-------------|
+| `name` | `string` | Name for tooltip and fallback initials |
+| `imgSrc` | `string` | URL of the avatar image |
+| `size` | `string` | Size of the avatar (e.g., "40px") |
+| `variant` | `"squared" \| "rounded"` | Shape of the avatar |
+
+## Features
+
+### Tooltip Support
+
+Each avatar shows a tooltip with the name on hover.
+
+### Popover for Overflow
+
+Clicking or hovering on the overflow indicator (+N) opens a popover showing all hidden avatars with their names.
+
+### Stacked Layout
+
+Avatars are automatically stacked with a slight overlap, creating a cohesive group appearance.
+
+## Examples
+
+### Team Members Display
+
+```tsx
+function TeamMembers({ members }) {
+  return (
+    <div className="flex items-center gap-3">
+      <AvatarGroup
+        max={4}
+        avatars={members.map((member) => ({
+          name: member.name,
+          imgSrc: member.avatar,
+          size: "36px",
+          variant: "rounded",
+        }))}
+      />
+      <span className="text-sm text-ppx-muted-foreground">
+        {members.length} team members
+      </span>
+    </div>
+  );
+}
+```
+
+### Project Contributors
+
+```tsx
+function ProjectCard({ project }) {
+  return (
+    <div className="rounded-lg border p-4">
+      <h3 className="font-medium">{project.name}</h3>
+      <p className="text-sm text-ppx-muted-foreground mb-4">
+        {project.description}
+      </p>
+
+      <div className="flex items-center justify-between">
+        <AvatarGroup
+          max={3}
+          avatars={project.contributors.map((c) => ({
+            name: c.name,
+            imgSrc: c.avatar,
+            size: "28px",
+            variant: "rounded",
+          }))}
+        />
+        <span className="text-xs text-ppx-muted-foreground">
+          Updated 2h ago
+        </span>
+      </div>
+    </div>
+  );
+}
+```

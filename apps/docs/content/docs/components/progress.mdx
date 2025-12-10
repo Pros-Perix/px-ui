@@ -1,0 +1,200 @@
+---
+title: Progress
+description: Progress indicator showing completion status
+---
+
+## Overview
+
+The Progress component displays the completion status of a task or operation. It consists of composable parts for flexible layouts.
+
+## Installation
+
+```tsx
+import * as Progress from "@px-ui/core";
+```
+
+## Base-UI Reference
+
+This component is built on top of [Base UI Progress](https://base-ui.com/react/components/progress).
+
+## Usage
+
+### Basic Usage
+
+```tsx
+import * as Progress from "@px-ui/core";
+
+<Progress.Root value={60}>
+  <Progress.Track>
+    <Progress.Indicator />
+  </Progress.Track>
+</Progress.Root>
+```
+
+### With Label and Value
+
+```tsx
+<Progress.Root value={75}>
+  <div className="flex items-center justify-between mb-2">
+    <Progress.Label>Loading...</Progress.Label>
+    <Progress.Value />
+  </div>
+  <Progress.Track>
+    <Progress.Indicator />
+  </Progress.Track>
+</Progress.Root>
+```
+
+### Sizes
+
+The track supports three size variants:
+
+```tsx
+// Small
+<Progress.Root value={50}>
+  <Progress.Track size="sm">
+    <Progress.Indicator />
+  </Progress.Track>
+</Progress.Root>
+
+// Default
+<Progress.Root value={50}>
+  <Progress.Track>
+    <Progress.Indicator />
+  </Progress.Track>
+</Progress.Root>
+
+// Large
+<Progress.Root value={50}>
+  <Progress.Track size="lg">
+    <Progress.Indicator />
+  </Progress.Track>
+</Progress.Root>
+```
+
+### Indeterminate State
+
+For operations with unknown duration:
+
+```tsx
+<Progress.Root value={null}>
+  <Progress.Track>
+    <Progress.Indicator />
+  </Progress.Track>
+</Progress.Root>
+```
+
+## Components
+
+### Progress.Root
+
+Container component that provides progress context.
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `value` | `number \| null` | - | Progress value (0-100). Use `null` for indeterminate |
+| `min` | `number` | `0` | Minimum value |
+| `max` | `number` | `100` | Maximum value |
+
+### Progress.Track
+
+The background track of the progress bar.
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `size` | `"default" \| "sm" \| "lg"` | `"default"` | Height of the track |
+| `className` | `string` | - | Additional CSS classes |
+
+### Progress.Indicator
+
+The filled portion indicating progress.
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `className` | `string` | - | Additional CSS classes |
+
+### Progress.Label
+
+Text label for the progress bar.
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `className` | `string` | - | Additional CSS classes |
+
+### Progress.Value
+
+Displays the current progress value.
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `className` | `string` | - | Additional CSS classes |
+
+## Examples
+
+### File Upload Progress
+
+```tsx
+import * as Progress from "@px-ui/core";
+
+function FileUpload({ progress, filename }) {
+  return (
+    <div className="rounded-lg border p-4">
+      <div className="flex items-center gap-3 mb-3">
+        <FileIcon />
+        <span className="flex-1 font-medium">{filename}</span>
+        <Progress.Value className="text-sm" />
+      </div>
+
+      <Progress.Root value={progress}>
+        <Progress.Track size="sm">
+          <Progress.Indicator />
+        </Progress.Track>
+      </Progress.Root>
+    </div>
+  );
+}
+```
+
+### Multi-Step Progress
+
+```tsx
+function StepProgress({ currentStep, totalSteps }) {
+  const progress = (currentStep / totalSteps) * 100;
+
+  return (
+    <Progress.Root value={progress}>
+      <div className="flex items-center justify-between mb-2">
+        <Progress.Label>
+          Step {currentStep} of {totalSteps}
+        </Progress.Label>
+        <span className="text-sm text-ppx-muted-foreground">
+          {Math.round(progress)}% complete
+        </span>
+      </div>
+      <Progress.Track>
+        <Progress.Indicator />
+      </Progress.Track>
+    </Progress.Root>
+  );
+}
+```
+
+### Loading State
+
+```tsx
+function LoadingCard() {
+  return (
+    <div className="rounded-lg border p-4">
+      <h3 className="font-medium mb-4">Processing...</h3>
+      <Progress.Root value={null}>
+        <Progress.Track>
+          <Progress.Indicator className="animate-pulse" />
+        </Progress.Track>
+      </Progress.Root>
+      <p className="text-sm text-ppx-muted-foreground mt-2">
+        Please wait while we process your request
+      </p>
+    </div>
+  );
+}
+```
