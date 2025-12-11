@@ -65,7 +65,7 @@ function useFileUploadContext() {
 
 export interface RootProps {
   children: React.ReactNode;
-  /** Files from the useFileUploadWithUploader hook */
+  /** Files from the useFileUpload hook */
   files: FileUploadFile[] | FileWithUploadStatus[];
   /** Add files action from the hook */
   addFiles: (files: FileList | File[]) => void;

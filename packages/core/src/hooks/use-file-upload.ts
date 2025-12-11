@@ -160,7 +160,7 @@ export type FileUploadWithUploaderActions = Omit<
   cancelUpload: (id: string) => void;
 };
 
-export const useFileUploadWithUploader = (
+export const useFileUpload = (
   options: FileUploadWithUploaderOptions = {},
 ): [FileUploadWithUploaderState, FileUploadWithUploaderActions] => {
   const { upload, ...baseOptions } = options;

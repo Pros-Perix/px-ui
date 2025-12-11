@@ -4,11 +4,7 @@ description: A composable, accessible file upload component with drag-and-drop, 
 icon: Upload
 ---
 
-import {
-  FileUpload,
-  FileUploadSimple,
-  useFileUploadWithUploader,
-} from "@px-ui/core";
+import { FileUpload, FileUploadSimple, useFileUpload } from "@px-ui/core";
 import { ComponentPreview } from "../../../src/components/component-preview";
 import {
   BasicDropzoneDemo,
@@ -32,7 +28,7 @@ import {
 
 A flexible file upload solution with two approaches:
 
-- **`FileUpload.*`** - UI-only composable components powered by the `useFileUploadWithUploader` hook
+- **`FileUpload.*`** - UI-only composable components powered by the `useFileUpload` hook
 - **`FileUploadSimple`** - Ready-to-use component with built-in state management and upload support
 
 ## Installation
@@ -45,10 +41,7 @@ npm install @px-ui/core
 
 ```tsx
 // Composable components + hook
-import {
-  FileUpload,
-  useFileUploadWithUploader,
-} from "@px-ui/core";
+import { FileUpload, useFileUpload } from "@px-ui/core";
 
 // Simple component with built-in state
 import { FileUploadSimple } from "@px-ui/core";
@@ -199,15 +192,15 @@ For image uploads, show a grid instead of a list.
 
 ---
 
-## useFileUploadWithUploader Hook
+## useFileUpload Hook
 
-The `useFileUploadWithUploader` hook provides all the state and actions needed for file upload functionality. Use this hook with the `FileUpload.*` components for full customization.
+The `useFileUpload` hook provides all the state and actions needed for file upload functionality. Use this hook with the `FileUpload.*` components for full customization.
 
 ```tsx
-import { useFileUploadWithUploader, FileUpload } from "@px-ui/core";
+import { useFileUpload, FileUpload } from "@px-ui/core";
 
 function CustomUploader() {
-  const [state, actions] = useFileUploadWithUploader({
+  const [state, actions] = useFileUpload({
     maxFiles: 5,
     maxSize: 10 * 1024 * 1024,
     accept: "image/*,.pdf",
@@ -331,7 +324,7 @@ interface UploadConfig {
 
 ## Composable Components (FileUpload.\*)
 
-The `FileUpload.*` components are UI-only and require the `useFileUploadWithUploader` hook for state management.
+The `FileUpload.*` components are UI-only and require the `useFileUpload` hook for state management.
 
 ## Examples
 
@@ -344,10 +337,10 @@ The default dropzone with drag-and-drop, paste, and browse button.
 </ComponentPreview>
 
 ```tsx
-import { FileUpload, useFileUploadWithUploader } from "@px-ui/core";
+import { FileUpload, useFileUpload } from "@px-ui/core";
 
 function BasicDropzone() {
-  const [state, actions] = useFileUploadWithUploader({
+  const [state, actions] = useFileUpload({
     onFilesChange: (files) => console.log(files),
   });
 
@@ -383,7 +376,7 @@ Upload a single image with full-size preview overlay.
 
 ```tsx
 function SingleImageUpload() {
-  const [state, actions] = useFileUploadWithUploader({
+  const [state, actions] = useFileUpload({
     accept: "image/*",
     maxSize: 5 * 1024 * 1024,
     multiple: false,
@@ -442,7 +435,7 @@ Circular avatar upload with hover state.
 
 ```tsx
 function AvatarUpload() {
-  const [state, actions] = useFileUploadWithUploader({
+  const [state, actions] = useFileUpload({
     accept: "image/*",
     multiple: false,
   });
@@ -496,7 +489,7 @@ Upload multiple images displayed in a responsive grid.
 
 ```tsx
 function MultipleImagesGrid() {
-  const [state, actions] = useFileUploadWithUploader({
+  const [state, actions] = useFileUpload({
     accept: "image/*",
     maxFiles: 8,
     multiple: true,
@@ -547,7 +540,7 @@ Upload multiple files with detailed list view.
 
 ```tsx
 function MultipleFilesList() {
-  const [state, actions] = useFileUploadWithUploader({
+  const [state, actions] = useFileUpload({
     maxFiles: 10,
     multiple: true,
   });
@@ -599,7 +592,7 @@ A simple button trigger without dropzone.
 
 ```tsx
 function CompactUpload() {
-  const [state, actions] = useFileUploadWithUploader({
+  const [state, actions] = useFileUpload({
     accept: ".pdf,.doc,.docx",
     multiple: false,
   });
@@ -643,7 +636,7 @@ Files with upload progress indicator.
 
 ```tsx
 function UploadWithProgress() {
-  const [state, actions] = useFileUploadWithUploader({
+  const [state, actions] = useFileUpload({
     multiple: true,
     upload: {
       autoUpload: true,
@@ -714,7 +707,7 @@ Compact inline image picker with add button.
 
 ```tsx
 function InlineImageUpload() {
-  const [state, actions] = useFileUploadWithUploader({
+  const [state, actions] = useFileUpload({
     accept: "image/*",
     maxFiles: 4,
     multiple: true,
@@ -769,7 +762,7 @@ Display uploaded files in a table format.
 
 ```tsx
 function FilesTable() {
-  const [state, actions] = useFileUploadWithUploader({
+  const [state, actions] = useFileUpload({
     maxFiles: 10,
     multiple: true,
   });
@@ -837,7 +830,7 @@ Display mixed file types in card grid.
 
 ```tsx
 function MixedContentCards() {
-  const [state, actions] = useFileUploadWithUploader({
+  const [state, actions] = useFileUpload({
     multiple: true,
   });
 
@@ -921,12 +914,12 @@ Available size variants for the dropzone.
 
 ## Validation
 
-Validation is handled by the `useFileUploadWithUploader` hook:
+Validation is handled by the `useFileUpload` hook:
 
 ### File Type Restriction
 
 ```tsx
-const [state, actions] = useFileUploadWithUploader({
+const [state, actions] = useFileUpload({
   accept: "image/*,.pdf",
 });
 
@@ -939,7 +932,7 @@ if (state.errors.length > 0) {
 ### File Size Limit
 
 ```tsx
-const [state, actions] = useFileUploadWithUploader({
+const [state, actions] = useFileUpload({
   maxSize: 5 * 1024 * 1024, // 5MB
 });
 ```
@@ -947,7 +940,7 @@ const [state, actions] = useFileUploadWithUploader({
 ### Max Files Limit
 
 ```tsx
-const [state, actions] = useFileUploadWithUploader({
+const [state, actions] = useFileUpload({
   multiple: true,
   maxFiles: 5,
 });
@@ -1013,7 +1006,7 @@ interface FileUploadFile {
 
 ## Best Practices
 
-- **Use the hook**: Always use `useFileUploadWithUploader` with `FileUpload.*` components
+- **Use the hook**: Always use `useFileUpload` with `FileUpload.*` components
 - **Provide clear constraints**: Pass validation options to the hook
 - **Show progress**: Use `ItemProgress` for upload feedback
 - **Handle errors**: Check `state.errors` for validation messages

@@ -2,7 +2,7 @@ import * as React from "react";
 import {
   FileUpload,
   FileUploadSimple,
-  useFileUploadWithUploader,
+  useFileUpload,
   type FileUploadFile,
   type FileWithUploadStatus,
   type FileWithPreview,
@@ -15,7 +15,7 @@ import {
 // ============================================================================
 
 export function BasicDropzoneDemo() {
-  const [state, actions] = useFileUploadWithUploader({
+  const [state, actions] = useFileUpload({
     onFilesChange: (files) => console.log(files),
   });
 
@@ -43,7 +43,7 @@ export function BasicDropzoneDemo() {
 // ============================================================================
 
 export function SingleImageUploadDemo() {
-  const [state, actions] = useFileUploadWithUploader({
+  const [state, actions] = useFileUpload({
     accept: "image/*",
     maxSize: 5 * 1024 * 1024,
     multiple: false,
@@ -107,7 +107,7 @@ export function SingleImageUploadDemo() {
 // ============================================================================
 
 export function AvatarUploadDemo() {
-  const [state, actions] = useFileUploadWithUploader({
+  const [state, actions] = useFileUpload({
     accept: "image/*",
     maxSize: 2 * 1024 * 1024,
     multiple: false,
@@ -159,7 +159,7 @@ export function AvatarUploadDemo() {
 // ============================================================================
 
 export function MultipleImagesGridDemo() {
-  const [state, actions] = useFileUploadWithUploader({
+  const [state, actions] = useFileUpload({
     accept: "image/*",
     maxSize: 5 * 1024 * 1024,
     maxFiles: 8,
@@ -217,7 +217,7 @@ export function MultipleImagesGridDemo() {
 // ============================================================================
 
 export function MultipleFilesListDemo() {
-  const [state, actions] = useFileUploadWithUploader({
+  const [state, actions] = useFileUpload({
     maxSize: 100 * 1024 * 1024,
     maxFiles: 10,
     multiple: true,
@@ -281,7 +281,7 @@ export function MultipleFilesListDemo() {
 // ============================================================================
 
 export function CompactUploadDemo() {
-  const [state, actions] = useFileUploadWithUploader({
+  const [state, actions] = useFileUpload({
     accept: ".pdf,.doc,.docx",
     maxSize: 10 * 1024 * 1024,
     multiple: false,
@@ -324,7 +324,7 @@ export function CompactUploadDemo() {
 // ============================================================================
 
 export function UploadWithProgressDemo() {
-  const [state, actions] = useFileUploadWithUploader({
+  const [state, actions] = useFileUpload({
     multiple: true,
     upload: {
       autoUpload: true,
@@ -399,7 +399,7 @@ export function UploadWithProgressDemo() {
 // ============================================================================
 
 export function InlineImageUploadDemo() {
-  const [state, actions] = useFileUploadWithUploader({
+  const [state, actions] = useFileUpload({
     accept: "image/*",
     maxFiles: 4,
     multiple: true,
@@ -460,7 +460,7 @@ export function InlineImageUploadDemo() {
 // ============================================================================
 
 export function FilesTableDemo() {
-  const [state, actions] = useFileUploadWithUploader({
+  const [state, actions] = useFileUpload({
     maxFiles: 10,
     multiple: true,
   });
@@ -546,7 +546,7 @@ export function FilesTableDemo() {
 // ============================================================================
 
 export function MixedContentCardsDemo() {
-  const [state, actions] = useFileUploadWithUploader({
+  const [state, actions] = useFileUpload({
     multiple: true,
   });
 
@@ -623,9 +623,9 @@ export function MixedContentCardsDemo() {
 // ============================================================================
 
 export function DropzoneSizesDemo() {
-  const [stateSmall, actionsSmall] = useFileUploadWithUploader({});
-  const [stateDefault, actionsDefault] = useFileUploadWithUploader({});
-  const [stateLarge, actionsLarge] = useFileUploadWithUploader({});
+  const [stateSmall, actionsSmall] = useFileUpload({});
+  const [stateDefault, actionsDefault] = useFileUpload({});
+  const [stateLarge, actionsLarge] = useFileUpload({});
 
   return (
     <div className="flex w-full flex-col gap-6">
