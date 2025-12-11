@@ -4,6 +4,10 @@ import { cn } from "../utils";
 import { Button } from "./button";
 import UploadCloudIcon from "../icons/upload-cloud-icon";
 import CloseIcon from "../icons/close-icon";
+import CheckIcon from "../icons/check-icon";
+import RetryIcon from "../icons/retry-icon";
+import SpinnerIcon from "../icons/spinner-icon";
+import UploadIcon from "../icons/upload-icon";
 import type {
   FileWithUploadStatus,
   FileUploadWithUploaderActions,
@@ -33,10 +37,12 @@ interface FileUploadContextValue {
   addFiles: (files: FileList | File[]) => void;
   removeFile: (id: string) => void;
   clearFiles: () => void;
+  retryUpload?: (id: string) => Promise<void>;
   accept?: string;
   multiple: boolean;
   disabled: boolean;
   isDragActive: boolean;
+  isUploading: boolean;
   openFileDialog: () => void;
   getInputProps: FileUploadWithUploaderActions["getInputProps"];
   handleDragEnter: FileUploadWithUploaderActions["handleDragEnter"];
@@ -73,6 +79,8 @@ export interface RootProps {
   removeFile: (id: string) => void;
   /** Clear files action from the hook */
   clearFiles: () => void;
+  /** Retry upload action from the hook */
+  retryUpload?: (id: string) => Promise<void>;
   /** Open file dialog action from the hook */
   openFileDialog: () => void;
   /** Get input props from the hook */
@@ -87,6 +95,8 @@ export interface RootProps {
   handleDrop: FileUploadWithUploaderActions["handleDrop"];
   /** Whether dragging is active (from hook state) */
   isDragActive?: boolean;
+  /** Whether upload is in progress (from hook state) */
+  isUploading?: boolean;
   /** Accepted file types (e.g., "image/*,.pdf") */
   accept?: string;
   /** Allow multiple file selection */
@@ -102,6 +112,7 @@ function Root({
   addFiles,
   removeFile,
   clearFiles,
+  retryUpload,
   openFileDialog,
   getInputProps,
   handleDragEnter,
@@ -109,6 +120,7 @@ function Root({
   handleDragOver,
   handleDrop,
   isDragActive = false,
+  isUploading = false,
   accept,
   multiple = false,
   disabled = false,
@@ -119,10 +131,12 @@ function Root({
     addFiles,
     removeFile,
     clearFiles,
+    retryUpload,
     accept,
     multiple,
     disabled,
     isDragActive,
+    isUploading,
     openFileDialog,
     getInputProps,
     handleDragEnter,
@@ -194,6 +208,7 @@ function Dropzone({
     multiple,
     disabled,
     isDragActive,
+    isUploading,
     openFileDialog,
     getInputProps,
     handleDragEnter,
@@ -304,9 +319,16 @@ function Dropzone({
             type="button"
             variant="default"
             onClick={openFileDialog}
-            disabled={disabled}
+            disabled={disabled || isUploading}
           >
-            {browseText}
+            {isUploading ? (
+              <>
+                <SpinnerIcon className="size-4 animate-spin" />
+                Uploading...
+              </>
+            ) : (
+              browseText
+            )}
           </Button>
         </>
       ) : null}
@@ -318,20 +340,44 @@ function Dropzone({
 // Trigger Component (standalone button)
 // ============================================================================
 
-export interface TriggerProps extends React.ComponentProps<typeof Button> {}
+export interface TriggerProps extends React.ComponentProps<typeof Button> {
+  /** Text to show while uploading */
+  uploadingText?: string;
+  /** Show uploading state */
+  showUploadingState?: boolean;
+}
 
-function Trigger({ children, ...props }: TriggerProps) {
-  const { openFileDialog, disabled } = useFileUploadContext();
+function Trigger({
+  children,
+  uploadingText = "Uploading...",
+  showUploadingState = true,
+  ...props
+}: TriggerProps) {
+  const { openFileDialog, disabled, isUploading } = useFileUploadContext();
+
+  const isDisabled = disabled || (showUploadingState && isUploading);
 
   return (
     <Button
       type="button"
       onClick={openFileDialog}
-      disabled={disabled}
+      disabled={isDisabled}
       data-slot="file-upload-trigger"
       {...props}
     >
-      {children ?? "Select files"}
+      {showUploadingState && isUploading ? (
+        <>
+          <SpinnerIcon className="size-4 animate-spin" />
+          {uploadingText}
+        </>
+      ) : (
+        (children ?? (
+          <>
+            <UploadIcon className="size-4" />
+            Select files
+          </>
+        ))
+      )}
     </Button>
   );
 }
@@ -379,15 +425,27 @@ function useFileUploadItem() {
 
 export interface ItemProps extends React.ComponentProps<"div"> {
   file: FileUploadFile;
+  /** Apply error styling based on file status */
+  statusStyles?: boolean;
 }
 
-function Item({ file, className, children, ...props }: ItemProps) {
+function Item({
+  file,
+  className,
+  children,
+  statusStyles = true,
+  ...props
+}: ItemProps) {
   return (
     <ItemContext.Provider value={file}>
       <div
         data-slot="file-upload-item"
+        data-status={file.status}
         className={cn(
           "rounded-ppx-s border-ppx-neutral-4 bg-ppx-neutral-1 flex items-center gap-3 border p-3",
+          statusStyles &&
+            file.status === "error" &&
+            "border-ppx-red-4 bg-ppx-red-1",
           className,
         )}
         {...props}
@@ -530,6 +588,117 @@ function ItemProgress({ className, ...props }: ItemProgressProps) {
 }
 
 // ============================================================================
+// ItemStatus Component
+// ============================================================================
+
+export interface ItemStatusProps extends React.ComponentProps<"div"> {
+  /** Custom success icon */
+  successIcon?: React.ReactNode;
+  /** Custom uploading text/element */
+  uploadingContent?: React.ReactNode;
+  /** Custom error text/element */
+  errorContent?: React.ReactNode;
+}
+
+function ItemStatus({
+  className,
+  successIcon,
+  uploadingContent,
+  errorContent,
+  ...props
+}: ItemStatusProps) {
+  const file = useFileUploadItem();
+
+  if (file.status === "uploading") {
+    return (
+      <span
+        data-slot="file-upload-item-status"
+        className={cn("text-ppx-xs text-ppx-neutral-10 shrink-0", className)}
+        {...props}
+      >
+        {uploadingContent ?? `${file.progress}%`}
+      </span>
+    );
+  }
+
+  if (file.status === "success") {
+    return (
+      <span
+        data-slot="file-upload-item-status"
+        className={cn("text-ppx-green-5 shrink-0", className)}
+        {...props}
+      >
+        {successIcon ?? <CheckIcon className="size-4" />}
+      </span>
+    );
+  }
+
+  if (file.status === "error") {
+    return (
+      <span
+        data-slot="file-upload-item-status"
+        className={cn("text-ppx-xs text-ppx-red-5 shrink-0", className)}
+        {...props}
+      >
+        {errorContent ?? "Failed"}
+      </span>
+    );
+  }
+
+  return null;
+}
+
+// ============================================================================
+// ItemError Component
+// ============================================================================
+
+export interface ItemErrorProps extends React.ComponentProps<"span"> {}
+
+function ItemError({ className, ...props }: ItemErrorProps) {
+  const file = useFileUploadItem();
+
+  if (!file.error) return null;
+
+  return (
+    <span
+      data-slot="file-upload-item-error"
+      className={cn("text-ppx-xs text-ppx-red-5", className)}
+      {...props}
+    >
+      {file.error}
+    </span>
+  );
+}
+
+// ============================================================================
+// ItemRetry Component
+// ============================================================================
+
+export interface ItemRetryProps extends React.ComponentProps<typeof Button> {}
+
+function ItemRetry({ className, children, ...props }: ItemRetryProps) {
+  const { retryUpload } = useFileUploadContext();
+  const file = useFileUploadItem();
+
+  if (file.status !== "error" || !retryUpload) return null;
+
+  return (
+    <Button
+      type="button"
+      variant="ghost"
+      size="icon-sm"
+      onClick={() => retryUpload(file.id)}
+      data-slot="file-upload-item-retry"
+      aria-label={`Retry uploading ${file.file.name}`}
+      className={cn("shrink-0", className)}
+      {...props}
+    >
+      {children ?? <RetryIcon className="size-4" />}
+    </Button>
+  );
+}
+
+// ============================================================================
 // ClearButton Component
 // ============================================================================
 
@@ -584,16 +753,25 @@ function ImageGrid({ className, children, ...props }: ImageGridProps) {
 
 export interface ImageGridItemProps extends React.ComponentProps<"div"> {
   file: FileUploadFile;
+  /** Show status overlays (uploading/error) */
+  showStatusOverlay?: boolean;
 }
 
-function ImageGridItem({ file, className, ...props }: ImageGridItemProps) {
-  const { removeFile } = useFileUploadContext();
+function ImageGridItem({
+  file,
+  className,
+  showStatusOverlay = true,
+  ...props
+}: ImageGridItemProps) {
+  const { removeFile, retryUpload } = useFileUploadContext();
 
   return (
     <div
       data-slot="file-upload-image-grid-item"
+      data-status={file.status}
       className={cn(
         "rounded-ppx-s group relative aspect-square overflow-hidden",
+        file.status === "error" && "ring-ppx-red-5 ring-2",
         className,
       )}
       {...props}
@@ -609,6 +787,37 @@ function ImageGridItem({ file, className, ...props }: ImageGridItemProps) {
           <FileIcon className="text-ppx-neutral-10 size-8" />
         </div>
       )}
+
+      {/* Upload overlay */}
+      {showStatusOverlay && file.status === "uploading" && (
+        <div className="absolute inset-0 flex items-center justify-center bg-black/40">
+          <div className="text-sm font-medium text-white">{file.progress}%</div>
+        </div>
+      )}
+
+      {/* Error overlay */}
+      {showStatusOverlay && file.status === "error" && retryUpload && (
+        <div className="absolute inset-0 flex items-center justify-center bg-black/40">
+          <Button
+            type="button"
+            variant="ghost"
+            size="icon-sm"
+            onClick={() => retryUpload(file.id)}
+            className="text-white hover:text-white"
+          >
+            <RetryIcon className="size-5" />
+          </Button>
+        </div>
+      )}
+
+      {/* Success indicator */}
+      {showStatusOverlay && file.status === "success" && (
+        <div className="bg-ppx-green-5 absolute bottom-1 right-1 rounded-full p-0.5">
+          <CheckIcon className="size-3 text-white" />
+        </div>
+      )}
+
+      {/* Remove button */}
       <button
         type="button"
         onClick={() => removeFile(file.id)}
@@ -658,6 +867,9 @@ export const FileUpload = {
   ItemSize,
   ItemRemove,
   ItemProgress,
+  ItemStatus,
+  ItemError,
+  ItemRetry,
   ClearButton,
   ImageGrid,
   ImageGridItem,

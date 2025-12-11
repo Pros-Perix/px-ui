@@ -28,8 +28,10 @@ import {
 
 A flexible file upload solution with two approaches:
 
-- **`FileUpload.*`** - UI-only composable components powered by the `useFileUpload` hook
-- **`FileUploadSimple`** - Ready-to-use component with built-in state management and upload support
+- **`FileUploadSimple`** - Ready-to-use component that abstracts both the hook and UI primitives for quick setup
+- **`FileUpload.*` + `useFileUpload`** - Composable primitives and hook for full customization
+
+The `FileUploadSimple` component internally uses the `FileUpload.*` primitives and `useFileUpload` hook, so you get the same functionality with less boilerplate.
 
 ## Installation
 
@@ -225,6 +227,7 @@ function CustomUploader() {
       addFiles={actions.addFiles}
       removeFile={actions.removeFile}
       clearFiles={actions.clearFiles}
+      retryUpload={actions.retryUpload}
       openFileDialog={actions.openFileDialog}
       getInputProps={actions.getInputProps}
       handleDragEnter={actions.handleDragEnter}
@@ -232,6 +235,7 @@ function CustomUploader() {
       handleDragOver={actions.handleDragOver}
       handleDrop={actions.handleDrop}
       isDragActive={state.isDragging}
+      isUploading={state.isUploading}
       accept="image/*,.pdf"
       multiple
     >
@@ -241,10 +245,20 @@ function CustomUploader() {
           files.map((file) => (
             <FileUpload.Item key={file.id} file={file}>
               <FileUpload.ItemPreview />
-              <div className="flex flex-col">
-                <FileUpload.ItemName />
-                <FileUpload.ItemSize />
+              <div className="flex min-w-0 flex-1 flex-col gap-1">
+                <div className="flex items-center justify-between">
+                  <FileUpload.ItemName />
+                  <FileUpload.ItemStatus />
+                </div>
+                <div className="flex items-center gap-2">
+                  <FileUpload.ItemSize />
+                  {file.status === "uploading" && (
+                    <FileUpload.ItemProgress className="flex-1" />
+                  )}
+                </div>
+                <FileUpload.ItemError />
               </div>
+              <FileUpload.ItemRetry />
               <FileUpload.ItemRemove />
             </FileUpload.Item>
           ))
@@ -324,7 +338,9 @@ interface UploadConfig {
 
 ## Composable Components (FileUpload.\*)
 
-The `FileUpload.*` components are UI-only and require the `useFileUpload` hook for state management.
+The `FileUpload.*` components are UI primitives that work with the `useFileUpload` hook. This is what `FileUploadSimple` uses internally - giving you the same power with full customization.
+
+**Note:** When using upload functionality, pass `retryUpload` and `isUploading` from the hook to `FileUpload.Root` for complete upload support.
 
 ## Examples
 
@@ -663,6 +679,7 @@ function UploadWithProgress() {
       addFiles={actions.addFiles}
       removeFile={actions.removeFile}
       clearFiles={actions.clearFiles}
+      retryUpload={actions.retryUpload}
       openFileDialog={actions.openFileDialog}
       getInputProps={actions.getInputProps}
       handleDragEnter={actions.handleDragEnter}
@@ -670,6 +687,7 @@ function UploadWithProgress() {
       handleDragOver={actions.handleDragOver}
       handleDrop={actions.handleDrop}
       isDragActive={state.isDragging}
+      isUploading={state.isUploading}
       multiple
     >
       <FileUpload.Dropzone size="sm" />
@@ -681,10 +699,12 @@ function UploadWithProgress() {
               <div className="flex flex-1 flex-col gap-1">
                 <div className="flex justify-between">
                   <FileUpload.ItemName />
-                  <span>{file.progress}%</span>
+                  <FileUpload.ItemStatus />
                 </div>
                 <FileUpload.ItemProgress />
+                <FileUpload.ItemError />
               </div>
+              <FileUpload.ItemRetry />
               <FileUpload.ItemRemove />
             </FileUpload.Item>
           ))
@@ -894,21 +914,24 @@ Available size variants for the dropzone.
 
 ## Component Parts
 
-| Component                  | Description                           |
-| -------------------------- | ------------------------------------- |
-| `FileUpload.Root`          | Context provider, receives hook props |
-| `FileUpload.Dropzone`      | Drag-and-drop area with default UI    |
-| `FileUpload.Trigger`       | Standalone button to open file picker |
-| `FileUpload.ItemList`      | Container for file items              |
-| `FileUpload.Item`          | Individual file item wrapper          |
-| `FileUpload.ItemPreview`   | Thumbnail/preview for files           |
-| `FileUpload.ItemName`      | File name display                     |
-| `FileUpload.ItemSize`      | File size display                     |
-| `FileUpload.ItemRemove`    | Remove file button                    |
-| `FileUpload.ItemProgress`  | Progress bar for uploads              |
-| `FileUpload.ClearButton`   | Remove all files button               |
-| `FileUpload.ImageGrid`     | Grid layout for images                |
-| `FileUpload.ImageGridItem` | Image grid item with remove           |
+| Component                  | Description                                        |
+| -------------------------- | -------------------------------------------------- |
+| `FileUpload.Root`          | Context provider, receives hook props              |
+| `FileUpload.Dropzone`      | Drag-and-drop area with default UI                 |
+| `FileUpload.Trigger`       | Standalone button to open file picker              |
+| `FileUpload.ItemList`      | Container for file items                           |
+| `FileUpload.Item`          | Individual file item wrapper with status styling   |
+| `FileUpload.ItemPreview`   | Thumbnail/preview for files                        |
+| `FileUpload.ItemName`      | File name display                                  |
+| `FileUpload.ItemSize`      | File size display                                  |
+| `FileUpload.ItemRemove`    | Remove file button                                 |
+| `FileUpload.ItemProgress`  | Progress bar for uploads                           |
+| `FileUpload.ItemStatus`    | Status indicator (uploading %, success, or failed) |
+| `FileUpload.ItemError`     | Error message display                              |
+| `FileUpload.ItemRetry`     | Retry button for failed uploads                    |
+| `FileUpload.ClearButton`   | Remove all files button                            |
+| `FileUpload.ImageGrid`     | Grid layout for images                             |
+| `FileUpload.ImageGridItem` | Image grid item with status overlays               |
 
 ---
 
@@ -952,22 +975,24 @@ const [state, actions] = useFileUpload({
 
 ### FileUpload.Root
 
-| Prop              | Type                                  | Required | Description                  |
-| ----------------- | ------------------------------------- | -------- | ---------------------------- |
-| `files`           | `FileUploadFile[]`                    | Yes      | Files from hook state        |
-| `addFiles`        | `(files: FileList \| File[]) => void` | Yes      | Add files action from hook   |
-| `removeFile`      | `(id: string) => void`                | Yes      | Remove file action from hook |
-| `clearFiles`      | `() => void`                          | Yes      | Clear files action from hook |
-| `openFileDialog`  | `() => void`                          | Yes      | Open file dialog from hook   |
-| `getInputProps`   | `(props?) => InputProps`              | Yes      | Get input props from hook    |
-| `handleDragEnter` | `(e: DragEvent) => void`              | Yes      | Drag enter handler from hook |
-| `handleDragLeave` | `(e: DragEvent) => void`              | Yes      | Drag leave handler from hook |
-| `handleDragOver`  | `(e: DragEvent) => void`              | Yes      | Drag over handler from hook  |
-| `handleDrop`      | `(e: DragEvent) => void`              | Yes      | Drop handler from hook       |
-| `isDragActive`    | `boolean`                             | No       | Whether dragging is active   |
-| `accept`          | `string`                              | No       | Accepted file types          |
-| `multiple`        | `boolean`                             | No       | Allow multiple files         |
-| `disabled`        | `boolean`                             | No       | Disable the upload           |
+| Prop              | Type                                  | Required | Description                   |
+| ----------------- | ------------------------------------- | -------- | ----------------------------- |
+| `files`           | `FileUploadFile[]`                    | Yes      | Files from hook state         |
+| `addFiles`        | `(files: FileList \| File[]) => void` | Yes      | Add files action from hook    |
+| `removeFile`      | `(id: string) => void`                | Yes      | Remove file action from hook  |
+| `clearFiles`      | `() => void`                          | Yes      | Clear files action from hook  |
+| `retryUpload`     | `(id: string) => Promise<void>`       | No       | Retry upload action from hook |
+| `openFileDialog`  | `() => void`                          | Yes      | Open file dialog from hook    |
+| `getInputProps`   | `(props?) => InputProps`              | Yes      | Get input props from hook     |
+| `handleDragEnter` | `(e: DragEvent) => void`              | Yes      | Drag enter handler from hook  |
+| `handleDragLeave` | `(e: DragEvent) => void`              | Yes      | Drag leave handler from hook  |
+| `handleDragOver`  | `(e: DragEvent) => void`              | Yes      | Drag over handler from hook   |
+| `handleDrop`      | `(e: DragEvent) => void`              | Yes      | Drop handler from hook        |
+| `isDragActive`    | `boolean`                             | No       | Whether dragging is active    |
+| `isUploading`     | `boolean`                             | No       | Whether upload is in progress |
+| `accept`          | `string`                              | No       | Accepted file types           |
+| `multiple`        | `boolean`                             | No       | Allow multiple files          |
+| `disabled`        | `boolean`                             | No       | Disable the upload            |
 
 ### FileUpload.Dropzone
 
@@ -977,6 +1002,36 @@ const [state, actions] = useFileUpload({
 | `dropzoneText`       | `string`                    | `'Paste Or Drag & Drop Files Here'` | Dropzone text        |
 | `browseText`         | `string`                    | `'Browse for files'`                | Browse button text   |
 | `hideDefaultContent` | `boolean`                   | `false`                             | Hide default content |
+
+### FileUpload.Trigger
+
+| Prop                 | Type      | Default          | Description                     |
+| -------------------- | --------- | ---------------- | ------------------------------- |
+| `uploadingText`      | `string`  | `'Uploading...'` | Text shown while uploading      |
+| `showUploadingState` | `boolean` | `true`           | Show spinner and text on upload |
+| `...ButtonProps`     | -         | -                | All Button component props      |
+
+### FileUpload.Item
+
+| Prop           | Type             | Default | Description                         |
+| -------------- | ---------------- | ------- | ----------------------------------- |
+| `file`         | `FileUploadFile` | -       | The file object (required)          |
+| `statusStyles` | `boolean`        | `true`  | Apply error styling based on status |
+
+### FileUpload.ItemStatus
+
+| Prop               | Type        | Default   | Description                   |
+| ------------------ | ----------- | --------- | ----------------------------- |
+| `successIcon`      | `ReactNode` | Checkmark | Custom success icon           |
+| `uploadingContent` | `ReactNode` | `{n}%`    | Custom uploading text/element |
+| `errorContent`     | `ReactNode` | `Failed`  | Custom error text/element     |
+
+### FileUpload.ImageGridItem
+
+| Prop                | Type             | Default | Description                        |
+| ------------------- | ---------------- | ------- | ---------------------------------- |
+| `file`              | `FileUploadFile` | -       | The file object (required)         |
+| `showStatusOverlay` | `boolean`        | `true`  | Show uploading/error/success state |
 
 ### Types
 
@@ -1006,9 +1061,10 @@ interface FileUploadFile {
 
 ## Best Practices
 
-- **Use the hook**: Always use `useFileUpload` with `FileUpload.*` components
-- **Provide clear constraints**: Pass validation options to the hook
-- **Show progress**: Use `ItemProgress` for upload feedback
-- **Handle errors**: Check `state.errors` for validation messages
+- **Start with `FileUploadSimple`**: For most use cases, use `FileUploadSimple` - it abstracts both the hook and primitives
+- **Use primitives for customization**: When you need full control, use `FileUpload.*` with `useFileUpload`
+- **Pass all hook actions**: When using primitives, pass `retryUpload` and `isUploading` for full upload support
+- **Show upload status**: Use `ItemStatus`, `ItemProgress`, `ItemError`, and `ItemRetry` for complete feedback
+- **Provide clear constraints**: Pass validation options (`maxSize`, `maxFiles`, `accept`) to the hook
 - **Preview images**: The hook auto-generates previews for images
 - **Clean up**: Previews are automatically cleaned up when files are removed
