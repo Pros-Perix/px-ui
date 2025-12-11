@@ -846,37 +846,66 @@ function getFileExtension(filename: string): string {
 // FileUploadSimple Demos
 // ============================================================================
 
-// Mock upload functions for demos
-const mockGetPresignedUrl = async ({
+// Upload functions using real API
+const getPresignedUrl = async ({
   filename,
   contentType,
+  size,
 }: {
   filename: string;
   contentType: string;
   size: number;
 }) => {
-  // Simulate API delay
-  await new Promise((r) => setTimeout(r, 500));
-  return {
-    result: {
-      url: `https://example-bucket.s3.amazonaws.com/uploads/${Date.now()}-${filename}`,
-      fullPath: `https://cdn.example.com/uploads/${Date.now()}-${filename}`,
-    },
-  };
+  const params = new URLSearchParams({
+    filename,
+    contentType,
+    size: size.toString(),
+  });
+
+  try {
+    const res = await fetch(
+      `https://api.uat.prosperix.com/documents_service/public/signature_and_policy?${params.toString()}`,
+    );
+    if (!res.ok) {
+      return { error: `Request failed with status ${res.status}` };
+    }
+    const result = await res.json();
+    // Check if the response body contains an error
+    if (result.error) {
+      return { error: result.error };
+    }
+    return { result };
+  } catch (e: any) {
+    return { error: e.message };
+  }
 };
 
-const mockUploadFile = async (
+const uploadFile = async (
   url: string,
   file: File,
   presignedData: { url: string; fullPath: string },
   onProgress?: (progress: number) => void,
 ) => {
-  // Simulate upload with progress
-  for (let i = 0; i <= 100; i += 10) {
-    await new Promise((r) => setTimeout(r, 100));
-    onProgress?.(i);
+  const formData = new FormData();
+  formData.append("file", file);
+
+  onProgress?.(0);
+
+  try {
+    const res = await fetch(url, {
+      method: "POST",
+      body: formData,
+    });
+
+    if (!res.ok) {
+      return { error: `Upload failed with status ${res.status}` };
+    }
+
+    onProgress?.(100);
+    return { result: { url: presignedData.fullPath } };
+  } catch (e: any) {
+    return { error: e.message };
   }
-  return { result: { url: presignedData.fullPath } };
 };
 
 export function SimpleUploadDemo() {
@@ -904,8 +933,8 @@ export function SimpleUploadWithS3Demo() {
         maxFiles={5}
         maxSize={5 * 1024 * 1024}
         upload={{
-          getPresignedUrl: mockGetPresignedUrl,
-          uploadFile: mockUploadFile,
+          getPresignedUrl: getPresignedUrl,
+          uploadFile: uploadFile,
           onUploadComplete: (file: FileWithUploadStatus) => {
             console.log("Uploaded:", file);
           },
@@ -941,8 +970,8 @@ export function SimpleButtonVariantDemo() {
           buttonText="Upload Files"
           multiple
           upload={{
-            getPresignedUrl: mockGetPresignedUrl,
-            uploadFile: mockUploadFile,
+            getPresignedUrl: getPresignedUrl,
+            uploadFile: uploadFile,
           }}
         />
       </div>
@@ -954,8 +983,8 @@ export function SimpleButtonVariantDemo() {
           variant="compact"
           accept=".pdf,.doc,.docx"
           upload={{
-            getPresignedUrl: mockGetPresignedUrl,
-            uploadFile: mockUploadFile,
+            getPresignedUrl: getPresignedUrl,
+            uploadFile: uploadFile,
           }}
         />
       </div>
@@ -975,8 +1004,8 @@ export function SimpleImageGridDemo() {
         dropzoneText="Drop images here"
         buttonText="Select images"
         upload={{
-          getPresignedUrl: mockGetPresignedUrl,
-          uploadFile: mockUploadFile,
+          getPresignedUrl: getPresignedUrl,
+          uploadFile: uploadFile,
         }}
       />
     </div>
