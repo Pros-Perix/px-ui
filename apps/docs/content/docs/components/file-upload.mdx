@@ -7,7 +7,6 @@ icon: Upload
 import {
   FileUpload,
   FileUploadSimple,
-  formatFileSize,
   useFileUploadWithUploader,
 } from "@px-ui/core";
 import { ComponentPreview } from "../../../src/components/component-preview";
@@ -33,8 +32,8 @@ import {
 
 A flexible file upload solution with two approaches:
 
-- **`FileUpload.*`** - Composable components for full customization
-- **`FileUploadSimple`** - Ready-to-use component with built-in upload support
+- **`FileUpload.*`** - UI-only composable components powered by the `useFileUploadWithUploader` hook
+- **`FileUploadSimple`** - Ready-to-use component with built-in state management and upload support
 
 ## Installation
 
@@ -45,18 +44,21 @@ npm install @px-ui/core
 ## Import
 
 ```tsx
-// Composable components
-import { FileUpload, formatFileSize } from "@px-ui/core";
+// Composable components + hook
+import {
+  FileUpload,
+  useFileUploadWithUploader,
+} from "@px-ui/core";
 
-// Simple component with upload support
-import { FileUploadSimple, useFileUploadWithUploader } from "@px-ui/core";
+// Simple component with built-in state
+import { FileUploadSimple } from "@px-ui/core";
 ```
 
 ---
 
-## FileUploadSimple (Recommended)
+## FileUploadSimple (Recommended for Quick Setup)
 
-For most use cases, use `FileUploadSimple` - a ready-to-use component with built-in upload support.
+For most use cases, use `FileUploadSimple` - a ready-to-use component with built-in state management and upload support.
 
 ### Basic Dropzone
 
@@ -175,39 +177,6 @@ For image uploads, show a grid instead of a list.
 
 ---
 
-### Without Auto-Upload
-
-Disable auto-upload to manually control when files are uploaded:
-
-```tsx
-function ManualUpload() {
-  const [state, actions] = useFileUploadWithUploader({
-    multiple: true,
-    upload: {
-      autoUpload: false, // Disable auto-upload
-      getPresignedUrl: async (params) => { ... },
-      uploadFile: async (url, file, data, onProgress) => { ... },
-    },
-  });
-
-  return (
-    <div>
-      <FileUploadSimple
-        multiple
-        upload={{
-          autoUpload: false,
-          getPresignedUrl: yourGetPresignedUrlFn,
-          uploadFile: yourUploadFileFn,
-        }}
-      />
-      <button onClick={() => actions.uploadFiles()}>
-        Upload All
-      </button>
-    </div>
-  );
-}
-```
-
 ### FileUploadSimple Props
 
 | Prop             | Type                                  | Default                             | Description                     |
@@ -232,10 +201,10 @@ function ManualUpload() {
 
 ## useFileUploadWithUploader Hook
 
-For full control, use the hook directly:
+The `useFileUploadWithUploader` hook provides all the state and actions needed for file upload functionality. Use this hook with the `FileUpload.*` components for full customization.
 
 ```tsx
-import { useFileUploadWithUploader } from "@px-ui/core";
+import { useFileUploadWithUploader, FileUpload } from "@px-ui/core";
 
 function CustomUploader() {
   const [state, actions] = useFileUploadWithUploader({
@@ -257,44 +226,38 @@ function CustomUploader() {
     },
   });
 
-  const { files, isDragging, errors, isUploading } = state;
-  const {
-    addFiles,
-    removeFile,
-    clearFiles,
-    uploadFiles,
-    retryUpload,
-    cancelUpload,
-    getInputProps,
-    openFileDialog,
-    handleDragEnter,
-    handleDragLeave,
-    handleDragOver,
-    handleDrop,
-  } = actions;
-
   return (
-    <div
-      onDragEnter={handleDragEnter}
-      onDragLeave={handleDragLeave}
-      onDragOver={handleDragOver}
-      onDrop={handleDrop}
+    <FileUpload.Root
+      files={state.files}
+      addFiles={actions.addFiles}
+      removeFile={actions.removeFile}
+      clearFiles={actions.clearFiles}
+      openFileDialog={actions.openFileDialog}
+      getInputProps={actions.getInputProps}
+      handleDragEnter={actions.handleDragEnter}
+      handleDragLeave={actions.handleDragLeave}
+      handleDragOver={actions.handleDragOver}
+      handleDrop={actions.handleDrop}
+      isDragActive={state.isDragging}
+      accept="image/*,.pdf"
+      multiple
     >
-      <input {...getInputProps()} className="sr-only" />
-      <button onClick={openFileDialog}>Select Files</button>
-
-      {files.map((file) => (
-        <div key={file.id}>
-          <span>{file.file.name}</span>
-          <span>{file.status}</span>
-          {file.status === "uploading" && <span>{file.progress}%</span>}
-          {file.status === "error" && (
-            <button onClick={() => retryUpload(file.id)}>Retry</button>
-          )}
-          <button onClick={() => removeFile(file.id)}>Remove</button>
-        </div>
-      ))}
-    </div>
+      <FileUpload.Dropzone />
+      <FileUpload.ItemList>
+        {(files) =>
+          files.map((file) => (
+            <FileUpload.Item key={file.id} file={file}>
+              <FileUpload.ItemPreview />
+              <div className="flex flex-col">
+                <FileUpload.ItemName />
+                <FileUpload.ItemSize />
+              </div>
+              <FileUpload.ItemRemove />
+            </FileUpload.Item>
+          ))
+        }
+      </FileUpload.ItemList>
+    </FileUpload.Root>
   );
 }
 ```
@@ -319,6 +282,24 @@ interface FileWithUploadStatus {
   status: "idle" | "uploading" | "success" | "error";
   error?: string;
   uploadedUrl?: string;
+}
+
+// Actions
+interface FileUploadWithUploaderActions {
+  addFiles: (files: FileList | File[]) => void;
+  removeFile: (id: string) => void;
+  clearFiles: () => void;
+  clearErrors: () => void;
+  handleDragEnter: (e: DragEvent) => void;
+  handleDragLeave: (e: DragEvent) => void;
+  handleDragOver: (e: DragEvent) => void;
+  handleDrop: (e: DragEvent) => void;
+  handleFileChange: (e: ChangeEvent) => void;
+  openFileDialog: () => void;
+  getInputProps: (props?) => InputProps;
+  uploadFiles: (files?) => Promise<FileWithUploadStatus[]>;
+  retryUpload: (id: string) => Promise<void>;
+  cancelUpload: (id: string) => void;
 }
 
 // Upload config
@@ -350,7 +331,7 @@ interface UploadConfig {
 
 ## Composable Components (FileUpload.\*)
 
-For full customization, use the composable component API:
+The `FileUpload.*` components are UI-only and require the `useFileUploadWithUploader` hook for state management.
 
 ## Examples
 
@@ -363,9 +344,31 @@ The default dropzone with drag-and-drop, paste, and browse button.
 </ComponentPreview>
 
 ```tsx
-<FileUpload.Root onValueChange={(files) => console.log(files)}>
-  <FileUpload.Dropzone />
-</FileUpload.Root>
+import { FileUpload, useFileUploadWithUploader } from "@px-ui/core";
+
+function BasicDropzone() {
+  const [state, actions] = useFileUploadWithUploader({
+    onFilesChange: (files) => console.log(files),
+  });
+
+  return (
+    <FileUpload.Root
+      files={state.files}
+      addFiles={actions.addFiles}
+      removeFile={actions.removeFile}
+      clearFiles={actions.clearFiles}
+      openFileDialog={actions.openFileDialog}
+      getInputProps={actions.getInputProps}
+      handleDragEnter={actions.handleDragEnter}
+      handleDragLeave={actions.handleDragLeave}
+      handleDragOver={actions.handleDragOver}
+      handleDrop={actions.handleDrop}
+      isDragActive={state.isDragging}
+    >
+      <FileUpload.Dropzone />
+    </FileUpload.Root>
+  );
+}
 ```
 
 ---
@@ -380,16 +383,28 @@ Upload a single image with full-size preview overlay.
 
 ```tsx
 function SingleImageUpload() {
-  const [files, setFiles] = React.useState([]);
+  const [state, actions] = useFileUploadWithUploader({
+    accept: "image/*",
+    maxSize: 5 * 1024 * 1024,
+    multiple: false,
+  });
 
   return (
     <FileUpload.Root
-      value={files}
-      onValueChange={setFiles}
+      files={state.files}
+      addFiles={actions.addFiles}
+      removeFile={actions.removeFile}
+      clearFiles={actions.clearFiles}
+      openFileDialog={actions.openFileDialog}
+      getInputProps={actions.getInputProps}
+      handleDragEnter={actions.handleDragEnter}
+      handleDragLeave={actions.handleDragLeave}
+      handleDragOver={actions.handleDragOver}
+      handleDrop={actions.handleDrop}
+      isDragActive={state.isDragging}
       accept="image/*"
-      maxSize={5 * 1024 * 1024}
     >
-      {files.length === 0 ? (
+      {state.files.length === 0 ? (
         <FileUpload.Dropzone
           size="sm"
           dropzoneText="Drop your image here"
@@ -398,12 +413,12 @@ function SingleImageUpload() {
       ) : (
         <div className="relative">
           <img
-            src={files[0].preview}
-            alt={files[0].file.name}
+            src={state.files[0].preview}
+            alt={state.files[0].file.name}
             className="rounded-ppx-m h-48 w-full object-cover"
           />
           <button
-            onClick={() => setFiles([])}
+            onClick={actions.clearFiles}
             className="absolute right-2 top-2 rounded-full bg-black/60 p-2 text-white"
           >
             ✕
@@ -427,17 +442,33 @@ Circular avatar upload with hover state.
 
 ```tsx
 function AvatarUpload() {
-  const [files, setFiles] = React.useState([]);
+  const [state, actions] = useFileUploadWithUploader({
+    accept: "image/*",
+    multiple: false,
+  });
 
   return (
-    <FileUpload.Root value={files} onValueChange={setFiles} accept="image/*">
+    <FileUpload.Root
+      files={state.files}
+      addFiles={actions.addFiles}
+      removeFile={actions.removeFile}
+      clearFiles={actions.clearFiles}
+      openFileDialog={actions.openFileDialog}
+      getInputProps={actions.getInputProps}
+      handleDragEnter={actions.handleDragEnter}
+      handleDragLeave={actions.handleDragLeave}
+      handleDragOver={actions.handleDragOver}
+      handleDrop={actions.handleDrop}
+      isDragActive={state.isDragging}
+      accept="image/*"
+    >
       <FileUpload.Dropzone
         hideDefaultContent
         className="size-32 min-h-0 rounded-full p-0"
       >
-        {files.length > 0 ? (
+        {state.files.length > 0 ? (
           <img
-            src={files[0].preview}
+            src={state.files[0].preview}
             alt="Avatar"
             className="size-full rounded-full object-cover"
           />
@@ -464,20 +495,44 @@ Upload multiple images displayed in a responsive grid.
 </ComponentPreview>
 
 ```tsx
-<FileUpload.Root multiple accept="image/*" maxFiles={8}>
-  <FileUpload.Dropzone size="sm" />
-  <div className="mt-4 flex items-center justify-between">
-    <span>Uploaded ({files.length}/8)</span>
-    <FileUpload.ClearButton>Remove all</FileUpload.ClearButton>
-  </div>
-  <FileUpload.ImageGrid className="grid-cols-4 gap-2">
-    {(files) =>
-      files.map((file) => (
-        <FileUpload.ImageGridItem key={file.id} file={file} />
-      ))
-    }
-  </FileUpload.ImageGrid>
-</FileUpload.Root>
+function MultipleImagesGrid() {
+  const [state, actions] = useFileUploadWithUploader({
+    accept: "image/*",
+    maxFiles: 8,
+    multiple: true,
+  });
+
+  return (
+    <FileUpload.Root
+      files={state.files}
+      addFiles={actions.addFiles}
+      removeFile={actions.removeFile}
+      clearFiles={actions.clearFiles}
+      openFileDialog={actions.openFileDialog}
+      getInputProps={actions.getInputProps}
+      handleDragEnter={actions.handleDragEnter}
+      handleDragLeave={actions.handleDragLeave}
+      handleDragOver={actions.handleDragOver}
+      handleDrop={actions.handleDrop}
+      isDragActive={state.isDragging}
+      accept="image/*"
+      multiple
+    >
+      <FileUpload.Dropzone size="sm" />
+      <div className="mt-4 flex items-center justify-between">
+        <span>Uploaded ({state.files.length}/8)</span>
+        <FileUpload.ClearButton>Remove all</FileUpload.ClearButton>
+      </div>
+      <FileUpload.ImageGrid className="grid-cols-4 gap-2">
+        {(files) =>
+          files.map((file) => (
+            <FileUpload.ImageGridItem key={file.id} file={file} />
+          ))
+        }
+      </FileUpload.ImageGrid>
+    </FileUpload.Root>
+  );
+}
 ```
 
 ---
@@ -491,23 +546,45 @@ Upload multiple files with detailed list view.
 </ComponentPreview>
 
 ```tsx
-<FileUpload.Root multiple maxFiles={10}>
-  <FileUpload.Dropzone />
-  <FileUpload.ItemList>
-    {(files) =>
-      files.map((file) => (
-        <FileUpload.Item key={file.id} file={file}>
-          <FileUpload.ItemPreview />
-          <div className="flex flex-col">
-            <FileUpload.ItemName />
-            <FileUpload.ItemSize />
-          </div>
-          <FileUpload.ItemRemove />
-        </FileUpload.Item>
-      ))
-    }
-  </FileUpload.ItemList>
-</FileUpload.Root>
+function MultipleFilesList() {
+  const [state, actions] = useFileUploadWithUploader({
+    maxFiles: 10,
+    multiple: true,
+  });
+
+  return (
+    <FileUpload.Root
+      files={state.files}
+      addFiles={actions.addFiles}
+      removeFile={actions.removeFile}
+      clearFiles={actions.clearFiles}
+      openFileDialog={actions.openFileDialog}
+      getInputProps={actions.getInputProps}
+      handleDragEnter={actions.handleDragEnter}
+      handleDragLeave={actions.handleDragLeave}
+      handleDragOver={actions.handleDragOver}
+      handleDrop={actions.handleDrop}
+      isDragActive={state.isDragging}
+      multiple
+    >
+      <FileUpload.Dropzone />
+      <FileUpload.ItemList>
+        {(files) =>
+          files.map((file) => (
+            <FileUpload.Item key={file.id} file={file}>
+              <FileUpload.ItemPreview />
+              <div className="flex flex-col">
+                <FileUpload.ItemName />
+                <FileUpload.ItemSize />
+              </div>
+              <FileUpload.ItemRemove />
+            </FileUpload.Item>
+          ))
+        }
+      </FileUpload.ItemList>
+    </FileUpload.Root>
+  );
+}
 ```
 
 ---
@@ -521,15 +598,37 @@ A simple button trigger without dropzone.
 </ComponentPreview>
 
 ```tsx
-<FileUpload.Root accept=".pdf,.doc,.docx">
-  <div className="flex items-center gap-3">
-    <FileUpload.Trigger variant="outline" size="sm">
-      <UploadIcon className="size-4" />
-      Upload document
-    </FileUpload.Trigger>
-    {files.length > 0 && <span>{files[0].file.name}</span>}
-  </div>
-</FileUpload.Root>
+function CompactUpload() {
+  const [state, actions] = useFileUploadWithUploader({
+    accept: ".pdf,.doc,.docx",
+    multiple: false,
+  });
+
+  return (
+    <FileUpload.Root
+      files={state.files}
+      addFiles={actions.addFiles}
+      removeFile={actions.removeFile}
+      clearFiles={actions.clearFiles}
+      openFileDialog={actions.openFileDialog}
+      getInputProps={actions.getInputProps}
+      handleDragEnter={actions.handleDragEnter}
+      handleDragLeave={actions.handleDragLeave}
+      handleDragOver={actions.handleDragOver}
+      handleDrop={actions.handleDrop}
+      isDragActive={state.isDragging}
+      accept=".pdf,.doc,.docx"
+    >
+      <div className="flex items-center gap-3">
+        <FileUpload.Trigger variant="outline" size="sm">
+          <UploadIcon className="size-4" />
+          Upload document
+        </FileUpload.Trigger>
+        {state.files.length > 0 && <span>{state.files[0].file.name}</span>}
+      </div>
+    </FileUpload.Root>
+  );
+}
 ```
 
 ---
@@ -544,24 +643,42 @@ Files with upload progress indicator.
 
 ```tsx
 function UploadWithProgress() {
-  const [files, setFiles] = React.useState([]);
-
-  const handleUpload = async (newFiles) => {
-    setFiles(newFiles);
-
-    // Simulate upload progress
-    for (const file of newFiles) {
-      for (let progress = 0; progress <= 100; progress += 5) {
-        await new Promise((r) => setTimeout(r, 100));
-        setFiles((prev) =>
-          prev.map((f) => (f.id === file.id ? { ...f, progress } : f)),
-        );
-      }
-    }
-  };
+  const [state, actions] = useFileUploadWithUploader({
+    multiple: true,
+    upload: {
+      autoUpload: true,
+      getPresignedUrl: async ({ filename }) => ({
+        result: {
+          url: `https://example.com/upload/${filename}`,
+          fullPath: `https://cdn.example.com/${filename}`,
+        },
+      }),
+      uploadFile: async (url, file, presignedData, onProgress) => {
+        // Simulate upload with progress
+        for (let i = 0; i <= 100; i += 5) {
+          await new Promise((r) => setTimeout(r, 100));
+          onProgress?.(i);
+        }
+        return { result: { url: presignedData.fullPath } };
+      },
+    },
+  });
 
   return (
-    <FileUpload.Root value={files} onValueChange={handleUpload} multiple>
+    <FileUpload.Root
+      files={state.files}
+      addFiles={actions.addFiles}
+      removeFile={actions.removeFile}
+      clearFiles={actions.clearFiles}
+      openFileDialog={actions.openFileDialog}
+      getInputProps={actions.getInputProps}
+      handleDragEnter={actions.handleDragEnter}
+      handleDragLeave={actions.handleDragLeave}
+      handleDragOver={actions.handleDragOver}
+      handleDrop={actions.handleDrop}
+      isDragActive={state.isDragging}
+      multiple
+    >
       <FileUpload.Dropzone size="sm" />
       <FileUpload.ItemList>
         {(files) =>
@@ -596,24 +713,48 @@ Compact inline image picker with add button.
 </ComponentPreview>
 
 ```tsx
-<FileUpload.Root accept="image/*" multiple maxFiles={4}>
-  <div className="flex flex-wrap gap-2">
-    {files.map((file) => (
-      <div key={file.id} className="rounded-ppx-s relative size-16">
-        <img src={file.preview} className="size-full object-cover" />
-        <button onClick={() => removeFile(file.id)}>✕</button>
+function InlineImageUpload() {
+  const [state, actions] = useFileUploadWithUploader({
+    accept: "image/*",
+    maxFiles: 4,
+    multiple: true,
+  });
+
+  return (
+    <FileUpload.Root
+      files={state.files}
+      addFiles={actions.addFiles}
+      removeFile={actions.removeFile}
+      clearFiles={actions.clearFiles}
+      openFileDialog={actions.openFileDialog}
+      getInputProps={actions.getInputProps}
+      handleDragEnter={actions.handleDragEnter}
+      handleDragLeave={actions.handleDragLeave}
+      handleDragOver={actions.handleDragOver}
+      handleDrop={actions.handleDrop}
+      isDragActive={state.isDragging}
+      accept="image/*"
+      multiple
+    >
+      <div className="flex flex-wrap gap-2">
+        {state.files.map((file) => (
+          <div key={file.id} className="rounded-ppx-s relative size-16">
+            <img src={file.preview} className="size-full object-cover" />
+            <button onClick={() => actions.removeFile(file.id)}>✕</button>
+          </div>
+        ))}
+        {state.files.length < 4 && (
+          <FileUpload.Dropzone
+            hideDefaultContent
+            className="rounded-ppx-s size-16 min-h-0 border-2 border-dashed p-0"
+          >
+            <PlusIcon className="size-6" />
+          </FileUpload.Dropzone>
+        )}
       </div>
-    ))}
-    {files.length < 4 && (
-      <FileUpload.Dropzone
-        hideDefaultContent
-        className="rounded-ppx-s size-16 min-h-0 border-2 border-dashed p-0"
-      >
-        <PlusIcon className="size-6" />
-      </FileUpload.Dropzone>
-    )}
-  </div>
-</FileUpload.Root>
+    </FileUpload.Root>
+  );
+}
 ```
 
 ---
@@ -627,37 +768,61 @@ Display uploaded files in a table format.
 </ComponentPreview>
 
 ```tsx
-<FileUpload.Root multiple>
-  <FileUpload.Dropzone size="sm" />
-  <div className="rounded-ppx-s border">
-    <div className="bg-ppx-neutral-2 flex justify-between p-2">
-      <span>Files ({files.length})</span>
-      <FileUpload.Trigger size="sm">Add files</FileUpload.Trigger>
-    </div>
-    <table className="w-full">
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Type</th>
-          <th>Size</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        {files.map((file) => (
-          <tr key={file.id}>
-            <td>{file.file.name}</td>
-            <td>{getExtension(file.file.name)}</td>
-            <td>{formatFileSize(file.file.size)}</td>
-            <td>
-              <button onClick={() => removeFile(file.id)}>Delete</button>
-            </td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
-  </div>
-</FileUpload.Root>
+function FilesTable() {
+  const [state, actions] = useFileUploadWithUploader({
+    maxFiles: 10,
+    multiple: true,
+  });
+
+  return (
+    <FileUpload.Root
+      files={state.files}
+      addFiles={actions.addFiles}
+      removeFile={actions.removeFile}
+      clearFiles={actions.clearFiles}
+      openFileDialog={actions.openFileDialog}
+      getInputProps={actions.getInputProps}
+      handleDragEnter={actions.handleDragEnter}
+      handleDragLeave={actions.handleDragLeave}
+      handleDragOver={actions.handleDragOver}
+      handleDrop={actions.handleDrop}
+      isDragActive={state.isDragging}
+      multiple
+    >
+      <FileUpload.Dropzone size="sm" />
+      <div className="rounded-ppx-s border">
+        <div className="bg-ppx-neutral-2 flex justify-between p-2">
+          <span>Files ({state.files.length})</span>
+          <FileUpload.Trigger size="sm">Add files</FileUpload.Trigger>
+        </div>
+        <table className="w-full">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Type</th>
+              <th>Size</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {state.files.map((file) => (
+              <tr key={file.id}>
+                <td>{file.file.name}</td>
+                <td>{getExtension(file.file.name)}</td>
+                <td>{formatFileSize(file.file.size)}</td>
+                <td>
+                  <button onClick={() => actions.removeFile(file.id)}>
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </FileUpload.Root>
+  );
+}
 ```
 
 ---
@@ -671,28 +836,49 @@ Display mixed file types in card grid.
 </ComponentPreview>
 
 ```tsx
-<FileUpload.Root multiple>
-  <FileUpload.Dropzone size="sm" />
-  <div className="grid grid-cols-2 gap-3">
-    {files.map((file) => (
-      <div key={file.id} className="rounded-ppx-s border">
-        {file.preview ? (
-          <img src={file.preview} className="h-24 w-full object-cover" />
-        ) : (
-          <div className="flex h-24 items-center justify-center">
-            <FileIcon type={file.file.type} />
+function MixedContentCards() {
+  const [state, actions] = useFileUploadWithUploader({
+    multiple: true,
+  });
+
+  return (
+    <FileUpload.Root
+      files={state.files}
+      addFiles={actions.addFiles}
+      removeFile={actions.removeFile}
+      clearFiles={actions.clearFiles}
+      openFileDialog={actions.openFileDialog}
+      getInputProps={actions.getInputProps}
+      handleDragEnter={actions.handleDragEnter}
+      handleDragLeave={actions.handleDragLeave}
+      handleDragOver={actions.handleDragOver}
+      handleDrop={actions.handleDrop}
+      isDragActive={state.isDragging}
+      multiple
+    >
+      <FileUpload.Dropzone size="sm" />
+      <div className="grid grid-cols-2 gap-3">
+        {state.files.map((file) => (
+          <div key={file.id} className="rounded-ppx-s border">
+            {file.preview ? (
+              <img src={file.preview} className="h-24 w-full object-cover" />
+            ) : (
+              <div className="flex h-24 items-center justify-center">
+                <FileIcon type={file.file.type} />
+              </div>
+            )}
+            <div className="p-2">
+              <p className="truncate text-sm">{file.file.name}</p>
+              <p className="text-ppx-neutral-10 text-xs">
+                {formatFileSize(file.file.size)}
+              </p>
+            </div>
           </div>
-        )}
-        <div className="p-2">
-          <p className="truncate text-sm">{file.file.name}</p>
-          <p className="text-ppx-neutral-10 text-xs">
-            {formatFileSize(file.file.size)}
-          </p>
-        </div>
+        ))}
       </div>
-    ))}
-  </div>
-</FileUpload.Root>
+    </FileUpload.Root>
+  );
+}
 ```
 
 ---
@@ -715,58 +901,56 @@ Available size variants for the dropzone.
 
 ## Component Parts
 
-| Component                  | Description                                    |
-| -------------------------- | ---------------------------------------------- |
-| `FileUpload.Root`          | Context provider, manages state and validation |
-| `FileUpload.Dropzone`      | Drag-and-drop area with default UI             |
-| `FileUpload.Trigger`       | Standalone button to open file picker          |
-| `FileUpload.ItemList`      | Container for file items                       |
-| `FileUpload.Item`          | Individual file item wrapper                   |
-| `FileUpload.ItemPreview`   | Thumbnail/preview for files                    |
-| `FileUpload.ItemName`      | File name display                              |
-| `FileUpload.ItemSize`      | File size display                              |
-| `FileUpload.ItemRemove`    | Remove file button                             |
-| `FileUpload.ItemProgress`  | Progress bar for uploads                       |
-| `FileUpload.ClearButton`   | Remove all files button                        |
-| `FileUpload.ImageGrid`     | Grid layout for images                         |
-| `FileUpload.ImageGridItem` | Image grid item with remove                    |
+| Component                  | Description                           |
+| -------------------------- | ------------------------------------- |
+| `FileUpload.Root`          | Context provider, receives hook props |
+| `FileUpload.Dropzone`      | Drag-and-drop area with default UI    |
+| `FileUpload.Trigger`       | Standalone button to open file picker |
+| `FileUpload.ItemList`      | Container for file items              |
+| `FileUpload.Item`          | Individual file item wrapper          |
+| `FileUpload.ItemPreview`   | Thumbnail/preview for files           |
+| `FileUpload.ItemName`      | File name display                     |
+| `FileUpload.ItemSize`      | File size display                     |
+| `FileUpload.ItemRemove`    | Remove file button                    |
+| `FileUpload.ItemProgress`  | Progress bar for uploads              |
+| `FileUpload.ClearButton`   | Remove all files button               |
+| `FileUpload.ImageGrid`     | Grid layout for images                |
+| `FileUpload.ImageGridItem` | Image grid item with remove           |
 
 ---
 
 ## Validation
 
+Validation is handled by the `useFileUploadWithUploader` hook:
+
 ### File Type Restriction
 
 ```tsx
-<FileUpload.Root
-  accept="image/*,.pdf"
-  onError={(error) => console.error(error.message)}
->
-  <FileUpload.Dropzone />
-</FileUpload.Root>
+const [state, actions] = useFileUploadWithUploader({
+  accept: "image/*,.pdf",
+});
+
+// Check errors
+if (state.errors.length > 0) {
+  console.error(state.errors);
+}
 ```
 
 ### File Size Limit
 
 ```tsx
-<FileUpload.Root
-  maxSize={5 * 1024 * 1024} // 5MB
-  onError={(error) => console.error(error.message)}
->
-  <FileUpload.Dropzone />
-</FileUpload.Root>
+const [state, actions] = useFileUploadWithUploader({
+  maxSize: 5 * 1024 * 1024, // 5MB
+});
 ```
 
 ### Max Files Limit
 
 ```tsx
-<FileUpload.Root
-  multiple
-  maxFiles={5}
-  onError={(error) => console.error(error.message)}
->
-  <FileUpload.Dropzone />
-</FileUpload.Root>
+const [state, actions] = useFileUploadWithUploader({
+  multiple: true,
+  maxFiles: 5,
+});
 ```
 
 ---
@@ -775,17 +959,22 @@ Available size variants for the dropzone.
 
 ### FileUpload.Root
 
-| Prop            | Type                                | Default | Description                  |
-| --------------- | ----------------------------------- | ------- | ---------------------------- |
-| `value`         | `FileUploadFile[]`                  | -       | Controlled files state       |
-| `defaultValue`  | `FileUploadFile[]`                  | `[]`    | Default files (uncontrolled) |
-| `onValueChange` | `(files: FileUploadFile[]) => void` | -       | Called when files change     |
-| `accept`        | `string`                            | -       | Accepted file types          |
-| `multiple`      | `boolean`                           | `false` | Allow multiple files         |
-| `maxSize`       | `number`                            | -       | Max file size in bytes       |
-| `maxFiles`      | `number`                            | -       | Max number of files          |
-| `disabled`      | `boolean`                           | `false` | Disable the upload           |
-| `onError`       | `(error: FileUploadError) => void`  | -       | Validation error callback    |
+| Prop              | Type                                  | Required | Description                  |
+| ----------------- | ------------------------------------- | -------- | ---------------------------- |
+| `files`           | `FileUploadFile[]`                    | Yes      | Files from hook state        |
+| `addFiles`        | `(files: FileList \| File[]) => void` | Yes      | Add files action from hook   |
+| `removeFile`      | `(id: string) => void`                | Yes      | Remove file action from hook |
+| `clearFiles`      | `() => void`                          | Yes      | Clear files action from hook |
+| `openFileDialog`  | `() => void`                          | Yes      | Open file dialog from hook   |
+| `getInputProps`   | `(props?) => InputProps`              | Yes      | Get input props from hook    |
+| `handleDragEnter` | `(e: DragEvent) => void`              | Yes      | Drag enter handler from hook |
+| `handleDragLeave` | `(e: DragEvent) => void`              | Yes      | Drag leave handler from hook |
+| `handleDragOver`  | `(e: DragEvent) => void`              | Yes      | Drag over handler from hook  |
+| `handleDrop`      | `(e: DragEvent) => void`              | Yes      | Drop handler from hook       |
+| `isDragActive`    | `boolean`                             | No       | Whether dragging is active   |
+| `accept`          | `string`                              | No       | Accepted file types          |
+| `multiple`        | `boolean`                             | No       | Allow multiple files         |
+| `disabled`        | `boolean`                             | No       | Disable the upload           |
 
 ### FileUpload.Dropzone
 
@@ -801,16 +990,12 @@ Available size variants for the dropzone.
 ```tsx
 interface FileUploadFile {
   id: string;
-  file: File;
+  file: File | { name: string; size: number; type: string };
   progress?: number;
   status?: "idle" | "uploading" | "success" | "error";
   preview?: string;
-}
-
-interface FileUploadError {
-  type: "file-too-large" | "too-many-files" | "invalid-type";
-  message: string;
-  files?: File[];
+  error?: string;
+  uploadedUrl?: string;
 }
 ```
 
@@ -828,8 +1013,9 @@ interface FileUploadError {
 
 ## Best Practices
 
-- **Provide clear constraints**: Display accepted types and size limits
+- **Use the hook**: Always use `useFileUploadWithUploader` with `FileUpload.*` components
+- **Provide clear constraints**: Pass validation options to the hook
 - **Show progress**: Use `ItemProgress` for upload feedback
-- **Handle errors**: Implement `onError` for user-friendly messages
-- **Preview images**: The component auto-generates previews for images
-- **Clean up**: Previews are automatically cleaned up on unmount
+- **Handle errors**: Check `state.errors` for validation messages
+- **Preview images**: The hook auto-generates previews for images
+- **Clean up**: Previews are automatically cleaned up when files are removed

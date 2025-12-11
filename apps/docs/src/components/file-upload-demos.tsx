@@ -2,11 +2,12 @@ import * as React from "react";
 import {
   FileUpload,
   FileUploadSimple,
-  formatFileSize,
+  useFileUploadWithUploader,
   type FileUploadFile,
   type FileWithUploadStatus,
   type FileWithPreview,
   Button,
+  formatBytes,
 } from "@px-ui/core";
 
 // ============================================================================
@@ -14,8 +15,24 @@ import {
 // ============================================================================
 
 export function BasicDropzoneDemo() {
+  const [state, actions] = useFileUploadWithUploader({
+    onFilesChange: (files) => console.log(files),
+  });
+
   return (
-    <FileUpload.Root onValueChange={(files) => console.log(files)}>
+    <FileUpload.Root
+      files={state.files}
+      addFiles={actions.addFiles}
+      removeFile={actions.removeFile}
+      clearFiles={actions.clearFiles}
+      openFileDialog={actions.openFileDialog}
+      getInputProps={actions.getInputProps}
+      handleDragEnter={actions.handleDragEnter}
+      handleDragLeave={actions.handleDragLeave}
+      handleDragOver={actions.handleDragOver}
+      handleDrop={actions.handleDrop}
+      isDragActive={state.isDragging}
+    >
       <FileUpload.Dropzone />
     </FileUpload.Root>
   );
@@ -26,17 +43,29 @@ export function BasicDropzoneDemo() {
 // ============================================================================
 
 export function SingleImageUploadDemo() {
-  const [files, setFiles] = React.useState<FileUploadFile[]>([]);
+  const [state, actions] = useFileUploadWithUploader({
+    accept: "image/*",
+    maxSize: 5 * 1024 * 1024,
+    multiple: false,
+  });
 
   return (
     <div className="w-full max-w-sm">
       <FileUpload.Root
-        value={files}
-        onValueChange={setFiles}
+        files={state.files}
+        addFiles={actions.addFiles}
+        removeFile={actions.removeFile}
+        clearFiles={actions.clearFiles}
+        openFileDialog={actions.openFileDialog}
+        getInputProps={actions.getInputProps}
+        handleDragEnter={actions.handleDragEnter}
+        handleDragLeave={actions.handleDragLeave}
+        handleDragOver={actions.handleDragOver}
+        handleDrop={actions.handleDrop}
+        isDragActive={state.isDragging}
         accept="image/*"
-        maxSize={5 * 1024 * 1024}
       >
-        {files.length === 0 ? (
+        {state.files.length === 0 ? (
           <FileUpload.Dropzone
             size="sm"
             dropzoneText="Drop your image here"
@@ -45,22 +74,22 @@ export function SingleImageUploadDemo() {
         ) : (
           <div className="relative">
             <img
-              src={files[0].preview}
-              alt={files[0].file.name}
+              src={state.files[0].preview}
+              alt={state.files[0].file.name}
               className="rounded-ppx-m h-48 w-full object-cover"
             />
             <button
-              onClick={() => setFiles([])}
+              onClick={actions.clearFiles}
               className="absolute right-2 top-2 flex size-8 items-center justify-center rounded-full bg-black/60 text-white transition-opacity hover:bg-black/80"
             >
               <CloseIcon className="size-4" />
             </button>
             <div className="rounded-b-ppx-m absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-3">
               <p className="truncate text-sm font-medium text-white">
-                {files[0].file.name}
+                {state.files[0].file.name}
               </p>
               <p className="text-xs text-white/70">
-                {formatFileSize(files[0].file.size)}
+                {formatBytes(state.files[0].file.size)}
               </p>
             </div>
           </div>
@@ -78,23 +107,35 @@ export function SingleImageUploadDemo() {
 // ============================================================================
 
 export function AvatarUploadDemo() {
-  const [files, setFiles] = React.useState<FileUploadFile[]>([]);
+  const [state, actions] = useFileUploadWithUploader({
+    accept: "image/*",
+    maxSize: 2 * 1024 * 1024,
+    multiple: false,
+  });
 
   return (
     <div className="flex flex-col items-center gap-4">
       <FileUpload.Root
-        value={files}
-        onValueChange={setFiles}
+        files={state.files}
+        addFiles={actions.addFiles}
+        removeFile={actions.removeFile}
+        clearFiles={actions.clearFiles}
+        openFileDialog={actions.openFileDialog}
+        getInputProps={actions.getInputProps}
+        handleDragEnter={actions.handleDragEnter}
+        handleDragLeave={actions.handleDragLeave}
+        handleDragOver={actions.handleDragOver}
+        handleDrop={actions.handleDrop}
+        isDragActive={state.isDragging}
         accept="image/*"
-        maxSize={2 * 1024 * 1024}
       >
         <FileUpload.Dropzone
           hideDefaultContent
           className="size-32 min-h-0 rounded-full p-0"
         >
-          {files.length > 0 ? (
+          {state.files.length > 0 ? (
             <img
-              src={files[0].preview}
+              src={state.files[0].preview}
               alt="Avatar"
               className="size-full rounded-full object-cover"
             />
@@ -118,28 +159,40 @@ export function AvatarUploadDemo() {
 // ============================================================================
 
 export function MultipleImagesGridDemo() {
-  const [files, setFiles] = React.useState<FileUploadFile[]>([]);
+  const [state, actions] = useFileUploadWithUploader({
+    accept: "image/*",
+    maxSize: 5 * 1024 * 1024,
+    maxFiles: 8,
+    multiple: true,
+  });
 
   return (
     <div className="w-full max-w-md">
       <FileUpload.Root
-        value={files}
-        onValueChange={setFiles}
-        multiple
+        files={state.files}
+        addFiles={actions.addFiles}
+        removeFile={actions.removeFile}
+        clearFiles={actions.clearFiles}
+        openFileDialog={actions.openFileDialog}
+        getInputProps={actions.getInputProps}
+        handleDragEnter={actions.handleDragEnter}
+        handleDragLeave={actions.handleDragLeave}
+        handleDragOver={actions.handleDragOver}
+        handleDrop={actions.handleDrop}
+        isDragActive={state.isDragging}
         accept="image/*"
-        maxFiles={8}
-        maxSize={5 * 1024 * 1024}
+        multiple
       >
         <FileUpload.Dropzone
           size="sm"
           dropzoneText="Drop images here"
           browseText="Select images"
         />
-        {files.length > 0 && (
+        {state.files.length > 0 && (
           <div className="mt-4">
             <div className="mb-2 flex items-center justify-between">
               <span className="text-ppx-neutral-14 text-sm font-medium">
-                Uploaded ({files.length}/8)
+                Uploaded ({state.files.length}/8)
               </span>
               <FileUpload.ClearButton className="text-xs">
                 Remove all
@@ -164,26 +217,37 @@ export function MultipleImagesGridDemo() {
 // ============================================================================
 
 export function MultipleFilesListDemo() {
-  const [files, setFiles] = React.useState<FileUploadFile[]>([]);
+  const [state, actions] = useFileUploadWithUploader({
+    maxSize: 100 * 1024 * 1024,
+    maxFiles: 10,
+    multiple: true,
+  });
 
   return (
     <div className="w-full max-w-md">
       <FileUpload.Root
-        value={files}
-        onValueChange={setFiles}
+        files={state.files}
+        addFiles={actions.addFiles}
+        removeFile={actions.removeFile}
+        clearFiles={actions.clearFiles}
+        openFileDialog={actions.openFileDialog}
+        getInputProps={actions.getInputProps}
+        handleDragEnter={actions.handleDragEnter}
+        handleDragLeave={actions.handleDragLeave}
+        handleDragOver={actions.handleDragOver}
+        handleDrop={actions.handleDrop}
+        isDragActive={state.isDragging}
         multiple
-        maxFiles={10}
-        maxSize={100 * 1024 * 1024}
       >
         <FileUpload.Dropzone
           dropzoneText="Drag & drop files here"
           browseText="Browse files"
         />
-        {files.length > 0 && (
+        {state.files.length > 0 && (
           <div className="mt-4">
             <div className="mb-2 flex items-center justify-between">
               <span className="text-ppx-neutral-14 text-sm font-medium">
-                Files ({files.length})
+                Files ({state.files.length})
               </span>
               <FileUpload.ClearButton className="text-ppx-red-5 hover:text-ppx-red-6 text-xs">
                 Remove all
@@ -217,24 +281,36 @@ export function MultipleFilesListDemo() {
 // ============================================================================
 
 export function CompactUploadDemo() {
-  const [files, setFiles] = React.useState<FileUploadFile[]>([]);
+  const [state, actions] = useFileUploadWithUploader({
+    accept: ".pdf,.doc,.docx",
+    maxSize: 10 * 1024 * 1024,
+    multiple: false,
+  });
 
   return (
     <div className="w-full max-w-sm">
       <FileUpload.Root
-        value={files}
-        onValueChange={setFiles}
+        files={state.files}
+        addFiles={actions.addFiles}
+        removeFile={actions.removeFile}
+        clearFiles={actions.clearFiles}
+        openFileDialog={actions.openFileDialog}
+        getInputProps={actions.getInputProps}
+        handleDragEnter={actions.handleDragEnter}
+        handleDragLeave={actions.handleDragLeave}
+        handleDragOver={actions.handleDragOver}
+        handleDrop={actions.handleDrop}
+        isDragActive={state.isDragging}
         accept=".pdf,.doc,.docx"
-        maxSize={10 * 1024 * 1024}
       >
         <div className="flex items-center gap-3">
           <FileUpload.Trigger variant="outline" size="sm">
             <UploadIcon className="size-4" />
             Upload document
           </FileUpload.Trigger>
-          {files.length > 0 && (
+          {state.files.length > 0 && (
             <span className="text-ppx-neutral-12 text-sm">
-              {files[0].file.name}
+              {state.files[0].file.name}
             </span>
           )}
         </div>
@@ -248,36 +324,47 @@ export function CompactUploadDemo() {
 // ============================================================================
 
 export function UploadWithProgressDemo() {
-  const [files, setFiles] = React.useState<FileUploadFile[]>([]);
-
-  const handleUpload = async (newFiles: FileUploadFile[]) => {
-    setFiles(newFiles);
-
-    for (const file of newFiles) {
-      if (file.progress !== undefined) continue;
-
-      for (let progress = 0; progress <= 100; progress += 5) {
-        await new Promise((r) => setTimeout(r, 100));
-        setFiles((prev) =>
-          prev.map((f) =>
-            f.id === file.id
-              ? {
-                  ...f,
-                  progress,
-                  status: progress < 100 ? "uploading" : "success",
-                }
-              : f,
-          ),
-        );
-      }
-    }
-  };
+  const [state, actions] = useFileUploadWithUploader({
+    multiple: true,
+    upload: {
+      autoUpload: true,
+      getPresignedUrl: async ({ filename }) => {
+        await new Promise((r) => setTimeout(r, 200));
+        return {
+          result: {
+            url: `https://example.com/upload/${filename}`,
+            fullPath: `https://cdn.example.com/${filename}`,
+          },
+        };
+      },
+      uploadFile: async (_url, _file, presignedData, onProgress) => {
+        for (let i = 0; i <= 100; i += 5) {
+          await new Promise((r) => setTimeout(r, 100));
+          onProgress?.(i);
+        }
+        return { result: { url: presignedData.fullPath } };
+      },
+    },
+  });
 
   return (
     <div className="w-full max-w-md">
-      <FileUpload.Root value={files} onValueChange={handleUpload} multiple>
+      <FileUpload.Root
+        files={state.files}
+        addFiles={actions.addFiles}
+        removeFile={actions.removeFile}
+        clearFiles={actions.clearFiles}
+        openFileDialog={actions.openFileDialog}
+        getInputProps={actions.getInputProps}
+        handleDragEnter={actions.handleDragEnter}
+        handleDragLeave={actions.handleDragLeave}
+        handleDragOver={actions.handleDragOver}
+        handleDrop={actions.handleDrop}
+        isDragActive={state.isDragging}
+        multiple
+      >
         <FileUpload.Dropzone size="sm" />
-        {files.length > 0 && (
+        {state.files.length > 0 && (
           <FileUpload.ItemList className="mt-4">
             {(files) =>
               files.map((file) => (
@@ -312,19 +399,31 @@ export function UploadWithProgressDemo() {
 // ============================================================================
 
 export function InlineImageUploadDemo() {
-  const [files, setFiles] = React.useState<FileUploadFile[]>([]);
+  const [state, actions] = useFileUploadWithUploader({
+    accept: "image/*",
+    maxFiles: 4,
+    multiple: true,
+  });
 
   return (
     <div className="w-full max-w-md">
       <FileUpload.Root
-        value={files}
-        onValueChange={setFiles}
+        files={state.files}
+        addFiles={actions.addFiles}
+        removeFile={actions.removeFile}
+        clearFiles={actions.clearFiles}
+        openFileDialog={actions.openFileDialog}
+        getInputProps={actions.getInputProps}
+        handleDragEnter={actions.handleDragEnter}
+        handleDragLeave={actions.handleDragLeave}
+        handleDragOver={actions.handleDragOver}
+        handleDrop={actions.handleDrop}
+        isDragActive={state.isDragging}
         accept="image/*"
         multiple
-        maxFiles={4}
       >
         <div className="flex flex-wrap items-center gap-2">
-          {files.map((file) => (
+          {state.files.map((file) => (
             <div
               key={file.id}
               className="rounded-ppx-s group relative size-16 overflow-hidden"
@@ -335,16 +434,14 @@ export function InlineImageUploadDemo() {
                 className="size-full object-cover"
               />
               <button
-                onClick={() =>
-                  setFiles((prev) => prev.filter((f) => f.id !== file.id))
-                }
+                onClick={() => actions.removeFile(file.id)}
                 className="absolute inset-0 flex items-center justify-center bg-black/50 opacity-0 transition-opacity group-hover:opacity-100"
               >
                 <CloseIcon className="size-4 text-white" />
               </button>
             </div>
           ))}
-          {files.length < 4 && (
+          {state.files.length < 4 && (
             <FileUpload.Dropzone
               hideDefaultContent
               className="rounded-ppx-s border-ppx-neutral-5 hover:border-ppx-primary-5 hover:bg-ppx-primary-1 size-16 min-h-0 cursor-pointer border-2 border-dashed p-0"
@@ -363,22 +460,33 @@ export function InlineImageUploadDemo() {
 // ============================================================================
 
 export function FilesTableDemo() {
-  const [files, setFiles] = React.useState<FileUploadFile[]>([]);
+  const [state, actions] = useFileUploadWithUploader({
+    maxFiles: 10,
+    multiple: true,
+  });
 
   return (
     <div className="w-full max-w-lg">
       <FileUpload.Root
-        value={files}
-        onValueChange={setFiles}
+        files={state.files}
+        addFiles={actions.addFiles}
+        removeFile={actions.removeFile}
+        clearFiles={actions.clearFiles}
+        openFileDialog={actions.openFileDialog}
+        getInputProps={actions.getInputProps}
+        handleDragEnter={actions.handleDragEnter}
+        handleDragLeave={actions.handleDragLeave}
+        handleDragOver={actions.handleDragOver}
+        handleDrop={actions.handleDrop}
+        isDragActive={state.isDragging}
         multiple
-        maxFiles={10}
       >
         <FileUpload.Dropzone size="sm" />
-        {files.length > 0 && (
+        {state.files.length > 0 && (
           <div className="rounded-ppx-s border-ppx-neutral-4 mt-4 overflow-hidden border">
             <div className="bg-ppx-neutral-2 flex items-center justify-between px-4 py-2">
               <span className="text-ppx-neutral-14 text-sm font-medium">
-                Files ({files.length})
+                Files ({state.files.length})
               </span>
               <div className="flex gap-2">
                 <FileUpload.Trigger size="sm" variant="ghost">
@@ -403,7 +511,7 @@ export function FilesTableDemo() {
                 </tr>
               </thead>
               <tbody className="divide-ppx-neutral-3 divide-y">
-                {files.map((file) => (
+                {state.files.map((file) => (
                   <tr key={file.id} className="text-sm">
                     <td className="text-ppx-neutral-14 max-w-[200px] truncate px-4 py-2 font-medium">
                       {file.file.name}
@@ -412,15 +520,11 @@ export function FilesTableDemo() {
                       {getFileExtension(file.file.name).toUpperCase()}
                     </td>
                     <td className="text-ppx-neutral-10 px-4 py-2">
-                      {formatFileSize(file.file.size)}
+                      {formatBytes(file.file.size)}
                     </td>
                     <td className="px-4 py-2 text-right">
                       <button
-                        onClick={() =>
-                          setFiles((prev) =>
-                            prev.filter((f) => f.id !== file.id),
-                          )
-                        }
+                        onClick={() => actions.removeFile(file.id)}
                         className="text-ppx-red-5 hover:text-ppx-red-6"
                       >
                         <TrashIcon className="size-4" />
@@ -442,24 +546,39 @@ export function FilesTableDemo() {
 // ============================================================================
 
 export function MixedContentCardsDemo() {
-  const [files, setFiles] = React.useState<FileUploadFile[]>([]);
+  const [state, actions] = useFileUploadWithUploader({
+    multiple: true,
+  });
 
   return (
     <div className="w-full max-w-md">
-      <FileUpload.Root value={files} onValueChange={setFiles} multiple>
+      <FileUpload.Root
+        files={state.files}
+        addFiles={actions.addFiles}
+        removeFile={actions.removeFile}
+        clearFiles={actions.clearFiles}
+        openFileDialog={actions.openFileDialog}
+        getInputProps={actions.getInputProps}
+        handleDragEnter={actions.handleDragEnter}
+        handleDragLeave={actions.handleDragLeave}
+        handleDragOver={actions.handleDragOver}
+        handleDrop={actions.handleDrop}
+        isDragActive={state.isDragging}
+        multiple
+      >
         <FileUpload.Dropzone size="sm" />
-        {files.length > 0 && (
+        {state.files.length > 0 && (
           <div className="mt-4">
             <div className="mb-2 flex items-center justify-between">
               <span className="text-ppx-neutral-14 text-sm font-medium">
-                Files ({files.length})
+                Files ({state.files.length})
               </span>
               <FileUpload.ClearButton className="text-xs">
                 Remove all
               </FileUpload.ClearButton>
             </div>
             <div className="grid grid-cols-2 gap-3">
-              {files.map((file) => (
+              {state.files.map((file) => (
                 <div
                   key={file.id}
                   className="rounded-ppx-s border-ppx-neutral-4 bg-ppx-neutral-1 group relative overflow-hidden border"
@@ -480,13 +599,11 @@ export function MixedContentCardsDemo() {
                       {file.file.name}
                     </p>
                     <p className="text-ppx-neutral-10 text-xs">
-                      {formatFileSize(file.file.size)}
+                      {formatBytes(file.file.size)}
                     </p>
                   </div>
                   <button
-                    onClick={() =>
-                      setFiles((prev) => prev.filter((f) => f.id !== file.id))
-                    }
+                    onClick={() => actions.removeFile(file.id)}
                     className="absolute right-1 top-1 flex size-6 items-center justify-center rounded-full bg-black/60 text-white opacity-0 transition-opacity group-hover:opacity-100"
                   >
                     <CloseIcon className="size-3" />
@@ -506,23 +623,63 @@ export function MixedContentCardsDemo() {
 // ============================================================================
 
 export function DropzoneSizesDemo() {
+  const [stateSmall, actionsSmall] = useFileUploadWithUploader({});
+  const [stateDefault, actionsDefault] = useFileUploadWithUploader({});
+  const [stateLarge, actionsLarge] = useFileUploadWithUploader({});
+
   return (
     <div className="flex w-full flex-col gap-6">
       <div>
         <p className="text-ppx-neutral-10 mb-2 text-xs font-medium">Small</p>
-        <FileUpload.Root>
+        <FileUpload.Root
+          files={stateSmall.files}
+          addFiles={actionsSmall.addFiles}
+          removeFile={actionsSmall.removeFile}
+          clearFiles={actionsSmall.clearFiles}
+          openFileDialog={actionsSmall.openFileDialog}
+          getInputProps={actionsSmall.getInputProps}
+          handleDragEnter={actionsSmall.handleDragEnter}
+          handleDragLeave={actionsSmall.handleDragLeave}
+          handleDragOver={actionsSmall.handleDragOver}
+          handleDrop={actionsSmall.handleDrop}
+          isDragActive={stateSmall.isDragging}
+        >
           <FileUpload.Dropzone size="sm" />
         </FileUpload.Root>
       </div>
       <div>
         <p className="text-ppx-neutral-10 mb-2 text-xs font-medium">Default</p>
-        <FileUpload.Root>
+        <FileUpload.Root
+          files={stateDefault.files}
+          addFiles={actionsDefault.addFiles}
+          removeFile={actionsDefault.removeFile}
+          clearFiles={actionsDefault.clearFiles}
+          openFileDialog={actionsDefault.openFileDialog}
+          getInputProps={actionsDefault.getInputProps}
+          handleDragEnter={actionsDefault.handleDragEnter}
+          handleDragLeave={actionsDefault.handleDragLeave}
+          handleDragOver={actionsDefault.handleDragOver}
+          handleDrop={actionsDefault.handleDrop}
+          isDragActive={stateDefault.isDragging}
+        >
           <FileUpload.Dropzone size="default" />
         </FileUpload.Root>
       </div>
       <div>
         <p className="text-ppx-neutral-10 mb-2 text-xs font-medium">Large</p>
-        <FileUpload.Root>
+        <FileUpload.Root
+          files={stateLarge.files}
+          addFiles={actionsLarge.addFiles}
+          removeFile={actionsLarge.removeFile}
+          clearFiles={actionsLarge.clearFiles}
+          openFileDialog={actionsLarge.openFileDialog}
+          getInputProps={actionsLarge.getInputProps}
+          handleDragEnter={actionsLarge.handleDragEnter}
+          handleDragLeave={actionsLarge.handleDragLeave}
+          handleDragOver={actionsLarge.handleDragOver}
+          handleDrop={actionsLarge.handleDrop}
+          isDragActive={stateLarge.isDragging}
+        >
           <FileUpload.Dropzone size="lg" />
         </FileUpload.Root>
       </div>
