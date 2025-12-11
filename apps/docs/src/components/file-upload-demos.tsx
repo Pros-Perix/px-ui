@@ -354,6 +354,7 @@ export function UploadWithProgressDemo() {
         addFiles={actions.addFiles}
         removeFile={actions.removeFile}
         clearFiles={actions.clearFiles}
+        retryUpload={actions.retryUpload}
         openFileDialog={actions.openFileDialog}
         getInputProps={actions.getInputProps}
         handleDragEnter={actions.handleDragEnter}
@@ -361,6 +362,7 @@ export function UploadWithProgressDemo() {
         handleDragOver={actions.handleDragOver}
         handleDrop={actions.handleDrop}
         isDragActive={state.isDragging}
+        isUploading={state.isUploading}
         multiple
       >
         <FileUpload.Dropzone size="sm" />
@@ -375,14 +377,12 @@ export function UploadWithProgressDemo() {
                   <div className="flex min-w-0 flex-1 flex-col gap-1.5">
                     <div className="flex items-center justify-between">
                       <FileUpload.ItemName />
-                      <span className="text-ppx-neutral-10 shrink-0 text-xs">
-                        {file.progress !== undefined
-                          ? `${file.progress}%`
-                          : "Pending"}
-                      </span>
+                      <FileUpload.ItemStatus />
                     </div>
                     <FileUpload.ItemProgress />
+                    <FileUpload.ItemError />
                   </div>
+                  <FileUpload.ItemRetry />
                   <FileUpload.ItemRemove />
                 </FileUpload.Item>
               ))
