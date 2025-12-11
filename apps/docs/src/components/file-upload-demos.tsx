@@ -730,7 +730,7 @@ export function SimpleUploadDemo() {
       <FileUploadSimple
         accept="image/*,.pdf,.doc,.docx"
         maxSize={10 * 1024 * 1024}
-        onFilesChange={(files: FileWithUploadStatus[]) =>
+        onFilesChange={(files: FileWithPreview[]) =>
           console.log("Files changed:", files)
         }
       />
@@ -759,7 +759,7 @@ export function SimpleUploadWithS3Demo() {
             console.log("All uploads complete:", files);
           },
         }}
-        onFilesChange={(files: FileWithUploadStatus[]) =>
+        onFilesChange={(files: FileWithPreview[]) =>
           console.log("Files:", files)
         }
       />
