@@ -10,7 +10,7 @@ import RetryIcon from "../icons/retry-icon";
 import UploadIcon from "../icons/upload-icon";
 import SpinnerIcon from "../icons/spinner-icon";
 import {
-  useFileUploadWithUploader,
+  useFileUpload,
   type FileUploadWithUploaderOptions,
   type FileWithPreview,
   type FileWithUploadStatus,
@@ -109,7 +109,7 @@ export function FileUploadSimple({
   onFilesAdded,
   upload,
 }: FileUploadSimpleProps) {
-  const [state, actions] = useFileUploadWithUploader({
+  const [state, actions] = useFileUpload({
     maxFiles,
     maxSize,
     accept,
@@ -477,7 +477,7 @@ export function FileUploadSimple({
 // Export hook for direct use
 // ============================================================================
 
-export { useFileUploadWithUploader } from "../hooks/use-file-upload";
+export { useFileUpload } from "../hooks/use-file-upload";
 export type {
   FileWithUploadStatus,
   UploadConfig,
