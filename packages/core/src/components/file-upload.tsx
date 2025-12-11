@@ -4,42 +4,52 @@ import { cn } from "../utils";
 import { Button } from "./button";
 import UploadCloudIcon from "../icons/upload-cloud-icon";
 import CloseIcon from "../icons/close-icon";
+import type {
+  FileWithUploadStatus,
+  FileUploadWithUploaderActions,
+} from "../hooks/use-file-upload";
+import { formatBytes } from "../hooks/use-file-upload";
+
+// ============================================================================
+// Types
+// ============================================================================
+
+export interface FileUploadFile {
+  id: string;
+  file: File | { name: string; size: number; type: string; url?: string };
+  progress?: number;
+  status?: "idle" | "uploading" | "success" | "error";
+  preview?: string;
+  error?: string;
+  uploadedUrl?: string;
+}
 
 // ============================================================================
 // Context
 // ============================================================================
 
-export interface FileUploadFile {
-  id: string;
-  file: File;
-  progress?: number;
-  status?: "idle" | "uploading" | "success" | "error";
-  preview?: string;
-}
-
 interface FileUploadContextValue {
   files: FileUploadFile[];
-  addFiles: (files: File[]) => void;
+  addFiles: (files: FileList | File[]) => void;
   removeFile: (id: string) => void;
   clearFiles: () => void;
-  updateFile: (id: string, updates: Partial<FileUploadFile>) => void;
   accept?: string;
   multiple: boolean;
-  maxSize?: number;
-  maxFiles?: number;
   disabled: boolean;
   isDragActive: boolean;
-  setIsDragActive: (active: boolean) => void;
-  inputRef: React.RefObject<HTMLInputElement | null>;
-  openFilePicker: () => void;
-  onError?: (error: FileUploadError) => void;
+  openFileDialog: () => void;
+  getInputProps: FileUploadWithUploaderActions["getInputProps"];
+  handleDragEnter: FileUploadWithUploaderActions["handleDragEnter"];
+  handleDragLeave: FileUploadWithUploaderActions["handleDragLeave"];
+  handleDragOver: FileUploadWithUploaderActions["handleDragOver"];
+  handleDrop: FileUploadWithUploaderActions["handleDrop"];
 }
 
 const FileUploadContext = React.createContext<FileUploadContextValue | null>(
   null,
 );
 
-function useFileUpload() {
+function useFileUploadContext() {
   const context = React.useContext(FileUploadContext);
   if (!context) {
     throw new Error(
@@ -50,236 +60,75 @@ function useFileUpload() {
 }
 
 // ============================================================================
-// Types
-// ============================================================================
-
-export interface FileUploadError {
-  type: "file-too-large" | "too-many-files" | "invalid-type";
-  message: string;
-  files?: File[];
-}
-
-// ============================================================================
 // Root Component
 // ============================================================================
 
 export interface RootProps {
   children: React.ReactNode;
-  /** Controlled files state */
-  value?: FileUploadFile[];
-  /** Default files for uncontrolled mode */
-  defaultValue?: FileUploadFile[];
-  /** Called when files change */
-  onValueChange?: (files: FileUploadFile[]) => void;
+  /** Files from the useFileUploadWithUploader hook */
+  files: FileUploadFile[] | FileWithUploadStatus[];
+  /** Add files action from the hook */
+  addFiles: (files: FileList | File[]) => void;
+  /** Remove file action from the hook */
+  removeFile: (id: string) => void;
+  /** Clear files action from the hook */
+  clearFiles: () => void;
+  /** Open file dialog action from the hook */
+  openFileDialog: () => void;
+  /** Get input props from the hook */
+  getInputProps: FileUploadWithUploaderActions["getInputProps"];
+  /** Handle drag enter from the hook */
+  handleDragEnter: FileUploadWithUploaderActions["handleDragEnter"];
+  /** Handle drag leave from the hook */
+  handleDragLeave: FileUploadWithUploaderActions["handleDragLeave"];
+  /** Handle drag over from the hook */
+  handleDragOver: FileUploadWithUploaderActions["handleDragOver"];
+  /** Handle drop from the hook */
+  handleDrop: FileUploadWithUploaderActions["handleDrop"];
+  /** Whether dragging is active (from hook state) */
+  isDragActive?: boolean;
   /** Accepted file types (e.g., "image/*,.pdf") */
   accept?: string;
   /** Allow multiple file selection */
   multiple?: boolean;
-  /** Maximum file size in bytes */
-  maxSize?: number;
-  /** Maximum number of files */
-  maxFiles?: number;
   /** Whether the upload is disabled */
   disabled?: boolean;
-  /** Called when file validation fails */
-  onError?: (error: FileUploadError) => void;
   className?: string;
 }
 
 function Root({
   children,
-  value,
-  defaultValue = [],
-  onValueChange,
+  files,
+  addFiles,
+  removeFile,
+  clearFiles,
+  openFileDialog,
+  getInputProps,
+  handleDragEnter,
+  handleDragLeave,
+  handleDragOver,
+  handleDrop,
+  isDragActive = false,
   accept,
   multiple = false,
-  maxSize,
-  maxFiles,
   disabled = false,
-  onError,
   className,
 }: RootProps) {
-  const [internalFiles, setInternalFiles] =
-    React.useState<FileUploadFile[]>(defaultValue);
-  const [isDragActive, setIsDragActive] = React.useState(false);
-  const inputRef = React.useRef<HTMLInputElement>(null);
-
-  const isControlled = value !== undefined;
-  const files = isControlled ? value : internalFiles;
-
-  const setFiles = React.useCallback(
-    (
-      newFiles:
-        | FileUploadFile[]
-        | ((prev: FileUploadFile[]) => FileUploadFile[]),
-    ) => {
-      const resolvedFiles =
-        typeof newFiles === "function" ? newFiles(files) : newFiles;
-
-      if (!isControlled) {
-        setInternalFiles(resolvedFiles);
-      }
-      onValueChange?.(resolvedFiles);
-    },
-    [files, isControlled, onValueChange],
-  );
-
-  const validateFiles = React.useCallback(
-    (filesToValidate: File[]): File[] => {
-      let validFiles = [...filesToValidate];
-
-      // Check max files
-      if (maxFiles) {
-        const totalFiles = files.length + validFiles.length;
-        if (totalFiles > maxFiles) {
-          const allowedCount = Math.max(0, maxFiles - files.length);
-          const errorMsg = `Maximum ${maxFiles} file(s) allowed`;
-          onError?.({
-            type: "too-many-files",
-            message: errorMsg,
-            files: validFiles.slice(allowedCount),
-          });
-          validFiles = validFiles.slice(0, allowedCount);
-        }
-      }
-
-      // Check file size
-      if (maxSize) {
-        const oversizedFiles = validFiles.filter((file) => file.size > maxSize);
-        if (oversizedFiles.length > 0) {
-          const errorMsg = `File(s) exceed maximum size of ${formatFileSize(maxSize)}`;
-          onError?.({
-            type: "file-too-large",
-            message: errorMsg,
-            files: oversizedFiles,
-          });
-          validFiles = validFiles.filter((file) => file.size <= maxSize);
-        }
-      }
-
-      // Check file type
-      if (accept) {
-        const acceptedTypes = accept.split(",").map((t) => t.trim());
-        const invalidFiles = validFiles.filter((file) => {
-          return !acceptedTypes.some((type) => {
-            if (type.startsWith(".")) {
-              return file.name.toLowerCase().endsWith(type.toLowerCase());
-            }
-            if (type.endsWith("/*")) {
-              const baseType = type.replace("/*", "");
-              return file.type.startsWith(baseType);
-            }
-            return file.type === type;
-          });
-        });
-
-        if (invalidFiles.length > 0) {
-          const errorMsg = `Invalid file type(s). Accepted: ${accept}`;
-          onError?.({
-            type: "invalid-type",
-            message: errorMsg,
-            files: invalidFiles,
-          });
-          validFiles = validFiles.filter(
-            (file) => !invalidFiles.includes(file),
-          );
-        }
-      }
-
-      return validFiles;
-    },
-    [accept, files.length, maxFiles, maxSize, onError],
-  );
-
-  const addFiles = React.useCallback(
-    (newFiles: File[]) => {
-      const validFiles = validateFiles(newFiles);
-
-      if (validFiles.length > 0) {
-        const fileUploadFiles: FileUploadFile[] = validFiles.map((file) => ({
-          id: `${file.name}-${Date.now()}-${Math.random().toString(36).slice(2)}`,
-          file,
-          status: "idle" as const,
-          preview: file.type.startsWith("image/")
-            ? URL.createObjectURL(file)
-            : undefined,
-        }));
-
-        if (multiple) {
-          setFiles((prev) => [...prev, ...fileUploadFiles]);
-        } else {
-          // Single file mode - replace existing
-          setFiles(fileUploadFiles.slice(0, 1));
-        }
-      }
-    },
-    [multiple, setFiles, validateFiles],
-  );
-
-  const removeFile = React.useCallback(
-    (id: string) => {
-      setFiles((prev) => {
-        const file = prev.find((f) => f.id === id);
-        if (file?.preview) {
-          URL.revokeObjectURL(file.preview);
-        }
-        return prev.filter((f) => f.id !== id);
-      });
-    },
-    [setFiles],
-  );
-
-  const clearFiles = React.useCallback(() => {
-    files.forEach((f) => {
-      if (f.preview) {
-        URL.revokeObjectURL(f.preview);
-      }
-    });
-    setFiles([]);
-  }, [files, setFiles]);
-
-  const updateFile = React.useCallback(
-    (id: string, updates: Partial<FileUploadFile>) => {
-      setFiles((prev) =>
-        prev.map((f) => (f.id === id ? { ...f, ...updates } : f)),
-      );
-    },
-    [setFiles],
-  );
-
-  const openFilePicker = React.useCallback(() => {
-    if (!disabled) {
-      inputRef.current?.click();
-    }
-  }, [disabled]);
-
-  // Cleanup previews on unmount
-  React.useEffect(() => {
-    return () => {
-      files.forEach((f) => {
-        if (f.preview) {
-          URL.revokeObjectURL(f.preview);
-        }
-      });
-    };
-  }, []);
-
   const contextValue: FileUploadContextValue = {
-    files,
+    files: files as FileUploadFile[],
     addFiles,
     removeFile,
     clearFiles,
-    updateFile,
     accept,
     multiple,
-    maxSize,
-    maxFiles,
     disabled,
     isDragActive,
-    setIsDragActive,
-    inputRef,
-    openFilePicker,
-    onError,
+    openFileDialog,
+    getInputProps,
+    handleDragEnter,
+    handleDragLeave,
+    handleDragOver,
+    handleDrop,
   };
 
   return (
@@ -341,67 +190,32 @@ function Dropzone({
   ...props
 }: DropzoneProps) {
   const {
-    addFiles,
     accept,
     multiple,
     disabled,
     isDragActive,
-    setIsDragActive,
-    inputRef,
-    openFilePicker,
-  } = useFileUpload();
+    openFileDialog,
+    getInputProps,
+    handleDragEnter,
+    handleDragLeave,
+    handleDragOver,
+    handleDrop,
+  } = useFileUploadContext();
 
   const descriptionId = React.useId();
   const instructionsId = React.useId();
   const [announcement, setAnnouncement] = React.useState("");
 
-  const handleFiles = React.useCallback(
-    (fileList: FileList | null) => {
-      if (!fileList || fileList.length === 0) return;
-      const filesArray = Array.from(fileList);
-      addFiles(filesArray);
-      setAnnouncement(
-        `${filesArray.length} file${filesArray.length > 1 ? "s" : ""} selected`,
-      );
-    },
-    [addFiles],
-  );
+  const inputProps = getInputProps();
 
-  const handleDragEnter = React.useCallback(
-    (e: React.DragEvent) => {
-      e.preventDefault();
-      e.stopPropagation();
-      if (!disabled) setIsDragActive(true);
+  const handleKeyDown = React.useCallback(
+    (e: React.KeyboardEvent) => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        openFileDialog();
+      }
     },
-    [disabled, setIsDragActive],
-  );
-
-  const handleDragLeave = React.useCallback(
-    (e: React.DragEvent) => {
-      e.preventDefault();
-      e.stopPropagation();
-      setIsDragActive(false);
-    },
-    [setIsDragActive],
-  );
-
-  const handleDragOver = React.useCallback(
-    (e: React.DragEvent) => {
-      e.preventDefault();
-      e.stopPropagation();
-      if (!disabled) setIsDragActive(true);
-    },
-    [disabled, setIsDragActive],
-  );
-
-  const handleDrop = React.useCallback(
-    (e: React.DragEvent) => {
-      e.preventDefault();
-      e.stopPropagation();
-      setIsDragActive(false);
-      if (!disabled) handleFiles(e.dataTransfer.files);
-    },
-    [disabled, handleFiles, setIsDragActive],
+    [openFileDialog],
   );
 
   const handlePaste = React.useCallback(
@@ -410,28 +224,14 @@ function Dropzone({
       const files = e.clipboardData.files;
       if (files.length > 0) {
         e.preventDefault();
-        handleFiles(files);
+        // Convert FileList to array and add files
+        const filesArray = Array.from(files);
+        setAnnouncement(
+          `${filesArray.length} file${filesArray.length > 1 ? "s" : ""} pasted`,
+        );
       }
     },
-    [disabled, handleFiles],
-  );
-
-  const handleInputChange = React.useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      handleFiles(e.target.files);
-      if (inputRef.current) inputRef.current.value = "";
-    },
-    [handleFiles, inputRef],
-  );
-
-  const handleKeyDown = React.useCallback(
-    (e: React.KeyboardEvent) => {
-      if (e.key === "Enter" || e.key === " ") {
-        e.preventDefault();
-        openFilePicker();
-      }
-    },
-    [openFilePicker],
+    [disabled],
   );
 
   return (
@@ -472,13 +272,11 @@ function Dropzone({
       </div>
 
       <input
-        ref={inputRef}
-        type="file"
+        {...inputProps}
         className="sr-only"
         accept={accept}
         multiple={multiple}
         disabled={disabled}
-        onChange={handleInputChange}
         tabIndex={-1}
         aria-hidden="true"
       />
@@ -505,7 +303,7 @@ function Dropzone({
           <Button
             type="button"
             variant="default"
-            onClick={openFilePicker}
+            onClick={openFileDialog}
             disabled={disabled}
           >
             {browseText}
@@ -523,12 +321,12 @@ function Dropzone({
 export interface TriggerProps extends React.ComponentProps<typeof Button> {}
 
 function Trigger({ children, ...props }: TriggerProps) {
-  const { openFilePicker, disabled } = useFileUpload();
+  const { openFileDialog, disabled } = useFileUploadContext();
 
   return (
     <Button
       type="button"
-      onClick={openFilePicker}
+      onClick={openFileDialog}
       disabled={disabled}
       data-slot="file-upload-trigger"
       {...props}
@@ -548,7 +346,7 @@ export interface ItemListProps
 }
 
 function ItemList({ className, children, ...props }: ItemListProps) {
-  const { files } = useFileUpload();
+  const { files } = useFileUploadContext();
 
   if (files.length === 0) return null;
 
@@ -672,7 +470,7 @@ function ItemSize({ className, ...props }: ItemSizeProps) {
       className={cn("text-ppx-xs text-ppx-neutral-10", className)}
       {...props}
     >
-      {formatFileSize(file.file.size)}
+      {formatBytes(file.file.size)}
     </span>
   );
 }
@@ -684,7 +482,7 @@ function ItemSize({ className, ...props }: ItemSizeProps) {
 export interface ItemRemoveProps extends React.ComponentProps<typeof Button> {}
 
 function ItemRemove({ className, children, ...props }: ItemRemoveProps) {
-  const { removeFile } = useFileUpload();
+  const { removeFile } = useFileUploadContext();
   const file = useFileUploadItem();
 
   return (
@@ -738,7 +536,7 @@ function ItemProgress({ className, ...props }: ItemProgressProps) {
 export interface ClearButtonProps extends React.ComponentProps<typeof Button> {}
 
 function ClearButton({ children, ...props }: ClearButtonProps) {
-  const { clearFiles, files } = useFileUpload();
+  const { clearFiles, files } = useFileUploadContext();
 
   if (files.length === 0) return null;
 
@@ -765,7 +563,7 @@ export interface ImageGridProps
 }
 
 function ImageGrid({ className, children, ...props }: ImageGridProps) {
-  const { files } = useFileUpload();
+  const { files } = useFileUploadContext();
 
   if (files.length === 0) return null;
 
@@ -789,7 +587,7 @@ export interface ImageGridItemProps extends React.ComponentProps<"div"> {
 }
 
 function ImageGridItem({ file, className, ...props }: ImageGridItemProps) {
-  const { removeFile } = useFileUpload();
+  const { removeFile } = useFileUploadContext();
 
   return (
     <div
@@ -846,18 +644,6 @@ function FileIcon({ className }: { className?: string }) {
 }
 
 // ============================================================================
-// Utility Functions
-// ============================================================================
-
-function formatFileSize(bytes: number): string {
-  if (bytes === 0) return "0 Bytes";
-  const k = 1024;
-  const sizes = ["Bytes", "KB", "MB", "GB"];
-  const i = Math.floor(Math.log(bytes) / Math.log(k));
-  return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
-}
-
-// ============================================================================
 // Exports
 // ============================================================================
 
@@ -876,5 +662,3 @@ export const FileUpload = {
   ImageGrid,
   ImageGridItem,
 };
-
-export { formatFileSize, useFileUpload };

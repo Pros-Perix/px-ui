@@ -2,7 +2,6 @@ import * as React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "../utils";
 import { Button } from "./button";
-import { FileUpload, formatFileSize, type FileUploadFile } from "./file-upload";
 import UploadCloudIcon from "../icons/upload-cloud-icon";
 import CloseIcon from "../icons/close-icon";
 import FileIcon from "../icons/file-icon";
@@ -15,6 +14,7 @@ import {
   type FileUploadWithUploaderOptions,
   type FileWithPreview,
   type FileWithUploadStatus,
+  formatBytes,
 } from "../hooks/use-file-upload";
 
 // ============================================================================
@@ -201,7 +201,7 @@ export function FileUploadSimple({
 
           <div className="flex items-center gap-2">
             <span className="text-ppx-xs text-ppx-neutral-10">
-              {formatFileSize(file.file.size)}
+              {formatBytes(file.file.size)}
             </span>
             {file.status === "uploading" && (
               <div className="bg-ppx-neutral-3 h-1.5 flex-1 overflow-hidden rounded-full">
