@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { HomeLayout } from "fumadocs-ui/layouts/home";
 import { baseOptions } from "@/lib/layout.shared";
 import { buttonVariants } from "@px-ui/core";
+import PpxLogo from "@/assets/ppx-colored-logo";
 
 export const Route = createFileRoute("/")({
   component: Home,
@@ -11,11 +12,13 @@ function Home() {
   return (
     <HomeLayout {...baseOptions()} themeSwitch={{ enabled: false }}>
       <div className="-mt-40 flex flex-1 flex-col items-center justify-center px-4 py-16">
-        <h1 className="text-ppx-h1 font-sans-b text-ppx-foreground mb-4">
-          PX-UI
-        </h1>
+        <div className="mb-4 flex items-center gap-3">
+          <PpxLogo className="size-10" />
+          <h1 className="text-ppx-h1 font-sans-b text-ppx-foreground">PX-UI</h1>
+        </div>
         <p className="text-ppx-base text-ppx-muted-foreground mb-8 max-w-md text-center">
-          A modern React component library built on Base UI
+          A modern, accessible, TypeScript‑first React component library built
+          for enterprise web apps.
         </p>
         <div className="flex gap-4">
           <Link

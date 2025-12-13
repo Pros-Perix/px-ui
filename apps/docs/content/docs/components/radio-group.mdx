@@ -1,178 +1,203 @@
 ---
-title: RadioGroup
-description: Group of mutually exclusive radio options
+title: Radio Group
+description: A group of radio buttons for single selection
+apiReference: https://base-ui.com/react/components/radio-group.md
 ---
 
 ## Overview
 
-The RadioGroup component provides a set of radio buttons where only one option can be selected at a time.
+The RadioGroup component provides a group of radio buttons for selecting a single option from multiple choices. It's built on top of Base UI's RadioGroup component and supports multiple sizes.
 
-## Installation
+## Import
 
 ```tsx
-import * as RadioGroup from "@px-ui/core";
+import { RadioGroup } from "@px-ui/core";
 ```
-
-## Base-UI Reference
-
-This component is built on top of [Base UI RadioGroup](https://base-ui.com/react/components/radio-group).
 
 ## Usage
 
-### Basic Usage
+<Preview>
+  <RadioGroup.Group>
+    <Label>
+      <RadioGroup.Item value="option1" />
+      Option 1
+    </Label>
+    <Label>
+      <RadioGroup.Item value="option2" />
+      Option 2
+    </Label>
+    <Label>
+      <RadioGroup.Item value="option3" />
+      Option 3
+    </Label>
+  </RadioGroup.Group>
+</Preview>
 
+<CodeBlock>
 ```tsx
-import * as RadioGroup from "@px-ui/core";
-
 <RadioGroup.Group>
-  <div className="flex items-center gap-2">
+  <Label>
     <RadioGroup.Item value="option1" />
-    <label>Option 1</label>
-  </div>
-  <div className="flex items-center gap-2">
+    Option 1
+  </Label>
+  <Label>
     <RadioGroup.Item value="option2" />
-    <label>Option 2</label>
-  </div>
-  <div className="flex items-center gap-2">
+    Option 2
+  </Label>
+  <Label>
     <RadioGroup.Item value="option3" />
-    <label>Option 3</label>
-  </div>
+    Option 3
+  </Label>
 </RadioGroup.Group>
 ```
+</CodeBlock>
 
-### Controlled State
-
-```tsx
-import { useState } from "react";
-
-function Example() {
-  const [value, setValue] = useState("option1");
-
-  return (
-    <RadioGroup.Group value={value} onValueChange={setValue}>
-      <div className="flex items-center gap-2">
-        <RadioGroup.Item value="option1" />
-        <label>Option 1</label>
-      </div>
-      <div className="flex items-center gap-2">
-        <RadioGroup.Item value="option2" />
-        <label>Option 2</label>
-      </div>
-    </RadioGroup.Group>
-  );
-}
-```
+## Examples
 
 ### Sizes
 
+<Preview>
+  <div className="flex flex-col gap-6">
+    <RadioGroup.Group>
+      <Label>
+        <RadioGroup.Item value="small" size="sm" />
+        Small
+      </Label>
+      <Label>
+        <RadioGroup.Item value="small2" size="sm" />
+        Small 2
+      </Label>
+    </RadioGroup.Group>
+    <RadioGroup.Group>
+      <Label>
+        <RadioGroup.Item value="default" />
+        Default
+      </Label>
+      <Label>
+        <RadioGroup.Item value="default2" />
+        Default 2
+      </Label>
+    </RadioGroup.Group>
+    <RadioGroup.Group>
+      <Label>
+        <RadioGroup.Item value="large" size="lg" />
+        Large
+      </Label>
+      <Label>
+        <RadioGroup.Item value="large2" size="lg" />
+        Large 2
+      </Label>
+    </RadioGroup.Group>
+  </div>
+</Preview>
+
+<CodeBlock>
 ```tsx
 <RadioGroup.Group>
-  <RadioGroup.Item value="sm" size="sm" />   // 16px
-  <RadioGroup.Item value="default" />         // 20px (default)
-  <RadioGroup.Item value="lg" size="lg" />   // 24px
+  <Label>
+    <RadioGroup.Item value="small" size="sm" />
+    Small
+  </Label>
+  <Label>
+    <RadioGroup.Item value="default" />
+    Default
+  </Label>
+  <Label>
+    <RadioGroup.Item value="large" size="lg" />
+    Large
+  </Label>
 </RadioGroup.Group>
 ```
+</CodeBlock>
 
-### Disabled State
+### Controlled
 
+<Preview>
+  <RadioGroup.Group value="option2">
+    <Label>
+      <RadioGroup.Item value="option1" />
+      Option 1
+    </Label>
+    <Label>
+      <RadioGroup.Item value="option2" />
+      Option 2
+    </Label>
+    <Label>
+      <RadioGroup.Item value="option3" />
+      Option 3
+    </Label>
+  </RadioGroup.Group>
+</Preview>
+
+<CodeBlock>
 ```tsx
-<RadioGroup.Group disabled>
-  <div className="flex items-center gap-2">
-    <RadioGroup.Item value="disabled" />
-    <label>Disabled option</label>
-  </div>
+<RadioGroup.Group value="option2">
+  <Label>
+    <RadioGroup.Item value="option1" />
+    Option 1
+  </Label>
+  <Label>
+    <RadioGroup.Item value="option2" />
+    Option 2
+  </Label>
+  <Label>
+    <RadioGroup.Item value="option3" />
+    Option 3
+  </Label>
 </RadioGroup.Group>
 ```
+</CodeBlock>
 
-## Components
+### Disabled
 
-### RadioGroup.Group
+<Preview>
+  <RadioGroup.Group>
+    <Label>
+      <RadioGroup.Item value="option1" disabled />
+      Disabled option
+    </Label>
+    <Label>
+      <RadioGroup.Item value="option2" />
+      Enabled option
+    </Label>
+  </RadioGroup.Group>
+</Preview>
 
-The container component that manages the selection state.
+<CodeBlock>
+```tsx
+<RadioGroup.Group>
+  <Label>
+    <RadioGroup.Item value="option1" disabled />
+    Disabled option
+  </Label>
+  <Label>
+    <RadioGroup.Item value="option2" />
+    Enabled option
+  </Label>
+</RadioGroup.Group>
+```
+</CodeBlock>
+
+## Props
+
+### RadioGroup
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
 | `value` | `string` | - | Controlled selected value |
-| `defaultValue` | `string` | - | Initial selected value (uncontrolled) |
-| `onValueChange` | `(value: string) => void` | - | Callback when selection changes |
-| `disabled` | `boolean` | `false` | Disable all radio items |
-| `name` | `string` | - | Form field name |
+| `defaultValue` | `string` | - | Uncontrolled default selected value |
+| `onValueChange` | `(value: string) => void` | - | Callback when value changes |
+| `disabled` | `boolean` | - | Disable all radio items |
 | `className` | `string` | - | Additional CSS classes |
 
 ### RadioGroup.Item
 
-Individual radio button.
-
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `value` | `string` | - | Value of this option |
+| `value` | `string` | - | Value of the radio item |
+| `disabled` | `boolean` | - | Disable the radio item |
 | `size` | `"default" \| "sm" \| "lg"` | `"default"` | Size of the radio button |
-| `disabled` | `boolean` | `false` | Disable this specific item |
+| `variant` | `"default"` | `"default"` | Visual style variant |
 | `className` | `string` | - | Additional CSS classes |
 
-## Examples
-
-### Selection Form
-
-```tsx
-import * as RadioGroup from "@px-ui/core";
-
-function PlanSelector() {
-  const [plan, setPlan] = useState("free");
-
-  return (
-    <RadioGroup.Group value={plan} onValueChange={setPlan}>
-      <div className="flex flex-col gap-4">
-        <label className="flex items-center gap-3 cursor-pointer">
-          <RadioGroup.Item value="free" />
-          <div>
-            <p className="font-medium">Free</p>
-            <p className="text-sm text-ppx-muted-foreground">
-              Basic features
-            </p>
-          </div>
-        </label>
-
-        <label className="flex items-center gap-3 cursor-pointer">
-          <RadioGroup.Item value="pro" />
-          <div>
-            <p className="font-medium">Pro - $9/month</p>
-            <p className="text-sm text-ppx-muted-foreground">
-              Advanced features
-            </p>
-          </div>
-        </label>
-
-        <label className="flex items-center gap-3 cursor-pointer">
-          <RadioGroup.Item value="enterprise" />
-          <div>
-            <p className="font-medium">Enterprise - Contact us</p>
-            <p className="text-sm text-ppx-muted-foreground">
-              Custom solutions
-            </p>
-          </div>
-        </label>
-      </div>
-    </RadioGroup.Group>
-  );
-}
-```
-
-### Horizontal Layout
-
-```tsx
-<RadioGroup.Group defaultValue="left" className="flex-row gap-6">
-  <label className="flex items-center gap-2">
-    <RadioGroup.Item value="left" />
-    Left
-  </label>
-  <label className="flex items-center gap-2">
-    <RadioGroup.Item value="center" />
-    Center
-  </label>
-  <label className="flex items-center gap-2">
-    <RadioGroup.Item value="right" />
-    Right
-  </label>
-</RadioGroup.Group>
-```
+Plus all standard Base UI RadioGroup and Radio props.

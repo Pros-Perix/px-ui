@@ -1,157 +1,146 @@
 ---
 title: Switch
-description: Toggle switch for boolean settings
+description: A toggle switch component for binary choices
+apiReference: https://base-ui.com/react/components/switch.md
 ---
 
 ## Overview
 
-The Switch component is a toggle control for switching between two states, typically on/off. It provides a more visual alternative to a checkbox for settings.
+The Switch component is a toggle control that allows users to switch between two states. It's built on top of Base UI's Switch component and supports multiple sizes.
 
-## Installation
+## Import
 
 ```tsx
 import { Switch } from "@px-ui/core";
 ```
 
-## Base-UI Reference
-
-This component is built on top of [Base UI Switch](https://base-ui.com/react/components/switch).
-
 ## Usage
 
-### Basic Usage
+<Preview>
+  <div className="flex flex-col gap-4">
+    <label className="flex items-center gap-2">
+      <Switch />
+      <span>Enable notifications</span>
+    </label>
+  </div>
+</Preview>
 
+<CodeBlock>
 ```tsx
-<Switch />
+<label className="flex items-center gap-2">
+  <Switch />
+  <span>Enable notifications</span>
+</label>
 ```
+</CodeBlock>
 
-### Controlled State
-
-```tsx
-import { useState } from "react";
-
-function Example() {
-  const [enabled, setEnabled] = useState(false);
-
-  return (
-    <Switch
-      checked={enabled}
-      onCheckedChange={setEnabled}
-    />
-  );
-}
-```
+## Examples
 
 ### Sizes
 
+<Preview>
+  <div className="flex flex-col gap-4">
+    <label className="flex items-center gap-2">
+      <Switch size="sm" />
+      <span>Small switch</span>
+    </label>
+    <label className="flex items-center gap-2">
+      <Switch />
+      <span>Default switch</span>
+    </label>
+    <label className="flex items-center gap-2">
+      <Switch size="lg" />
+      <span>Large switch</span>
+    </label>
+  </div>
+</Preview>
+
+<CodeBlock>
 ```tsx
-<Switch size="sm" />  // Small: 32x16px
-<Switch />            // Default: 40x20px
-<Switch size="lg" />  // Large: 48x24px
+<label className="flex items-center gap-2">
+  <Switch size="sm" />
+  <span>Small switch</span>
+</label>
+
+<label className="flex items-center gap-2">
+  <Switch />
+  <span>Default switch</span>
+</label>
+
+<label className="flex items-center gap-2">
+  <Switch size="lg" />
+  <span>Large switch</span>
+</label>
 ```
+</CodeBlock>
 
-### With Label
+### Checked State
 
+<Preview>
+  <div className="flex flex-col gap-4">
+    <label className="flex items-center gap-2">
+      <Switch defaultChecked />
+      <span>Checked by default</span>
+    </label>
+    <label className="flex items-center gap-2">
+      <Switch checked />
+      <span>Controlled checked</span>
+    </label>
+  </div>
+</Preview>
+
+<CodeBlock>
 ```tsx
-import { Switch, Label } from "@px-ui/core";
+<label className="flex items-center gap-2">
+  <Switch defaultChecked />
+  <span>Checked by default</span>
+</label>
 
-<div className="flex items-center gap-3">
-  <Switch id="notifications" />
-  <Label htmlFor="notifications">Enable notifications</Label>
-</div>
+<label className="flex items-center gap-2">
+  <Switch checked />
+  <span>Controlled checked</span>
+</label>
 ```
+</CodeBlock>
 
 ### Disabled State
 
+<Preview>
+  <div className="flex flex-col gap-4">
+    <label className="flex items-center gap-2">
+      <Switch disabled />
+      <span>Disabled switch</span>
+    </label>
+    <label className="flex items-center gap-2">
+      <Switch disabled defaultChecked />
+      <span>Disabled checked</span>
+    </label>
+  </div>
+</Preview>
+
+<CodeBlock>
 ```tsx
-<Switch disabled />
-<Switch disabled checked />
+<label className="flex items-center gap-2">
+  <Switch disabled />
+  <span>Disabled switch</span>
+</label>
+
+<label className="flex items-center gap-2">
+  <Switch disabled defaultChecked />
+  <span>Disabled checked</span>
+</label>
 ```
+</CodeBlock>
 
 ## Props
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
 | `checked` | `boolean` | - | Controlled checked state |
-| `defaultChecked` | `boolean` | - | Initial checked state (uncontrolled) |
-| `onCheckedChange` | `(checked: boolean) => void` | - | Callback when state changes |
-| `size` | `"sm" \| "lg"` | - | Size variant (default is medium) |
-| `disabled` | `boolean` | `false` | Disable the switch |
-| `name` | `string` | - | Form field name |
-| `value` | `string` | - | Form field value |
+| `defaultChecked` | `boolean` | - | Uncontrolled default checked state |
+| `disabled` | `boolean` | - | Disable the switch |
+| `size` | `"sm" \| "lg"` | - | Size of the switch (default is medium) |
 | `className` | `string` | - | Additional CSS classes |
+| `onCheckedChange` | `(checked: boolean) => void` | - | Callback when checked state changes |
 
-## Examples
-
-### Settings Panel
-
-```tsx
-import { Switch, Label } from "@px-ui/core";
-
-function SettingsPanel() {
-  return (
-    <div className="flex flex-col gap-4">
-      <div className="flex items-center justify-between">
-        <div className="flex flex-col">
-          <Label>Dark mode</Label>
-          <span className="text-sm text-ppx-muted-foreground">
-            Enable dark theme
-          </span>
-        </div>
-        <Switch />
-      </div>
-
-      <div className="flex items-center justify-between">
-        <div className="flex flex-col">
-          <Label>Notifications</Label>
-          <span className="text-sm text-ppx-muted-foreground">
-            Receive push notifications
-          </span>
-        </div>
-        <Switch defaultChecked />
-      </div>
-
-      <div className="flex items-center justify-between">
-        <div className="flex flex-col">
-          <Label>Auto-save</Label>
-          <span className="text-sm text-ppx-muted-foreground">
-            Automatically save changes
-          </span>
-        </div>
-        <Switch />
-      </div>
-    </div>
-  );
-}
-```
-
-### Form Integration
-
-```tsx
-import { useForm, Controller } from "react-hook-form";
-import { Switch, Label } from "@px-ui/core";
-
-function PreferencesForm() {
-  const { control, handleSubmit } = useForm({
-    defaultValues: { emailUpdates: false },
-  });
-
-  return (
-    <form onSubmit={handleSubmit(console.log)}>
-      <Controller
-        name="emailUpdates"
-        control={control}
-        render={({ field }) => (
-          <div className="flex items-center gap-3">
-            <Switch
-              checked={field.value}
-              onCheckedChange={field.onChange}
-            />
-            <Label>Email updates</Label>
-          </div>
-        )}
-      />
-    </form>
-  );
-}
-```
+Plus all standard Base UI Switch props.

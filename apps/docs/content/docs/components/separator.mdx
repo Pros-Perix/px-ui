@@ -1,13 +1,13 @@
 ---
 title: Separator
-description: Visual divider for separating content
+description: A visual separator component for dividing content
 ---
 
 ## Overview
 
-The Separator component creates a visual divider between content sections. It supports both horizontal and vertical orientations.
+The Separator component provides a visual divider between content sections. It can be displayed horizontally or vertically and supports decorative mode for purely visual separators.
 
-## Installation
+## Import
 
 ```tsx
 import { Separator } from "@px-ui/core";
@@ -15,98 +15,96 @@ import { Separator } from "@px-ui/core";
 
 ## Usage
 
-### Horizontal Separator
+<Preview>
+  <div className="flex flex-col gap-4 w-full">
+    <div>Content above</div>
+    <Separator orientation="horizontal" />
+    <div>Content below</div>
+  </div>
+</Preview>
 
+<CodeBlock>
 ```tsx
-<div className="flex flex-col gap-4">
-  <p>Content above</p>
+<div>
+  <div>Content above</div>
   <Separator orientation="horizontal" />
-  <p>Content below</p>
+  <div>Content below</div>
 </div>
 ```
+</CodeBlock>
 
-### Vertical Separator
+## Examples
 
+### Horizontal
+
+<Preview>
+  <div className="flex flex-col gap-4 w-full">
+    <div>Section 1</div>
+    <Separator orientation="horizontal" />
+    <div>Section 2</div>
+    <Separator orientation="horizontal" />
+    <div>Section 3</div>
+  </div>
+</Preview>
+
+<CodeBlock>
 ```tsx
-<div className="flex items-center gap-4 h-8">
-  <span>Left content</span>
-  <Separator orientation="vertical" />
-  <span>Right content</span>
+<div>
+  <div>Section 1</div>
+  <Separator orientation="horizontal" />
+  <div>Section 2</div>
+  <Separator orientation="horizontal" />
+  <div>Section 3</div>
 </div>
 ```
+</CodeBlock>
 
-### Decorative Separator
+### Vertical
 
-Use the `decorative` prop when the separator is purely visual and should be hidden from screen readers:
+<Preview>
+  <div className="flex items-center gap-4 h-20">
+    <div>Left</div>
+    <Separator orientation="vertical" />
+    <div>Middle</div>
+    <Separator orientation="vertical" />
+    <div>Right</div>
+  </div>
+</Preview>
 
+<CodeBlock>
+```tsx
+<div className="flex items-center gap-4 h-20">
+  <div>Left</div>
+  <Separator orientation="vertical" />
+  <div>Middle</div>
+  <Separator orientation="vertical" />
+  <div>Right</div>
+</div>
+```
+</CodeBlock>
+
+### Decorative
+
+<Preview>
+  <div className="flex flex-col gap-4 w-full">
+    <div>Content</div>
+    <Separator orientation="horizontal" decorative />
+    <div>More content</div>
+  </div>
+</Preview>
+
+<CodeBlock>
 ```tsx
 <Separator orientation="horizontal" decorative />
 ```
+</CodeBlock>
 
 ## Props
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `orientation` | `"horizontal" \| "vertical"` | `"vertical"` | Direction of the separator |
-| `decorative` | `boolean` | `false` | If true, removes semantic meaning for screen readers |
+| `orientation` | `"horizontal" \| "vertical"` | `"vertical"` | Orientation of the separator |
+| `decorative` | `boolean` | `false` | If true, the separator is decorative and won't be announced by screen readers |
 | `className` | `string` | - | Additional CSS classes |
 
-## Accessibility
-
-- When `decorative` is `false`, the separator has `role="separator"` and appropriate `aria-orientation`
-- When `decorative` is `true`, the separator has `role="none"` and is hidden from screen readers
-
-## Examples
-
-### Menu Separator
-
-```tsx
-import { Separator } from "@px-ui/core";
-
-<div className="flex flex-col gap-1">
-  <button className="p-2 text-left">Profile</button>
-  <button className="p-2 text-left">Settings</button>
-  <Separator orientation="horizontal" />
-  <button className="p-2 text-left text-ppx-red-5">Log out</button>
-</div>
-```
-
-### Toolbar Divider
-
-```tsx
-import { Button, Separator } from "@px-ui/core";
-
-<div className="flex items-center gap-2">
-  <Button variant="ghost" size="icon-sm">
-    <BoldIcon />
-  </Button>
-  <Button variant="ghost" size="icon-sm">
-    <ItalicIcon />
-  </Button>
-  <Separator orientation="vertical" className="h-6" />
-  <Button variant="ghost" size="icon-sm">
-    <AlignLeftIcon />
-  </Button>
-  <Button variant="ghost" size="icon-sm">
-    <AlignCenterIcon />
-  </Button>
-</div>
-```
-
-### Card Footer Separator
-
-```tsx
-import { Separator, Button } from "@px-ui/core";
-
-<div className="rounded-lg border p-4">
-  <h3 className="font-medium">Card Title</h3>
-  <p className="text-sm text-ppx-muted-foreground">Card content</p>
-
-  <Separator orientation="horizontal" className="my-4" />
-
-  <div className="flex justify-end gap-2">
-    <Button variant="outline">Cancel</Button>
-    <Button variant="primary">Save</Button>
-  </div>
-</div>
-```
+Plus all standard HTML div attributes.

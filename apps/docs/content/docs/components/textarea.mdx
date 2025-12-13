@@ -1,13 +1,13 @@
 ---
 title: Textarea
-description: Multi-line text input with size and width variants
+description: A multi-line text input component with validation states
 ---
 
 ## Overview
 
-The Textarea component provides a styled multi-line text input area with support for different sizes, width behaviors, and validation states.
+The Textarea component is a styled multi-line text input field that supports multiple sizes, validation states, and width variants. It's perfect for longer text input like descriptions or comments.
 
-## Installation
+## Import
 
 ```tsx
 import { Textarea } from "@px-ui/core";
@@ -15,121 +15,94 @@ import { Textarea } from "@px-ui/core";
 
 ## Usage
 
-### Basic Usage
+<Preview>
+  <Textarea placeholder="Enter your message..." />
+</Preview>
 
+<CodeBlock>
 ```tsx
 <Textarea placeholder="Enter your message..." />
 ```
+</CodeBlock>
 
-### With Default Value
-
-```tsx
-<Textarea defaultValue="Hello World" placeholder="Enter text..." />
-```
+## Examples
 
 ### Sizes
 
+<Preview>
+  <div className="flex flex-col gap-4 w-full max-w-md">
+    <Textarea size="sm" placeholder="Small textarea" />
+    <Textarea size="default" placeholder="Default textarea" />
+  </div>
+</Preview>
+
+<CodeBlock>
 ```tsx
-<Textarea size="default" placeholder="Default size (min-height: 4rem)" />
-<Textarea size="sm" placeholder="Small size (min-height: 3rem)" />
+<Textarea size="sm" placeholder="Small textarea" />
+<Textarea size="default" placeholder="Default textarea" />
 ```
+</CodeBlock>
+
+### Validation States
+
+<Preview>
+  <div className="flex flex-col gap-4 w-full max-w-md">
+    <Textarea placeholder="Valid textarea" defaultValue="Valid content" />
+    <Textarea invalid placeholder="Invalid textarea" defaultValue="Invalid content" />
+    <Textarea disabled placeholder="Disabled textarea" />
+  </div>
+</Preview>
+
+<CodeBlock>
+```tsx
+<Textarea placeholder="Valid textarea" defaultValue="Valid content" />
+<Textarea invalid placeholder="Invalid textarea" defaultValue="Invalid content" />
+<Textarea disabled placeholder="Disabled textarea" />
+```
+</CodeBlock>
+
+### With Rows
+
+<Preview>
+  <div className="flex flex-col gap-4 w-full max-w-md">
+    <Textarea rows={3} placeholder="3 rows" />
+    <Textarea rows={5} placeholder="5 rows" />
+  </div>
+</Preview>
+
+<CodeBlock>
+```tsx
+<Textarea rows={3} placeholder="3 rows" />
+<Textarea rows={5} placeholder="5 rows" />
+```
+</CodeBlock>
 
 ### Width Variants
 
-Control how the textarea handles its width:
+<Preview>
+  <div className="flex flex-col gap-4 w-full max-w-md">
+    <Textarea widthVariant="full" placeholder="Full width" />
+    <Textarea widthVariant="enforced" placeholder="Enforced width" />
+  </div>
+</Preview>
 
+<CodeBlock>
 ```tsx
-// Full width (default) - takes available space
 <Textarea widthVariant="full" placeholder="Full width" />
-
-// Enforced - uses minimum width (18rem)
 <Textarea widthVariant="enforced" placeholder="Enforced width" />
 ```
-
-### Disabled State
-
-```tsx
-<Textarea disabled placeholder="Disabled textarea" />
-```
-
-### Invalid State
-
-Use the `invalid` prop to show validation errors:
-
-```tsx
-<Textarea invalid placeholder="Invalid textarea" />
-```
-
-### Custom Rows
-
-```tsx
-<Textarea rows={6} placeholder="Larger textarea..." />
-```
+</CodeBlock>
 
 ## Props
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
 | `size` | `"default" \| "sm"` | `"default"` | Size of the textarea |
-| `widthVariant` | `"enforced" \| "full"` | `"full"` | Width behavior |
-| `invalid` | `boolean` | `false` | Show invalid/error state |
-| `disabled` | `boolean` | `false` | Disable the textarea |
-| `placeholder` | `string` | - | Placeholder text |
+| `widthVariant` | `"enforced" \| "full"` | `"full"` | Width behavior of the textarea |
+| `invalid` | `boolean` | - | Whether the textarea is in an invalid state |
+| `disabled` | `boolean` | - | Whether the textarea is disabled |
 | `rows` | `number` | - | Number of visible text lines |
 | `className` | `string` | - | Additional CSS classes |
+| `placeholder` | `string` | - | Placeholder text |
 
 Plus all standard HTML textarea attributes.
-
-## Examples
-
-### Form Field
-
-```tsx
-import { Textarea, Label } from "@px-ui/core";
-
-<div className="flex flex-col gap-2">
-  <Label htmlFor="message">Message</Label>
-  <Textarea id="message" placeholder="Enter your message..." rows={4} />
-</div>
-```
-
-### With Character Count
-
-```tsx
-import { useState } from "react";
-import { Textarea } from "@px-ui/core";
-
-function TextareaWithCount() {
-  const [value, setValue] = useState("");
-  const maxLength = 500;
-
-  return (
-    <div className="flex flex-col gap-1">
-      <Textarea
-        value={value}
-        onChange={(e) => setValue(e.target.value)}
-        maxLength={maxLength}
-        placeholder="Enter description..."
-      />
-      <span className="text-sm text-ppx-muted-foreground text-right">
-        {value.length}/{maxLength}
-      </span>
-    </div>
-  );
-}
-```
-
-### With Error
-
-```tsx
-import { Textarea } from "@px-ui/core";
-import * as Field from "@px-ui/forms";
-
-<Field.Root>
-  <Field.Label>Description</Field.Label>
-  <Field.Content>
-    <Textarea invalid placeholder="Enter description" />
-    <Field.Error>Description is required</Field.Error>
-  </Field.Content>
-</Field.Root>
-```

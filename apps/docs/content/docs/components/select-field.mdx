@@ -1,0 +1,247 @@
+---
+title: Select Field
+description: A simplified Select component for common use cases with automatic label detection
+---
+
+## Overview
+
+The SelectField component provides a simplified interface for the Select component, automatically handling label rendering and common use cases. It's perfect for forms where you have a simple list of items to select from.
+
+## Import
+
+```tsx
+import { SelectField } from "@px-ui/forms";
+```
+
+## Usage
+
+<Preview>
+  <SelectField
+    items={[
+      { label: "Option 1", value: "option1" },
+      { label: "Option 2", value: "option2" },
+      { label: "Option 3", value: "option3" },
+    ]}
+    value={undefined}
+    onValueChange={(value) => console.log(value)}
+    placeholder="Select an option"
+  />
+</Preview>
+
+<CodeBlock>
+```tsx
+<SelectField
+  items={[
+    { label: "Option 1", value: "option1" },
+    { label: "Option 2", value: "option2" },
+    { label: "Option 3", value: "option3" },
+  ]}
+  value={undefined}
+  onValueChange={(value) => console.log(value)}
+  placeholder="Select an option"
+/>
+```
+</CodeBlock>
+
+## Examples
+
+### With Auto-Detection
+
+<Preview>
+  <SelectField
+    items={[
+      { label: "Sans-serif", value: "sans" },
+      { label: "Serif", value: "serif" },
+      { label: "Monospace", value: "mono" },
+    ]}
+    value={undefined}
+    onValueChange={(value) => console.log(value)}
+    placeholder="Select a font"
+  />
+</Preview>
+
+<CodeBlock>
+```tsx
+<SelectField
+  items={[
+    { label: "Sans-serif", value: "sans" },
+    { label: "Serif", value: "serif" },
+    { label: "Monospace", value: "mono" },
+  ]}
+  value={undefined}
+  onValueChange={(value) => console.log(value)}
+  placeholder="Select a font"
+/>
+```
+</CodeBlock>
+
+### With Custom Rendering
+
+<Preview>
+  <SelectField
+    items={[
+      { id: 1, name: "John Doe", email: "john@example.com" },
+      { id: 2, name: "Jane Smith", email: "jane@example.com" },
+      { id: 3, name: "Bob Johnson", email: "bob@example.com" },
+    ]}
+    value={undefined}
+    onValueChange={(value) => console.log(value)}
+    renderLabel={(user) => user.name}
+    renderOption={(user) => (
+      <div>
+        <div className="font-medium">{user.name}</div>
+        <div className="text-sm text-ppx-muted-foreground">{user.email}</div>
+      </div>
+    )}
+    isItemEqualToValue={(a, b) => a.id === b.id}
+    placeholder="Select a user"
+  />
+</Preview>
+
+<CodeBlock>
+```tsx
+<SelectField
+  items={[
+    { id: 1, name: "John Doe", email: "john@example.com" },
+    { id: 2, name: "Jane Smith", email: "jane@example.com" },
+    { id: 3, name: "Bob Johnson", email: "bob@example.com" },
+  ]}
+  value={undefined}
+  onValueChange={(value) => console.log(value)}
+  renderLabel={(user) => user.name}
+  renderOption={(user) => (
+    <div>
+      <div className="font-medium">{user.name}</div>
+      <div className="text-sm text-ppx-muted-foreground">{user.email}</div>
+    </div>
+  )}
+  isItemEqualToValue={(a, b) => a.id === b.id}
+  placeholder="Select a user"
+/>
+```
+</CodeBlock>
+
+### Multiple Selection
+
+<Preview>
+  <SelectField
+    items={[
+      { label: "Option 1", value: "option1" },
+      { label: "Option 2", value: "option2" },
+      { label: "Option 3", value: "option3" },
+    ]}
+    multiple
+    value={["option1", "option2"]}
+    onValueChange={(values) => console.log(values)}
+    placeholder="Select options"
+  />
+</Preview>
+
+<CodeBlock>
+```tsx
+<SelectField
+  items={[
+    { label: "Option 1", value: "option1" },
+    { label: "Option 2", value: "option2" },
+    { label: "Option 3", value: "option3" },
+  ]}
+  multiple
+  value={["option1", "option2"]}
+  onValueChange={(values) => console.log(values)}
+  placeholder="Select options"
+/>
+```
+</CodeBlock>
+
+### Sizes
+
+<Preview>
+  <div className="flex flex-col gap-4 w-full max-w-md">
+    <SelectField
+      items={[
+        { label: "Option 1", value: "option1" },
+        { label: "Option 2", value: "option2" },
+      ]}
+      size="sm"
+      placeholder="Small"
+    />
+    <SelectField
+      items={[
+        { label: "Option 1", value: "option1" },
+        { label: "Option 2", value: "option2" },
+      ]}
+      size="default"
+      placeholder="Default"
+    />
+  </div>
+</Preview>
+
+<CodeBlock>
+```tsx
+<SelectField
+  items={[
+    { label: "Option 1", value: "option1" },
+    { label: "Option 2", value: "option2" },
+  ]}
+  size="sm"
+  placeholder="Small"
+/>
+
+<SelectField
+  items={[
+    { label: "Option 1", value: "option1" },
+    { label: "Option 2", value: "option2" },
+  ]}
+  size="default"
+  placeholder="Default"
+/>
+```
+</CodeBlock>
+
+### Invalid State
+
+<Preview>
+  <SelectField
+    items={[
+      { label: "Option 1", value: "option1" },
+      { label: "Option 2", value: "option2" },
+    ]}
+    invalid
+    placeholder="Invalid select"
+  />
+</Preview>
+
+<CodeBlock>
+```tsx
+<SelectField
+  items={[
+    { label: "Option 1", value: "option1" },
+    { label: "Option 2", value: "option2" },
+  ]}
+  invalid
+  placeholder="Invalid select"
+/>
+```
+</CodeBlock>
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `items` | `ReadonlyArray<TItem>` | - | Array of items to display in the select dropdown |
+| `value` | `TItem \| TItem[]` | - | Selected value(s) |
+| `onValueChange` | `(value: TItem \| TItem[]) => void` | - | Callback when value changes |
+| `renderLabel` | `(item: TItem) => ReactNode` | - | Function to render the label in the trigger (auto-detects if item has 'label' property) |
+| `renderOption` | `(item: TItem) => ReactNode` | - | Function to render each option in the dropdown (auto-detects if item has 'label' property) |
+| `placeholder` | `string` | - | Placeholder text when no value is selected |
+| `size` | `"default" \| "sm"` | - | Size of the trigger |
+| `widthVariant` | `"enforced" \| "full"` | - | Width behavior of the trigger |
+| `contentWidthVariant` | `"trigger" \| "fit" \| "enforced"` | - | Width variant for the dropdown content |
+| `triggerClassName` | `string` | - | Additional CSS classes for the trigger |
+| `contentProps` | `object` | - | Additional props for Select.Content |
+| `multiple` | `boolean` | `false` | Enable multiple selection |
+| `disabled` | `boolean` | - | Disable the select |
+| `invalid` | `boolean` | - | Invalid state |
+| `isItemEqualToValue` | `(item: TItem, value: TItem) => boolean` | - | Custom equality function for comparing items |
+
+Plus all standard Select.Root props.

@@ -1,13 +1,12 @@
 ---
-title: AvatarGroup
-description: Display a group of avatars with overflow handling
+title: Avatar Group
+description: Display multiple avatars in a group with overflow handling
 ---
 
 ## Overview
+The AvatarGroup component displays multiple avatars in a horizontal group with automatic overflow handling. When the number of avatars exceeds the maximum, it shows a "+N" indicator that opens a popover with the remaining avatars.
 
-The AvatarGroup component displays multiple avatars in a stacked layout with automatic overflow handling. When there are more avatars than the maximum display count, a popover shows the remaining avatars.
-
-## Installation
+## Import
 
 ```tsx
 import { AvatarGroup } from "@px-ui/core";
@@ -15,158 +14,101 @@ import { AvatarGroup } from "@px-ui/core";
 
 ## Usage
 
-### Basic Usage
+<Preview>
+  <AvatarGroup
+    avatars={[
+      { name: "John Doe", imgSrc: "https://github.com/shadcn.png", variant: "rounded" },
+      { name: "Jane Smith", imgSrc: "https://github.com/shadcn.png", variant: "rounded" },
+      { name: "Bob Johnson", imgSrc: "https://github.com/shadcn.png", variant: "rounded" },
+    ]}
+    max={2}
+  />
+</Preview>
 
+<CodeBlock>
 ```tsx
 <AvatarGroup
   avatars={[
-    { name: "John Doe", imgSrc: "/avatars/john.jpg", size: "40px" },
-    { name: "Jane Smith", imgSrc: "/avatars/jane.jpg", size: "40px" },
-    { name: "Bob Wilson", imgSrc: "/avatars/bob.jpg", size: "40px" },
+    { name: "John Doe", imgSrc: "https://github.com/shadcn.png", variant: "rounded" },
+    { name: "Jane Smith", imgSrc: "https://github.com/shadcn.png", variant: "rounded" },
+    { name: "Bob Johnson", imgSrc: "https://github.com/shadcn.png", variant: "rounded" },
   ]}
+  max={2}
 />
 ```
+</CodeBlock>
+
+## Examples
 
 ### With Overflow
 
-When there are more avatars than the `max` prop allows, the remaining count is shown:
+<Preview>
+  <AvatarGroup
+    avatars={[
+      { name: "John Doe", imgSrc: "https://github.com/shadcn.png", variant: "rounded" },
+      { name: "Jane Smith", imgSrc: "https://github.com/shadcn.png", variant: "rounded" },
+      { name: "Bob Johnson", imgSrc: "https://github.com/shadcn.png", variant: "rounded" },
+      { name: "Alice Wilson", imgSrc: "https://github.com/shadcn.png", variant: "rounded" },
+      { name: "Charlie Brown", imgSrc: "https://github.com/shadcn.png", variant: "rounded" },
+    ]}
+    max={3}
+  />
+</Preview>
 
+<CodeBlock>
 ```tsx
 <AvatarGroup
+  avatars={[
+    { name: "John Doe", imgSrc: "https://github.com/shadcn.png", variant: "rounded" },
+    { name: "Jane Smith", imgSrc: "https://github.com/shadcn.png", variant: "rounded" },
+    { name: "Bob Johnson", imgSrc: "https://github.com/shadcn.png", variant: "rounded" },
+    { name: "Alice Wilson", imgSrc: "https://github.com/shadcn.png", variant: "rounded" },
+    { name: "Charlie Brown", imgSrc: "https://github.com/shadcn.png", variant: "rounded" },
+  ]}
   max={3}
-  avatars={[
-    { name: "John Doe", imgSrc: "/avatars/john.jpg", size: "40px" },
-    { name: "Jane Smith", imgSrc: "/avatars/jane.jpg", size: "40px" },
-    { name: "Bob Wilson", imgSrc: "/avatars/bob.jpg", size: "40px" },
-    { name: "Alice Brown", imgSrc: "/avatars/alice.jpg", size: "40px" },
-    { name: "Charlie Davis", imgSrc: "/avatars/charlie.jpg", size: "40px" },
-  ]}
 />
-// Displays: [John] [Jane] [Bob] [+2]
 ```
+</CodeBlock>
 
-### Custom Maximum
+### Without Images
 
+<Preview>
+  <AvatarGroup
+    avatars={[
+      { name: "John Doe", imgSrc: null, variant: "rounded" },
+      { name: "Jane Smith", imgSrc: null, variant: "rounded" },
+      { name: "Bob Johnson", imgSrc: null, variant: "rounded" },
+      { name: "Alice Wilson", imgSrc: null, variant: "rounded" },
+    ]}
+    max={3}
+  />
+</Preview>
+
+<CodeBlock>
 ```tsx
-// Show more avatars before overflow
-<AvatarGroup
-  max={6}
-  avatars={avatars}
-/>
-
-// Show fewer
-<AvatarGroup
-  max={2}
-  avatars={avatars}
-/>
-```
-
-### Different Variants
-
-The avatar group inherits the variant from the first avatar:
-
-```tsx
-// Rounded avatars
 <AvatarGroup
   avatars={[
-    { name: "John", imgSrc: "/john.jpg", size: "32px", variant: "rounded" },
-    { name: "Jane", imgSrc: "/jane.jpg", size: "32px", variant: "rounded" },
+    { name: "John Doe", imgSrc: null, variant: "rounded" },
+    { name: "Jane Smith", imgSrc: null, variant: "rounded" },
+    { name: "Bob Johnson", imgSrc: null, variant: "rounded" },
+    { name: "Alice Wilson", imgSrc: null, variant: "rounded" },
   ]}
-/>
-
-// Squared avatars (default)
-<AvatarGroup
-  avatars={[
-    { name: "Company A", imgSrc: "/a.jpg", size: "32px", variant: "squared" },
-    { name: "Company B", imgSrc: "/b.jpg", size: "32px", variant: "squared" },
-  ]}
+  max={3}
 />
 ```
+</CodeBlock>
 
 ## Props
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `avatars` | `AvatarProps[]` | - | Array of avatar props (name, imgSrc, size, variant) |
-| `max` | `number` | `4` | Maximum number of avatars to display before overflow |
+| `avatars` | `Array<AvatarProps>` | - | Array of avatar props to display |
+| `max` | `number` | `4` | Maximum number of avatars to display before showing overflow |
 | `className` | `string` | - | Additional CSS classes |
 
-### Avatar Props
-
-Each item in the `avatars` array accepts the same props as the Avatar component:
-
-| Prop | Type | Description |
-|------|------|-------------|
-| `name` | `string` | Name for tooltip and fallback initials |
-| `imgSrc` | `string` | URL of the avatar image |
-| `size` | `string` | Size of the avatar (e.g., "40px") |
-| `variant` | `"squared" \| "rounded"` | Shape of the avatar |
-
-## Features
-
-### Tooltip Support
-
-Each avatar shows a tooltip with the name on hover.
-
-### Popover for Overflow
-
-Clicking or hovering on the overflow indicator (+N) opens a popover showing all hidden avatars with their names.
-
-### Stacked Layout
-
-Avatars are automatically stacked with a slight overlap, creating a cohesive group appearance.
-
-## Examples
-
-### Team Members Display
-
-```tsx
-function TeamMembers({ members }) {
-  return (
-    <div className="flex items-center gap-3">
-      <AvatarGroup
-        max={4}
-        avatars={members.map((member) => ({
-          name: member.name,
-          imgSrc: member.avatar,
-          size: "36px",
-          variant: "rounded",
-        }))}
-      />
-      <span className="text-sm text-ppx-muted-foreground">
-        {members.length} team members
-      </span>
-    </div>
-  );
-}
-```
-
-### Project Contributors
-
-```tsx
-function ProjectCard({ project }) {
-  return (
-    <div className="rounded-lg border p-4">
-      <h3 className="font-medium">{project.name}</h3>
-      <p className="text-sm text-ppx-muted-foreground mb-4">
-        {project.description}
-      </p>
-
-      <div className="flex items-center justify-between">
-        <AvatarGroup
-          max={3}
-          avatars={project.contributors.map((c) => ({
-            name: c.name,
-            imgSrc: c.avatar,
-            size: "28px",
-            variant: "rounded",
-          }))}
-        />
-        <span className="text-xs text-ppx-muted-foreground">
-          Updated 2h ago
-        </span>
-      </div>
-    </div>
-  );
-}
-```
+The `avatars` array accepts the same props as the `Avatar` component:
+- `name`: `string \| null \| undefined` - Name for initials and tooltip
+- `imgSrc`: `string \| null \| undefined` - Image source URL
+- `variant`: `"squared" \| "rounded"` - Visual style variant
+- `size`: `` `${number}px` `` - Size of the avatar
+- `className`: `string` - Additional CSS classes

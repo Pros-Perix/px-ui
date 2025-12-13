@@ -1,0 +1,226 @@
+---
+title: Combobox
+description: A combobox component that combines an input with a dropdown list of options
+apiReference: https://base-ui.com/react/components/combobox.md
+---
+
+## Overview
+
+The Combobox component combines an input field with a dropdown list of options, allowing users to search and select from a list. It's built on top of Base UI's Combobox component and supports single and multiple selection, async loading, and infinite scroll.
+
+## Import
+
+```tsx
+import { Combobox } from "@px-ui/core";
+```
+
+## Usage
+
+<Preview>
+  <Combobox.Root items={["Option 1", "Option 2", "Option 3"]}>
+    <Combobox.SearchableTrigger placeholder="Search..." />
+    <Combobox.Content>
+      <Combobox.List>
+        <Combobox.Item value="Option 1">Option 1</Combobox.Item>
+        <Combobox.Item value="Option 2">Option 2</Combobox.Item>
+        <Combobox.Item value="Option 3">Option 3</Combobox.Item>
+      </Combobox.List>
+    </Combobox.Content>
+  </Combobox.Root>
+</Preview>
+
+<CodeBlock>
+```tsx
+<Combobox.Root items={["Option 1", "Option 2", "Option 3"]}>
+  <Combobox.SearchableTrigger placeholder="Search..." />
+  <Combobox.Content>
+    <Combobox.List>
+      <Combobox.Item value="Option 1">Option 1</Combobox.Item>
+      <Combobox.Item value="Option 2">Option 2</Combobox.Item>
+      <Combobox.Item value="Option 3">Option 3</Combobox.Item>
+    </Combobox.List>
+  </Combobox.Content>
+</Combobox.Root>
+```
+</CodeBlock>
+
+## Examples
+
+### With Chips (Multiple Selection)
+
+<Preview>
+  <Combobox.Root
+    items={["Option 1", "Option 2", "Option 3"]}
+    multiple
+    value={["Option 1", "Option 2"]}
+    onValueChange={(values) => console.log(values)}
+  >
+    <Combobox.ChipsTrigger placeholder="Select options..." />
+    <Combobox.Content>
+      <Combobox.List>
+        <Combobox.Item value="Option 1">Option 1</Combobox.Item>
+        <Combobox.Item value="Option 2">Option 2</Combobox.Item>
+        <Combobox.Item value="Option 3">Option 3</Combobox.Item>
+      </Combobox.List>
+    </Combobox.Content>
+  </Combobox.Root>
+</Preview>
+
+<CodeBlock>
+```tsx
+<Combobox.Root
+  items={["Option 1", "Option 2", "Option 3"]}
+  multiple
+  value={["Option 1", "Option 2"]}
+  onValueChange={(values) => console.log(values)}
+>
+  <Combobox.ChipsTrigger placeholder="Select options..." />
+  <Combobox.Content>
+    <Combobox.List>
+      <Combobox.Item value="Option 1">Option 1</Combobox.Item>
+      <Combobox.Item value="Option 2">Option 2</Combobox.Item>
+      <Combobox.Item value="Option 3">Option 3</Combobox.Item>
+    </Combobox.List>
+  </Combobox.Content>
+</Combobox.Root>
+```
+</CodeBlock>
+
+### With Loading State
+
+<Preview>
+  <Combobox.Root
+    items={["Option 1", "Option 2", "Option 3"]}
+    isLoading
+  >
+    <Combobox.SearchableTrigger placeholder="Search..." />
+    <Combobox.Content>
+      <Combobox.List>
+        <Combobox.Item value="Option 1">Option 1</Combobox.Item>
+        <Combobox.Item value="Option 2">Option 2</Combobox.Item>
+        <Combobox.Item value="Option 3">Option 3</Combobox.Item>
+      </Combobox.List>
+    </Combobox.Content>
+  </Combobox.Root>
+</Preview>
+
+<CodeBlock>
+```tsx
+<Combobox.Root
+  items={["Option 1", "Option 2", "Option 3"]}
+  isLoading
+>
+  <Combobox.SearchableTrigger placeholder="Search..." />
+  <Combobox.Content>
+    <Combobox.List>
+      <Combobox.Item value="Option 1">Option 1</Combobox.Item>
+      <Combobox.Item value="Option 2">Option 2</Combobox.Item>
+      <Combobox.Item value="Option 3">Option 3</Combobox.Item>
+    </Combobox.List>
+  </Combobox.Content>
+</Combobox.Root>
+```
+</CodeBlock>
+
+### Invalid State
+
+<Preview>
+  <Combobox.Root
+    items={["Option 1", "Option 2", "Option 3"]}
+    invalid
+  >
+    <Combobox.SearchableTrigger placeholder="Invalid combobox" />
+    <Combobox.Content>
+      <Combobox.List>
+        <Combobox.Item value="Option 1">Option 1</Combobox.Item>
+        <Combobox.Item value="Option 2">Option 2</Combobox.Item>
+        <Combobox.Item value="Option 3">Option 3</Combobox.Item>
+      </Combobox.List>
+    </Combobox.Content>
+  </Combobox.Root>
+</Preview>
+
+<CodeBlock>
+```tsx
+<Combobox.Root
+  items={["Option 1", "Option 2", "Option 3"]}
+  invalid
+>
+  <Combobox.SearchableTrigger placeholder="Invalid combobox" />
+  <Combobox.Content>
+    <Combobox.List>
+      <Combobox.Item value="Option 1">Option 1</Combobox.Item>
+      <Combobox.Item value="Option 2">Option 2</Combobox.Item>
+      <Combobox.Item value="Option 3">Option 3</Combobox.Item>
+    </Combobox.List>
+  </Combobox.Content>
+</Combobox.Root>
+```
+</CodeBlock>
+
+## Props
+
+### Combobox.Root
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `items` | `any[]` | - | Array of items to display |
+| `value` | `any \| any[]` | - | Selected value(s) |
+| `defaultValue` | `any \| any[]` | - | Default selected value(s) |
+| `onValueChange` | `(value: any \| any[]) => void` | - | Callback when value changes |
+| `multiple` | `boolean` | `false` | Enable multiple selection |
+| `invalid` | `boolean` | - | Invalid state |
+| `disabled` | `boolean` | - | Disable the combobox |
+| `isLoading` | `boolean` | - | Show loading state |
+| `isLoadingMore` | `boolean` | - | Show loading more state (for infinite scroll) |
+| `isError` | `boolean` | - | Show error state |
+| `hasMore` | `boolean` | - | Whether there are more items to load |
+| `onLoadMore` | `() => void` | - | Callback to load more items |
+| `loadOptions` | `LoadOptionsConfig` | - | Async options loader configuration |
+| `isItemEqualToValue` | `(item: any, value: any) => boolean` | - | Custom equality function |
+
+### Combobox.SearchableTrigger
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `placeholder` | `string` | - | Placeholder text |
+| `size` | `"default" \| "sm"` | - | Size of the trigger |
+| `widthVariant` | `"enforced" \| "full"` | - | Width behavior |
+| `className` | `string` | - | Additional CSS classes |
+
+### Combobox.ChipsTrigger
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `placeholder` | `string` | - | Placeholder text |
+| `size` | `"default" \| "sm"` | - | Size of the trigger |
+| `widthVariant` | `"enforced" \| "full"` | - | Width behavior |
+| `className` | `string` | - | Additional CSS classes |
+
+### Combobox.Content
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `empty` | `string` | `"No options"` | Empty state message |
+| `widthVariant` | `"trigger" \| "fit" \| "enforced"` | `"trigger"` | Width behavior |
+| `portalProps` | `object` | - | Props for Combobox.Portal |
+| `positionerProps` | `object` | - | Props for Combobox.Positioner |
+| `popupProps` | `object` | - | Props for Combobox.Popup |
+| `children` | `ReactNode` | - | Content (typically List) |
+
+### Combobox.List
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `children` | `ReactNode` | - | List items |
+
+### Combobox.Item
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `value` | `any` | - | Item value |
+| `disabled` | `boolean` | - | Disable the item |
+| `className` | `string` | - | Additional CSS classes |
+| `children` | `ReactNode` | - | Item content |
+
+Plus all standard Base UI Combobox props.

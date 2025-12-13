@@ -3,3 +3,7 @@
 @import "fumadocs-ui/css/preset.css";
 @import "@px-ui/core/fonts.css";
 @import "@px-ui/core/styles.css";
+
+@theme {
+  --color-fd-card: var(--color-ppx-neutral-1);
+}

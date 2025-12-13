@@ -1,0 +1,223 @@
+---
+title: Popover
+description: A popover component for displaying content in a floating overlay
+apiReference: https://base-ui.com/react/components/popover.md
+---
+
+## Overview
+
+The Popover component displays content in a floating overlay anchored to a trigger element. It's built on top of Base UI's Popover component and is perfect for tooltips, dropdowns, and contextual information.
+
+## Import
+
+```tsx
+import { Popover } from "@px-ui/core";
+```
+
+## Usage
+
+<Preview>
+  <Popover.Root>
+    <Popover.Trigger render={<Button variant="outline">Open Popover</Button>} />
+    <Popover.Content>
+      <Popover.Header>
+        <Popover.Title>Popover Title</Popover.Title>
+        <Popover.Description>
+          This is a popover description.
+        </Popover.Description>
+      </Popover.Header>
+      <div className="mt-2">
+        <p>Popover content goes here.</p>
+      </div>
+    </Popover.Content>
+  </Popover.Root>
+</Preview>
+
+<CodeBlock>
+```tsx
+<Popover.Root>
+  <Popover.Trigger render={<Button variant="outline">Open Popover</Button>} />
+  <Popover.Content>
+    <Popover.Header>
+      <Popover.Title>Popover Title</Popover.Title>
+      <Popover.Description>
+        This is a popover description.
+      </Popover.Description>
+    </Popover.Header>
+    <div className="mt-2">
+      <p>Popover content goes here.</p>
+    </div>
+  </Popover.Content>
+</Popover.Root>
+```
+</CodeBlock>
+
+## Examples
+
+### With Footer
+
+<Preview>
+  <Popover.Root>
+    <Popover.Trigger render={<Button variant="outline">Delete Item</Button>} />
+    <Popover.Content>
+      <Popover.Header>
+        <Popover.Title>Delete Item</Popover.Title>
+        <Popover.Description>
+          Are you sure you want to delete this item? This action cannot be undone.
+        </Popover.Description>
+      </Popover.Header>
+      <Popover.Footer>
+        <Popover.Close render={<Button variant="outline">Cancel</Button>} />
+        <Button variant="destructive">Delete</Button>
+      </Popover.Footer>
+    </Popover.Content>
+  </Popover.Root>
+</Preview>
+
+<CodeBlock>
+```tsx
+<Popover.Root>
+  <Popover.Trigger render={<Button variant="outline">Delete Item</Button>} />
+  <Popover.Content>
+    <Popover.Header>
+      <Popover.Title>Delete Item</Popover.Title>
+      <Popover.Description>
+        Are you sure you want to delete this item? This action cannot be undone.
+      </Popover.Description>
+    </Popover.Header>
+    <Popover.Footer>
+      <Popover.Close render={<Button variant="outline">Cancel</Button>} />
+      <Button variant="destructive">Delete</Button>
+    </Popover.Footer>
+  </Popover.Content>
+</Popover.Root>
+```
+</CodeBlock>
+
+### Without Arrow
+
+<Preview>
+  <Popover.Root>
+    <Popover.Trigger render={<Button variant="outline">Open Popover</Button>} />
+    <Popover.Content arrow={false}>
+      <Popover.Header>
+        <Popover.Title>No Arrow</Popover.Title>
+        <Popover.Description>
+          This popover doesn't have an arrow.
+        </Popover.Description>
+      </Popover.Header>
+    </Popover.Content>
+  </Popover.Root>
+</Preview>
+
+<CodeBlock>
+```tsx
+<Popover.Root>
+  <Popover.Trigger render={<Button variant="outline">Open Popover</Button>} />
+  <Popover.Content arrow={false}>
+    <Popover.Header>
+      <Popover.Title>No Arrow</Popover.Title>
+      <Popover.Description>
+        This popover doesn't have an arrow.
+      </Popover.Description>
+    </Popover.Header>
+  </Popover.Content>
+</Popover.Root>
+```
+</CodeBlock>
+
+### Controlled
+
+<Preview>
+  <Popover.Root open={true} onOpenChange={(open) => console.log(open)}>
+    <Popover.Trigger render={<Button variant="outline">Controlled</Button>} />
+    <Popover.Content>
+      <Popover.Header>
+        <Popover.Title>Controlled Popover</Popover.Title>
+        <Popover.Description>
+          This popover's open state is controlled.
+        </Popover.Description>
+      </Popover.Header>
+    </Popover.Content>
+  </Popover.Root>
+</Preview>
+
+<CodeBlock>
+```tsx
+<Popover.Root open={true} onOpenChange={(open) => console.log(open)}>
+  <Popover.Trigger render={<Button variant="outline">Controlled</Button>} />
+  <Popover.Content>
+    <Popover.Header>
+      <Popover.Title>Controlled Popover</Popover.Title>
+      <Popover.Description>
+        This popover's open state is controlled.
+      </Popover.Description>
+    </Popover.Header>
+  </Popover.Content>
+</Popover.Root>
+```
+</CodeBlock>
+
+## Props
+
+### Popover.Root
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `open` | `boolean` | - | Controlled open state |
+| `defaultOpen` | `boolean` | - | Uncontrolled default open state |
+| `onOpenChange` | `(open: boolean) => void` | - | Callback when open state changes |
+| `openOnHover` | `boolean` | `false` | Open on hover instead of click |
+
+### Popover.Trigger
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `render` | `ReactNode \| ComponentProps` | - | Custom trigger element or render props |
+| `disabled` | `boolean` | - | Disable the trigger |
+
+### Popover.Content
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `arrow` | `boolean` | `true` | Show arrow pointing to trigger |
+| `positionerProps` | `object` | - | Props for Popover.Positioner (side, align, sideOffset) |
+| `popupProps` | `object` | - | Props for Popover.Popup |
+| `className` | `string` | - | Additional CSS classes |
+| `children` | `ReactNode` | - | Popover content |
+
+### Popover.Header
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `className` | `string` | - | Additional CSS classes |
+| `children` | `ReactNode` | - | Header content |
+
+### Popover.Title
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `className` | `string` | - | Additional CSS classes |
+| `children` | `ReactNode` | - | Title text |
+
+### Popover.Description
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `className` | `string` | - | Additional CSS classes |
+| `children` | `ReactNode` | - | Description text |
+
+### Popover.Footer
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `className` | `string` | - | Additional CSS classes |
+| `children` | `ReactNode` | - | Footer content |
+
+### Popover.Close
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `render` | `ReactNode \| ComponentProps` | - | Custom close element or render props |
+
+Plus all standard Base UI Popover props.

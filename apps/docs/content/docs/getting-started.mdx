@@ -11,12 +11,6 @@ Install the packages using your preferred package manager:
 pnpm add @px-ui/core @px-ui/forms
 ```
 
-Or with npm:
-
-```bash
-npm install @px-ui/core @px-ui/forms
-```
-
 ## Peer Dependencies
 
 PX-UI requires the following peer dependencies to be installed in your project.
@@ -45,9 +39,11 @@ pnpm add @px-ui/core @px-ui/forms @tanstack/react-query date-fns zod react-hook-
 
 ## CSS Setup
 
-Import the PX-UI styles in your main CSS file (e.g., `globals.css` or `app.css`):
+Import the PX-UI styles in your main tailwind CSS file (e.g., `tailwind.css` or `app.css`):
 
 ```css
+/* make sure you add it after the tailwind.css import */
+/* @import "tailwind.css"; */
 @import "@px-ui/core/fonts.css";
 @import "@px-ui/core/styles.css";
 ```
@@ -68,45 +64,6 @@ function App() {
     <div>
       <Button variant="primary">Click me</Button>
     </div>
-  );
-}
-```
-
-## Using with Forms
-
-For form handling with validation, use the `@px-ui/forms` package:
-
-```tsx
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
-import { Button, Input } from "@px-ui/core";
-import * as Field from "@px-ui/forms";
-
-const schema = z.object({
-  email: z.string().email(),
-});
-
-function LoginForm() {
-  const { register, handleSubmit, formState: { errors } } = useForm({
-    resolver: zodResolver(schema),
-  });
-
-  return (
-    <form onSubmit={handleSubmit(console.log)}>
-      <Field.Root>
-        <Field.Label>Email</Field.Label>
-        <Field.Content>
-          <Input {...register("email")} />
-          {errors.email && (
-            <Field.Error>{errors.email.message}</Field.Error>
-          )}
-        </Field.Content>
-      </Field.Root>
-      <Button type="submit" variant="primary">
-        Submit
-      </Button>
-    </form>
   );
 }
 ```

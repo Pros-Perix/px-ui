@@ -1,13 +1,13 @@
 ---
 title: Label
-description: Accessible label for form inputs
+description: A label component for form inputs
 ---
 
 ## Overview
 
-The Label component provides an accessible label for form elements. It automatically handles disabled states when paired with disabled inputs.
+The Label component provides accessible labeling for form controls. It automatically handles disabled states and integrates with form inputs.
 
-## Installation
+## Import
 
 ```tsx
 import { Label } from "@px-ui/core";
@@ -15,113 +15,84 @@ import { Label } from "@px-ui/core";
 
 ## Usage
 
-### Basic Usage
+<Preview>
+  <div className="flex flex-col gap-2">
+    <Label htmlFor="email">Email</Label>
+    <input id="email" type="email" placeholder="Enter your email" className="px-3 py-2 border rounded-md" />
+  </div>
+</Preview>
 
+<CodeBlock>
 ```tsx
-import { Label, Input } from "@px-ui/core";
-
-<div className="flex flex-col gap-2">
-  <Label htmlFor="email">Email</Label>
-  <Input id="email" type="email" />
-</div>
+<Label htmlFor="email">Email</Label>
+<input id="email" type="email" placeholder="Enter your email" />
 ```
+</CodeBlock>
+
+## Examples
 
 ### With Checkbox
 
+<Preview>
+  <Label>
+    <Checkbox />
+    Accept terms and conditions
+  </Label>
+</Preview>
+
+<CodeBlock>
 ```tsx
-import { Label, Checkbox } from "@px-ui/core";
-
-<div className="flex items-center gap-2">
-  <Checkbox id="terms" />
-  <Label htmlFor="terms">Accept terms and conditions</Label>
-</div>
-```
-
-### With Required Indicator
-
-```tsx
-<Label htmlFor="name">
-  Name
-  <span className="text-ppx-red-5">*</span>
+<Label>
+  <Checkbox />
+  Accept terms and conditions
 </Label>
 ```
+</CodeBlock>
 
-### Inline Style
+### With Radio
 
-Labels render as flex containers, allowing inline content:
+<Preview>
+  <Label>
+    <RadioGroupItem value="option1" />
+    Option 1
+  </Label>
+</Preview>
 
+<CodeBlock>
 ```tsx
-<Label htmlFor="password">
-  Password
-  <span className="text-ppx-muted-foreground">(min 8 characters)</span>
+<Label>
+  <RadioGroupItem value="option1" />
+  Option 1
 </Label>
 ```
+</CodeBlock>
+
+### Disabled State
+
+<Preview>
+  <div className="flex flex-col gap-2">
+    <Label htmlFor="disabled-input" className="opacity-50">
+      Disabled Input
+    </Label>
+    <input id="disabled-input" type="text" disabled className="px-3 py-2 border rounded-md opacity-50" />
+  </div>
+</Preview>
+
+<CodeBlock>
+```tsx
+<Label htmlFor="disabled-input" className="opacity-50">
+  Disabled Input
+</Label>
+<input id="disabled-input" type="text" disabled />
+```
+</CodeBlock>
 
 ## Props
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `htmlFor` | `string` | - | ID of the form element this label is for |
+| `htmlFor` | `string` | - | Associates the label with a form control |
 | `className` | `string` | - | Additional CSS classes |
 | `children` | `ReactNode` | - | Label content |
 
 Plus all standard HTML label attributes.
-
-## Features
-
-### Disabled State Handling
-
-When the associated input is disabled, the label automatically adjusts its opacity:
-
-```tsx
-<div className="flex items-center gap-2">
-  <Checkbox id="option" disabled />
-  <Label htmlFor="option">Disabled option</Label>
-</div>
-```
-
-### Peer State Support
-
-The label responds to peer element states via CSS, automatically dimming when the associated input is disabled.
-
-## Examples
-
-### Form Field with Description
-
-```tsx
-import { Label, Input } from "@px-ui/core";
-
-<div className="flex flex-col gap-2">
-  <Label htmlFor="username">Username</Label>
-  <Input id="username" placeholder="Enter username" />
-  <p className="text-sm text-ppx-muted-foreground">
-    Your unique username for the platform
-  </p>
-</div>
-```
-
-### Horizontal Layout
-
-```tsx
-import { Label, Input } from "@px-ui/core";
-
-<div className="flex items-center gap-4">
-  <Label htmlFor="search" className="shrink-0">
-    Search
-  </Label>
-  <Input id="search" type="search" placeholder="Search..." />
-</div>
-```
-
-### With Badge
-
-```tsx
-import { Label } from "@px-ui/core";
-
-<Label htmlFor="feature">
-  New feature
-  <span className="rounded bg-ppx-primary-5 px-2 py-0.5 text-xs text-white">
-    Beta
-  </span>
-</Label>
-```

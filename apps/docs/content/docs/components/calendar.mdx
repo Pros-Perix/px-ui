@@ -1,0 +1,201 @@
+---
+title: Calendar
+description: A calendar component for date selection built on react-day-picker
+---
+
+## Overview
+
+The Calendar component provides a flexible date picker interface supporting single date selection, multiple dates, and date ranges. It's built on top of react-day-picker and provides a styled, accessible calendar interface.
+
+## Import
+
+```tsx
+import { Calendar } from "@px-ui/core";
+```
+
+## Usage
+
+<Preview>
+  <Calendar
+    mode="single"
+    selected={new Date()}
+    onSelect={(date) => console.log(date)}
+    className="rounded-ppx-s border border-ppx-neutral-5"
+  />
+</Preview>
+
+<CodeBlock>
+```tsx
+<Calendar
+  mode="single"
+  selected={new Date()}
+  onSelect={(date) => console.log(date)}
+  className="rounded-ppx-s border border-ppx-neutral-5"
+/>
+```
+</CodeBlock>
+
+## Examples
+
+### Single Date Selection
+
+<Preview>
+  <Calendar
+    mode="single"
+    selected={new Date(2025, 5, 15)}
+    onSelect={(date) => console.log(date)}
+    className="rounded-ppx-s border border-ppx-neutral-5"
+  />
+</Preview>
+
+<CodeBlock>
+```tsx
+<Calendar
+  mode="single"
+  selected={new Date(2025, 5, 15)}
+  onSelect={(date) => console.log(date)}
+  className="rounded-ppx-s border border-ppx-neutral-5"
+/>
+```
+</CodeBlock>
+
+### Range Selection
+
+<Preview>
+  <Calendar
+    mode="range"
+    selected={{ from: new Date(2025, 5, 10), to: new Date(2025, 5, 20) }}
+    onSelect={(range) => console.log(range)}
+    className="rounded-ppx-s border border-ppx-neutral-5"
+  />
+</Preview>
+
+<CodeBlock>
+```tsx
+<Calendar
+  mode="range"
+  selected={{ from: new Date(2025, 5, 10), to: new Date(2025, 5, 20) }}
+  onSelect={(range) => console.log(range)}
+  className="rounded-ppx-s border border-ppx-neutral-5"
+/>
+```
+</CodeBlock>
+
+### Multiple Date Selection
+
+<Preview>
+  <Calendar
+    mode="multiple"
+    selected={[new Date(2025, 5, 10), new Date(2025, 5, 15), new Date(2025, 5, 20)]}
+    onSelect={(dates) => console.log(dates)}
+    className="rounded-ppx-s border border-ppx-neutral-5"
+  />
+</Preview>
+
+<CodeBlock>
+```tsx
+<Calendar
+  mode="multiple"
+  selected={[new Date(2025, 5, 10), new Date(2025, 5, 15), new Date(2025, 5, 20)]}
+  onSelect={(dates) => console.log(dates)}
+  className="rounded-ppx-s border border-ppx-neutral-5"
+/>
+```
+</CodeBlock>
+
+### With Dropdown Navigation
+
+<Preview>
+  <Calendar
+    mode="single"
+    selected={new Date()}
+    onSelect={(date) => console.log(date)}
+    captionLayout="dropdown"
+    fromYear={2020}
+    toYear={2030}
+    className="rounded-ppx-s border border-ppx-neutral-5"
+  />
+</Preview>
+
+<CodeBlock>
+```tsx
+<Calendar
+  mode="single"
+  selected={new Date()}
+  onSelect={(date) => console.log(date)}
+  captionLayout="dropdown"
+  fromYear={2020}
+  toYear={2030}
+  className="rounded-ppx-s border border-ppx-neutral-5"
+/>
+```
+</CodeBlock>
+
+### Multiple Months
+
+<Preview>
+  <Calendar
+    mode="single"
+    selected={new Date()}
+    onSelect={(date) => console.log(date)}
+    numberOfMonths={2}
+    className="rounded-ppx-s border border-ppx-neutral-5"
+  />
+</Preview>
+
+<CodeBlock>
+```tsx
+<Calendar
+  mode="single"
+  selected={new Date()}
+  onSelect={(date) => console.log(date)}
+  numberOfMonths={2}
+  className="rounded-ppx-s border border-ppx-neutral-5"
+/>
+```
+</CodeBlock>
+
+### With Week Numbers
+
+<Preview>
+  <Calendar
+    mode="single"
+    selected={new Date()}
+    onSelect={(date) => console.log(date)}
+    showWeekNumber
+    className="rounded-ppx-s border border-ppx-neutral-5"
+  />
+</Preview>
+
+<CodeBlock>
+```tsx
+<Calendar
+  mode="single"
+  selected={new Date()}
+  onSelect={(date) => console.log(date)}
+  showWeekNumber
+  className="rounded-ppx-s border border-ppx-neutral-5"
+/>
+```
+</CodeBlock>
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `mode` | `"single" \| "multiple" \| "range"` | `"single"` | Selection mode |
+| `selected` | `Date \| Date[] \| { from: Date; to?: Date }` | - | Selected date(s) |
+| `onSelect` | `(date: Date \| Date[] \| { from: Date; to?: Date }) => void` | - | Callback when date is selected |
+| `defaultMonth` | `Date` | `new Date()` | Default month to display |
+| `month` | `Date` | - | Controlled month |
+| `onMonthChange` | `(month: Date) => void` | - | Callback when month changes |
+| `captionLayout` | `"label" \| "dropdown" \| "dropdown-months" \| "dropdown-years"` | `"label"` | Caption layout style |
+| `numberOfMonths` | `number` | `1` | Number of months to display |
+| `showOutsideDays` | `boolean` | `true` | Show days from previous/next month |
+| `showWeekNumber` | `boolean` | `false` | Show week numbers |
+| `disabled` | `Date \| Date[] \| { before?: Date; after?: Date }` | - | Disabled dates |
+| `fromYear` | `number` | - | Start year for dropdown |
+| `toYear` | `number` | - | End year for dropdown |
+| `className` | `string` | - | Additional CSS classes |
+
+Plus all standard react-day-picker DayPickerProps.

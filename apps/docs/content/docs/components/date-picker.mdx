@@ -1,0 +1,189 @@
+---
+title: Date Picker
+description: A date picker component that combines Calendar with a Popover trigger
+---
+
+## Overview
+
+The DatePicker component provides a date selection interface by combining the Calendar component with a Popover trigger. It supports single date, multiple dates, and date range selection modes.
+
+## Import
+
+```tsx
+import { DatePicker } from "@px-ui/core";
+```
+
+## Usage
+
+<Preview>
+  <DatePicker
+    mode="single"
+    selected={new Date()}
+    onSelect={(date) => console.log(date)}
+  />
+</Preview>
+
+<CodeBlock>
+```tsx
+<DatePicker
+  mode="single"
+  selected={new Date()}
+  onSelect={(date) => console.log(date)}
+/>
+```
+</CodeBlock>
+
+## Examples
+
+### With Placeholder
+
+<Preview>
+  <DatePicker
+    mode="single"
+    selected={undefined}
+    onSelect={(date) => console.log(date)}
+    placeholder="Select a date"
+  />
+</Preview>
+
+<CodeBlock>
+```tsx
+<DatePicker
+  mode="single"
+  selected={undefined}
+  onSelect={(date) => console.log(date)}
+  placeholder="Select a date"
+/>
+```
+</CodeBlock>
+
+### Custom Date Format
+
+<Preview>
+  <DatePicker
+    mode="single"
+    selected={new Date()}
+    onSelect={(date) => console.log(date)}
+    format="MMM dd, yyyy"
+    placeholder="Pick a date"
+  />
+</Preview>
+
+<CodeBlock>
+```tsx
+<DatePicker
+  mode="single"
+  selected={new Date()}
+  onSelect={(date) => console.log(date)}
+  format="MMM dd, yyyy"
+  placeholder="Pick a date"
+/>
+```
+</CodeBlock>
+
+### Range Selection
+
+<Preview>
+  <DatePicker
+    mode="range"
+    selected={{ from: new Date(2025, 5, 10), to: new Date(2025, 5, 20) }}
+    onSelect={(range) => console.log(range)}
+    placeholder="Select date range"
+  />
+</Preview>
+
+<CodeBlock>
+```tsx
+<DatePicker
+  mode="range"
+  selected={{ from: new Date(2025, 5, 10), to: new Date(2025, 5, 20) }}
+  onSelect={(range) => console.log(range)}
+  placeholder="Select date range"
+/>
+```
+</CodeBlock>
+
+### Multiple Dates
+
+<Preview>
+  <DatePicker
+    mode="multiple"
+    selected={[new Date(2025, 5, 10), new Date(2025, 5, 15)]}
+    onSelect={(dates) => console.log(dates)}
+    placeholder="Select dates"
+  />
+</Preview>
+
+<CodeBlock>
+```tsx
+<DatePicker
+  mode="multiple"
+  selected={[new Date(2025, 5, 10), new Date(2025, 5, 15)]}
+  onSelect={(dates) => console.log(dates)}
+  placeholder="Select dates"
+/>
+```
+</CodeBlock>
+
+### Disabled State
+
+<Preview>
+  <DatePicker
+    mode="single"
+    selected={new Date()}
+    onSelect={(date) => console.log(date)}
+    triggerProps={{ disabled: true }}
+  />
+</Preview>
+
+<CodeBlock>
+```tsx
+<DatePicker
+  mode="single"
+  selected={new Date()}
+  onSelect={(date) => console.log(date)}
+  triggerProps={{ disabled: true }}
+/>
+```
+</CodeBlock>
+
+### Invalid State
+
+<Preview>
+  <DatePicker
+    mode="single"
+    selected={new Date()}
+    onSelect={(date) => console.log(date)}
+    invalid
+  />
+</Preview>
+
+<CodeBlock>
+```tsx
+<DatePicker
+  mode="single"
+  selected={new Date()}
+  onSelect={(date) => console.log(date)}
+  invalid
+/>
+```
+</CodeBlock>
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `mode` | `"single" \| "multiple" \| "range"` | `"single"` | Selection mode (from Calendar) |
+| `selected` | `Date \| Date[] \| { from: Date; to?: Date }` | - | Selected date(s) |
+| `onSelect` | `(date: Date \| Date[] \| { from: Date; to?: Date }) => void` | - | Callback when date is selected |
+| `placeholder` | `string` | `"Pick a date"` | Placeholder text |
+| `format` | `string` | `"yyyy-MM-dd"` | Date format string (date-fns format) |
+| `invalid` | `boolean` | - | Invalid state |
+| `triggerProps` | `object` | - | Props for the trigger button (size, widthVariant, disabled, className) |
+| `trailingIcon` | `ReactNode` | - | Custom trailing icon |
+| `renderTriggerContent` | `ReactNode` | - | Custom trigger content |
+| `popoverRootProps` | `object` | - | Props for Popover.Root |
+| `popoverContentProps` | `object` | - | Props for Popover.Content |
+| `className` | `string` | - | Additional CSS classes |
+
+Plus all Calendar component props (captionLayout, numberOfMonths, showWeekNumber, disabled, fromYear, toYear, etc.).
