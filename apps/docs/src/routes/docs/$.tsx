@@ -1,4 +1,9 @@
-import { createFileRoute, notFound, useLocation } from "@tanstack/react-router";
+import {
+  createFileRoute,
+  linkOptions,
+  notFound,
+  useLocation,
+} from "@tanstack/react-router";
 import { DocsLayout } from "fumadocs-ui/layouts/docs";
 import { createServerFn } from "@tanstack/react-start";
 import { source } from "@/lib/source";
@@ -187,9 +192,19 @@ function Page() {
   const data = Route.useLoaderData();
   const { pageTree } = useFumadocsLoader(data);
   const Content = clientLoader.getComponent(data.path);
+  const link = linkOptions({ to: "/llms-full.txt" });
 
   return (
-    <DocsLayout {...baseOptions()} tree={pageTree}>
+    <DocsLayout
+      {...baseOptions()}
+      tree={{
+        ...pageTree,
+        children: [
+          ...pageTree.children,
+          { type: "page", name: "llms-full.txt", url: link.to, external: true },
+        ],
+      }}
+    >
       <Content />
     </DocsLayout>
   );

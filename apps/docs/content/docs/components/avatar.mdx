@@ -1,12 +1,18 @@
 ---
 title: Avatar
-description: Display user profile pictures with fallback to initials
+description: Display user profile pictures with automatic fallback to colored initials
 apiReference: https://base-ui.com/react/components/avatar
 ---
 
+import { AvatarBasicDemo } from "../../../src/components/avatar-basic-demo";
+import { AvatarVariantsDemo } from "../../../src/components/avatar-variants-demo";
+import { AvatarInitialsDemo } from "../../../src/components/avatar-initials-demo";
+import { AvatarSizesDemo } from "../../../src/components/avatar-sizes-demo";
+import { AvatarWithBadgeDemo } from "../../../src/components/avatar-with-badge-demo";
+
 ## Overview
 
-The Avatar component displays user profile pictures with automatic fallback to colored initials when an image is not available. It's built on top of Base UI's Avatar component and includes tooltip support.
+The Avatar component displays user profile pictures with automatic fallback to colored initials when images are unavailable. It includes smart features like deterministic color generation, built-in tooltips, and support for status badge overlays.
 
 ## Import
 
@@ -17,11 +23,7 @@ import { Avatar } from "@px-ui/core";
 ## Usage
 
 <Preview>
-  <Avatar
-    imgSrc="https://github.com/shadcn.png"
-    name="John Doe"
-    size="40px"
-  />
+  <AvatarBasicDemo />
 </Preview>
 
 <CodeBlock>
@@ -30,6 +32,7 @@ import { Avatar } from "@px-ui/core";
   imgSrc="https://github.com/shadcn.png"
   name="John Doe"
   size="40px"
+  variant="rounded"
 />
 ```
 </CodeBlock>
@@ -38,21 +41,10 @@ import { Avatar } from "@px-ui/core";
 
 ### Variants
 
+The Avatar component supports two visual variants: `squared` with rounded corners, and `rounded` for fully circular avatars.
+
 <Preview>
-  <div className="flex flex-wrap items-center gap-4">
-    <Avatar
-      imgSrc="https://github.com/shadcn.png"
-      name="Acme Inc"
-      size="40px"
-      variant="squared"
-    />
-    <Avatar
-      imgSrc="https://github.com/shadcn.png"
-      name="John Doe"
-      size="40px"
-      variant="rounded"
-    />
-  </div>
+  <AvatarVariantsDemo />
 </Preview>
 
 <CodeBlock>
@@ -60,75 +52,43 @@ import { Avatar } from "@px-ui/core";
 <Avatar
   imgSrc="https://github.com/shadcn.png"
   name="Acme Inc"
-  size="40px"
+  size="48px"
   variant="squared"
 />
 
 <Avatar
   imgSrc="https://github.com/shadcn.png"
   name="John Doe"
-  size="40px"
+  size="48px"
   variant="rounded"
 />
 ```
 </CodeBlock>
 
-### Without Image
+### Initials Fallback
+
+When no image is provided, the Avatar automatically displays initials with a color generated from the user's name. Each unique name consistently receives the same color.
 
 <Preview>
-  <div className="flex flex-wrap items-center gap-4">
-    <Avatar
-      name="John Doe"
-      size="40px"
-      variant="rounded"
-    />
-    <Avatar
-      name="Jane Smith"
-      size="50px"
-      variant="squared"
-    />
-  </div>
+  <AvatarInitialsDemo />
 </Preview>
 
 <CodeBlock>
 ```tsx
-<Avatar
-  name="John Doe"
-  size="40px"
-  variant="rounded"
-/>
-
-<Avatar
-  name="Jane Smith"
-  size="50px"
-  variant="squared"
-/>
+<Avatar name="John Doe" size="48px" variant="rounded" />
+<Avatar name="Jane Smith" size="48px" variant="rounded" />
+<Avatar name="Robert Johnson" size="48px" variant="rounded" />
+<Avatar name="Emily Davis" size="48px" variant="rounded" />
+<Avatar name="Michael Wilson" size="48px" variant="rounded" />
 ```
 </CodeBlock>
 
-### Custom Sizes
+### Sizes
+
+Avatars can be customized to any size using the `size` prop with pixel values.
 
 <Preview>
-  <div className="flex flex-wrap items-center gap-4">
-    <Avatar
-      imgSrc="https://github.com/shadcn.png"
-      name="John Doe"
-      size="32px"
-      variant="rounded"
-    />
-    <Avatar
-      imgSrc="https://github.com/shadcn.png"
-      name="John Doe"
-      size="40px"
-      variant="rounded"
-    />
-    <Avatar
-      imgSrc="https://github.com/shadcn.png"
-      name="John Doe"
-      size="60px"
-      variant="rounded"
-    />
-  </div>
+  <AvatarSizesDemo />
 </Preview>
 
 <CodeBlock>
@@ -150,46 +110,74 @@ import { Avatar } from "@px-ui/core";
 <Avatar
   imgSrc="https://github.com/shadcn.png"
   name="John Doe"
-  size="60px"
+  size="48px"
+  variant="rounded"
+/>
+
+<Avatar
+  imgSrc="https://github.com/shadcn.png"
+  name="John Doe"
+  size="64px"
   variant="rounded"
 />
 ```
 </CodeBlock>
 
-### Hide Tooltip
+### With Status Badge
+
+Wrap the Avatar in a relative container to position status badges or indicators.
 
 <Preview>
-  <div className="flex flex-wrap items-center gap-4">
-    <Avatar
-      imgSrc="https://github.com/shadcn.png"
-      name="John Doe"
-      size="40px"
-      variant="rounded"
-      hideTooltip
-    />
-  </div>
+  <AvatarWithBadgeDemo />
 </Preview>
 
 <CodeBlock>
 ```tsx
-<Avatar
-  imgSrc="https://github.com/shadcn.png"
-  name="John Doe"
-  size="40px"
-  variant="rounded"
-  hideTooltip
-/>
+<div className="relative">
+  <Avatar
+    imgSrc="https://github.com/shadcn.png"
+    name="John Doe"
+    size="48px"
+    variant="rounded"
+  />
+  <div className="absolute bottom-0 right-0 size-3 rounded-full border-2 border-white bg-green-500" />
+</div>
+
+<div className="relative">
+  <Avatar
+    imgSrc="https://github.com/shadcn.png"
+    name="Jane Smith"
+    size="48px"
+    variant="rounded"
+  />
+  <div className="absolute bottom-0 right-0 size-3 rounded-full border-2 border-white bg-yellow-500" />
+</div>
+
+<div className="relative">
+  <Avatar
+    imgSrc="https://github.com/shadcn.png"
+    name="Bob Wilson"
+    size="48px"
+    variant="rounded"
+  />
+  <div className="absolute bottom-0 right-0 size-3 rounded-full border-2 border-white bg-gray-500" />
+</div>
 ```
 </CodeBlock>
 
-## Props
+## API Reference
+
+### Avatar
+
+Displays a user avatar with image or initials fallback.
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `imgSrc` | `string \| null \| undefined` | - | Image source URL for the avatar |
-| `name` | `string \| null \| undefined` | - | Name used for initials fallback and tooltip |
+| `imgSrc` | `string \| null \| undefined` | - | Image source URL. Supports `/SIZE/` pattern for dynamic sizing |
+| `name` | `string \| null \| undefined` | - | User name for initials fallback and tooltip display |
 | `variant` | `"squared" \| "rounded"` | `"squared"` | Visual style variant |
 | `size` | `` `${number}px` `` | `"100px"` | Size of the avatar in pixels |
 | `className` | `string` | - | Additional CSS classes |
-| `children` | `ReactNode` | - | Additional content to render inside the avatar |
-| `hideTooltip` | `boolean` | `false` | Hide the tooltip that shows the name |
+| `hideTooltip` | `boolean` | `false` | Disable the name tooltip on hover |
+
+**Inherited Props:** Inherits all props from [Base UI Avatar.Root](https://base-ui.com/react/components/avatar#root).
