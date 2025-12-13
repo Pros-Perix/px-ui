@@ -47,7 +47,10 @@ import {
   // RadioGroup exports Group and Item
   Group as RadioGroupGroup,
   Item as RadioGroupItem,
+  buttonVariants,
 } from "@px-ui/core";
+import { LLMCopyButton } from "@/components/page-actions";
+import { ExternalLink } from "lucide-react";
 
 // Create RadioGroup namespace for MDX
 const RadioGroup = {
@@ -81,10 +84,47 @@ const serverLoader = createServerFn({
 
 const clientLoader = browserCollections.docs.createClientLoader({
   component({ toc, frontmatter, default: MDX }) {
+    const path = useLocation();
+    const markdownLink = `/llms${path.pathname}`;
+
     return (
       <DocsPage toc={toc}>
-        <DocsTitle>{frontmatter.title}</DocsTitle>
-        <DocsDescription>{frontmatter.description}</DocsDescription>
+        <div className="flex justify-between">
+          <DocsTitle>{frontmatter.title}</DocsTitle>
+          <LLMCopyButton markdownUrl={markdownLink} />
+        </div>
+        <DocsDescription className="mb-2">
+          {frontmatter.description}
+        </DocsDescription>
+
+        <div className="mb-6 flex items-center gap-2">
+          <a
+            target="_blank"
+            className={buttonVariants({
+              variant: "outline",
+              size: "sm",
+              className: "w-fit",
+            })}
+            href={markdownLink}
+          >
+            Markdown <ExternalLink size={16} />
+          </a>
+
+          {frontmatter.apiReference && (
+            <a
+              target="_blank"
+              className={buttonVariants({
+                variant: "outline",
+                size: "sm",
+                className: "w-fit",
+              })}
+              href={frontmatter.apiReference}
+            >
+              API Reference <ExternalLink size={16} />
+            </a>
+          )}
+        </div>
+
         <DocsBody>
           <MDX
             components={{

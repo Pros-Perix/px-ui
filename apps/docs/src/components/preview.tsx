@@ -73,7 +73,7 @@ export function CodeBlock({ children, maxHeight = 300 }: CodeBlockProps) {
       >
         {children}
         {!isExpanded && needsExpand && (
-          <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-[#0d1117] to-transparent" />
+          <div className="from-ppx-neutral-4 pointer-events-none absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t to-transparent" />
         )}
       </div>
       {needsExpand && (

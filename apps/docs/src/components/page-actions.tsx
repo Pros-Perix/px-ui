@@ -1,8 +1,7 @@
 import { useState } from "react";
 import { Check, Copy } from "lucide-react";
-import { cn } from "../lib/cn";
-import { useCopyButton } from "fumadocs-ui/utils/use-copy-button";
-import { buttonVariants } from "@px-ui/core";
+import { Tooltip } from "@px-ui/core";
+import { Button } from "@px-ui/core";
 
 const cache = new Map<string, string>();
 
@@ -14,42 +13,62 @@ export function LLMCopyButton({
 }: {
   markdownUrl: string;
 }) {
-  const [isLoading, setLoading] = useState(false);
-  const [checked, onClick] = useCopyButton(async () => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = async () => {
     const cached = cache.get(markdownUrl);
     if (cached) return navigator.clipboard.writeText(cached);
 
-    setLoading(true);
+    setIsLoading(true);
 
-    try {
-      await navigator.clipboard.write([
-        new ClipboardItem({
-          "text/plain": fetch(markdownUrl).then(async (res) => {
-            const content = await res.text();
-            cache.set(markdownUrl, content);
+    const res = await fetch(markdownUrl);
 
-            return content;
-          }),
-        }),
-      ]);
-    } finally {
-      setLoading(false);
+    if (!res.ok) {
+      alert("Something went wrong, unable to copy");
+      setIsLoading(false);
+      return;
     }
-  });
+
+    const data = await res.text();
+
+    if (!data) {
+      alert("Something went wrong, unable to copy");
+      setIsLoading(false);
+      return;
+    }
+
+    await navigator.clipboard.write([
+      new ClipboardItem({
+        "text/plain": data,
+      }),
+    ]);
+
+    setIsLoading(false);
+    setCopied(true);
+
+    setTimeout(() => {
+      setCopied(false);
+    }, 3000);
+  };
 
   return (
-    <button
-      disabled={isLoading}
-      className={cn(
-        buttonVariants({
-          variant: "outline",
-          size: "sm",
-        }),
-      )}
-      onClick={onClick}
-    >
-      {checked ? <Check /> : <Copy />}
-      Copy Markdown
-    </button>
+    <Tooltip.Root>
+      <Tooltip.Trigger
+        render={
+          <Button
+            disabled={isLoading}
+            variant="ghost"
+            size="sm"
+            className="w-fit"
+            onClick={handleCopy}
+            aria-label="Copy Markdown"
+          >
+            {copied ? <Check /> : <Copy size={16} />}
+          </Button>
+        }
+      />
+      <Tooltip.Content>Copy markdown content</Tooltip.Content>
+    </Tooltip.Root>
   );
 }
