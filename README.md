@@ -1,6 +1,6 @@
 # px-ui – Modern React Component Library
 
-Welcome to **px-ui**, a scalable, modular component library built with:
+Welcome to **px-ui**, a modern, accessible, TypeScript‑first React component library built for enterprise web apps with
 
 - **React 19 + TypeScript**
 - **Tailwind CSS v4**
