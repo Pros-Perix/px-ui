@@ -1,13 +1,27 @@
-# px-ui – Monorepo Component Library
+# px-ui – Modern React Component Library
 
-Welcome to **px-ui**, a scalable, modular, and blazing-fast component library built with:
+Welcome to **px-ui**, a scalable, modular component library built with:
 
-* **React + TypeScript**
-* **Tailwind CSS v4** (centralized in `@px-ui/core`)
-* **Storybook** (per-package or global)
-* **Vitest + Testing Library**
-* **Vite** for builds
-* **PlopJS** for scaffolding new components
+- **React 19 + TypeScript**
+- **Tailwind CSS v4**
+- **tsdown** for fast builds
+- **Changesets** for version management
+
+---
+
+## Packages
+
+### [@px-ui/core](./packages/core)
+
+Core UI components including Button, Input, Select, Dialog, Calendar, and more. Built with Tailwind CSS v4 and TypeScript.
+
+### [@px-ui/forms](./packages/forms)
+
+Form management components built on React Hook Form with Zod validation support.
+
+### [@px-ui/docs](./apps/docs)
+
+Documentation site built with Fumadocs and TanStack Start.
 
 ---
 
@@ -21,77 +35,27 @@ pnpm install
 
 ## Development Workflow
 
-### Start Storybook (Global for All Packages)
+### Start Documentation Site
 
 ```bash
-pnpm run dev
+pnpm start docs dev
 ```
 
-This will:
+This starts the documentation site where you can preview all components.
 
-* Watch Tailwind styles in `@px-ui/core`
-* Launch Storybook with all components
-
-Or run storybook for a specific package:
+### Watch a Package in Development Mode
 
 ```bash
-pnpm --filter @px-ui/button dev
-```
----
-
-### Run Storybook Only (No Style Watch)
-
-```bash
-pnpm run storybook
+pnpm start core dev
 ```
 
----
-
-### Watch Tailwind Styles Only
-
-```bash
-pnpm run watch-core-styles
-```
-
-Watches `@px-ui/core/src/index.css` and regenerates `dist/core.css` on changes.
-Used in all Storybook previews.
-
----
-
-## Run Tests
-
-```bash
-pnpm run test
-```
-
-Or run tests for a specific package:
-
-```bash
-pnpm --filter @px-ui/button test
-```
-
----
-
-## Create a New Component Package
-
-```bash
-pnpm run gen:component
-```
-
-This runs **PlopJS** and scaffolds:
-
-* `packages/<your-component>`
-* With boilerplate: `.storybook`, `src/`, tests, stories, vite, etc.
-
----
+This watches the package and rebuilds on changes.
 
 ## Linting
 
 ```bash
 pnpm run lint
 ```
-
----
 
 ## Building Packages
 
@@ -101,10 +65,10 @@ Build all packages:
 pnpm run build
 ```
 
-Or build a specific one:
+Or build a specific package:
 
 ```bash
-pnpm --filter @px-ui/button build
+pnpm --filter @px-ui/core build
 ```
 
 ---
@@ -115,7 +79,7 @@ This project uses [`changesets`](https://github.com/changesets/changesets) for v
 
 ### Creating a New Release
 
-1. Make your changes to components (e.g., `packages/core/src/Button.tsx`)
+1. Make your changes to components
 2. Create a changeset:
    ```bash
    pnpm changeset
@@ -146,10 +110,10 @@ When you push to `master`:
 
 To enable automated publishing, configure the following GitHub secret:
 
-* `NPM_TOKEN` - Your npm authentication token
-  * Generate at [npmjs.com/settings/tokens](https://www.npmjs.com/settings/YOUR_USERNAME/tokens)
-  * Must have "Automation" or "Publish" permission
-  * Add to: Settings → Secrets and variables → Actions → New repository secret
+- `NPM_TOKEN` - Your npm authentication token
+  - Generate at [npmjs.com/settings/tokens](https://www.npmjs.com/settings/YOUR_USERNAME/tokens)
+  - Must have "Automation" or "Publish" permission
+  - Add to: Settings → Secrets and variables → Actions → New repository secret
 
 ### Manual Publishing (if needed)
 
@@ -170,6 +134,7 @@ pnpm run release
 - `pnpm run version` - Apply changesets (bump versions)
 - `pnpm run release` - Publish packages to npm
 - `pnpm run build` - Build all packages
+- `pnpm start <package> <script>` - Run a script in a specific package
 
 ---
 
@@ -178,13 +143,12 @@ pnpm run release
 ```
 px-ui/
 ├── packages/
-│   ├── core/         # Tailwind v4, design tokens, central CSS
-│   └── button/       # Sample component package
-│       ├── .storybook/
-│       ├── src/
-│       └── ...
-├── generators/       # PlopJS template logic
-├── tsconfig.base.json
+│   ├── core/         # Core UI components with Tailwind CSS v4
+│   └── forms/        # Form components with React Hook Form
+├── apps/
+│   └── docs/         # Documentation site (Fumadocs + TanStack Start)
+├── .changeset/       # Changesets for version management
+├── .github/          # GitHub Actions workflows
 ├── pnpm-workspace.yaml
 └── README.md
 ```
@@ -193,9 +157,9 @@ px-ui/
 
 ## Tips for Contributors
 
-* Always **extend root Storybook configs** in per-package `main.ts`/`preview.ts`
-* Use static Tailwind class strings for purge friendliness
-* Keep `@px-ui/core` as the only source of design system and Tailwind config
-* Keep component logic dumb (UI only), delegate smart behavior to consumers
+- Use our defined style classes instead of tailwind classes
+- Keep `@px-ui/core` as the single source of truth for design tokens
+- All components are built with accessibility in mind using Base UI
+- Run the lint before committing: `pnpm run lint`
 
 ---
