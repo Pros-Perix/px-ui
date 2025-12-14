@@ -1,6 +1,7 @@
 {
   "name": "px-ui",
   "version": "0.3.0",
+  "packageManager": "pnpm@10.15.0",
   "scripts": {
     "do-clean-install": "rm -rf node_modules && pnpm -r exec rm -rf node_modules && pnpm i",
     "start": "pnpm --filter",
