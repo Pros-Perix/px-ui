@@ -109,13 +109,67 @@ pnpm --filter @px-ui/button build
 
 ---
 
-## Publishing (optional)
+## Publishing
 
-If publishing to npm (private or public):
+This project uses [`changesets`](https://github.com/changesets/changesets) for version management and automated npm publishing via GitHub Actions.
 
-* Ensure `dist/` is built
-* Use [`changesets`](https://github.com/changesets/changesets) for versioning
-* Trigger GitHub Actions or manual `npm publish`
+### Creating a New Release
+
+1. Make your changes to components (e.g., `packages/core/src/Button.tsx`)
+2. Create a changeset:
+   ```bash
+   pnpm changeset
+   ```
+   - Select which packages changed (@px-ui/core, @px-ui/forms)
+   - Choose version bump type (patch/minor/major)
+   - Write a description of the changes (used in CHANGELOG)
+3. Commit both your code changes AND the changeset file:
+   ```bash
+   git add .
+   git commit -m "feat: add new Button variant"
+   git push origin master
+   ```
+
+### Automated Publishing Workflow
+
+When you push to `master`:
+
+1. GitHub Actions detects changeset files
+2. It creates/updates a "Version Packages" PR that:
+   - Bumps package versions in package.json
+   - Updates CHANGELOG.md files
+   - Handles dependency updates (e.g., if @px-ui/core updates, @px-ui/forms dependency updates too)
+3. Review the PR to see what will be released
+4. Merge the PR → Packages automatically publish to npm
+
+### Setup Requirements
+
+To enable automated publishing, configure the following GitHub secret:
+
+* `NPM_TOKEN` - Your npm authentication token
+  * Generate at [npmjs.com/settings/tokens](https://www.npmjs.com/settings/YOUR_USERNAME/tokens)
+  * Must have "Automation" or "Publish" permission
+  * Add to: Settings → Secrets and variables → Actions → New repository secret
+
+### Manual Publishing (if needed)
+
+```bash
+# 1. Version packages (reads changesets, bumps versions, updates CHANGELOGs)
+pnpm run version
+
+# 2. Build all packages
+pnpm run build
+
+# 3. Publish to npm
+pnpm run release
+```
+
+### Commands Reference
+
+- `pnpm changeset` - Create a new changeset
+- `pnpm run version` - Apply changesets (bump versions)
+- `pnpm run release` - Publish packages to npm
+- `pnpm run build` - Build all packages
 
 ---
 

@@ -1,6 +1,6 @@
 {
   "name": "@px-ui/forms",
-  "version": "1.1.2",
+  "version": "1.4.0",
   "description": "Form components built on top of px-ui-core",
   "type": "module",
   "module": "./dist/index.js",
@@ -18,7 +18,6 @@
     "dev": "tsdown --watch",
     "test": "vitest",
     "typecheck": "tsc --noEmit",
-    "release": "bumpp && pnpm publish",
     "prepublishOnly": "pnpm run build"
   },
   "keywords": [
@@ -58,7 +57,6 @@
     "@types/react": "^19.2.0",
     "@types/react-dom": "^19.2.0",
     "@vitejs/plugin-react": "^5.1.1",
-    "bumpp": "^10.3.1",
     "happy-dom": "^20.0.10",
     "react": "19.2.0",
     "react-dom": "19.2.0",

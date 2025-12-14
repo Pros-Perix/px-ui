@@ -6,7 +6,10 @@
     "start": "pnpm --filter",
     "build": "pnpm -r run build",
     "lint": "eslint . --ext .ts,.tsx",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "changeset": "changeset",
+    "version": "changeset version",
+    "release": "changeset publish"
   },
   "dependencies": {
     "react": "19.2.0",
