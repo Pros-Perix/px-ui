@@ -1,5 +1,6 @@
 {
   "name": "@px-ui/docs",
+  "private": true,
   "sideEffects": false,
   "type": "module",
   "scripts": {
