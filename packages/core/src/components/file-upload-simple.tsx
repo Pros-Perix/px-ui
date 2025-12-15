@@ -160,10 +160,7 @@ export function FileUploadSimple({
         />
 
         <div className="flex min-w-0 flex-1 flex-col gap-1">
-          <div className="flex items-center justify-between">
-            <FileUpload.ItemName />
-            <FileUpload.ItemStatus className="ml-2" />
-          </div>
+          <FileUpload.ItemName />
 
           <div className="flex items-center gap-2">
             <FileUpload.ItemSize />
@@ -176,6 +173,7 @@ export function FileUploadSimple({
         </div>
 
         <div className="flex shrink-0 items-center gap-1">
+          <FileUpload.ItemStatus />
           <FileUpload.ItemRetry />
           <FileUpload.ItemRemove />
         </div>
