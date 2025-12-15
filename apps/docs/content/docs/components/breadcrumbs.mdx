@@ -1,0 +1,175 @@
+---
+title: Breadcrumbs
+description: Navigation component showing the user's location within a hierarchy
+---
+
+import { BreadcrumbsBasicDemo } from "../../../src/components/breadcrumbs-basic-demo";
+import { BreadcrumbsWithIconsDemo } from "../../../src/components/breadcrumbs-with-icons-demo";
+import { BreadcrumbsLongDemo } from "../../../src/components/breadcrumbs-long-demo";
+
+## Overview
+
+The Breadcrumbs component provides hierarchical navigation that shows the user's current location and allows them to navigate back through parent pages. It includes proper ARIA attributes for accessibility and supports icons, custom rendering, and responsive layouts.
+
+## Import
+
+```tsx
+import { Breadcrumbs } from "@px-ui/core";
+```
+
+## Usage
+
+<Preview>
+  <BreadcrumbsBasicDemo />
+</Preview>
+
+<CodeBlock>
+```tsx
+<Breadcrumbs.Breadcrumb>
+  <Breadcrumbs.BreadcrumbList>
+    <Breadcrumbs.BreadcrumbItem>
+      <Breadcrumbs.BreadcrumbLink href="/">Home</Breadcrumbs.BreadcrumbLink>
+    </Breadcrumbs.BreadcrumbItem>
+    <Breadcrumbs.BreadcrumbSeparator />
+    <Breadcrumbs.BreadcrumbItem>
+      <Breadcrumbs.BreadcrumbLink href="/docs">
+        Documentation
+      </Breadcrumbs.BreadcrumbLink>
+    </Breadcrumbs.BreadcrumbItem>
+    <Breadcrumbs.BreadcrumbSeparator />
+    <Breadcrumbs.BreadcrumbItem>
+      <Breadcrumbs.BreadcrumbPage>Components</Breadcrumbs.BreadcrumbPage>
+    </Breadcrumbs.BreadcrumbItem>
+  </Breadcrumbs.BreadcrumbList>
+</Breadcrumbs.Breadcrumb>
+```
+</CodeBlock>
+
+## Examples
+
+### With Icons
+
+Add icons to breadcrumb links for better visual recognition.
+
+<Preview>
+  <BreadcrumbsWithIconsDemo />
+</Preview>
+
+<CodeBlock>
+```tsx
+<Breadcrumbs.BreadcrumbLink href="/" className="flex items-center gap-1.5">
+  <HomeIcon />
+  Home
+</Breadcrumbs.BreadcrumbLink>
+```
+</CodeBlock>
+
+### Long Navigation Paths
+
+The breadcrumbs component automatically wraps on smaller screens thanks to its responsive flex layout.
+
+<Preview>
+  <BreadcrumbsLongDemo />
+</Preview>
+
+<CodeBlock>
+```tsx
+<Breadcrumbs.Breadcrumb>
+  <Breadcrumbs.BreadcrumbList>
+    <Breadcrumbs.BreadcrumbItem>
+      <Breadcrumbs.BreadcrumbLink href="/">Home</Breadcrumbs.BreadcrumbLink>
+    </Breadcrumbs.BreadcrumbItem>
+    <Breadcrumbs.BreadcrumbSeparator />
+    {/* Multiple levels... */}
+    <Breadcrumbs.BreadcrumbItem>
+      <Breadcrumbs.BreadcrumbPage>Current Page</Breadcrumbs.BreadcrumbPage>
+    </Breadcrumbs.BreadcrumbItem>
+  </Breadcrumbs.BreadcrumbList>
+</Breadcrumbs.Breadcrumb>
+```
+</CodeBlock>
+
+## Anatomy
+
+Components that make up Breadcrumbs:
+
+### Breadcrumbs.Breadcrumb
+
+The root navigation wrapper with proper ARIA labeling.
+
+**Inherited Props:** Inherits all props from native HTML `nav` element.
+
+---
+
+### Breadcrumbs.BreadcrumbList
+
+The ordered list container for breadcrumb items.
+
+**Custom Props:**
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `className` | `string` | - | Additional CSS classes |
+
+**Inherited Props:** Inherits all props from native HTML `ol` element.
+
+---
+
+### Breadcrumbs.BreadcrumbItem
+
+Individual list item wrapper for each breadcrumb.
+
+**Custom Props:**
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `className` | `string` | - | Additional CSS classes |
+
+**Inherited Props:** Inherits all props from native HTML `li` element.
+
+---
+
+### Breadcrumbs.BreadcrumbLink
+
+Clickable link to navigate to a parent page.
+
+**Custom Props:**
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `className` | `string` | - | Additional CSS classes |
+| `render` | `function` | - | Custom render function for using custom link components (e.g., React Router Link) |
+
+**Inherited Props:** Inherits all props from native HTML `a` element including `href`.
+
+---
+
+### Breadcrumbs.BreadcrumbPage
+
+The current page indicator (non-clickable).
+
+**Custom Props:**
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `className` | `string` | - | Additional CSS classes |
+
+**Inherited Props:** Inherits all props from native HTML `span` element.
+
+---
+
+### Breadcrumbs.BreadcrumbSeparator
+
+Visual separator between breadcrumb items (chevron icon).
+
+**Custom Props:**
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `className` | `string` | - | Additional CSS classes |
+
+**Inherited Props:** Inherits all props from native HTML `li` element.
+
+## API Reference
+
+See the Anatomy section above for detailed prop information for each component.

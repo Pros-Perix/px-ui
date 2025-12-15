@@ -18,50 +18,10 @@ import defaultMdxComponents from "fumadocs-ui/mdx";
 import { Tab, Tabs } from "fumadocs-ui/components/tabs";
 import { baseOptions } from "@/lib/layout.shared";
 import { useFumadocsLoader } from "fumadocs-core/source/client";
-
-// Preview components
 import { Preview, PreviewStack, CodeBlock } from "@/components/preview";
-
-// PX-UI Components for live previews
-import {
-  // Simple components
-  Button,
-  Input,
-  Textarea,
-  Checkbox,
-  Switch,
-  Label,
-  Spinner,
-  Avatar,
-  AvatarGroup,
-  Separator,
-  // Namespace components
-  Dialog,
-  Select,
-  Popover,
-  Tooltip,
-  Tabs as PxTabs,
-  Menu,
-  Progress,
-  Combobox,
-  Breadcrumbs,
-  InputGroup,
-  SegmentedControl,
-  BlockCheckboxGroup,
-  BlockRadioGroup,
-  // RadioGroup exports Group and Item
-  Group as RadioGroupGroup,
-  Item as RadioGroupItem,
-  buttonVariants,
-} from "@px-ui/core";
+import { buttonVariants } from "@px-ui/core";
 import { LLMCopyButton } from "@/components/page-actions";
 import { ExternalLink } from "lucide-react";
-
-// Create RadioGroup namespace for MDX
-const RadioGroup = {
-  Group: RadioGroupGroup,
-  Item: RadioGroupItem,
-};
 
 export const Route = createFileRoute("/docs/$")({
   component: Page,
@@ -141,45 +101,6 @@ const clientLoader = browserCollections.docs.createClientLoader({
               Preview,
               PreviewStack,
               CodeBlock,
-              // PX-UI Components
-              Button,
-              Input,
-              Textarea,
-              Checkbox,
-              Switch,
-              Label,
-              Spinner,
-              Avatar,
-              AvatarGroup,
-              Separator,
-              // @ts-expect-error
-              Dialog,
-              // @ts-expect-error
-              Select,
-              // @ts-expect-error
-              Popover,
-              // @ts-expect-error
-              Tooltip,
-              // @ts-expect-error
-              PxTabs,
-              // @ts-expect-error
-              Menu,
-              // @ts-expect-error
-              Progress,
-              // @ts-expect-error
-              RadioGroup,
-              // @ts-expect-error
-              Combobox,
-              // @ts-expect-error
-              Breadcrumbs,
-              // @ts-expect-error
-              InputGroup,
-              // @ts-expect-error
-              SegmentedControl,
-              // @ts-expect-error
-              BlockCheckboxGroup,
-              // @ts-expect-error
-              BlockRadioGroup,
             }}
           />
         </DocsBody>

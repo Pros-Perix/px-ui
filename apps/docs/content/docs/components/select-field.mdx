@@ -1,0 +1,274 @@
+---
+title: Select Field
+description: A simplified select component wrapper for common use cases with automatic label detection and type-safe selection
+apiReference: https://base-ui.com/react/components/select
+---
+
+import SelectFieldBasicDemo from "../../../src/components/select-field-basic-demo.tsx";
+import SelectFieldMultipleDemo from "../../../src/components/select-field-multiple-demo.tsx";
+import SelectFieldSizesDemo from "../../../src/components/select-field-sizes-demo.tsx";
+import SelectFieldCustomRenderDemo from "../../../src/components/select-field-custom-render-demo.tsx";
+
+## Overview
+
+SelectField is a simplified wrapper around the Select component that streamlines common use cases. It handles item rendering, label detection, and key generation automatically while maintaining full type safety. For more complex scenarios requiring custom sub-component composition, use the full Select component from `@px-ui/core`.
+
+## Import
+
+```tsx
+import { SelectField } from "@px-ui/forms";
+```
+
+## Usage
+
+<Preview>
+  <SelectFieldBasicDemo />
+</Preview>
+
+```tsx
+import { SelectField } from "@px-ui/forms";
+import { useState } from "react";
+
+export default function Example() {
+  const [value, setValue] = useState<string | null>(null);
+
+  const items = [
+    { id: "apple", label: "Apple" },
+    { id: "banana", label: "Banana" },
+    { id: "orange", label: "Orange" },
+    { id: "mango", label: "Mango" },
+    { id: "grape", label: "Grape" },
+  ];
+
+  return (
+    <SelectField
+      items={items}
+      value={value}
+      onValueChange={setValue}
+      placeholder="Select a fruit"
+    />
+  );
+}
+```
+
+## Examples
+
+### Multiple Selection
+
+Enable multiple item selection with the `multiple` prop.
+
+<Preview>
+  <SelectFieldMultipleDemo />
+</Preview>
+
+```tsx
+import { SelectField } from "@px-ui/forms";
+import { useState } from "react";
+
+export default function Example() {
+  const [value, setValue] = useState<string[]>([]);
+
+  const items = [
+    { id: "react", label: "React" },
+    { id: "vue", label: "Vue" },
+    { id: "angular", label: "Angular" },
+    { id: "svelte", label: "Svelte" },
+    { id: "solid", label: "Solid" },
+  ];
+
+  return (
+    <SelectField
+      items={items}
+      value={value}
+      onValueChange={setValue}
+      multiple
+      placeholder="Select frameworks"
+    />
+  );
+}
+```
+
+### Sizes
+
+Control the size of the select field using the `size` prop.
+
+<Preview>
+  <SelectFieldSizesDemo />
+</Preview>
+
+```tsx
+import { SelectField } from "@px-ui/forms";
+import { useState } from "react";
+
+export default function Example() {
+  const [value, setValue] = useState<string | null>(null);
+
+  const items = [
+    { id: "sm", label: "Small" },
+    { id: "md", label: "Medium" },
+    { id: "lg", label: "Large" },
+  ];
+
+  return (
+    <div className="flex flex-col gap-4">
+      <SelectField
+        items={items}
+        value={value}
+        onValueChange={setValue}
+        placeholder="Small size"
+        size="sm"
+      />
+      <SelectField
+        items={items}
+        value={value}
+        onValueChange={setValue}
+        placeholder="Medium size (default)"
+        size="md"
+      />
+      <SelectField
+        items={items}
+        value={value}
+        onValueChange={setValue}
+        placeholder="Large size"
+        size="lg"
+      />
+    </div>
+  );
+}
+```
+
+### Custom Rendering
+
+Use `renderLabel` and `renderOption` to customize how items are displayed. If not provided, SelectField automatically uses the `label` property from items.
+
+<Preview>
+  <SelectFieldCustomRenderDemo />
+</Preview>
+
+```tsx
+import { SelectField } from "@px-ui/forms";
+import { useState } from "react";
+
+interface User {
+  id: number;
+  name: string;
+  email: string;
+  role: string;
+}
+
+export default function Example() {
+  const [value, setValue] = useState<User | null>(null);
+
+  const users: User[] = [
+    { id: 1, name: "John Doe", email: "john@example.com", role: "Admin" },
+    { id: 2, name: "Jane Smith", email: "jane@example.com", role: "Editor" },
+    { id: 3, name: "Bob Johnson", email: "bob@example.com", role: "Viewer" },
+    { id: 4, name: "Alice Brown", email: "alice@example.com", role: "Editor" },
+  ];
+
+  return (
+    <SelectField
+      items={users}
+      value={value}
+      onValueChange={setValue}
+      placeholder="Select a user"
+      renderLabel={(user) => user.name}
+      renderOption={(user) => (
+        <div className="flex flex-col">
+          <span className="font-medium">{user.name}</span>
+          <span className="text-sm text-gray-11">{user.email}</span>
+        </div>
+      )}
+    />
+  );
+}
+```
+
+## API Reference
+
+### SelectField
+
+The main select field component that wraps the Select component from `@px-ui/core`.
+
+#### Custom Props
+
+<ResponseField name="items" type="ReadonlyArray<TItem>" required>
+  Array of items to display in the select dropdown.
+</ResponseField>
+
+<ResponseField name="renderLabel" type="(item: TItem) => React.ReactNode">
+  Function to render the label in the trigger for the selected item. If not provided and item has a `label` property, it will be used automatically.
+</ResponseField>
+
+<ResponseField name="renderOption" type="(item: TItem) => React.ReactNode">
+  Function to render each option in the dropdown. If not provided and item has a `label` property, it will be used automatically.
+</ResponseField>
+
+<ResponseField name="placeholder" type="string">
+  Placeholder text when no value is selected.
+</ResponseField>
+
+<ResponseField name="size" type="'sm' | 'md' | 'lg'" default="md">
+  Size variant for the select trigger.
+</ResponseField>
+
+<ResponseField name="widthVariant" type="'sm' | 'md' | 'lg' | 'full'" default="full">
+  Width variant for the select trigger.
+</ResponseField>
+
+<ResponseField name="contentWidthVariant" type="'trigger' | 'full'" default="trigger">
+  Width variant for the dropdown content.
+</ResponseField>
+
+<ResponseField name="triggerClassName" type="string">
+  Additional CSS classes for the trigger element.
+</ResponseField>
+
+<ResponseField name="contentProps" type="Omit<React.ComponentProps<typeof Select.Content>, 'children' | 'widthVariant'>">
+  Additional props for Select.Content component.
+</ResponseField>
+
+#### Inherited Props from Select.Root
+
+<ResponseField name="value" type="TItem | TItem[] | null" required>
+  The current selected value(s).
+</ResponseField>
+
+<ResponseField name="onValueChange" type="(value: TItem | TItem[] | null) => void" required>
+  Callback fired when the selected value changes.
+</ResponseField>
+
+<ResponseField name="multiple" type="boolean" default="false">
+  Whether multiple items can be selected.
+</ResponseField>
+
+<ResponseField name="disabled" type="boolean" default="false">
+  Whether the select is disabled.
+</ResponseField>
+
+<ResponseField name="invalid" type="boolean" default="false">
+  Whether the select is in an invalid state.
+</ResponseField>
+
+<ResponseField name="readOnly" type="boolean" default="false">
+  Whether the select is read-only.
+</ResponseField>
+
+<ResponseField name="name" type="string">
+  Name attribute for form submission.
+</ResponseField>
+
+<ResponseField name="isItemEqualToValue" type="(item: TItem, value: TItem) => boolean">
+  Custom equality function to compare items. By default, uses strict equality.
+</ResponseField>
+
+<ResponseField name="inputRef" type="React.Ref<HTMLInputElement>">
+  Ref to the hidden input element used for form submission.
+</ResponseField>
+
+## Notes
+
+- SelectField automatically detects `label`, `id`, or `value` properties from items for key generation and display
+- For complex layouts or custom sub-component composition, use the full `Select` component from `@px-ui/core`
+- The component is fully type-safe and infers the item type from the `items` array
+- When using `multiple` selection, selected items are displayed as chips with a configurable max items (default: 2)

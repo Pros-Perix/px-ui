@@ -42,10 +42,12 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <HeadContent />
       </head>
       <body className="flex min-h-screen flex-col">
-        <RootProvider theme={{ enabled: false, defaultTheme: "light" }}>
-          {children}
-        </RootProvider>
-        <Scripts />
+        <div className="root">
+          <RootProvider theme={{ enabled: false, defaultTheme: "light" }}>
+            {children}
+          </RootProvider>
+          <Scripts />
+        </div>
       </body>
     </html>
   );

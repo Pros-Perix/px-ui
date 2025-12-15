@@ -1,0 +1,328 @@
+---
+title: Field
+description: A comprehensive form field wrapper with label, description, and error handling
+---
+
+import { FieldBasicDemo } from "../../../src/components/field-basic-demo";
+import { FieldWithErrorDemo } from "../../../src/components/field-with-error-demo";
+import { FieldHorizontalDemo } from "../../../src/components/field-horizontal-demo";
+import { FieldGroupDemo } from "../../../src/components/field-group-demo";
+
+## Overview
+
+The Field component provides a complete form field structure with label, description, error messages, and flexible layout options. It helps maintain consistent spacing and styling across form inputs while handling validation states.
+
+## Import
+
+```tsx
+import { Field } from "@px-ui/forms";
+```
+
+## Usage
+
+<Preview>
+  <FieldBasicDemo />
+</Preview>
+
+<CodeBlock>
+```tsx
+<Field.Root>
+  <Field.Label htmlFor="email">Email</Field.Label>
+  <Input id="email" type="email" placeholder="Enter your email" />
+  <Field.Description>
+    We'll never share your email with anyone else.
+  </Field.Description>
+</Field.Root>
+```
+</CodeBlock>
+
+## Examples
+
+### With Error
+
+Display validation errors below the input field.
+
+<Preview>
+  <FieldWithErrorDemo />
+</Preview>
+
+<CodeBlock>
+```tsx
+<Field.Root data-invalid="true">
+  <Field.Label htmlFor="username">Username</Field.Label>
+  <Input id="username" aria-invalid="true" placeholder="Enter username" />
+  <Field.Error>Username must be at least 3 characters long</Field.Error>
+</Field.Root>
+```
+</CodeBlock>
+
+### Horizontal Layout
+
+Use horizontal orientation for side-by-side label and input layouts.
+
+<Preview>
+  <FieldHorizontalDemo />
+</Preview>
+
+<CodeBlock>
+```tsx
+<Field.Root orientation="horizontal">
+  <Field.Content>
+    <Field.Title>Full Name</Field.Title>
+    <Field.Description>Enter your first and last name</Field.Description>
+  </Field.Content>
+  <Input placeholder="John Doe" />
+</Field.Root>
+
+<Field.Root orientation="horizontal">
+  <Field.Content>
+    <Field.Title>Email Notifications</Field.Title>
+    <Field.Description>
+      Receive email updates about your account
+    </Field.Description>
+  </Field.Content>
+  <Switch />
+</Field.Root>
+```
+</CodeBlock>
+
+### Field Group
+
+Group multiple related fields with consistent spacing.
+
+<Preview>
+  <FieldGroupDemo />
+</Preview>
+
+<CodeBlock>
+```tsx
+<Field.Group>
+  <Field.Root>
+    <Field.Label htmlFor="firstName">First Name</Field.Label>
+    <Input id="firstName" placeholder="John" />
+  </Field.Root>
+
+  <Field.Root>
+    <Field.Label htmlFor="lastName">Last Name</Field.Label>
+    <Input id="lastName" placeholder="Doe" />
+  </Field.Root>
+
+  <Field.Root>
+    <Field.Label htmlFor="email">Email</Field.Label>
+    <Input id="email" type="email" placeholder="john@example.com" />
+    <Field.Description>
+      We'll never share your email with anyone else.
+    </Field.Description>
+  </Field.Root>
+</Field.Group>
+```
+</CodeBlock>
+
+## Anatomy
+
+Components that make up `Field`:
+
+### `Field.Root`
+
+The root container for a form field, managing layout and state.
+
+**Custom Props:**
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `orientation` | `"vertical" \| "horizontal" \| "responsive"` | `"vertical"` | Layout direction of the field |
+| `data-invalid` | `string` | - | Set to "true" to indicate invalid state |
+| `data-disabled` | `string` | - | Set to "true" to indicate disabled state |
+| `className` | `string` | - | Additional CSS classes |
+
+**Inherited Props:** Standard HTML `div` props
+
+---
+
+### `Field.Label`
+
+Label element for the form field, connected to the input via `htmlFor`.
+
+**Custom Props:**
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `htmlFor` | `string` | - | ID of the associated input element |
+| `className` | `string` | - | Additional CSS classes |
+
+**Inherited Props:** Inherits all props from the Label component
+
+---
+
+### `Field.Title`
+
+Alternative to Label for non-input field labels (used in horizontal layouts).
+
+**Custom Props:**
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `className` | `string` | - | Additional CSS classes |
+
+**Inherited Props:** Standard HTML `div` props
+
+---
+
+### `Field.Description`
+
+Helper text providing additional context about the field.
+
+**Custom Props:**
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `className` | `string` | - | Additional CSS classes |
+
+**Inherited Props:** Standard HTML `p` props
+
+---
+
+### `Field.Error`
+
+Error message display for validation feedback.
+
+**Custom Props:**
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `errors` | `Array<{ message?: string }>` | - | Array of error objects to display |
+| `className` | `string` | - | Additional CSS classes |
+
+**Inherited Props:** Standard HTML `div` props
+
+---
+
+### `Field.Content`
+
+Container for grouping title and description (used in horizontal layouts).
+
+**Custom Props:**
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `className` | `string` | - | Additional CSS classes |
+
+**Inherited Props:** Standard HTML `div` props
+
+---
+
+### `Field.Group`
+
+Container for grouping multiple related fields with consistent spacing.
+
+**Custom Props:**
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `className` | `string` | - | Additional CSS classes |
+
+**Inherited Props:** Standard HTML `div` props
+
+---
+
+### `Field.Set`
+
+Semantic fieldset wrapper for related form fields.
+
+**Custom Props:**
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `className` | `string` | - | Additional CSS classes |
+
+**Inherited Props:** Standard HTML `fieldset` props
+
+---
+
+### `Field.Legend`
+
+Legend element for fieldsets.
+
+**Custom Props:**
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `variant` | `"legend" \| "label"` | `"legend"` | Visual style variant |
+| `className` | `string` | - | Additional CSS classes |
+
+**Inherited Props:** Standard HTML `legend` props
+
+---
+
+### `Field.Separator`
+
+Visual separator between fields with optional centered text.
+
+**Custom Props:**
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `children` | `ReactNode` | - | Optional text to display in center of separator |
+| `className` | `string` | - | Additional CSS classes |
+
+**Inherited Props:** Standard HTML `div` props
+
+---
+
+## API Reference
+
+See the [Anatomy](#anatomy) section above for detailed component props.
+
+## Common Patterns
+
+### With Multiple Errors
+
+Display multiple validation errors:
+
+```tsx
+<Field.Root data-invalid="true">
+  <Field.Label htmlFor="password">Password</Field.Label>
+  <Input id="password" type="password" aria-invalid="true" />
+  <Field.Error
+    errors={[
+      { message: "Password must be at least 8 characters" },
+      { message: "Password must contain a number" },
+      { message: "Password must contain a special character" },
+    ]}
+  />
+</Field.Root>
+```
+
+### Responsive Layout
+
+Use responsive orientation for mobile-first designs:
+
+```tsx
+<Field.Root orientation="responsive">
+  <Field.Content>
+    <Field.Title>Settings</Field.Title>
+    <Field.Description>Configure your preferences</Field.Description>
+  </Field.Content>
+  <Switch />
+</Field.Root>
+```
+
+### With Separator
+
+Separate sections of a form:
+
+```tsx
+<Field.Group>
+  <Field.Root>
+    <Field.Label htmlFor="name">Name</Field.Label>
+    <Input id="name" />
+  </Field.Root>
+
+  <Field.Separator>Contact Information</Field.Separator>
+
+  <Field.Root>
+    <Field.Label htmlFor="email">Email</Field.Label>
+    <Input id="email" type="email" />
+  </Field.Root>
+</Field.Group>
+```

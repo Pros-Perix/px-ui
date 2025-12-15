@@ -1,0 +1,200 @@
+---
+title: Progress
+description: Visual indicator for showing completion progress with labels and values
+apiReference: https://base-ui.com/react/components/progress
+---
+
+import { ProgressBasicDemo } from "../../../src/components/progress-basic-demo";
+import { ProgressWithLabelDemo } from "../../../src/components/progress-with-label-demo";
+import { ProgressSizesDemo } from "../../../src/components/progress-sizes-demo";
+import { ProgressStatesDemo } from "../../../src/components/progress-states-demo";
+
+## Overview
+
+The Progress component provides a visual indicator for showing task completion progress. It supports customizable sizes, labels, numeric value display, and smooth animations for progress updates.
+
+## Import
+
+```tsx
+import { Progress } from "@px-ui/core";
+```
+
+## Usage
+
+<Preview>
+  <ProgressBasicDemo />
+</Preview>
+
+<CodeBlock>
+```tsx
+<Progress.Root value={65} className="w-full max-w-md">
+  <Progress.Track>
+    <Progress.Indicator />
+  </Progress.Track>
+</Progress.Root>
+```
+</CodeBlock>
+
+## Examples
+
+### With Label and Value
+
+Combine labels and values to provide clear context about the progress.
+
+<Preview>
+  <ProgressWithLabelDemo />
+</Preview>
+
+<CodeBlock>
+```tsx
+<Progress.Root value={45} className="w-full max-w-md">
+  <div className="mb-2 flex items-center justify-between">
+    <Progress.Label>Uploading files...</Progress.Label>
+    <Progress.Value />
+  </div>
+  <Progress.Track>
+    <Progress.Indicator />
+  </Progress.Track>
+</Progress.Root>
+```
+</CodeBlock>
+
+### Sizes
+
+The Progress.Track component supports three size variants for different contexts.
+
+<Preview>
+  <ProgressSizesDemo />
+</Preview>
+
+<CodeBlock>
+```tsx
+<Progress.Track size="sm">
+  <Progress.Indicator />
+</Progress.Track>
+
+<Progress.Track size="default">
+  <Progress.Indicator />
+</Progress.Track>
+
+<Progress.Track size="lg">
+  <Progress.Indicator />
+</Progress.Track>
+```
+</CodeBlock>
+
+### Different States
+
+Show progress at different completion stages.
+
+<Preview>
+  <ProgressStatesDemo />
+</Preview>
+
+<CodeBlock>
+```tsx
+{/* Starting */}
+<Progress.Root value={0}>
+  <div className="mb-2 flex items-center justify-between">
+    <Progress.Label>Starting...</Progress.Label>
+    <Progress.Value />
+  </div>
+  <Progress.Track>
+    <Progress.Indicator />
+  </Progress.Track>
+</Progress.Root>
+
+{/* In progress */}
+<Progress.Root value={50}>
+  <div className="mb-2 flex items-center justify-between">
+    <Progress.Label>In progress</Progress.Label>
+    <Progress.Value />
+  </div>
+  <Progress.Track>
+    <Progress.Indicator />
+  </Progress.Track>
+</Progress.Root>
+
+{/* Complete */}
+<Progress.Root value={100}>
+  <div className="mb-2 flex items-center justify-between">
+    <Progress.Label>Complete!</Progress.Label>
+    <Progress.Value />
+  </div>
+  <Progress.Track>
+    <Progress.Indicator />
+  </Progress.Track>
+</Progress.Root>
+```
+</CodeBlock>
+
+## Anatomy
+
+Components that make up Progress:
+
+### Progress.Root
+
+The root container component that manages progress state.
+
+**Inherited Props:** Inherits all props from [Base UI Progress.Root](https://base-ui.com/react/components/progress#root) including `value`, `min`, `max`, etc.
+
+---
+
+### Progress.Track
+
+The background track that contains the progress indicator.
+
+**Custom Props:**
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `size` | `"default" \| "sm" \| "lg"` | `"default"` | Height of the progress track |
+| `className` | `string` | - | Additional CSS classes |
+
+**Inherited Props:** Inherits all props from [Base UI Progress.Track](https://base-ui.com/react/components/progress#track).
+
+---
+
+### Progress.Indicator
+
+The animated fill that shows the current progress.
+
+**Custom Props:**
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `className` | `string` | - | Additional CSS classes |
+
+**Inherited Props:** Inherits all props from [Base UI Progress.Indicator](https://base-ui.com/react/components/progress#indicator).
+
+---
+
+### Progress.Label
+
+Text label describing the progress task.
+
+**Custom Props:**
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `className` | `string` | - | Additional CSS classes |
+
+**Inherited Props:** Inherits all props from [Base UI Progress.Label](https://base-ui.com/react/components/progress#label).
+
+---
+
+### Progress.Value
+
+Displays the numeric progress value (percentage).
+
+**Custom Props:**
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `className` | `string` | - | Additional CSS classes |
+
+**Inherited Props:** Inherits all props from [Base UI Progress.Value](https://base-ui.com/react/components/progress).
+
+## API Reference
+
+See the Anatomy section above for detailed prop information for each component.
