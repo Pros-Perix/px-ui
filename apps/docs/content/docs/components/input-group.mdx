@@ -1,0 +1,194 @@
+---
+title: Input Group
+description: Combine inputs with addons, icons, and buttons for enhanced functionality
+---
+
+import { InputGroupBasicDemo } from "../../../src/components/input-group-basic-demo";
+import { InputGroupWithButtonDemo } from "../../../src/components/input-group-with-button-demo";
+import { InputGroupTextDemo } from "../../../src/components/input-group-text-demo";
+import { InputGroupSizesDemo } from "../../../src/components/input-group-sizes-demo";
+
+## Overview
+
+The InputGroup component combines input fields with addons like icons, text, and buttons. It provides a cohesive visual design for complex input controls while maintaining focus states and accessibility across all elements.
+
+## Import
+
+```tsx
+import { InputGroup } from "@px-ui/core";
+```
+
+## Usage
+
+<Preview>
+  <InputGroupBasicDemo />
+</Preview>
+
+<CodeBlock>
+```tsx
+<InputGroup.Root>
+  <InputGroup.Addon>
+    <SearchIcon />
+  </InputGroup.Addon>
+  <InputGroup.Input placeholder="Search..." />
+</InputGroup.Root>
+```
+</CodeBlock>
+
+## Examples
+
+### With Button
+
+Add action buttons directly within the input group for quick access to related functionality.
+
+<Preview>
+  <InputGroupWithButtonDemo />
+</Preview>
+
+<CodeBlock>
+```tsx
+<InputGroup.Root>
+  <InputGroup.Input placeholder="Enter your email" />
+  <InputGroup.Addon align="inline-end">
+    <InputGroup.Button>Subscribe</InputGroup.Button>
+  </InputGroup.Addon>
+</InputGroup.Root>
+```
+</CodeBlock>
+
+### With Text
+
+Use text addons to provide context like prefixes, suffixes, or units.
+
+<Preview>
+  <InputGroupTextDemo />
+</Preview>
+
+<CodeBlock>
+```tsx
+<InputGroup.Root>
+  <InputGroup.Addon>
+    <InputGroup.Text>https://</InputGroup.Text>
+  </InputGroup.Addon>
+  <InputGroup.Input placeholder="example.com" />
+</InputGroup.Root>
+
+<InputGroup.Root>
+  <InputGroup.Input placeholder="Enter amount" type="number" />
+  <InputGroup.Addon align="inline-end">
+    <InputGroup.Text>USD</InputGroup.Text>
+  </InputGroup.Addon>
+</InputGroup.Root>
+```
+</CodeBlock>
+
+### Sizes
+
+Input groups support multiple sizes to match different design contexts.
+
+<Preview>
+  <InputGroupSizesDemo />
+</Preview>
+
+<CodeBlock>
+```tsx
+<InputGroup.Root size="sm">
+  <InputGroup.Addon>
+    <SearchIcon />
+  </InputGroup.Addon>
+  <InputGroup.Input placeholder="Small input group" />
+</InputGroup.Root>
+
+<InputGroup.Root size="default">
+  <InputGroup.Addon>
+    <SearchIcon />
+  </InputGroup.Addon>
+  <InputGroup.Input placeholder="Default input group" />
+</InputGroup.Root>
+```
+</CodeBlock>
+
+## Anatomy
+
+Components that make up `InputGroup`:
+
+### `InputGroup.Root`
+
+The root container that holds all input group components and manages their layout.
+
+**Custom Props:**
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `size` | `"default" \| "sm"` | `"default"` | Size of the input group |
+| `widthVariant` | `"enforced" \| "fit" \| "full"` | `"full"` | Width behavior of the input group |
+| `disabled` | `boolean` | `false` | Whether the input group is disabled |
+| `className` | `string` | - | Additional CSS classes |
+
+**Inherited Props:** Standard HTML `div` props
+
+---
+
+### `InputGroup.Input`
+
+The input field within the group.
+
+**Custom Props:**
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `invalid` | `boolean` | `false` | Whether the input is in an invalid state |
+| `className` | `string` | - | Additional CSS classes |
+
+**Inherited Props:** Standard HTML `input` props
+
+---
+
+### `InputGroup.Addon`
+
+Container for icons, text, or buttons displayed alongside the input.
+
+**Custom Props:**
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `align` | `"inline-start" \| "inline-end"` | `"inline-start"` | Position of the addon |
+| `className` | `string` | - | Additional CSS classes |
+
+**Inherited Props:** Standard HTML `div` props
+
+---
+
+### `InputGroup.Button`
+
+Button component styled to work within an input group.
+
+**Custom Props:**
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `size` | `"xs" \| "sm" \| "icon-xs" \| "icon-sm"` | `"xs"` | Size of the button |
+| `variant` | Button variants | `"ghost"` | Visual style of the button |
+| `className` | `string` | - | Additional CSS classes |
+
+**Inherited Props:** All Button component props except size
+
+---
+
+### `InputGroup.Text`
+
+Text element for displaying static content like prefixes, suffixes, or units.
+
+**Custom Props:**
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `className` | `string` | - | Additional CSS classes |
+
+**Inherited Props:** Standard HTML `span` props
+
+---
+
+## API Reference
+
+See the [Anatomy](#anatomy) section above for detailed component props.

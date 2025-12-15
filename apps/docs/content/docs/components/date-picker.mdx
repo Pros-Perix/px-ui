@@ -1,0 +1,233 @@
+---
+title: Date Picker
+description: A popover-based date picker combining an input trigger with a calendar for easy date selection
+---
+
+import { DatePickerBasicDemo } from "../../../src/components/date-picker-basic-demo";
+import { DatePickerRangeDemo } from "../../../src/components/date-picker-range-demo";
+import { DatePickerFormatDemo } from "../../../src/components/date-picker-format-demo";
+import { DatePickerDisabledDemo } from "../../../src/components/date-picker-disabled-demo";
+
+## Overview
+
+The DatePicker component combines a trigger button with a calendar popover, providing an intuitive interface for date selection. It supports various date formats, single dates, date ranges, and disabled date handling.
+
+## Import
+
+```tsx
+import { DatePicker } from "@px-ui/core";
+```
+
+## Usage
+
+<Preview>
+  <DatePickerBasicDemo />
+</Preview>
+
+<CodeBlock>
+```tsx
+const [selected, setSelected] = useState<Date | undefined>(undefined);
+
+<DatePicker
+  mode="single"
+  selected={selected}
+  onSelect={setSelected}
+  placeholder="Pick a date"
+/>
+```
+</CodeBlock>
+
+## Examples
+
+### Range Selection
+
+Allow users to select a date range by enabling range mode.
+
+<Preview>
+  <DatePickerRangeDemo />
+</Preview>
+
+<CodeBlock>
+```tsx
+const [selected, setSelected] = useState<DateRange | undefined>(undefined);
+
+<DatePicker
+  mode="range"
+  selected={selected}
+  onSelect={setSelected}
+  placeholder="Pick a date range"
+/>
+```
+</CodeBlock>
+
+### Date Formats
+
+Customize the date format displayed in the trigger using the `format` prop with date-fns format strings.
+
+<Preview>
+  <DatePickerFormatDemo />
+</Preview>
+
+<CodeBlock>
+```tsx
+<DatePicker
+  mode="single"
+  selected={selected}
+  onSelect={setSelected}
+  format="MM/dd/yyyy"
+  placeholder="MM/DD/YYYY"
+/>
+
+<DatePicker
+  mode="single"
+  selected={selected}
+  onSelect={setSelected}
+  format="dd-MM-yyyy"
+  placeholder="DD-MM-YYYY"
+/>
+
+<DatePicker
+  mode="single"
+  selected={selected}
+  onSelect={setSelected}
+  format="PPP"
+  placeholder="Long format"
+/>
+```
+</CodeBlock>
+
+### Disabled Dates
+
+Restrict date selection by disabling past dates, future dates, or specific dates.
+
+<Preview>
+  <DatePickerDisabledDemo />
+</Preview>
+
+<CodeBlock>
+```tsx
+// Disable past dates
+<DatePicker
+  mode="single"
+  selected={selected}
+  onSelect={setSelected}
+  disabled={{ before: new Date() }}
+  placeholder="Pick a future date"
+/>
+
+// Disable future dates
+<DatePicker
+  mode="single"
+  selected={selected}
+  onSelect={setSelected}
+  disabled={{ after: new Date() }}
+  placeholder="Pick a past date"
+/>
+
+// Disable specific dates
+<DatePicker
+  mode="single"
+  selected={selected}
+  onSelect={setSelected}
+  disabled={[new Date(2024, 0, 1), new Date(2024, 11, 25)]}
+  placeholder="Pick a date"
+/>
+```
+</CodeBlock>
+
+## API Reference
+
+### DatePicker
+
+The main date picker component combining trigger and calendar.
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `mode` | `"single" \| "multiple" \| "range"` | `"single"` | Selection mode for dates |
+| `selected` | `Date \| Date[] \| DateRange` | - | Currently selected date(s) |
+| `onSelect` | `function` | - | Callback when date selection changes |
+| `placeholder` | `string` | `"Pick a date"` | Placeholder text for the trigger |
+| `format` | `string` | `"yyyy-MM-dd"` | Date format string (date-fns format) |
+| `disabled` | `Date \| Date[] \| function` | - | Dates that cannot be selected |
+| `invalid` | `boolean` | `false` | Whether the date picker is in invalid state |
+| `trailingIcon` | `ReactNode` | `<CalendarIcon />` | Icon shown at the end of the trigger |
+| `renderTriggerContent` | `ReactNode` | - | Custom content for the trigger |
+| `triggerProps` | `object` | - | Props for the trigger button |
+| `popoverRootProps` | `object` | - | Props for the popover root |
+| `popoverContentProps` | `object` | - | Props for the popover content |
+
+**Calendar Props:** All Calendar component props are also supported.
+
+---
+
+### TriggerProps
+
+The `triggerProps` object accepts the following properties:
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `size` | `"sm" \| "md" \| "lg"` | `"md"` | Size of the trigger button |
+| `widthVariant` | `"fit" \| "enforced" \| "full"` | `"enforced"` | Width behavior of the trigger |
+| `disabled` | `boolean` | `false` | Whether the trigger is disabled |
+| `className` | `string` | - | Additional CSS classes |
+
+---
+
+## Common Patterns
+
+### Custom Date Format
+
+Use date-fns format strings to customize date display:
+
+```tsx
+// US format
+<DatePicker format="MM/dd/yyyy" />
+
+// European format
+<DatePicker format="dd/MM/yyyy" />
+
+// Long format
+<DatePicker format="PPPP" />
+
+// Short format with weekday
+<DatePicker format="EEE, MMM d, yyyy" />
+```
+
+### With Default Value
+
+Set an initial selected date:
+
+```tsx
+<DatePicker
+  mode="single"
+  selected={new Date()}
+  onSelect={setSelected}
+  placeholder="Pick a date"
+/>
+```
+
+### Size Variants
+
+Control the size of the trigger:
+
+```tsx
+<DatePicker
+  mode="single"
+  selected={selected}
+  onSelect={setSelected}
+  triggerProps={{ size: "sm" }}
+/>
+```
+
+### Disabled State
+
+Disable the entire date picker:
+
+```tsx
+<DatePicker
+  mode="single"
+  selected={selected}
+  onSelect={setSelected}
+  triggerProps={{ disabled: true }}
+/>
+```

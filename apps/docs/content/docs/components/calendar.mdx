@@ -1,0 +1,187 @@
+---
+title: Calendar
+description: A flexible calendar component for date selection with single, multiple, and range modes
+---
+
+import { CalendarBasicDemo } from "../../../src/components/calendar-basic-demo";
+import { CalendarRangeDemo } from "../../../src/components/calendar-range-demo";
+import { CalendarMultipleDemo } from "../../../src/components/calendar-multiple-demo";
+import { CalendarDropdownDemo } from "../../../src/components/calendar-dropdown-demo";
+
+## Overview
+
+The Calendar component provides a visual interface for date selection. Built on react-day-picker, it supports single date selection, date ranges, multiple dates, and includes features like month/year dropdowns and keyboard navigation.
+
+## Import
+
+```tsx
+import { Calendar } from "@px-ui/core";
+```
+
+## Usage
+
+<Preview>
+  <CalendarBasicDemo />
+</Preview>
+
+<CodeBlock>
+```tsx
+const [selected, setSelected] = useState<Date | undefined>(new Date());
+
+<Calendar
+  mode="single"
+  selected={selected}
+  onSelect={setSelected}
+/>
+```
+</CodeBlock>
+
+## Examples
+
+### Range Selection
+
+Allow users to select a date range with visual highlighting between start and end dates.
+
+<Preview>
+  <CalendarRangeDemo />
+</Preview>
+
+<CodeBlock>
+```tsx
+const [selected, setSelected] = useState<DateRange | undefined>({
+  from: new Date(),
+  to: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+});
+
+<Calendar
+  mode="range"
+  selected={selected}
+  onSelect={setSelected}
+/>
+```
+</CodeBlock>
+
+### Multiple Selection
+
+Enable selection of multiple individual dates.
+
+<Preview>
+  <CalendarMultipleDemo />
+</Preview>
+
+<CodeBlock>
+```tsx
+const [selected, setSelected] = useState<Date[] | undefined>([
+  new Date(),
+  new Date(Date.now() + 2 * 24 * 60 * 60 * 1000),
+]);
+
+<Calendar
+  mode="multiple"
+  selected={selected}
+  onSelect={setSelected}
+/>
+```
+</CodeBlock>
+
+### With Dropdowns
+
+Use dropdown menus for month and year selection to quickly navigate to distant dates.
+
+<Preview>
+  <CalendarDropdownDemo />
+</Preview>
+
+<CodeBlock>
+```tsx
+<Calendar
+  mode="single"
+  selected={selected}
+  onSelect={setSelected}
+  captionLayout="dropdown"
+  fromYear={2020}
+  toYear={2030}
+/>
+```
+</CodeBlock>
+
+## API Reference
+
+### Calendar
+
+The main calendar component for date selection.
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `mode` | `"single" \| "multiple" \| "range"` | `"single"` | Selection mode for the calendar |
+| `selected` | `Date \| Date[] \| DateRange` | - | Currently selected date(s) |
+| `onSelect` | `function` | - | Callback when date selection changes |
+| `disabled` | `Date \| Date[] \| function` | - | Dates that cannot be selected |
+| `showOutsideDays` | `boolean` | `true` | Show days from adjacent months |
+| `captionLayout` | `"label" \| "dropdown"` | `"label"` | Layout for month/year caption |
+| `fromYear` | `number` | - | Starting year for dropdown (when using dropdown layout) |
+| `toYear` | `number` | - | Ending year for dropdown (when using dropdown layout) |
+| `showWeekNumber` | `boolean` | `false` | Display week numbers |
+| `className` | `string` | - | Additional CSS classes |
+
+**Inherited Props:** Inherits all props from [react-day-picker DayPicker](https://react-day-picker.js.org/api/interfaces/DayPickerProps)
+
+---
+
+## Common Patterns
+
+### Disabling Dates
+
+Disable specific dates or date ranges:
+
+```tsx
+// Disable past dates
+<Calendar
+  mode="single"
+  selected={selected}
+  onSelect={setSelected}
+  disabled={{ before: new Date() }}
+/>
+
+// Disable specific dates
+<Calendar
+  mode="single"
+  selected={selected}
+  onSelect={setSelected}
+  disabled={[new Date(2024, 0, 1), new Date(2024, 11, 25)]}
+/>
+
+// Disable with custom function
+<Calendar
+  mode="single"
+  selected={selected}
+  onSelect={setSelected}
+  disabled={(date) => date.getDay() === 0 || date.getDay() === 6}
+/>
+```
+
+### Default Month
+
+Control which month is initially displayed:
+
+```tsx
+<Calendar
+  mode="single"
+  selected={selected}
+  onSelect={setSelected}
+  defaultMonth={new Date(2024, 0)} // January 2024
+/>
+```
+
+### Multiple Months
+
+Display multiple months side by side:
+
+```tsx
+<Calendar
+  mode="range"
+  selected={selected}
+  onSelect={setSelected}
+  numberOfMonths={2}
+/>
+```

@@ -1,0 +1,175 @@
+---
+title: BlockCheckboxGroup
+description: Large card-style checkboxes for selecting multiple options with rich content
+apiReference: https://base-ui.com/react/components/checkbox-group
+---
+
+import { BlockCheckboxGroupBasicDemo } from "../../../src/components/block-checkbox-group-basic-demo";
+import { BlockCheckboxGroupMultipleDemo } from "../../../src/components/block-checkbox-group-multiple-demo";
+import { BlockCheckboxGroupWithIconsDemo } from "../../../src/components/block-checkbox-group-with-icons-demo";
+
+## Overview
+
+The BlockCheckboxGroup component provides large, card-style checkboxes ideal for presenting options with titles and descriptions. It supports multiple selections with visual feedback through hover effects, border changes, and smooth transitions.
+
+## Import
+
+```tsx
+import { BlockCheckboxGroup } from "@px-ui/core";
+```
+
+## Usage
+
+<Preview>
+  <BlockCheckboxGroupBasicDemo />
+</Preview>
+
+<CodeBlock>
+```tsx
+<BlockCheckboxGroup.Group defaultValue={["email"]}>
+  <BlockCheckboxGroup.Item value="email">
+    <BlockCheckboxGroup.Header>
+      <BlockCheckboxGroup.Title>Email Notifications</BlockCheckboxGroup.Title>
+    </BlockCheckboxGroup.Header>
+    <BlockCheckboxGroup.Description>
+      Receive notifications via email when there's activity on your account
+    </BlockCheckboxGroup.Description>
+  </BlockCheckboxGroup.Item>
+
+  <BlockCheckboxGroup.Item value="sms">
+    <BlockCheckboxGroup.Header>
+      <BlockCheckboxGroup.Title>SMS Notifications</BlockCheckboxGroup.Title>
+    </BlockCheckboxGroup.Header>
+    <BlockCheckboxGroup.Description>
+      Get text messages for important updates and alerts
+    </BlockCheckboxGroup.Description>
+  </BlockCheckboxGroup.Item>
+</BlockCheckboxGroup.Group>
+```
+</CodeBlock>
+
+## Examples
+
+### Multiple Selections
+
+Users can select multiple options simultaneously.
+
+<Preview>
+  <BlockCheckboxGroupMultipleDemo />
+</Preview>
+
+<CodeBlock>
+```tsx
+<BlockCheckboxGroup.Group defaultValue={["react", "typescript", "tailwind"]}>
+  <BlockCheckboxGroup.Item value="react">
+    <BlockCheckboxGroup.Header>
+      <BlockCheckboxGroup.Title>React</BlockCheckboxGroup.Title>
+    </BlockCheckboxGroup.Header>
+    <BlockCheckboxGroup.Description>
+      A JavaScript library for building user interfaces
+    </BlockCheckboxGroup.Description>
+  </BlockCheckboxGroup.Item>
+  {/* More items... */}
+</BlockCheckboxGroup.Group>
+```
+</CodeBlock>
+
+### With Icons
+
+Add icons to headers for better visual recognition.
+
+<Preview>
+  <BlockCheckboxGroupWithIconsDemo />
+</Preview>
+
+<CodeBlock>
+```tsx
+<BlockCheckboxGroup.Item value="pro">
+  <BlockCheckboxGroup.Header>
+    <UserIcon />
+    <BlockCheckboxGroup.Title>Pro Plan</BlockCheckboxGroup.Title>
+  </BlockCheckboxGroup.Header>
+  <BlockCheckboxGroup.Description>
+    For growing teams. Includes advanced features and priority support.
+  </BlockCheckboxGroup.Description>
+</BlockCheckboxGroup.Item>
+```
+</CodeBlock>
+
+## Anatomy
+
+Components that make up BlockCheckboxGroup:
+
+### BlockCheckboxGroup.Group
+
+The container component that manages checkbox group state.
+
+**Custom Props:**
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `className` | `string` | - | Additional CSS classes |
+
+**Inherited Props:** Inherits all props from [Base UI CheckboxGroup](https://base-ui.com/react/components/checkbox-group) including `value`, `defaultValue`, `onValueChange`, `disabled`, etc.
+
+---
+
+### BlockCheckboxGroup.Item
+
+Large card-style checkbox item with hover and checked state styling.
+
+**Custom Props:**
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `invalid` | `boolean` | `false` | When true, applies error styling with red shadow |
+| `className` | `string` | - | Additional CSS classes |
+
+**Inherited Props:** Inherits all props from the Checkbox component including `value`, `disabled`, etc.
+
+**Features:**
+- Minimum height of 155px for consistent card size
+- Hover border effect when not disabled
+- Primary border when checked
+- Red shadow when invalid
+- Reduced opacity when disabled
+
+---
+
+### BlockCheckboxGroup.Header
+
+Container for header content (typically icon and title).
+
+**Custom Props:**
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `className` | `string` | - | Additional CSS classes |
+
+---
+
+### BlockCheckboxGroup.Title
+
+Title text for the checkbox option.
+
+**Custom Props:**
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `className` | `string` | - | Additional CSS classes |
+
+---
+
+### BlockCheckboxGroup.Description
+
+Descriptive text explaining the checkbox option.
+
+**Custom Props:**
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `className` | `string` | - | Additional CSS classes |
+
+## API Reference
+
+See the Anatomy section above for detailed prop information for each component.

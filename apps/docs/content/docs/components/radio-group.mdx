@@ -1,0 +1,142 @@
+---
+title: RadioGroup
+description: Single-selection control for mutually exclusive options with multiple sizes
+apiReference: https://base-ui.com/react/components/radio
+---
+
+import { RadioGroupBasicDemo } from "../../../src/components/radio-group-basic-demo";
+import { RadioGroupSizesDemo } from "../../../src/components/radio-group-sizes-demo";
+import { RadioGroupWithDescriptionsDemo } from "../../../src/components/radio-group-with-descriptions-demo";
+import { RadioGroupHorizontalDemo } from "../../../src/components/radio-group-horizontal-demo";
+
+## Overview
+
+The RadioGroup component provides a set of mutually exclusive options where users can select exactly one choice. It supports multiple sizes, keyboard navigation, and flexible layouts with full accessibility support.
+
+## Import
+
+```tsx
+import { RadioGroup } from "@px-ui/core";
+```
+
+## Usage
+
+<Preview>
+  <RadioGroupBasicDemo />
+</Preview>
+
+<CodeBlock>
+```tsx
+<RadioGroup.Group defaultValue="comfortable">
+  <div className="flex items-center gap-2">
+    <RadioGroup.Item value="default" id="default" />
+    <label htmlFor="default">Default</label>
+  </div>
+  <div className="flex items-center gap-2">
+    <RadioGroup.Item value="comfortable" id="comfortable" />
+    <label htmlFor="comfortable">Comfortable</label>
+  </div>
+  <div className="flex items-center gap-2">
+    <RadioGroup.Item value="compact" id="compact" />
+    <label htmlFor="compact">Compact</label>
+  </div>
+</RadioGroup.Group>
+```
+</CodeBlock>
+
+## Examples
+
+### Sizes
+
+The RadioGroup.Item component supports three size variants.
+
+<Preview>
+  <RadioGroupSizesDemo />
+</Preview>
+
+<CodeBlock>
+```tsx
+<RadioGroup.Item value="sm" id="size-sm" size="sm" />
+<RadioGroup.Item value="default" id="size-default" size="default" />
+<RadioGroup.Item value="lg" id="size-lg" size="lg" />
+```
+</CodeBlock>
+
+### With Descriptions
+
+Radio items can be paired with labels and descriptions for better context.
+
+<Preview>
+  <RadioGroupWithDescriptionsDemo />
+</Preview>
+
+<CodeBlock>
+```tsx
+<RadioGroup.Group defaultValue="card">
+  <div className="flex items-start gap-3">
+    <RadioGroup.Item value="card" id="payment-card" className="mt-0.5" />
+    <div className="flex flex-col gap-1">
+      <label htmlFor="payment-card">Credit Card</label>
+      <p>Pay with your credit or debit card</p>
+    </div>
+  </div>
+  {/* More options... */}
+</RadioGroup.Group>
+```
+</CodeBlock>
+
+### Horizontal Layout
+
+Override the default vertical layout by applying flex-row to the Group component.
+
+<Preview>
+  <RadioGroupHorizontalDemo />
+</Preview>
+
+<CodeBlock>
+```tsx
+<RadioGroup.Group defaultValue="email" className="flex-row flex-wrap">
+  <div className="flex items-center gap-2">
+    <RadioGroup.Item value="email" id="contact-email" />
+    <label htmlFor="contact-email">Email</label>
+  </div>
+  {/* More options... */}
+</RadioGroup.Group>
+```
+</CodeBlock>
+
+## Anatomy
+
+Components that make up the RadioGroup:
+
+### RadioGroup.Group
+
+The container component that manages the radio group state.
+
+**Custom Props:**
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `className` | `string` | - | Additional CSS classes. Default layout is `flex flex-col gap-3` |
+
+**Inherited Props:** Inherits all props from [Base UI RadioGroup](https://base-ui.com/react/components/radio-group) including `value`, `defaultValue`, `onValueChange`, `disabled`, etc.
+
+---
+
+### RadioGroup.Item
+
+Individual radio button within the group.
+
+**Custom Props:**
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `variant` | `"default"` | `"default"` | Visual style variant |
+| `size` | `"default" \| "sm" \| "lg"` | `"default"` | Size of the radio button |
+| `className` | `string` | - | Additional CSS classes |
+
+**Inherited Props:** Inherits all props from [Base UI Radio.Root](https://base-ui.com/react/components/radio#root) including `value`, `disabled`, etc.
+
+## API Reference
+
+See the Anatomy section above for detailed prop information for each component.

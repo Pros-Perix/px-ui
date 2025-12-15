@@ -1,0 +1,252 @@
+---
+title: Tabs
+description: A set of layered sections of content that are displayed one at a time
+apiReference: https://base-ui.com/react/components/tabs
+---
+
+import { TabsBasicDemo } from "../../../src/components/tabs-basic-demo";
+import { TabsUnderlineDemo } from "../../../src/components/tabs-underline-demo";
+import { TabsWithIconsDemo } from "../../../src/components/tabs-with-icons-demo";
+import { TabsContentDemo } from "../../../src/components/tabs-content-demo";
+import { TabsDisabledDemo } from "../../../src/components/tabs-disabled-demo";
+
+## Overview
+
+The Tabs component organizes content into multiple sections, allowing users to switch between them without leaving the page. It features an animated underline indicator that smoothly transitions between active tabs.
+
+## Import
+
+```tsx
+import { Tabs } from "@px-ui/core";
+```
+
+## Usage
+
+<Preview>
+  <TabsBasicDemo />
+</Preview>
+
+<CodeBlock>
+```tsx
+<Tabs.Root defaultValue="account">
+  <Tabs.List>
+    <Tabs.Trigger value="account">Account</Tabs.Trigger>
+    <Tabs.Trigger value="password">Password</Tabs.Trigger>
+    <Tabs.Trigger value="notifications">Notifications</Tabs.Trigger>
+  </Tabs.List>
+  <Tabs.Content value="account">
+    <div className="p-4">
+      <p>Manage your account settings and preferences.</p>
+    </div>
+  </Tabs.Content>
+  <Tabs.Content value="password">
+    <div className="p-4">
+      <p>Change your password and security settings.</p>
+    </div>
+  </Tabs.Content>
+  <Tabs.Content value="notifications">
+    <div className="p-4">
+      <p>Configure how you receive notifications.</p>
+    </div>
+  </Tabs.Content>
+</Tabs.Root>
+```
+</CodeBlock>
+
+## Examples
+
+### Underline Variant
+
+The Tabs component uses an underline style by default, with a smooth animated indicator that follows the active tab.
+
+<Preview>
+  <TabsUnderlineDemo />
+</Preview>
+
+<CodeBlock>
+```tsx
+<Tabs.Root defaultValue="posts" variant="underline">
+  <Tabs.List>
+    <Tabs.Trigger value="posts">Posts</Tabs.Trigger>
+    <Tabs.Trigger value="comments">Comments</Tabs.Trigger>
+    <Tabs.Trigger value="likes">Likes</Tabs.Trigger>
+    <Tabs.Trigger value="shares">Shares</Tabs.Trigger>
+  </Tabs.List>
+  <Tabs.Content value="posts">
+    <div className="p-4">
+      <p>Your published posts and articles.</p>
+    </div>
+  </Tabs.Content>
+  {/* Other content panels... */}
+</Tabs.Root>
+```
+</CodeBlock>
+
+### With Icons
+
+Enhance tab triggers with icons to provide visual context for each section.
+
+<Preview>
+  <TabsWithIconsDemo />
+</Preview>
+
+<CodeBlock>
+```tsx
+<Tabs.Root defaultValue="overview">
+  <Tabs.List>
+    <Tabs.Trigger value="overview">
+      <LayoutDashboardIcon />
+      Overview
+    </Tabs.Trigger>
+    <Tabs.Trigger value="analytics">
+      <TrendingUpIcon />
+      Analytics
+    </Tabs.Trigger>
+    <Tabs.Trigger value="settings">
+      <SettingsIcon />
+      Settings
+    </Tabs.Trigger>
+  </Tabs.List>
+  <Tabs.Content value="overview">
+    <div className="p-4">
+      <p>Dashboard overview and key metrics.</p>
+    </div>
+  </Tabs.Content>
+  {/* Other content panels... */}
+</Tabs.Root>
+```
+</CodeBlock>
+
+### Rich Content
+
+Tabs can contain complex content including forms, data displays, and interactive elements.
+
+<Preview>
+  <TabsContentDemo />
+</Preview>
+
+<CodeBlock>
+```tsx
+<Tabs.Root defaultValue="profile" className="w-full max-w-md">
+  <Tabs.List>
+    <Tabs.Trigger value="profile">Profile</Tabs.Trigger>
+    <Tabs.Trigger value="security">Security</Tabs.Trigger>
+  </Tabs.List>
+  <Tabs.Content value="profile">
+    <div className="flex flex-col gap-4 p-4">
+      <div className="flex flex-col gap-2">
+        <Label htmlFor="name">Name</Label>
+        <Input id="name" defaultValue="John Doe" />
+      </div>
+      <Button>Save Changes</Button>
+    </div>
+  </Tabs.Content>
+  <Tabs.Content value="security">
+    <div className="flex flex-col gap-4 p-4">
+      <div className="flex flex-col gap-2">
+        <Label htmlFor="current">Current Password</Label>
+        <Input id="current" type="password" />
+      </div>
+      <Button>Update Password</Button>
+    </div>
+  </Tabs.Content>
+</Tabs.Root>
+```
+</CodeBlock>
+
+### Disabled Tabs
+
+Disable individual tabs to prevent user interaction with unavailable sections.
+
+<Preview>
+  <TabsDisabledDemo />
+</Preview>
+
+<CodeBlock>
+```tsx
+<Tabs.Root defaultValue="available">
+  <Tabs.List>
+    <Tabs.Trigger value="available">Available</Tabs.Trigger>
+    <Tabs.Trigger value="coming-soon" disabled>
+      Coming Soon
+    </Tabs.Trigger>
+    <Tabs.Trigger value="maintenance" disabled>
+      Maintenance
+    </Tabs.Trigger>
+  </Tabs.List>
+  <Tabs.Content value="available">
+    <div className="p-4">
+      <p>This feature is currently available.</p>
+    </div>
+  </Tabs.Content>
+</Tabs.Root>
+```
+</CodeBlock>
+
+## Anatomy
+
+Components that make up `Tabs`:
+
+### `Tabs.Root`
+
+The root container that manages tab state and coordination between triggers and content panels.
+
+**Custom Props:**
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `variant` | `"underline"` | `"underline"` | Visual style variant for the tabs |
+| `className` | `string` | - | Additional CSS classes |
+
+**Inherited Props:** Inherits all props from [Base UI Tabs.Root](https://base-ui.com/react/components/tabs#root)
+
+---
+
+### `Tabs.List`
+
+Container for tab triggers, displays the tab navigation bar with the animated indicator.
+
+**Custom Props:**
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `className` | `string` | - | Additional CSS classes |
+
+**Inherited Props:** Inherits all props from [Base UI Tabs.List](https://base-ui.com/react/components/tabs#list)
+
+---
+
+### `Tabs.Trigger`
+
+Individual tab button that activates its corresponding content panel when clicked.
+
+**Custom Props:**
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `value` | `string` | - | Unique identifier matching the content panel |
+| `disabled` | `boolean` | `false` | Whether the tab is disabled |
+| `className` | `string` | - | Additional CSS classes |
+
+**Inherited Props:** Inherits all props from [Base UI Tabs.Tab](https://base-ui.com/react/components/tabs#tab)
+
+---
+
+### `Tabs.Content`
+
+Content panel associated with a specific tab trigger, displayed when its tab is active.
+
+**Custom Props:**
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `value` | `string` | - | Unique identifier matching the trigger |
+| `className` | `string` | - | Additional CSS classes |
+
+**Inherited Props:** Inherits all props from [Base UI Tabs.Panel](https://base-ui.com/react/components/tabs#panel)
+
+---
+
+## API Reference
+
+See the [Anatomy](#anatomy) section above for detailed component props.

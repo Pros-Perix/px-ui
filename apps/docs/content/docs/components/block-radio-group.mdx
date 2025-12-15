@@ -1,0 +1,176 @@
+---
+title: BlockRadioGroup
+description: Large card-style radio buttons for selecting a single option with rich content
+apiReference: https://base-ui.com/react/components/radio-group
+---
+
+import { BlockRadioGroupBasicDemo } from "../../../src/components/block-radio-group-basic-demo";
+import { BlockRadioGroupWithIconsDemo } from "../../../src/components/block-radio-group-with-icons-demo";
+import { BlockRadioGroupSelectionDemo } from "../../../src/components/block-radio-group-selection-demo";
+
+## Overview
+
+The BlockRadioGroup component provides large, card-style radio buttons ideal for presenting mutually exclusive options with titles and descriptions. It supports single selection with visual feedback through hover effects, border changes, and smooth transitions.
+
+## Import
+
+```tsx
+import { BlockRadioGroup } from "@px-ui/core";
+```
+
+## Usage
+
+<Preview>
+  <BlockRadioGroupBasicDemo />
+</Preview>
+
+<CodeBlock>
+```tsx
+<BlockRadioGroup.Group defaultValue="standard">
+  <BlockRadioGroup.Item value="standard">
+    <BlockRadioGroup.Header>
+      <BlockRadioGroup.Title>Standard Shipping</BlockRadioGroup.Title>
+    </BlockRadioGroup.Header>
+    <BlockRadioGroup.Description>
+      Delivery in 5-7 business days · Free
+    </BlockRadioGroup.Description>
+  </BlockRadioGroup.Item>
+
+  <BlockRadioGroup.Item value="express">
+    <BlockRadioGroup.Header>
+      <BlockRadioGroup.Title>Express Shipping</BlockRadioGroup.Title>
+    </BlockRadioGroup.Header>
+    <BlockRadioGroup.Description>
+      Delivery in 2-3 business days · $9.99
+    </BlockRadioGroup.Description>
+  </BlockRadioGroup.Item>
+</BlockRadioGroup.Group>
+```
+</CodeBlock>
+
+## Examples
+
+### With Icons
+
+Add icons to headers for better visual recognition and hierarchy.
+
+<Preview>
+  <BlockRadioGroupWithIconsDemo />
+</Preview>
+
+<CodeBlock>
+```tsx
+<BlockRadioGroup.Item value="pro">
+  <BlockRadioGroup.Header>
+    <UserIcon />
+    <BlockRadioGroup.Title>Pro Plan</BlockRadioGroup.Title>
+  </BlockRadioGroup.Header>
+  <BlockRadioGroup.Description>
+    $29/month · Advanced features and priority support
+  </BlockRadioGroup.Description>
+</BlockRadioGroup.Item>
+```
+</CodeBlock>
+
+### Payment Selection
+
+A common use case for block-style radio groups is payment method selection.
+
+<Preview>
+  <BlockRadioGroupSelectionDemo />
+</Preview>
+
+<CodeBlock>
+```tsx
+<BlockRadioGroup.Group defaultValue="card">
+  <BlockRadioGroup.Item value="card">
+    <BlockRadioGroup.Header>
+      <CreditCardIcon />
+      <BlockRadioGroup.Title>Credit Card</BlockRadioGroup.Title>
+    </BlockRadioGroup.Header>
+    <BlockRadioGroup.Description>
+      Pay securely with your credit or debit card
+    </BlockRadioGroup.Description>
+  </BlockRadioGroup.Item>
+  {/* More options... */}
+</BlockRadioGroup.Group>
+```
+</CodeBlock>
+
+## Anatomy
+
+Components that make up BlockRadioGroup:
+
+### BlockRadioGroup.Group
+
+The container component that manages radio group state for single selection.
+
+**Custom Props:**
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `className` | `string` | - | Additional CSS classes |
+
+**Inherited Props:** Inherits all props from [Base UI RadioGroup](https://base-ui.com/react/components/radio-group) including `value`, `defaultValue`, `onValueChange`, `disabled`, etc.
+
+---
+
+### BlockRadioGroup.Item
+
+Large card-style radio button with hover and checked state styling.
+
+**Custom Props:**
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `invalid` | `boolean` | `false` | When true, applies error styling with red shadow |
+| `className` | `string` | - | Additional CSS classes |
+
+**Inherited Props:** Inherits all props from RadioGroup.Item including `value`, `disabled`, etc.
+
+**Features:**
+- Minimum height of 155px for consistent card size
+- Hover border effect when not disabled
+- Primary border when checked
+- Red shadow when invalid
+- Reduced opacity when disabled
+
+---
+
+### BlockRadioGroup.Header
+
+Container for header content (typically icon and title).
+
+**Custom Props:**
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `className` | `string` | - | Additional CSS classes |
+
+---
+
+### BlockRadioGroup.Title
+
+Title text for the radio option.
+
+**Custom Props:**
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `className` | `string` | - | Additional CSS classes |
+
+---
+
+### BlockRadioGroup.Description
+
+Descriptive text explaining the radio option.
+
+**Custom Props:**
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `className` | `string` | - | Additional CSS classes |
+
+## API Reference
+
+See the Anatomy section above for detailed prop information for each component.

@@ -1,0 +1,183 @@
+---
+title: Tooltip
+description: Display helpful information when users hover or focus on an element
+apiReference: https://base-ui.com/react/components/tooltip
+---
+
+import { TooltipBasicDemo } from "../../../src/components/tooltip-basic-demo";
+import { TooltipPositionsDemo } from "../../../src/components/tooltip-positions-demo";
+import { TooltipWithIconDemo } from "../../../src/components/tooltip-with-icon-demo";
+import { TooltipDelayDemo } from "../../../src/components/tooltip-delay-demo";
+
+## Overview
+
+The Tooltip component provides contextual information when users hover over or focus on an element. It features smooth animations, flexible positioning, and automatic arrow indicators that point to the trigger element.
+
+## Import
+
+```tsx
+import { Tooltip } from "@px-ui/core";
+```
+
+## Usage
+
+<Preview>
+  <TooltipBasicDemo />
+</Preview>
+
+<CodeBlock>
+```tsx
+<Tooltip.Root>
+  <Tooltip.Trigger>
+    <Button variant="outline">Hover me</Button>
+  </Tooltip.Trigger>
+  <Tooltip.Content>
+    <p>This is a helpful tooltip</p>
+  </Tooltip.Content>
+</Tooltip.Root>
+```
+</CodeBlock>
+
+## Examples
+
+### Positions
+
+Tooltips can be positioned on any side of the trigger element using the `side` prop.
+
+<Preview>
+  <TooltipPositionsDemo />
+</Preview>
+
+<CodeBlock>
+```tsx
+<Tooltip.Root>
+  <Tooltip.Trigger>
+    <Button variant="outline">Top</Button>
+  </Tooltip.Trigger>
+  <Tooltip.Content side="top">
+    <p>Tooltip on top</p>
+  </Tooltip.Content>
+</Tooltip.Root>
+
+<Tooltip.Root>
+  <Tooltip.Trigger>
+    <Button variant="outline">Bottom</Button>
+  </Tooltip.Trigger>
+  <Tooltip.Content side="bottom">
+    <p>Tooltip on bottom</p>
+  </Tooltip.Content>
+</Tooltip.Root>
+```
+</CodeBlock>
+
+### With Icon
+
+Tooltips are commonly used with info icons to provide additional context without cluttering the UI.
+
+<Preview>
+  <TooltipWithIconDemo />
+</Preview>
+
+<CodeBlock>
+```tsx
+<div className="flex items-center gap-2">
+  <span>Payment method</span>
+  <Tooltip.Root>
+    <Tooltip.Trigger>
+      <button>
+        <InfoIcon />
+      </button>
+    </Tooltip.Trigger>
+    <Tooltip.Content>
+      <p>We accept all major credit cards and PayPal</p>
+    </Tooltip.Content>
+  </Tooltip.Root>
+</div>
+```
+</CodeBlock>
+
+### Delay
+
+Control when the tooltip appears using the `delay` prop to avoid showing tooltips too quickly during casual mouse movement.
+
+<Preview>
+  <TooltipDelayDemo />
+</Preview>
+
+<CodeBlock>
+```tsx
+<Tooltip.Root delay={0}>
+  <Tooltip.Trigger>
+    <Button variant="outline">No delay</Button>
+  </Tooltip.Trigger>
+  <Tooltip.Content>
+    <p>Appears immediately</p>
+  </Tooltip.Content>
+</Tooltip.Root>
+
+<Tooltip.Root delay={500}>
+  <Tooltip.Trigger>
+    <Button variant="outline">500ms delay</Button>
+  </Tooltip.Trigger>
+  <Tooltip.Content>
+    <p>Appears after 500ms</p>
+  </Tooltip.Content>
+</Tooltip.Root>
+```
+</CodeBlock>
+
+## Anatomy
+
+Components that make up `Tooltip`:
+
+### `Tooltip.Root`
+
+The root container that manages tooltip state and coordinates all tooltip components.
+
+**Custom Props:**
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `open` | `boolean` | - | Controlled open state |
+| `defaultOpen` | `boolean` | `false` | Default open state (uncontrolled) |
+| `onOpenChange` | `(open: boolean) => void` | - | Callback when open state changes |
+| `delay` | `number` | `600` | Delay in milliseconds before showing tooltip |
+
+**Inherited Props:** Inherits all props from [Base UI Tooltip.Root](https://base-ui.com/react/components/tooltip#root)
+
+---
+
+### `Tooltip.Trigger`
+
+The element that triggers the tooltip on hover or focus.
+
+**Custom Props:**
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `className` | `string` | - | Additional CSS classes |
+
+**Inherited Props:** Inherits all props from [Base UI Tooltip.Trigger](https://base-ui.com/react/components/tooltip#trigger)
+
+---
+
+### `Tooltip.Content`
+
+The tooltip popup content with arrow indicator.
+
+**Custom Props:**
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `side` | `"top" \| "bottom" \| "left" \| "right"` | `"top"` | Which side to position the tooltip |
+| `align` | `"start" \| "center" \| "end"` | `"center"` | Alignment relative to the trigger |
+| `sideOffset` | `number` | `8` | Distance in pixels from the trigger |
+| `className` | `string` | - | Additional CSS classes |
+
+**Inherited Props:** Inherits all props from [Base UI Tooltip.Popup](https://base-ui.com/react/components/tooltip#popup)
+
+---
+
+## API Reference
+
+See the [Anatomy](#anatomy) section above for detailed component props.

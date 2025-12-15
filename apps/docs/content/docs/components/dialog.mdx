@@ -1,0 +1,336 @@
+---
+title: Dialog
+description: A modal window that overlays the main content to display important information or collect user input
+apiReference: https://base-ui.com/react/components/dialog
+---
+
+import { DialogBasicDemo } from "../../../src/components/dialog-basic-demo";
+import { DialogWithIconDemo } from "../../../src/components/dialog-with-icon-demo";
+import { DialogConfirmationDemo } from "../../../src/components/dialog-confirmation-demo";
+import { DialogFormDemo } from "../../../src/components/dialog-form-demo";
+
+## Overview
+
+The Dialog component displays content in a modal overlay that captures the user's attention and requires interaction before returning to the main application. It includes smooth animations, backdrop overlay, and built-in accessibility features.
+
+## Import
+
+```tsx
+import { Dialog } from "@px-ui/core";
+```
+
+## Usage
+
+<Preview>
+  <DialogBasicDemo />
+</Preview>
+
+<CodeBlock>
+```tsx
+<Dialog.Root>
+  <Dialog.Trigger render={(props) => <Button {...props}>Open Dialog</Button>} />
+  <Dialog.Content>
+    <Dialog.Header>
+      <Dialog.HeaderContent>
+        <Dialog.Title>Account Settings</Dialog.Title>
+        <Dialog.Description>
+          Make changes to your account settings here.
+        </Dialog.Description>
+      </Dialog.HeaderContent>
+    </Dialog.Header>
+    <div className="flex flex-col gap-4">
+      <p>Update your profile information, preferences, and account details.</p>
+    </div>
+    <Dialog.Footer>
+      <Dialog.Close render={(props) => <Button {...props} variant="outline">Cancel</Button>} />
+      <Button>Save Changes</Button>
+    </Dialog.Footer>
+  </Dialog.Content>
+</Dialog.Root>
+```
+</CodeBlock>
+
+## Examples
+
+### With Icon
+
+Add a visual icon to the dialog header to provide context for the action or content.
+
+<Preview>
+  <DialogWithIconDemo />
+</Preview>
+
+<CodeBlock>
+```tsx
+<Dialog.Root>
+  <Dialog.Trigger render={(props) => <Button {...props}>Share Document</Button>} />
+  <Dialog.Content>
+    <Dialog.Header>
+      <Dialog.HeaderIcon>
+        <ShareIcon />
+      </Dialog.HeaderIcon>
+      <Dialog.HeaderContent>
+        <Dialog.Title>Share this document</Dialog.Title>
+        <Dialog.Description>
+          Anyone with the link will be able to view this document.
+        </Dialog.Description>
+      </Dialog.HeaderContent>
+    </Dialog.Header>
+    <div className="flex flex-col gap-4">
+      {/* Share content */}
+    </div>
+    <Dialog.Footer>
+      <Dialog.Close render={(props) => <Button {...props}>Done</Button>} />
+    </Dialog.Footer>
+  </Dialog.Content>
+</Dialog.Root>
+```
+</CodeBlock>
+
+### Confirmation Dialog
+
+Use dialogs to confirm destructive or important actions before proceeding.
+
+<Preview>
+  <DialogConfirmationDemo />
+</Preview>
+
+<CodeBlock>
+```tsx
+<Dialog.Root>
+  <Dialog.Trigger render={(props) => <Button {...props} variant="destructive">Delete Account</Button>} />
+  <Dialog.Content>
+    <Dialog.Header>
+      <Dialog.HeaderIcon className="bg-red-100 text-red-600">
+        <TrashIcon />
+      </Dialog.HeaderIcon>
+      <Dialog.HeaderContent>
+        <Dialog.Title>Delete Account</Dialog.Title>
+        <Dialog.Description>
+          Are you sure you want to delete your account? This action cannot be undone.
+        </Dialog.Description>
+      </Dialog.HeaderContent>
+    </Dialog.Header>
+    <div className="flex flex-col gap-4">
+      <p>All your data, projects, and settings will be permanently removed.</p>
+    </div>
+    <Dialog.Footer>
+      <Dialog.Close render={(props) => <Button {...props} variant="outline">Cancel</Button>} />
+      <Button variant="destructive">Delete Account</Button>
+    </Dialog.Footer>
+  </Dialog.Content>
+</Dialog.Root>
+```
+</CodeBlock>
+
+### Form Dialog
+
+Dialogs can contain forms for collecting user input without leaving the current page context.
+
+<Preview>
+  <DialogFormDemo />
+</Preview>
+
+<CodeBlock>
+```tsx
+<Dialog.Root>
+  <Dialog.Trigger render={(props) => <Button {...props}>Create Project</Button>} />
+  <Dialog.Content>
+    <Dialog.Header>
+      <Dialog.HeaderContent>
+        <Dialog.Title>Create New Project</Dialog.Title>
+        <Dialog.Description>
+          Enter the details for your new project.
+        </Dialog.Description>
+      </Dialog.HeaderContent>
+    </Dialog.Header>
+    <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-2">
+        <Label htmlFor="project-name">Project Name</Label>
+        <Input id="project-name" placeholder="My Awesome Project" />
+      </div>
+      <div className="flex flex-col gap-2">
+        <Label htmlFor="project-description">Description</Label>
+        <Input id="project-description" placeholder="A brief description" />
+      </div>
+    </div>
+    <Dialog.Footer>
+      <Dialog.Close render={(props) => <Button {...props} variant="outline">Cancel</Button>} />
+      <Button>Create Project</Button>
+    </Dialog.Footer>
+  </Dialog.Content>
+</Dialog.Root>
+```
+</CodeBlock>
+
+## Anatomy
+
+Components that make up `Dialog`:
+
+### `Dialog.Root`
+
+The root container that manages dialog state and coordinates all dialog components.
+
+**Custom Props:**
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `open` | `boolean` | - | Controlled open state |
+| `defaultOpen` | `boolean` | `false` | Default open state (uncontrolled) |
+| `onOpenChange` | `(open: boolean) => void` | - | Callback when open state changes |
+
+**Inherited Props:** Inherits all props from [Base UI Dialog.Root](https://base-ui.com/react/components/dialog#root)
+
+---
+
+### `Dialog.Trigger`
+
+Button that opens the dialog when clicked.
+
+**Custom Props:**
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `render` | `(props) => ReactNode` | - | Render prop for custom trigger element |
+
+**Inherited Props:** Inherits all props from [Base UI Dialog.Trigger](https://base-ui.com/react/components/dialog#trigger)
+
+---
+
+### `Dialog.Content`
+
+The main dialog content container with overlay, animations, and close button.
+
+**Custom Props:**
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `className` | `string` | - | Additional CSS classes |
+
+**Inherited Props:** Inherits all props from [Base UI Dialog.Popup](https://base-ui.com/react/components/dialog#popup)
+
+---
+
+### `Dialog.Header`
+
+Container for the dialog title, description, and optional icon.
+
+**Custom Props:**
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `className` | `string` | - | Additional CSS classes |
+
+**Inherited Props:** Standard HTML `div` props
+
+---
+
+### `Dialog.HeaderIcon`
+
+Optional icon container displayed at the start of the header.
+
+**Custom Props:**
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `className` | `string` | - | Additional CSS classes |
+
+**Inherited Props:** Standard HTML `div` props
+
+---
+
+### `Dialog.HeaderContent`
+
+Container for title and description in the header.
+
+**Custom Props:**
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `className` | `string` | - | Additional CSS classes |
+
+**Inherited Props:** Standard HTML `div` props
+
+---
+
+### `Dialog.Title`
+
+The dialog title element, important for accessibility.
+
+**Custom Props:**
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `className` | `string` | - | Additional CSS classes |
+
+**Inherited Props:** Inherits all props from [Base UI Dialog.Title](https://base-ui.com/react/components/dialog#title)
+
+---
+
+### `Dialog.Description`
+
+Optional description providing more context about the dialog.
+
+**Custom Props:**
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `className` | `string` | - | Additional CSS classes |
+
+**Inherited Props:** Inherits all props from [Base UI Dialog.Description](https://base-ui.com/react/components/dialog#description)
+
+---
+
+### `Dialog.Footer`
+
+Container for action buttons at the bottom of the dialog.
+
+**Custom Props:**
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `className` | `string` | - | Additional CSS classes |
+
+**Inherited Props:** Standard HTML `div` props
+
+---
+
+### `Dialog.Close`
+
+Button that closes the dialog when clicked.
+
+**Custom Props:**
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `render` | `(props) => ReactNode` | - | Render prop for custom close element |
+
+**Inherited Props:** Inherits all props from [Base UI Dialog.Close](https://base-ui.com/react/components/dialog#close)
+
+---
+
+### `Dialog.Portal`
+
+Portal component for rendering dialog content outside the DOM hierarchy.
+
+**Inherited Props:** Inherits all props from [Base UI Dialog.Portal](https://base-ui.com/react/components/dialog#portal)
+
+---
+
+### `Dialog.Overlay`
+
+The backdrop overlay behind the dialog content.
+
+**Custom Props:**
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `className` | `string` | - | Additional CSS classes |
+
+**Inherited Props:** Inherits all props from [Base UI Dialog.Backdrop](https://base-ui.com/react/components/dialog#backdrop)
+
+---
+
+## API Reference
+
+See the [Anatomy](#anatomy) section above for detailed component props.

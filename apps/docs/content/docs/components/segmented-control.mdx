@@ -1,0 +1,131 @@
+---
+title: SegmentedControl
+description: Pill-shaped single-selection control for switching between views or filters
+apiReference: https://base-ui.com/react/components/radio
+---
+
+import { SegmentedControlBasicDemo } from "../../../src/components/segmented-control-basic-demo";
+import { SegmentedControlSizesDemo } from "../../../src/components/segmented-control-sizes-demo";
+import { SegmentedControlWithIconsDemo } from "../../../src/components/segmented-control-with-icons-demo";
+
+## Overview
+
+The SegmentedControl component provides a pill-shaped control for mutually exclusive options, commonly used for view switching or filter selection. It features smooth transitions, clear visual feedback, and keyboard navigation support.
+
+## Import
+
+```tsx
+import { SegmentedControl } from "@px-ui/core";
+```
+
+## Usage
+
+<Preview>
+  <SegmentedControlBasicDemo />
+</Preview>
+
+<CodeBlock>
+```tsx
+<SegmentedControl.Root defaultValue="week">
+  <SegmentedControl.Item value="day">Day</SegmentedControl.Item>
+  <SegmentedControl.Item value="week">Week</SegmentedControl.Item>
+  <SegmentedControl.Item value="month">Month</SegmentedControl.Item>
+  <SegmentedControl.Item value="year">Year</SegmentedControl.Item>
+</SegmentedControl.Root>
+```
+</CodeBlock>
+
+## Examples
+
+### Sizes
+
+The SegmentedControl.Item component supports three size variants.
+
+<Preview>
+  <SegmentedControlSizesDemo />
+</Preview>
+
+<CodeBlock>
+```tsx
+{/* Small */}
+<SegmentedControl.Root defaultValue="list">
+  <SegmentedControl.Item value="list" size="sm">List</SegmentedControl.Item>
+  <SegmentedControl.Item value="grid" size="sm">Grid</SegmentedControl.Item>
+</SegmentedControl.Root>
+
+{/* Default */}
+<SegmentedControl.Root defaultValue="list">
+  <SegmentedControl.Item value="list" size="default">List</SegmentedControl.Item>
+  <SegmentedControl.Item value="grid" size="default">Grid</SegmentedControl.Item>
+</SegmentedControl.Root>
+
+{/* Large */}
+<SegmentedControl.Root defaultValue="list">
+  <SegmentedControl.Item value="list" size="lg">List</SegmentedControl.Item>
+  <SegmentedControl.Item value="grid" size="lg">Grid</SegmentedControl.Item>
+</SegmentedControl.Root>
+```
+</CodeBlock>
+
+### With Icons
+
+Combine icons with text labels for better visual recognition.
+
+<Preview>
+  <SegmentedControlWithIconsDemo />
+</Preview>
+
+<CodeBlock>
+```tsx
+<SegmentedControl.Root defaultValue="list">
+  <SegmentedControl.Item value="list" className="gap-2">
+    <ListIcon />
+    List
+  </SegmentedControl.Item>
+  <SegmentedControl.Item value="grid" className="gap-2">
+    <GridIcon />
+    Grid
+  </SegmentedControl.Item>
+  <SegmentedControl.Item value="cards" className="gap-2">
+    <CardsIcon />
+    Cards
+  </SegmentedControl.Item>
+</SegmentedControl.Root>
+```
+</CodeBlock>
+
+## Anatomy
+
+Components that make up SegmentedControl:
+
+### SegmentedControl.Root
+
+The container component that manages the segmented control state.
+
+**Custom Props:**
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `className` | `string` | - | Additional CSS classes |
+
+**Inherited Props:** Inherits all props from [Base UI RadioGroup](https://base-ui.com/react/components/radio-group) including `value`, `defaultValue`, `onValueChange`, `disabled`, etc.
+
+---
+
+### SegmentedControl.Item
+
+Individual segment within the control.
+
+**Custom Props:**
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `variant` | `"default"` | `"default"` | Visual style variant |
+| `size` | `"default" \| "sm" \| "lg"` | `"default"` | Size of the segment |
+| `className` | `string` | - | Additional CSS classes |
+
+**Inherited Props:** Inherits all props from [Base UI Radio.Root](https://base-ui.com/react/components/radio#root) including `value`, `disabled`, etc.
+
+## API Reference
+
+See the Anatomy section above for detailed prop information for each component.

@@ -1,0 +1,274 @@
+---
+title: Popover
+description: Display rich content in a floating panel anchored to an element
+apiReference: https://base-ui.com/react/components/popover
+---
+
+import { PopoverBasicDemo } from "../../../src/components/popover-basic-demo";
+import { PopoverPositionsDemo } from "../../../src/components/popover-positions-demo";
+import { PopoverWithFormDemo } from "../../../src/components/popover-with-form-demo";
+import { PopoverWithCloseDemo } from "../../../src/components/popover-with-close-demo";
+
+## Overview
+
+The Popover component displays rich content in a floating panel that appears when triggered. Unlike tooltips, popovers can contain interactive elements like buttons, forms, and links. They feature smooth animations, flexible positioning, and arrow indicators.
+
+## Import
+
+```tsx
+import { Popover } from "@px-ui/core";
+```
+
+## Usage
+
+<Preview>
+  <PopoverBasicDemo />
+</Preview>
+
+<CodeBlock>
+```tsx
+<Popover.Root>
+  <Popover.Trigger render={(props) => <Button {...props}>Open Popover</Button>} />
+  <Popover.Content>
+    <Popover.Header>
+      <Popover.Title>Quick Actions</Popover.Title>
+      <Popover.Description>
+        Choose an action to perform
+      </Popover.Description>
+    </Popover.Header>
+    <div className="flex flex-col gap-2 pt-4">
+      <Button variant="outline" size="sm">View Details</Button>
+      <Button variant="outline" size="sm">Edit Settings</Button>
+    </div>
+  </Popover.Content>
+</Popover.Root>
+```
+</CodeBlock>
+
+## Examples
+
+### Positions
+
+Popovers can be positioned on any side of the trigger element using `positionerProps`.
+
+<Preview>
+  <PopoverPositionsDemo />
+</Preview>
+
+<CodeBlock>
+```tsx
+<Popover.Root>
+  <Popover.Trigger render={(props) => <Button {...props}>Top</Button>} />
+  <Popover.Content positionerProps={{ side: "top" }}>
+    <p>Popover positioned on top</p>
+  </Popover.Content>
+</Popover.Root>
+
+<Popover.Root>
+  <Popover.Trigger render={(props) => <Button {...props}>Bottom</Button>} />
+  <Popover.Content positionerProps={{ side: "bottom" }}>
+    <p>Popover positioned on bottom</p>
+  </Popover.Content>
+</Popover.Root>
+```
+</CodeBlock>
+
+### With Form
+
+Popovers can contain interactive forms for collecting user input.
+
+<Preview>
+  <PopoverWithFormDemo />
+</Preview>
+
+<CodeBlock>
+```tsx
+<Popover.Root>
+  <Popover.Trigger render={(props) => <Button {...props}>Update Profile</Button>} />
+  <Popover.Content className="w-80">
+    <Popover.Header>
+      <Popover.Title>Edit Profile</Popover.Title>
+      <Popover.Description>
+        Update your profile information
+      </Popover.Description>
+    </Popover.Header>
+    <div className="flex flex-col gap-4 pt-4">
+      <div className="flex flex-col gap-2">
+        <Label htmlFor="name">Name</Label>
+        <Input id="name" defaultValue="John Doe" />
+      </div>
+    </div>
+    <Popover.Footer className="pt-4">
+      <Popover.Close render={(props) => <Button {...props} variant="outline">Cancel</Button>} />
+      <Button>Save Changes</Button>
+    </Popover.Footer>
+  </Popover.Content>
+</Popover.Root>
+```
+</CodeBlock>
+
+### With Close Button
+
+Add a close button for users who prefer explicit dismiss controls.
+
+<Preview>
+  <PopoverWithCloseDemo />
+</Preview>
+
+<CodeBlock>
+```tsx
+<Popover.Root>
+  <Popover.Trigger render={(props) => <Button {...props}>Show Info</Button>} />
+  <Popover.Content>
+    <div className="flex items-start justify-between gap-4">
+      <Popover.Header>
+        <Popover.Title>Information</Popover.Title>
+        <Popover.Description>
+          This is some helpful information about your account.
+        </Popover.Description>
+      </Popover.Header>
+      <Popover.CloseIconButton />
+    </div>
+  </Popover.Content>
+</Popover.Root>
+```
+</CodeBlock>
+
+## Anatomy
+
+Components that make up `Popover`:
+
+### `Popover.Root`
+
+The root container that manages popover state and coordinates all popover components.
+
+**Custom Props:**
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `open` | `boolean` | - | Controlled open state |
+| `defaultOpen` | `boolean` | `false` | Default open state (uncontrolled) |
+| `onOpenChange` | `(open: boolean) => void` | - | Callback when open state changes |
+
+**Inherited Props:** Inherits all props from [Base UI Popover.Root](https://base-ui.com/react/components/popover#root)
+
+---
+
+### `Popover.Trigger`
+
+The element that triggers the popover when clicked.
+
+**Custom Props:**
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `render` | `(props) => ReactNode` | - | Render prop for custom trigger element |
+
+**Inherited Props:** Inherits all props from [Base UI Popover.Trigger](https://base-ui.com/react/components/popover#trigger)
+
+---
+
+### `Popover.Content`
+
+The main popover content container with positioning, arrow, and animations.
+
+**Custom Props:**
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `arrow` | `boolean` | `true` | Whether to show the arrow indicator |
+| `positionerProps` | `object` | - | Props for the positioner component |
+| `popupProps` | `object` | - | Props for the popup component |
+| `className` | `string` | - | Additional CSS classes |
+
+**Inherited Props:** The `popupProps` accepts all props from [Base UI Popover.Popup](https://base-ui.com/react/components/popover#popup)
+
+---
+
+### `Popover.Header`
+
+Container for the popover title and description.
+
+**Custom Props:**
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `className` | `string` | - | Additional CSS classes |
+
+**Inherited Props:** Standard HTML `div` props
+
+---
+
+### `Popover.Title`
+
+The popover title element, important for accessibility.
+
+**Custom Props:**
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `className` | `string` | - | Additional CSS classes |
+
+**Inherited Props:** Inherits all props from [Base UI Popover.Title](https://base-ui.com/react/components/popover#title)
+
+---
+
+### `Popover.Description`
+
+Optional description providing context about the popover content.
+
+**Custom Props:**
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `className` | `string` | - | Additional CSS classes |
+
+**Inherited Props:** Inherits all props from [Base UI Popover.Description](https://base-ui.com/react/components/popover#description)
+
+---
+
+### `Popover.Footer`
+
+Container for action buttons at the bottom of the popover.
+
+**Custom Props:**
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `className` | `string` | - | Additional CSS classes |
+
+**Inherited Props:** Standard HTML `div` props
+
+---
+
+### `Popover.Close`
+
+Button that closes the popover when clicked.
+
+**Custom Props:**
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `render` | `(props) => ReactNode` | - | Render prop for custom close element |
+
+**Inherited Props:** Inherits all props from [Base UI Popover.Close](https://base-ui.com/react/components/popover#close)
+
+---
+
+### `Popover.CloseIconButton`
+
+Pre-styled close button with icon, typically placed in the header.
+
+**Custom Props:**
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `className` | `string` | - | Additional CSS classes |
+
+**Inherited Props:** Standard HTML `button` props
+
+---
+
+## API Reference
+
+See the [Anatomy](#anatomy) section above for detailed component props.

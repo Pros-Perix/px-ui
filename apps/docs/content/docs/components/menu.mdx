@@ -1,0 +1,264 @@
+---
+title: Menu
+description: Display a list of actions or options in a dropdown menu
+apiReference: https://base-ui.com/react/components/menu
+---
+
+import { MenuBasicDemo } from "../../../src/components/menu-basic-demo";
+import { MenuWithGroupsDemo } from "../../../src/components/menu-with-groups-demo";
+import { MenuRadioDemo } from "../../../src/components/menu-radio-demo";
+import { MenuSizesDemo } from "../../../src/components/menu-sizes-demo";
+
+## Overview
+
+The Menu component displays a list of actions or options in a dropdown panel. It provides keyboard navigation, supports grouping with labels, radio selection, and includes smooth animations and flexible positioning.
+
+## Import
+
+```tsx
+import { Menu } from "@px-ui/core";
+```
+
+## Usage
+
+<Preview>
+  <MenuBasicDemo />
+</Preview>
+
+<CodeBlock>
+```tsx
+<Menu.Root>
+  <Menu.Trigger>Actions</Menu.Trigger>
+  <Menu.Content>
+    <Menu.Item>Edit</Menu.Item>
+    <Menu.Item>Duplicate</Menu.Item>
+    <Menu.Item>Archive</Menu.Item>
+    <Menu.Separator />
+    <Menu.Item>Delete</Menu.Item>
+  </Menu.Content>
+</Menu.Root>
+```
+</CodeBlock>
+
+## Examples
+
+### With Groups
+
+Organize menu items into logical groups with labels for better organization.
+
+<Preview>
+  <MenuWithGroupsDemo />
+</Preview>
+
+<CodeBlock>
+```tsx
+<Menu.Root>
+  <Menu.Trigger>Options</Menu.Trigger>
+  <Menu.Content>
+    <Menu.Group>
+      <Menu.GroupLabel>Editing</Menu.GroupLabel>
+      <Menu.Item>Cut</Menu.Item>
+      <Menu.Item>Copy</Menu.Item>
+      <Menu.Item>Paste</Menu.Item>
+    </Menu.Group>
+    <Menu.Separator />
+    <Menu.Group>
+      <Menu.GroupLabel>View</Menu.GroupLabel>
+      <Menu.Item>Zoom In</Menu.Item>
+      <Menu.Item>Zoom Out</Menu.Item>
+    </Menu.Group>
+  </Menu.Content>
+</Menu.Root>
+```
+</CodeBlock>
+
+### Radio Selection
+
+Use radio groups for single-selection options within a menu.
+
+<Preview>
+  <MenuRadioDemo />
+</Preview>
+
+<CodeBlock>
+```tsx
+const [theme, setTheme] = useState("light");
+
+<Menu.Root>
+  <Menu.Trigger>Theme: {theme}</Menu.Trigger>
+  <Menu.Content>
+    <Menu.RadioGroup value={theme} onValueChange={setTheme}>
+      <Menu.RadioItem value="light">Light</Menu.RadioItem>
+      <Menu.RadioItem value="dark">Dark</Menu.RadioItem>
+      <Menu.RadioItem value="system">System</Menu.RadioItem>
+    </Menu.RadioGroup>
+  </Menu.Content>
+</Menu.Root>
+```
+</CodeBlock>
+
+### Sizes
+
+Menu triggers support different sizes to match your design needs.
+
+<Preview>
+  <MenuSizesDemo />
+</Preview>
+
+<CodeBlock>
+```tsx
+<Menu.Root>
+  <Menu.Trigger size="sm">Small Menu</Menu.Trigger>
+  <Menu.Content>
+    <Menu.Item>Edit</Menu.Item>
+    <Menu.Item>Delete</Menu.Item>
+  </Menu.Content>
+</Menu.Root>
+
+<Menu.Root>
+  <Menu.Trigger size="md">Medium Menu</Menu.Trigger>
+  <Menu.Content>
+    <Menu.Item>Edit</Menu.Item>
+    <Menu.Item>Delete</Menu.Item>
+  </Menu.Content>
+</Menu.Root>
+```
+</CodeBlock>
+
+## Anatomy
+
+Components that make up `Menu`:
+
+### `Menu.Root`
+
+The root container that manages menu state and coordinates all menu components.
+
+**Custom Props:**
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `open` | `boolean` | - | Controlled open state |
+| `defaultOpen` | `boolean` | `false` | Default open state (uncontrolled) |
+| `onOpenChange` | `(open: boolean) => void` | - | Callback when open state changes |
+
+**Inherited Props:** Inherits all props from [Base UI Menu.Root](https://base-ui.com/react/components/menu#root)
+
+---
+
+### `Menu.Trigger`
+
+Button that opens the menu when clicked.
+
+**Custom Props:**
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `size` | `"sm" \| "md" \| "lg"` | `"md"` | Size of the trigger button |
+| `widthVariant` | `"fit" \| "trigger" \| "enforced"` | `"fit"` | Width variant for the trigger |
+| `className` | `string` | - | Additional CSS classes |
+
+**Inherited Props:** Inherits all props from [Base UI Menu.Trigger](https://base-ui.com/react/components/menu#trigger)
+
+---
+
+### `Menu.Content`
+
+The menu content container with positioning and animations.
+
+**Custom Props:**
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `widthVariant` | `"fit" \| "trigger" \| "enforced"` | `"fit"` | Width behavior of the menu |
+| `portalProps` | `object` | - | Props for the portal component |
+| `positionerProps` | `object` | - | Props for the positioner component |
+| `popupProps` | `object` | - | Props for the popup component |
+
+**Inherited Props:** Props are distributed to the Base UI Portal, Positioner, and Popup components
+
+---
+
+### `Menu.Item`
+
+Individual menu item that can be clicked or selected.
+
+**Custom Props:**
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `disabled` | `boolean` | `false` | Whether the item is disabled |
+| `className` | `string` | - | Additional CSS classes |
+
+**Inherited Props:** Inherits all props from [Base UI Menu.Item](https://base-ui.com/react/components/menu#item)
+
+---
+
+### `Menu.Separator`
+
+Visual separator line between menu items or groups.
+
+**Custom Props:**
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `className` | `string` | - | Additional CSS classes |
+
+**Inherited Props:** Inherits all props from [Base UI Menu.Separator](https://base-ui.com/react/components/menu#separator)
+
+---
+
+### `Menu.Group`
+
+Container for grouping related menu items.
+
+**Inherited Props:** Inherits all props from [Base UI Menu.Group](https://base-ui.com/react/components/menu#group)
+
+---
+
+### `Menu.GroupLabel`
+
+Label for a group of menu items.
+
+**Custom Props:**
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `className` | `string` | - | Additional CSS classes |
+
+**Inherited Props:** Inherits all props from [Base UI Menu.GroupLabel](https://base-ui.com/react/components/menu#grouplabel)
+
+---
+
+### `Menu.RadioGroup`
+
+Container for radio items allowing single selection.
+
+**Custom Props:**
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `value` | `string` | - | Currently selected radio item value |
+| `onValueChange` | `(value: string) => void` | - | Callback when selection changes |
+
+**Inherited Props:** Inherits all props from [Base UI Menu.RadioGroup](https://base-ui.com/react/components/menu#radiogroup)
+
+---
+
+### `Menu.RadioItem`
+
+Radio menu item for single-selection within a group.
+
+**Custom Props:**
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `value` | `string` | - | Value of this radio item |
+| `className` | `string` | - | Additional CSS classes |
+
+**Inherited Props:** Inherits all props from [Base UI Menu.RadioItem](https://base-ui.com/react/components/menu#radioitem)
+
+---
+
+## API Reference
+
+See the [Anatomy](#anatomy) section above for detailed component props.

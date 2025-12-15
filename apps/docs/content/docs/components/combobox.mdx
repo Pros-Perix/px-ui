@@ -1,0 +1,315 @@
+---
+title: Combobox
+description: A searchable dropdown component for selecting values with autocomplete functionality
+apiReference: https://base-ui.com/react/components/combobox
+---
+
+import { ComboboxBasicDemo } from "../../../src/components/combobox-basic-demo";
+import { ComboboxSearchableDemo } from "../../../src/components/combobox-searchable-demo";
+import { ComboboxMultipleDemo } from "../../../src/components/combobox-multiple-demo";
+import { ComboboxWithSearchDemo } from "../../../src/components/combobox-with-search-demo";
+
+## Overview
+
+The Combobox component combines a text input with a dropdown list, allowing users to search and select values with autocomplete functionality. It supports single and multiple selection, async data loading, and infinite scrolling.
+
+## Import
+
+```tsx
+import { Combobox } from "@px-ui/core";
+```
+
+## Usage
+
+<Preview>
+  <ComboboxBasicDemo />
+</Preview>
+
+<CodeBlock>
+```tsx
+const [value, setValue] = useState<any>(null);
+
+const fruits = [
+  { value: "apple", label: "Apple" },
+  { value: "banana", label: "Banana" },
+  { value: "orange", label: "Orange" },
+];
+
+<Combobox.Root value={value} onValueChange={setValue}>
+  <Combobox.Trigger>
+    <Combobox.Value placeholder="Select a fruit" />
+  </Combobox.Trigger>
+  <Combobox.Content>
+    <Combobox.List>
+      {fruits.map((fruit) => (
+        <Combobox.Item key={fruit.value} value={fruit}>
+          {fruit.label}
+        </Combobox.Item>
+      ))}
+    </Combobox.List>
+  </Combobox.Content>
+</Combobox.Root>
+```
+</CodeBlock>
+
+## Examples
+
+### Searchable Trigger
+
+Use a searchable trigger to allow users to type and filter options as they search.
+
+<Preview>
+  <ComboboxSearchableDemo />
+</Preview>
+
+<CodeBlock>
+```tsx
+const [value, setValue] = useState<any>(null);
+
+<Combobox.Root value={value} onValueChange={setValue}>
+  <Combobox.SearchableTrigger placeholder="Search countries..." />
+  <Combobox.Content>
+    <Combobox.List>
+      {countries.map((country) => (
+        <Combobox.Item key={country.value} value={country}>
+          {country.label}
+        </Combobox.Item>
+      ))}
+    </Combobox.List>
+  </Combobox.Content>
+</Combobox.Root>
+```
+</CodeBlock>
+
+### Multiple Selection
+
+Enable multi-select mode with chips to allow users to select multiple options.
+
+<Preview>
+  <ComboboxMultipleDemo />
+</Preview>
+
+<CodeBlock>
+```tsx
+const [value, setValue] = useState<any[]>([]);
+
+<Combobox.Root multiple value={value} onValueChange={setValue}>
+  <Combobox.ChipsTrigger placeholder="Select languages">
+    {(item: any) => (
+      <Combobox.Chip key={item.value}>
+        {item.label}
+      </Combobox.Chip>
+    )}
+  </Combobox.ChipsTrigger>
+  <Combobox.Content>
+    <Combobox.List>
+      {languages.map((language) => (
+        <Combobox.MultiItem key={language.value} value={language}>
+          {language.label}
+        </Combobox.MultiItem>
+      ))}
+    </Combobox.List>
+  </Combobox.Content>
+</Combobox.Root>
+```
+</CodeBlock>
+
+### With Search Field
+
+Add a dedicated search field within the dropdown for better filtering of large lists.
+
+<Preview>
+  <ComboboxWithSearchDemo />
+</Preview>
+
+<CodeBlock>
+```tsx
+<Combobox.Root value={value} onValueChange={setValue}>
+  <Combobox.Trigger>
+    <Combobox.Value placeholder="Select a user" />
+  </Combobox.Trigger>
+  <Combobox.Content>
+    <Combobox.Search placeholder="Search users..." />
+    <Combobox.List>
+      {users.map((user) => (
+        <Combobox.Item key={user.value} value={user}>
+          {user.label}
+        </Combobox.Item>
+      ))}
+    </Combobox.List>
+  </Combobox.Content>
+</Combobox.Root>
+```
+</CodeBlock>
+
+## Anatomy
+
+Components that make up `Combobox`:
+
+### `Combobox.Root`
+
+The root container that manages combobox state and coordinates all combobox components.
+
+**Custom Props:**
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `value` | `Value \| Value[]` | - | Selected value(s) |
+| `onValueChange` | `(value) => void` | - | Callback when selection changes |
+| `multiple` | `boolean` | `false` | Enable multi-select mode |
+| `disabled` | `boolean` | `false` | Whether the combobox is disabled |
+| `invalid` | `boolean` | `false` | Whether the combobox is in an invalid state |
+| `isLoading` | `boolean` | `false` | Whether options are loading |
+| `loadOptions` | `LoadOptionsConfig` | - | Async options loading configuration |
+
+**Inherited Props:** Inherits all props from [Base UI Combobox.Root](https://base-ui.com/react/components/combobox#root)
+
+---
+
+### `Combobox.Trigger`
+
+Button that opens the combobox dropdown when clicked.
+
+**Custom Props:**
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `size` | `"sm" \| "md" \| "lg"` | `"md"` | Size of the trigger button |
+| `widthVariant` | `"fit" \| "enforced" \| "full"` | `"enforced"` | Width behavior of the trigger |
+| `className` | `string` | - | Additional CSS classes |
+
+**Inherited Props:** Inherits all props from [Base UI Combobox.Trigger](https://base-ui.com/react/components/combobox#trigger)
+
+---
+
+### `Combobox.SearchableTrigger`
+
+Input-based trigger that allows typing to search and filter options.
+
+**Custom Props:**
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `placeholder` | `string` | - | Placeholder text for the input |
+| `size` | `"default" \| "sm"` | `"default"` | Size of the input |
+| `widthVariant` | `"enforced" \| "fit" \| "full"` | `"full"` | Width behavior |
+| `addons` | `ReactNode` | - | Additional addons for the input |
+| `className` | `string` | - | Additional CSS classes |
+
+---
+
+### `Combobox.ChipsTrigger`
+
+Multi-select trigger that displays selected values as removable chips.
+
+**Custom Props:**
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `placeholder` | `string` | - | Placeholder when no values selected |
+| `children` | `function` | - | Render function for each chip |
+| `size` | `"default" \| "sm"` | `"default"` | Size of the trigger |
+| `widthVariant` | `"enforced" \| "full"` | `"enforced"` | Width behavior |
+| `className` | `string` | - | Additional CSS classes |
+
+---
+
+### `Combobox.Value`
+
+Displays the currently selected value or placeholder text.
+
+**Custom Props:**
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `placeholder` | `string` | - | Text to show when no value is selected |
+| `children` | `ReactNode \| function` | - | Custom render function for the value |
+| `className` | `string` | - | Additional CSS classes |
+
+---
+
+### `Combobox.Content`
+
+The dropdown content container with positioning and animations.
+
+**Custom Props:**
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `empty` | `string` | `"No options"` | Text to show when no options match |
+| `widthVariant` | `"trigger" \| "fit" \| "enforced"` | `"trigger"` | Width behavior |
+| `portalProps` | `object` | - | Props for the portal component |
+| `positionerProps` | `object` | - | Props for the positioner component |
+| `popupProps` | `object` | - | Props for the popup component |
+
+---
+
+### `Combobox.List`
+
+Container for combobox items, handles scrolling and keyboard navigation.
+
+**Inherited Props:** Inherits all props from [Base UI Combobox.List](https://base-ui.com/react/components/combobox#list)
+
+---
+
+### `Combobox.Item`
+
+Individual selectable option in the dropdown.
+
+**Custom Props:**
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `value` | `any` | - | Value of this option |
+| `disabled` | `boolean` | `false` | Whether the option is disabled |
+| `className` | `string` | - | Additional CSS classes |
+
+**Inherited Props:** Inherits all props from [Base UI Combobox.Item](https://base-ui.com/react/components/combobox#item)
+
+---
+
+### `Combobox.MultiItem`
+
+Item component for multi-select mode with checkbox indicator.
+
+**Custom Props:**
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `value` | `any` | - | Value of this option |
+| `disabled` | `boolean` | `false` | Whether the option is disabled |
+| `className` | `string` | - | Additional CSS classes |
+
+---
+
+### `Combobox.Chip`
+
+Chip component for displaying selected values in multi-select mode.
+
+**Custom Props:**
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `className` | `string` | - | Additional CSS classes |
+
+**Inherited Props:** Inherits all props from [Base UI Combobox.Chip](https://base-ui.com/react/components/combobox#chip)
+
+---
+
+### `Combobox.Search`
+
+Dedicated search input field within the dropdown for filtering options.
+
+**Custom Props:**
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `placeholder` | `string` | `"Search options"` | Placeholder text |
+
+**Inherited Props:** Inherits all props from [Base UI Combobox.Input](https://base-ui.com/react/components/combobox#input)
+
+---
+
+## API Reference
+
+See the [Anatomy](#anatomy) section above for detailed component props.

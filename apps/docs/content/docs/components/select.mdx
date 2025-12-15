@@ -1,0 +1,261 @@
+---
+title: Select
+description: A dropdown component for selecting one or multiple values from a list of options
+apiReference: https://base-ui.com/react/components/select
+---
+
+import { SelectBasicDemo } from "../../../src/components/select-basic-demo";
+import { SelectMultipleDemo } from "../../../src/components/select-multiple-demo";
+import { SelectSizesDemo } from "../../../src/components/select-sizes-demo";
+import { SelectDisabledDemo } from "../../../src/components/select-disabled-demo";
+
+## Overview
+
+The Select component provides a dropdown interface for choosing one or multiple values from a list of options. It features keyboard navigation, search functionality, smooth animations, and support for both single and multi-select modes.
+
+## Import
+
+```tsx
+import { Select } from "@px-ui/core";
+```
+
+## Usage
+
+<Preview>
+  <SelectBasicDemo />
+</Preview>
+
+<CodeBlock>
+```tsx
+const [value, setValue] = useState<string | null>(null);
+
+<Select.Root value={value} onValueChange={setValue}>
+  <Select.Trigger>
+    <Select.Value placeholder="Select a fruit" />
+  </Select.Trigger>
+  <Select.Content>
+    <Select.List>
+      <Select.Item value="apple">Apple</Select.Item>
+      <Select.Item value="banana">Banana</Select.Item>
+      <Select.Item value="orange">Orange</Select.Item>
+    </Select.List>
+  </Select.Content>
+</Select.Root>
+```
+</CodeBlock>
+
+## Examples
+
+### Multiple Selection
+
+Enable multi-select mode to allow users to choose multiple options.
+
+<Preview>
+  <SelectMultipleDemo />
+</Preview>
+
+<CodeBlock>
+```tsx
+const [value, setValue] = useState<string[]>([]);
+
+<Select.Root multiple value={value} onValueChange={setValue}>
+  <Select.Trigger>
+    <Select.MultiSelectedValue selectedValue={value} maxItems={2} />
+    <Select.Value placeholder="Select technologies" />
+  </Select.Trigger>
+  <Select.Content>
+    <Select.List>
+      <Select.MultiItem value="react">React</Select.MultiItem>
+      <Select.MultiItem value="vue">Vue</Select.MultiItem>
+      <Select.MultiItem value="angular">Angular</Select.MultiItem>
+    </Select.List>
+  </Select.Content>
+</Select.Root>
+```
+</CodeBlock>
+
+### Sizes
+
+Select components support different sizes to match your design needs.
+
+<Preview>
+  <SelectSizesDemo />
+</Preview>
+
+<CodeBlock>
+```tsx
+<Select.Root value={value} onValueChange={setValue}>
+  <Select.Trigger size="sm">
+    <Select.Value placeholder="Small" />
+  </Select.Trigger>
+  <Select.Content>
+    <Select.List>
+      <Select.Item value="1">Option 1</Select.Item>
+    </Select.List>
+  </Select.Content>
+</Select.Root>
+
+<Select.Root value={value} onValueChange={setValue}>
+  <Select.Trigger size="md">
+    <Select.Value placeholder="Medium" />
+  </Select.Trigger>
+  <Select.Content>
+    <Select.List>
+      <Select.Item value="1">Option 1</Select.Item>
+    </Select.List>
+  </Select.Content>
+</Select.Root>
+```
+</CodeBlock>
+
+### Disabled
+
+Disable the select to prevent user interaction.
+
+<Preview>
+  <SelectDisabledDemo />
+</Preview>
+
+<CodeBlock>
+```tsx
+<Select.Root value="apple" disabled>
+  <Select.Trigger>
+    <Select.Value placeholder="Select a fruit" />
+  </Select.Trigger>
+  <Select.Content>
+    <Select.List>
+      <Select.Item value="apple">Apple</Select.Item>
+      <Select.Item value="banana">Banana</Select.Item>
+    </Select.List>
+  </Select.Content>
+</Select.Root>
+```
+</CodeBlock>
+
+## Anatomy
+
+Components that make up `Select`:
+
+### `Select.Root`
+
+The root container that manages select state and coordinates all select components.
+
+**Custom Props:**
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `value` | `Value \| Value[]` | - | Selected value(s) |
+| `onValueChange` | `(value) => void` | - | Callback when selection changes |
+| `multiple` | `boolean` | `false` | Enable multi-select mode |
+| `disabled` | `boolean` | `false` | Whether the select is disabled |
+| `invalid` | `boolean` | `false` | Whether the select is in an invalid state |
+
+**Inherited Props:** Inherits all props from [Base UI Select.Root](https://base-ui.com/react/components/select#root)
+
+---
+
+### `Select.Trigger`
+
+Button that opens the select dropdown when clicked.
+
+**Custom Props:**
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `size` | `"sm" \| "md" \| "lg"` | `"md"` | Size of the trigger button |
+| `widthVariant` | `"fit" \| "enforced" \| "full"` | `"enforced"` | Width behavior of the trigger |
+| `className` | `string` | - | Additional CSS classes |
+
+**Inherited Props:** Inherits all props from [Base UI Select.Trigger](https://base-ui.com/react/components/select#trigger)
+
+---
+
+### `Select.Value`
+
+Displays the currently selected value or placeholder text.
+
+**Custom Props:**
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `placeholder` | `string` | - | Text to show when no value is selected |
+| `children` | `ReactNode \| function` | - | Custom render function for the value |
+| `className` | `string` | - | Additional CSS classes |
+
+**Inherited Props:** Inherits all props from [Base UI Select.Value](https://base-ui.com/react/components/select#value)
+
+---
+
+### `Select.Content`
+
+The dropdown content container with positioning and animations.
+
+**Custom Props:**
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `widthVariant` | `"trigger" \| "fit" \| "enforced"` | `"trigger"` | Width behavior of the content |
+| `portalProps` | `object` | - | Props for the portal component |
+| `positionerProps` | `object` | - | Props for the positioner component |
+| `popupProps` | `object` | - | Props for the popup component |
+
+**Inherited Props:** Props are distributed to Base UI Portal, Positioner, and Popup components
+
+---
+
+### `Select.List`
+
+Container for select items, handles scrolling and keyboard navigation.
+
+**Inherited Props:** Inherits all props from [Base UI Select.List](https://base-ui.com/react/components/select#list)
+
+---
+
+### `Select.Item`
+
+Individual selectable option in the dropdown.
+
+**Custom Props:**
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `value` | `any` | - | Value of this option |
+| `disabled` | `boolean` | `false` | Whether the option is disabled |
+| `className` | `string` | - | Additional CSS classes |
+
+**Inherited Props:** Inherits all props from [Base UI Select.Item](https://base-ui.com/react/components/select#item)
+
+---
+
+### `Select.MultiItem`
+
+Item component for multi-select mode with checkbox indicator.
+
+**Custom Props:**
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `value` | `any` | - | Value of this option |
+| `disabled` | `boolean` | `false` | Whether the option is disabled |
+| `className` | `string` | - | Additional CSS classes |
+
+**Inherited Props:** Inherits all props from [Base UI Select.Item](https://base-ui.com/react/components/select#item)
+
+---
+
+### `Select.MultiSelectedValue`
+
+Helper component to display selected values in multi-select mode.
+
+**Custom Props:**
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `selectedValue` | `any[]` | - | Array of selected values |
+| `maxItems` | `number` | - | Maximum number of items to display before showing count |
+
+---
+
+## API Reference
+
+See the [Anatomy](#anatomy) section above for detailed component props.
