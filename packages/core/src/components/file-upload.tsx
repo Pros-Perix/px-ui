@@ -619,7 +619,7 @@ function ItemStatus({
         className={cn("text-ppx-xs text-ppx-neutral-10 shrink-0", className)}
         {...props}
       >
-        {uploadingContent ?? `${file.progress}%`}
+        {uploadingContent ?? `${file.progress ?? 0}%`}
       </span>
     );
   }

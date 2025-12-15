@@ -93,11 +93,14 @@ export type UploadConfig = {
   /**
    * Function to get a presigned URL for uploading
    * Called before uploading each file
+   * @param params - Parameters including filename, contentType, size, and optional AbortSignal
+   * @param params.signal - Optional AbortSignal to cancel the request
    */
   getPresignedUrl: (params: {
     filename: string;
     contentType: string;
     size: number;
+    signal?: AbortSignal;
   }) => Promise<{
     result?: PresignedUrlResponse | null;
     error?: unknown;
@@ -106,12 +109,18 @@ export type UploadConfig = {
   /**
    * Function to upload the file to the storage
    * Receives the presigned URL and the file
+   * @param url - The presigned URL to upload to
+   * @param file - The file to upload
+   * @param presignedData - The full presigned URL response data
+   * @param onProgress - Optional callback for upload progress
+   * @param signal - Optional AbortSignal to cancel the upload
    */
   uploadFile: (
     url: string,
     file: File,
     presignedData: PresignedUrlResponse,
     onProgress?: (progress: number) => void,
+    signal?: AbortSignal,
   ) => Promise<{
     result?: { url: string; [key: string]: unknown };
     error?: unknown;
@@ -272,6 +281,7 @@ export const useFileUpload = (
             filename: file.name,
             contentType: file.type,
             size: file.size,
+            signal: abortController.signal,
           });
 
         if (presignedError || !presignedResult) {
@@ -302,6 +312,7 @@ export const useFileUpload = (
                 ),
               );
             },
+            abortController.signal,
           );
 
         if (uploadError) {
@@ -323,6 +334,21 @@ export const useFileUpload = (
 
         return uploadedFile;
       } catch (error) {
+        // Check if the upload was cancelled via AbortController
+        const isAborted =
+          error instanceof Error &&
+          (error.name === "AbortError" || abortController.signal.aborted);
+
+        if (isAborted) {
+          // Upload was cancelled - return idle state (already set by cancelUpload)
+          const cancelledFile: FileWithUploadStatus = {
+            ...fileWithStatus,
+            status: "idle",
+            progress: 0,
+          };
+          return cancelledFile;
+        }
+
         const errorMessage =
           error instanceof Error ? error.message : "Upload failed";
         const failedFile: FileWithUploadStatus = {
