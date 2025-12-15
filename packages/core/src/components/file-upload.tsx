@@ -216,6 +216,7 @@ function Dropzone({
     handleDragLeave,
     handleDragOver,
     handleDrop,
+    addFiles,
   } = useFileUploadContext();
 
   const descriptionId = React.useId();
@@ -242,12 +243,13 @@ function Dropzone({
         e.preventDefault();
         // Convert FileList to array and add files
         const filesArray = Array.from(files);
+        addFiles(filesArray);
         setAnnouncement(
           `${filesArray.length} file${filesArray.length > 1 ? "s" : ""} pasted`,
         );
       }
     },
-    [disabled],
+    [disabled, addFiles],
   );
 
   return (
