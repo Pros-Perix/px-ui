@@ -192,79 +192,33 @@ The main select field component that wraps the Select component from `@px-ui/cor
 
 #### Custom Props
 
-<ResponseField name="items" type="ReadonlyArray<TItem>" required>
-  Array of items to display in the select dropdown.
-</ResponseField>
-
-<ResponseField name="renderLabel" type="(item: TItem) => React.ReactNode">
-  Function to render the label in the trigger for the selected item. If not provided and item has a `label` property, it will be used automatically.
-</ResponseField>
-
-<ResponseField name="renderOption" type="(item: TItem) => React.ReactNode">
-  Function to render each option in the dropdown. If not provided and item has a `label` property, it will be used automatically.
-</ResponseField>
-
-<ResponseField name="placeholder" type="string">
-  Placeholder text when no value is selected.
-</ResponseField>
-
-<ResponseField name="size" type="'sm' | 'md' | 'lg'" default="md">
-  Size variant for the select trigger.
-</ResponseField>
-
-<ResponseField name="widthVariant" type="'sm' | 'md' | 'lg' | 'full'" default="full">
-  Width variant for the select trigger.
-</ResponseField>
-
-<ResponseField name="contentWidthVariant" type="'trigger' | 'full'" default="trigger">
-  Width variant for the dropdown content.
-</ResponseField>
-
-<ResponseField name="triggerClassName" type="string">
-  Additional CSS classes for the trigger element.
-</ResponseField>
-
-<ResponseField name="contentProps" type="Omit<React.ComponentProps<typeof Select.Content>, 'children' | 'widthVariant'>">
-  Additional props for Select.Content component.
-</ResponseField>
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `items` * | `ReadonlyArray<TItem>` | - | Array of items to display in the select dropdown |
+| `renderLabel` | `(item: TItem) => React.ReactNode` | - | Function to render the label in the trigger for the selected item. If not provided and item has a `label` property, it will be used automatically |
+| `renderOption` | `(item: TItem) => React.ReactNode` | - | Function to render each option in the dropdown. If not provided and item has a `label` property, it will be used automatically |
+| `placeholder` | `string` | - | Placeholder text when no value is selected |
+| `size` | `'sm' \| 'md' \| 'lg'` | `'md'` | Size variant for the select trigger |
+| `widthVariant` | `'sm' \| 'md' \| 'lg' \| 'full'` | `'full'` | Width variant for the select trigger |
+| `contentWidthVariant` | `'trigger' \| 'full'` | `'trigger'` | Width variant for the dropdown content |
+| `triggerClassName` | `string` | - | Additional CSS classes for the trigger element |
+| `contentProps` | `Omit<React.ComponentProps<typeof Select.Content>, 'children' \| 'widthVariant'>` | - | Additional props for Select.Content component |
 
 #### Inherited Props from Select.Root
 
-<ResponseField name="value" type="TItem | TItem[] | null" required>
-  The current selected value(s).
-</ResponseField>
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `value` * | `TItem \| TItem[] \| null` | - | The current selected value(s) |
+| `onValueChange` * | `(value: TItem \| TItem[] \| null) => void` | - | Callback fired when the selected value changes |
+| `multiple` | `boolean` | `false` | Whether multiple items can be selected |
+| `disabled` | `boolean` | `false` | Whether the select is disabled |
+| `invalid` | `boolean` | `false` | Whether the select is in an invalid state |
+| `readOnly` | `boolean` | `false` | Whether the select is read-only |
+| `name` | `string` | - | Name attribute for form submission |
+| `isItemEqualToValue` | `(item: TItem, value: TItem) => boolean` | - | Custom equality function to compare items. By default, uses strict equality |
+| `inputRef` | `React.Ref<HTMLInputElement>` | - | Ref to the hidden input element used for form submission |
 
-<ResponseField name="onValueChange" type="(value: TItem | TItem[] | null) => void" required>
-  Callback fired when the selected value changes.
-</ResponseField>
-
-<ResponseField name="multiple" type="boolean" default="false">
-  Whether multiple items can be selected.
-</ResponseField>
-
-<ResponseField name="disabled" type="boolean" default="false">
-  Whether the select is disabled.
-</ResponseField>
-
-<ResponseField name="invalid" type="boolean" default="false">
-  Whether the select is in an invalid state.
-</ResponseField>
-
-<ResponseField name="readOnly" type="boolean" default="false">
-  Whether the select is read-only.
-</ResponseField>
-
-<ResponseField name="name" type="string">
-  Name attribute for form submission.
-</ResponseField>
-
-<ResponseField name="isItemEqualToValue" type="(item: TItem, value: TItem) => boolean">
-  Custom equality function to compare items. By default, uses strict equality.
-</ResponseField>
-
-<ResponseField name="inputRef" type="React.Ref<HTMLInputElement>">
-  Ref to the hidden input element used for form submission.
-</ResponseField>
+_* Required prop_
 
 ## Notes
 

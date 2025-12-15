@@ -319,79 +319,39 @@ export default function Example() {
 
 A form input field that integrates Input with Field and react-hook-form's Controller.
 
-#### Props
-
-<ResponseField name="control" type="Control" required>
-  The control object from `useForm()` hook.
-</ResponseField>
-
-<ResponseField name="name" type="string" required>
-  The name of the form field. Must match a key in your form data type.
-</ResponseField>
-
-<ResponseField name="label" type="React.ReactNode" required>
-  Label text for the input field.
-</ResponseField>
-
-<ResponseField name="description" type="React.ReactNode">
-  Optional description text shown below the input.
-</ResponseField>
-
-<ResponseField name="required" type="boolean" default="false">
-  Whether the field is required. Adds a visual indicator to the label.
-</ResponseField>
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `control` * | `Control` | - | The control object from `useForm()` hook |
+| `name` * | `string` | - | The name of the form field. Must match a key in your form data type |
+| `label` * | `React.ReactNode` | - | Label text for the input field |
+| `description` | `React.ReactNode` | - | Optional description text shown below the input |
+| `required` | `boolean` | `false` | Whether the field is required. Adds a visual indicator to the label |
 
 ### FormTextarea
 
 A form textarea field that integrates Textarea with Field and react-hook-form's Controller.
 
-#### Props
-
-<ResponseField name="control" type="Control" required>
-  The control object from `useForm()` hook.
-</ResponseField>
-
-<ResponseField name="name" type="string" required>
-  The name of the form field. Must match a key in your form data type.
-</ResponseField>
-
-<ResponseField name="label" type="React.ReactNode" required>
-  Label text for the textarea field.
-</ResponseField>
-
-<ResponseField name="description" type="React.ReactNode">
-  Optional description text shown below the textarea.
-</ResponseField>
-
-<ResponseField name="required" type="boolean" default="false">
-  Whether the field is required. Adds a visual indicator to the label.
-</ResponseField>
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `control` * | `Control` | - | The control object from `useForm()` hook |
+| `name` * | `string` | - | The name of the form field. Must match a key in your form data type |
+| `label` * | `React.ReactNode` | - | Label text for the textarea field |
+| `description` | `React.ReactNode` | - | Optional description text shown below the textarea |
+| `required` | `boolean` | `false` | Whether the field is required. Adds a visual indicator to the label |
 
 ### FormCheckbox
 
 A form checkbox field that integrates Checkbox with Field and react-hook-form's Controller. Uses horizontal layout by default with the checkbox appearing before the label.
 
-#### Props
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `control` * | `Control` | - | The control object from `useForm()` hook |
+| `name` * | `string` | - | The name of the form field. Must match a key in your form data type |
+| `label` * | `React.ReactNode` | - | Label text for the checkbox field |
+| `description` | `React.ReactNode` | - | Optional description text shown below the checkbox |
+| `required` | `boolean` | `false` | Whether the field is required. Adds a visual indicator to the label |
 
-<ResponseField name="control" type="Control" required>
-  The control object from `useForm()` hook.
-</ResponseField>
-
-<ResponseField name="name" type="string" required>
-  The name of the form field. Must match a key in your form data type.
-</ResponseField>
-
-<ResponseField name="label" type="React.ReactNode" required>
-  Label text for the checkbox field.
-</ResponseField>
-
-<ResponseField name="description" type="React.ReactNode">
-  Optional description text shown below the checkbox.
-</ResponseField>
-
-<ResponseField name="required" type="boolean" default="false">
-  Whether the field is required. Adds a visual indicator to the label.
-</ResponseField>
+_* Required prop_
 
 ## Notes
 
