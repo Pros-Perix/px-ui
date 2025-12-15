@@ -225,87 +225,35 @@ The main combobox field component that wraps the Combobox component from `@px-ui
 
 #### Custom Props
 
-<ResponseField name="items" type="ReadonlyArray<TItem>">
-  Array of items to display. Required if not using `loadOptions`.
-</ResponseField>
-
-<ResponseField name="loadOptions" type="(query: string) => Promise<TItem[]>">
-  Function to load options asynchronously based on search query. If provided, `items` prop is not required.
-</ResponseField>
-
-<ResponseField name="renderLabel" type="(item: TSelectedValue | TSelectedValue[]) => React.ReactNode">
-  Function to render the label in the trigger for the selected item(s). For single select, receives a single item. For multiple select, receives an array of items. If not provided and item has a `label` property, it will be used automatically.
-</ResponseField>
-
-<ResponseField name="renderOption" type="(item: TItem) => React.ReactNode">
-  Function to render each option in the dropdown. If not provided and item has a `label` property, it will be used automatically.
-</ResponseField>
-
-<ResponseField name="renderChip" type="(item: TSelectedValue) => React.ReactNode | string">
-  Function to render each chip in ChipsTrigger (multiple selection only). If not provided, renderLabel or auto-detected label will be used.
-</ResponseField>
-
-<ResponseField name="placeholder" type="string">
-  Placeholder text when no value is selected.
-</ResponseField>
-
-<ResponseField name="searchInPopup" type="boolean" default="false">
-  Show search input inside the popup instead of in the trigger. Only applicable when not using searchable trigger.
-</ResponseField>
-
-<ResponseField name="size" type="'sm' | 'md' | 'lg'" default="md">
-  Size variant for the trigger.
-</ResponseField>
-
-<ResponseField name="widthVariant" type="'enforced' | 'full'" default="full">
-  Width variant for the trigger.
-</ResponseField>
-
-<ResponseField name="contentWidthVariant" type="'trigger' | 'fit' | 'enforced'" default="trigger">
-  Width variant for the dropdown content.
-</ResponseField>
-
-<ResponseField name="triggerClassName" type="string">
-  Additional CSS classes for the trigger element.
-</ResponseField>
-
-<ResponseField name="contentProps" type="Omit<React.ComponentProps<typeof Combobox.Content>, 'children' | 'widthVariant' | 'empty'>">
-  Additional props for Combobox.Content component.
-</ResponseField>
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `items` | `ReadonlyArray<TItem>` | - | Array of items to display. Required if not using `loadOptions` |
+| `loadOptions` | `(query: string) => Promise<TItem[]>` | - | Function to load options asynchronously based on search query. If provided, `items` prop is not required |
+| `renderLabel` | `(item: TSelectedValue \| TSelectedValue[]) => React.ReactNode` | - | Function to render the label in the trigger for the selected item(s). For single select, receives a single item. For multiple select, receives an array of items. If not provided and item has a `label` property, it will be used automatically |
+| `renderOption` | `(item: TItem) => React.ReactNode` | - | Function to render each option in the dropdown. If not provided and item has a `label` property, it will be used automatically |
+| `renderChip` | `(item: TSelectedValue) => React.ReactNode \| string` | - | Function to render each chip in ChipsTrigger (multiple selection only). If not provided, renderLabel or auto-detected label will be used |
+| `placeholder` | `string` | - | Placeholder text when no value is selected |
+| `searchInPopup` | `boolean` | `false` | Show search input inside the popup instead of in the trigger |
+| `size` | `'sm' \| 'md' \| 'lg'` | `'md'` | Size variant for the trigger |
+| `widthVariant` | `'enforced' \| 'full'` | `'full'` | Width variant for the trigger |
+| `contentWidthVariant` | `'trigger' \| 'fit' \| 'enforced'` | `'trigger'` | Width variant for the dropdown content |
+| `triggerClassName` | `string` | - | Additional CSS classes for the trigger element |
+| `contentProps` | `Omit<React.ComponentProps<typeof Combobox.Content>, 'children' \| 'widthVariant' \| 'empty'>` | - | Additional props for Combobox.Content component |
 
 #### Inherited Props from Combobox.Root
 
-<ResponseField name="value" type="TSelectedValue | TSelectedValue[] | null" required>
-  The current selected value(s).
-</ResponseField>
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `value` * | `TSelectedValue \| TSelectedValue[] \| null` | - | The current selected value(s) |
+| `onValueChange` * | `(value: TSelectedValue \| TSelectedValue[] \| null) => void` | - | Callback fired when the selected value changes |
+| `multiple` | `boolean` | `false` | Whether multiple items can be selected |
+| `disabled` | `boolean` | `false` | Whether the combobox is disabled |
+| `invalid` | `boolean` | `false` | Whether the combobox is in an invalid state |
+| `readOnly` | `boolean` | `false` | Whether the combobox is read-only |
+| `isItemEqualToValue` | `(item: TItem, value: TSelectedValue) => boolean` | - | Custom equality function to compare items. By default, uses strict equality |
+| `inputRef` | `React.Ref<HTMLInputElement>` | - | Ref to the hidden input element used for form submission |
 
-<ResponseField name="onValueChange" type="(value: TSelectedValue | TSelectedValue[] | null) => void" required>
-  Callback fired when the selected value changes.
-</ResponseField>
-
-<ResponseField name="multiple" type="boolean" default="false">
-  Whether multiple items can be selected.
-</ResponseField>
-
-<ResponseField name="disabled" type="boolean" default="false">
-  Whether the combobox is disabled.
-</ResponseField>
-
-<ResponseField name="invalid" type="boolean" default="false">
-  Whether the combobox is in an invalid state.
-</ResponseField>
-
-<ResponseField name="readOnly" type="boolean" default="false">
-  Whether the combobox is read-only.
-</ResponseField>
-
-<ResponseField name="isItemEqualToValue" type="(item: TItem, value: TSelectedValue) => boolean">
-  Custom equality function to compare items. By default, uses strict equality.
-</ResponseField>
-
-<ResponseField name="inputRef" type="React.Ref<HTMLInputElement>">
-  Ref to the hidden input element used for form submission.
-</ResponseField>
+_* Required prop_
 
 ## Notes
 
