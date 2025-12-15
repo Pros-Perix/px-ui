@@ -11,7 +11,7 @@ export const Route = createFileRoute("/")({
 function Home() {
   return (
     <HomeLayout {...baseOptions()} themeSwitch={{ enabled: false }}>
-      <div className="-mt-40 flex flex-1 flex-col items-center justify-center px-4 py-16">
+      <div className="mt-40 flex flex-1 flex-col items-center justify-center px-4 py-16">
         <div className="mb-4 flex items-center gap-3">
           <PpxLogo className="size-10" />
           <h1 className="text-ppx-h1 font-sans-b text-ppx-foreground">PX-UI</h1>
@@ -20,9 +20,9 @@ function Home() {
           A modern, accessible, TypeScript‑first React component library built
           for enterprise web apps.
         </p>
-        <div className="flex gap-4">
+        <div className="flex gap-2">
           <Link
-            className={buttonVariants({ size: "lg", variant: "primary" })}
+            className={buttonVariants({ variant: "primary" })}
             to="/docs/$"
             params={{ _splat: "getting-started" }}
           >
@@ -31,9 +31,7 @@ function Home() {
           <Link
             to="/docs/$"
             className={buttonVariants({
-              variant: "outline",
-              size: "lg",
-              className: "px-3!",
+              variant: "ghost",
             })}
             params={{ _splat: "components/button" }}
           >
