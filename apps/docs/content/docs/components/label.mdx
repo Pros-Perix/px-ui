@@ -1,11 +1,14 @@
 ---
 title: Label
-description: A label component for form inputs
+description: Accessible text labels for form controls with automatic disabled state styling
 ---
+
+import { LabelBasicDemo } from "../../../src/components/label-basic-demo";
+import { LabelWithFieldDemo } from "../../../src/components/label-with-field-demo";
 
 ## Overview
 
-The Label component provides accessible labeling for form controls. It automatically handles disabled states and integrates with form inputs.
+The Label component provides accessible, styled text labels for form controls. It automatically handles disabled states through peer and group relationships, ensuring consistent styling when associated form controls are disabled.
 
 ## Import
 
@@ -16,83 +19,57 @@ import { Label } from "@px-ui/core";
 ## Usage
 
 <Preview>
-  <div className="flex flex-col gap-2">
-    <Label htmlFor="email">Email</Label>
-    <input id="email" type="email" placeholder="Enter your email" className="px-3 py-2 border rounded-md" />
-  </div>
+  <LabelBasicDemo />
 </Preview>
 
 <CodeBlock>
 ```tsx
-<Label htmlFor="email">Email</Label>
-<input id="email" type="email" placeholder="Enter your email" />
+<Label htmlFor="email">Email address</Label>
 ```
 </CodeBlock>
 
 ## Examples
 
-### With Checkbox
+### With Form Fields
+
+Labels are designed to work seamlessly with all form components. Use the `htmlFor` prop to associate the label with an input.
 
 <Preview>
-  <Label>
-    <Checkbox />
-    Accept terms and conditions
-  </Label>
+  <LabelWithFieldDemo />
 </Preview>
 
 <CodeBlock>
 ```tsx
-<Label>
-  <Checkbox />
-  Accept terms and conditions
-</Label>
+<div className="flex flex-col gap-2">
+  <Label htmlFor="username">Username</Label>
+  <Input id="username" placeholder="Enter your username" />
+</div>
+
+<div className="flex items-center gap-2">
+  <Checkbox id="remember" />
+  <Label htmlFor="remember">Remember me</Label>
+</div>
+
+<div className="flex items-center gap-2">
+  <Switch id="newsletter" />
+  <Label htmlFor="newsletter">Subscribe to newsletter</Label>
+</div>
 ```
 </CodeBlock>
 
-### With Radio
+## API Reference
 
-<Preview>
-  <Label>
-    <RadioGroupItem value="option1" />
-    Option 1
-  </Label>
-</Preview>
+### Label
 
-<CodeBlock>
-```tsx
-<Label>
-  <RadioGroupItem value="option1" />
-  Option 1
-</Label>
-```
-</CodeBlock>
-
-### Disabled State
-
-<Preview>
-  <div className="flex flex-col gap-2">
-    <Label htmlFor="disabled-input" className="opacity-50">
-      Disabled Input
-    </Label>
-    <input id="disabled-input" type="text" disabled className="px-3 py-2 border rounded-md opacity-50" />
-  </div>
-</Preview>
-
-<CodeBlock>
-```tsx
-<Label htmlFor="disabled-input" className="opacity-50">
-  Disabled Input
-</Label>
-<input id="disabled-input" type="text" disabled />
-```
-</CodeBlock>
-
-## Props
+A styled label component with automatic disabled state handling.
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `htmlFor` | `string` | - | Associates the label with a form control |
+| `htmlFor` | `string` | - | ID of the form control this label is associated with |
 | `className` | `string` | - | Additional CSS classes |
-| `children` | `ReactNode` | - | Label content |
 
-Plus all standard HTML label attributes.
+**Inherited Props:** Inherits all props from native HTML `label` element.
+
+**Note:** The Label component automatically reduces opacity when:
+- Its parent element has `data-disabled="true"`
+- Its peer (sibling) element has the `disabled` attribute

@@ -1,11 +1,15 @@
 ---
 title: Spinner
-description: A loading spinner component for indicating async operations
+description: Animated loading indicator in three sizes with accessibility support
 ---
+
+import { SpinnerSizesDemo } from "../../../src/components/spinner-sizes-demo";
+import { SpinnerWithTextDemo } from "../../../src/components/spinner-with-text-demo";
+import { SpinnerLoadingDemo } from "../../../src/components/spinner-loading-demo";
 
 ## Overview
 
-The Spinner component displays a rotating loading indicator. It's commonly used to show that an operation is in progress.
+The Spinner component provides an animated loading indicator to show users that content is being loaded or an action is being processed. It includes proper ARIA attributes for screen readers and supports three size variants.
 
 ## Import
 
@@ -16,25 +20,7 @@ import { Spinner } from "@px-ui/core";
 ## Usage
 
 <Preview>
-  <Spinner />
-</Preview>
-
-<CodeBlock>
-```tsx
-<Spinner />
-```
-</CodeBlock>
-
-## Examples
-
-### Sizes
-
-<Preview>
-  <div className="flex items-center gap-4">
-    <Spinner size="small" />
-    <Spinner size="medium" />
-    <Spinner size="large" />
-  </div>
+  <SpinnerSizesDemo />
 </Preview>
 
 <CodeBlock>
@@ -45,54 +31,68 @@ import { Spinner } from "@px-ui/core";
 ```
 </CodeBlock>
 
-### In Button
+## Examples
+
+### With Text
+
+Combine the Spinner with text labels to provide context about what's loading.
 
 <Preview>
-  <div className="flex flex-wrap gap-4">
-    <Button disabled>
-      <Spinner size="small" />
-      Loading...
-    </Button>
-    <Button variant="primary" disabled>
-      <Spinner size="small" />
-      Saving...
-    </Button>
-  </div>
+  <SpinnerWithTextDemo />
 </Preview>
 
 <CodeBlock>
 ```tsx
-<Button disabled>
+<div className="flex items-center gap-2">
   <Spinner size="small" />
-  Loading...
-</Button>
+  <span>Loading...</span>
+</div>
 
-<Button variant="primary" disabled>
-  <Spinner size="small" />
-  Saving...
-</Button>
+<div className="flex items-center gap-2">
+  <Spinner size="medium" />
+  <span>Processing your request...</span>
+</div>
+
+<div className="flex items-center gap-3">
+  <Spinner size="large" />
+  <span>Please wait</span>
+</div>
 ```
 </CodeBlock>
 
-### In Container
+### Loading States
+
+Use the Spinner in common loading state scenarios like content areas and button loading states.
 
 <Preview>
-  <div className="flex items-center justify-center p-8 border rounded-lg">
-    <Spinner size="large" />
-  </div>
+  <SpinnerLoadingDemo />
 </Preview>
 
 <CodeBlock>
 ```tsx
 <div className="flex items-center justify-center p-8">
-  <Spinner size="large" />
+  <div className="flex flex-col items-center gap-3">
+    <Spinner size="medium" />
+    <span>Loading content...</span>
+  </div>
 </div>
+
+<Button disabled>
+  <Spinner size="small" />
+  Loading...
+</Button>
 ```
 </CodeBlock>
 
-## Props
+## API Reference
+
+### Spinner
+
+An animated loading indicator with size customization and accessibility support.
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `size` | `"small" \| "medium" \| "large"` | `"small"` | Size of the spinner |
+| `size` | `"small" \| "medium" \| "large"` | `"small"` | Size of the spinner (small: 16px, medium: 24px, large: 32px) |
 | `className` | `string` | - | Additional CSS classes |
+
+**Accessibility:** The Spinner includes `role="status"` and `aria-label="Loading"` for screen reader support.

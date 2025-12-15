@@ -1,12 +1,17 @@
 ---
 title: Checkbox
-description: A checkbox input component with multiple sizes
-apiReference: https://base-ui.com/react/components/checkbox.md
+description: Binary selection control with support for indeterminate state and multiple sizes
+apiReference: https://base-ui.com/react/components/checkbox
 ---
+
+import { CheckboxBasicDemo } from "../../../src/components/checkbox-basic-demo";
+import { CheckboxSizesDemo } from "../../../src/components/checkbox-sizes-demo";
+import { CheckboxIndeterminateDemo } from "../../../src/components/checkbox-indeterminate-demo";
+import { CheckboxDisabledDemo } from "../../../src/components/checkbox-disabled-demo";
 
 ## Overview
 
-The Checkbox component is a styled checkbox input built on top of Base UI's Checkbox component. It supports multiple sizes and can be used in controlled or uncontrolled forms.
+The Checkbox component provides a binary selection control that allows users to toggle between checked and unchecked states. It includes support for an indeterminate state for representing partial selections, multiple sizes, and full keyboard accessibility.
 
 ## Import
 
@@ -17,20 +22,15 @@ import { Checkbox } from "@px-ui/core";
 ## Usage
 
 <Preview>
-  <div className="flex flex-col gap-4">
-    <label className="flex items-center gap-2">
-      <Checkbox />
-      <span>Accept terms and conditions</span>
-    </label>
-  </div>
+  <CheckboxBasicDemo />
 </Preview>
 
 <CodeBlock>
 ```tsx
-<label className="flex items-center gap-2">
-  <Checkbox />
-  <span>Accept terms and conditions</span>
-</label>
+<div className="flex items-center gap-2">
+  <Checkbox id="terms" />
+  <label htmlFor="terms">Accept terms and conditions</label>
+</div>
 ```
 </CodeBlock>
 
@@ -38,131 +38,63 @@ import { Checkbox } from "@px-ui/core";
 
 ### Sizes
 
+The Checkbox component supports three size variants to match different interface densities.
+
 <Preview>
-  <div className="flex flex-col gap-4">
-    <label className="flex items-center gap-2">
-      <Checkbox size="sm" />
-      <span>Small checkbox</span>
-    </label>
-    <label className="flex items-center gap-2">
-      <Checkbox size="default" />
-      <span>Default checkbox</span>
-    </label>
-    <label className="flex items-center gap-2">
-      <Checkbox size="lg" />
-      <span>Large checkbox</span>
-    </label>
-  </div>
+  <CheckboxSizesDemo />
 </Preview>
 
 <CodeBlock>
 ```tsx
-<label className="flex items-center gap-2">
-  <Checkbox size="sm" />
-  <span>Small checkbox</span>
-</label>
-
-<label className="flex items-center gap-2">
-  <Checkbox size="default" />
-  <span>Default checkbox</span>
-</label>
-
-<label className="flex items-center gap-2">
-  <Checkbox size="lg" />
-  <span>Large checkbox</span>
-</label>
-```
-</CodeBlock>
-
-### Checked State
-
-<Preview>
-  <div className="flex flex-col gap-4">
-    <label className="flex items-center gap-2">
-      <Checkbox defaultChecked />
-      <span>Checked by default</span>
-    </label>
-    <label className="flex items-center gap-2">
-      <Checkbox checked />
-      <span>Controlled checked</span>
-    </label>
-  </div>
-</Preview>
-
-<CodeBlock>
-```tsx
-<label className="flex items-center gap-2">
-  <Checkbox defaultChecked />
-  <span>Checked by default</span>
-</label>
-
-<label className="flex items-center gap-2">
-  <Checkbox checked />
-  <span>Controlled checked</span>
-</label>
+<Checkbox id="small" size="sm" defaultChecked />
+<Checkbox id="default" size="default" defaultChecked />
+<Checkbox id="large" size="lg" defaultChecked />
 ```
 </CodeBlock>
 
 ### Indeterminate State
 
+The indeterminate state is useful for representing partial selections, such as when a parent checkbox controls multiple child checkboxes and only some are selected.
+
 <Preview>
-  <div className="flex flex-col gap-4">
-    <label className="flex items-center gap-2">
-      <Checkbox indeterminate />
-      <span>Indeterminate checkbox</span>
-    </label>
-  </div>
+  <CheckboxIndeterminateDemo />
 </Preview>
 
 <CodeBlock>
 ```tsx
-<label className="flex items-center gap-2">
-  <Checkbox indeterminate />
-  <span>Indeterminate checkbox</span>
-</label>
+<Checkbox id="unchecked" />
+<Checkbox id="indeterminate" indeterminate defaultChecked />
+<Checkbox id="checked" defaultChecked />
 ```
 </CodeBlock>
 
 ### Disabled State
 
+Checkboxes can be disabled in any state: unchecked, checked, or indeterminate.
+
 <Preview>
-  <div className="flex flex-col gap-4">
-    <label className="flex items-center gap-2">
-      <Checkbox disabled />
-      <span>Disabled checkbox</span>
-    </label>
-    <label className="flex items-center gap-2">
-      <Checkbox disabled defaultChecked />
-      <span>Disabled checked</span>
-    </label>
-  </div>
+  <CheckboxDisabledDemo />
 </Preview>
 
 <CodeBlock>
 ```tsx
-<label className="flex items-center gap-2">
-  <Checkbox disabled />
-  <span>Disabled checkbox</span>
-</label>
-
-<label className="flex items-center gap-2">
-  <Checkbox disabled defaultChecked />
-  <span>Disabled checked</span>
-</label>
+<Checkbox id="disabled-unchecked" disabled />
+<Checkbox id="disabled-checked" disabled defaultChecked />
+<Checkbox id="disabled-indeterminate" disabled indeterminate defaultChecked />
 ```
 </CodeBlock>
 
-## Props
+## API Reference
+
+### Checkbox
+
+A binary selection control component with customizable size and indeterminate state support.
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `checked` | `boolean` | - | Controlled checked state |
-| `defaultChecked` | `boolean` | - | Uncontrolled default checked state |
-| `indeterminate` | `boolean` | - | Indeterminate state |
-| `disabled` | `boolean` | - | Disable the checkbox |
-| `size` | `"default" \| "sm" \| "lg"` | `"default"` | Size of the checkbox |
 | `variant` | `"default"` | `"default"` | Visual style variant |
+| `size` | `"default" \| "sm" \| "lg"` | `"default"` | Size of the checkbox |
+| `indeterminate` | `boolean` | `false` | When true, displays a minus icon to indicate partial selection |
 | `className` | `string` | - | Additional CSS classes |
-| `onCheckedChange` | `(checked: boolean) => void` | - | Callback when checked state changes |
 
-Plus all standard Base UI Checkbox props.
+**Inherited Props:** Inherits all props from [Base UI Checkbox.Root](https://base-ui.com/react/components/checkbox#root) including `checked`, `defaultChecked`, `onCheckedChange`, `disabled`, `required`, etc.

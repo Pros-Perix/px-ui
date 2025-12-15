@@ -1,12 +1,17 @@
 ---
 title: Switch
-description: A toggle switch component for binary choices
-apiReference: https://base-ui.com/react/components/switch.md
+description: Toggle control for binary on/off states with smooth animations and multiple sizes
+apiReference: https://base-ui.com/react/components/switch
 ---
+
+import { SwitchBasicDemo } from "../../../src/components/switch-basic-demo";
+import { SwitchSizesDemo } from "../../../src/components/switch-sizes-demo";
+import { SwitchWithLabelsDemo } from "../../../src/components/switch-with-labels-demo";
+import { SwitchDisabledDemo } from "../../../src/components/switch-disabled-demo";
 
 ## Overview
 
-The Switch component is a toggle control that allows users to switch between two states. It's built on top of Base UI's Switch component and supports multiple sizes.
+The Switch component provides a toggle control for binary on/off states with smooth sliding animations. It supports multiple sizes, keyboard accessibility, and clear visual feedback for checked, unchecked, and disabled states.
 
 ## Import
 
@@ -17,20 +22,15 @@ import { Switch } from "@px-ui/core";
 ## Usage
 
 <Preview>
-  <div className="flex flex-col gap-4">
-    <label className="flex items-center gap-2">
-      <Switch />
-      <span>Enable notifications</span>
-    </label>
-  </div>
+  <SwitchBasicDemo />
 </Preview>
 
 <CodeBlock>
 ```tsx
-<label className="flex items-center gap-2">
-  <Switch />
-  <span>Enable notifications</span>
-</label>
+<div className="flex items-center gap-2">
+  <Switch id="notifications" />
+  <label htmlFor="notifications">Enable notifications</label>
+</div>
 ```
 </CodeBlock>
 
@@ -38,109 +38,71 @@ import { Switch } from "@px-ui/core";
 
 ### Sizes
 
+The Switch component supports three size variants to match different interface contexts.
+
 <Preview>
-  <div className="flex flex-col gap-4">
-    <label className="flex items-center gap-2">
-      <Switch size="sm" />
-      <span>Small switch</span>
-    </label>
-    <label className="flex items-center gap-2">
-      <Switch />
-      <span>Default switch</span>
-    </label>
-    <label className="flex items-center gap-2">
-      <Switch size="lg" />
-      <span>Large switch</span>
-    </label>
-  </div>
+  <SwitchSizesDemo />
 </Preview>
 
 <CodeBlock>
 ```tsx
-<label className="flex items-center gap-2">
-  <Switch size="sm" />
-  <span>Small switch</span>
-</label>
-
-<label className="flex items-center gap-2">
-  <Switch />
-  <span>Default switch</span>
-</label>
-
-<label className="flex items-center gap-2">
-  <Switch size="lg" />
-  <span>Large switch</span>
-</label>
+<Switch id="small" size="sm" defaultChecked />
+<Switch id="default" defaultChecked />
+<Switch id="large" size="lg" defaultChecked />
 ```
 </CodeBlock>
 
-### Checked State
+### With Labels
+
+Switches are commonly paired with labels to describe what they control. Always use a label for accessibility.
 
 <Preview>
-  <div className="flex flex-col gap-4">
-    <label className="flex items-center gap-2">
-      <Switch defaultChecked />
-      <span>Checked by default</span>
-    </label>
-    <label className="flex items-center gap-2">
-      <Switch checked />
-      <span>Controlled checked</span>
-    </label>
-  </div>
+  <SwitchWithLabelsDemo />
 </Preview>
 
 <CodeBlock>
 ```tsx
-<label className="flex items-center gap-2">
-  <Switch defaultChecked />
-  <span>Checked by default</span>
-</label>
+<div className="flex items-center gap-2">
+  <Switch id="airplane" />
+  <label htmlFor="airplane">Airplane mode</label>
+</div>
 
-<label className="flex items-center gap-2">
-  <Switch checked />
-  <span>Controlled checked</span>
-</label>
+<div className="flex items-center gap-2">
+  <Switch id="wifi" defaultChecked />
+  <label htmlFor="wifi">Wi-Fi</label>
+</div>
+
+<div className="flex items-center gap-2">
+  <Switch id="bluetooth" defaultChecked />
+  <label htmlFor="bluetooth">Bluetooth</label>
+</div>
 ```
 </CodeBlock>
 
 ### Disabled State
 
+Switches can be disabled in either the on or off state.
+
 <Preview>
-  <div className="flex flex-col gap-4">
-    <label className="flex items-center gap-2">
-      <Switch disabled />
-      <span>Disabled switch</span>
-    </label>
-    <label className="flex items-center gap-2">
-      <Switch disabled defaultChecked />
-      <span>Disabled checked</span>
-    </label>
-  </div>
+  <SwitchDisabledDemo />
 </Preview>
 
 <CodeBlock>
 ```tsx
-<label className="flex items-center gap-2">
-  <Switch disabled />
-  <span>Disabled switch</span>
-</label>
-
-<label className="flex items-center gap-2">
-  <Switch disabled defaultChecked />
-  <span>Disabled checked</span>
-</label>
+<Switch id="disabled-off" disabled />
+<Switch id="disabled-on" disabled defaultChecked />
 ```
 </CodeBlock>
 
-## Props
+## API Reference
+
+### Switch
+
+A toggle control component with smooth animations and multiple size options.
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `checked` | `boolean` | - | Controlled checked state |
-| `defaultChecked` | `boolean` | - | Uncontrolled default checked state |
-| `disabled` | `boolean` | - | Disable the switch |
-| `size` | `"sm" \| "lg"` | - | Size of the switch (default is medium) |
+| `size` | `"sm" \| "lg" \| undefined` | `undefined` | Size of the switch. When undefined, renders at default size |
 | `className` | `string` | - | Additional CSS classes |
-| `onCheckedChange` | `(checked: boolean) => void` | - | Callback when checked state changes |
 
-Plus all standard Base UI Switch props.
+**Inherited Props:** Inherits all props from [Base UI Switch.Root](https://base-ui.com/react/components/switch#root) including `checked`, `defaultChecked`, `onCheckedChange`, `disabled`, `required`, etc.

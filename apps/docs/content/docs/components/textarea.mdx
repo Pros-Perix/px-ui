@@ -1,11 +1,15 @@
 ---
 title: Textarea
-description: A multi-line text input component with validation states
+description: Multi-line text input field with size variants, width options, and validation states
 ---
+
+import { TextareaBasicDemo } from "../../../src/components/textarea-basic-demo";
+import { TextareaSizesDemo } from "../../../src/components/textarea-sizes-demo";
+import { TextareaInvalidDemo } from "../../../src/components/textarea-invalid-demo";
 
 ## Overview
 
-The Textarea component is a styled multi-line text input field that supports multiple sizes, validation states, and width variants. It's perfect for longer text input like descriptions or comments.
+The Textarea component provides a styled multi-line text input field with support for different sizes, width behaviors, and validation states. It includes automatic styling for focus, disabled, and error states, with proper accessibility attributes.
 
 ## Import
 
@@ -16,12 +20,12 @@ import { Textarea } from "@px-ui/core";
 ## Usage
 
 <Preview>
-  <Textarea placeholder="Enter your message..." />
+  <TextareaBasicDemo />
 </Preview>
 
 <CodeBlock>
 ```tsx
-<Textarea placeholder="Enter your message..." />
+<Textarea placeholder="Enter your message" />
 ```
 </CodeBlock>
 
@@ -29,11 +33,10 @@ import { Textarea } from "@px-ui/core";
 
 ### Sizes
 
+The Textarea component supports two size variants that control the minimum height.
+
 <Preview>
-  <div className="flex flex-col gap-4 w-full max-w-md">
-    <Textarea size="sm" placeholder="Small textarea" />
-    <Textarea size="default" placeholder="Default textarea" />
-  </div>
+  <TextareaSizesDemo />
 </Preview>
 
 <CodeBlock>
@@ -43,66 +46,33 @@ import { Textarea } from "@px-ui/core";
 ```
 </CodeBlock>
 
-### Validation States
+### Invalid State
+
+The Textarea component supports validation states through the `invalid` prop, which applies error styling and sets the appropriate ARIA attributes.
 
 <Preview>
-  <div className="flex flex-col gap-4 w-full max-w-md">
-    <Textarea placeholder="Valid textarea" defaultValue="Valid content" />
-    <Textarea invalid placeholder="Invalid textarea" defaultValue="Invalid content" />
-    <Textarea disabled placeholder="Disabled textarea" />
-  </div>
+  <TextareaInvalidDemo />
 </Preview>
 
 <CodeBlock>
 ```tsx
-<Textarea placeholder="Valid textarea" defaultValue="Valid content" />
-<Textarea invalid placeholder="Invalid textarea" defaultValue="Invalid content" />
+<Textarea placeholder="Valid textarea" />
+<Textarea invalid placeholder="Invalid textarea" />
 <Textarea disabled placeholder="Disabled textarea" />
 ```
 </CodeBlock>
 
-### With Rows
+## API Reference
 
-<Preview>
-  <div className="flex flex-col gap-4 w-full max-w-md">
-    <Textarea rows={3} placeholder="3 rows" />
-    <Textarea rows={5} placeholder="5 rows" />
-  </div>
-</Preview>
+### Textarea
 
-<CodeBlock>
-```tsx
-<Textarea rows={3} placeholder="3 rows" />
-<Textarea rows={5} placeholder="5 rows" />
-```
-</CodeBlock>
-
-### Width Variants
-
-<Preview>
-  <div className="flex flex-col gap-4 w-full max-w-md">
-    <Textarea widthVariant="full" placeholder="Full width" />
-    <Textarea widthVariant="enforced" placeholder="Enforced width" />
-  </div>
-</Preview>
-
-<CodeBlock>
-```tsx
-<Textarea widthVariant="full" placeholder="Full width" />
-<Textarea widthVariant="enforced" placeholder="Enforced width" />
-```
-</CodeBlock>
-
-## Props
+A styled multi-line text input component with size, width, and validation customization.
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `size` | `"default" \| "sm"` | `"default"` | Size of the textarea |
-| `widthVariant` | `"enforced" \| "full"` | `"full"` | Width behavior of the textarea |
-| `invalid` | `boolean` | - | Whether the textarea is in an invalid state |
-| `disabled` | `boolean` | - | Whether the textarea is disabled |
-| `rows` | `number` | - | Number of visible text lines |
+| `size` | `"default" \| "sm"` | `"default"` | Size variant affecting minimum height |
+| `widthVariant` | `"enforced" \| "full"` | `"full"` | Width behavior - enforced uses a fixed minimum width, full stretches to 100% |
+| `invalid` | `boolean` | `false` | When true, applies error styling and sets `aria-invalid` attribute |
 | `className` | `string` | - | Additional CSS classes |
-| `placeholder` | `string` | - | Placeholder text |
 
-Plus all standard HTML textarea attributes.
+**Inherited Props:** Inherits all props from native HTML `textarea` element including `value`, `onChange`, `placeholder`, `disabled`, `rows`, etc.
