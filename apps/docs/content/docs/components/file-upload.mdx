@@ -21,13 +21,13 @@ import {
 
 ## Overview
 
-The File Upload system gives you two ways to build file upload experiences: use `FileUploadSimple` for a ready-to-use component, or combine `useFileUpload` with the `FileUpload.*` primitives for fully custom UIs.
+The File Upload system gives you two ways to build file upload experiences: use `FileUploadField` for a ready-to-use component, or combine `useFileUpload` with the `FileUpload.*` primitives for fully custom UIs.
 
 ## Import
 
 ```tsx
 // Recommended: ready-to-use component
-import { FileUploadSimple } from "@px-ui/core";
+import { FileUploadField } from "@px-ui/forms";
 
 // Advanced: hook + composable primitives
 import { FileUpload, useFileUpload } from "@px-ui/core";
@@ -35,7 +35,7 @@ import { FileUpload, useFileUpload } from "@px-ui/core";
 
 ## Usage
 
-This example uses `FileUploadSimple`, which includes state management, validation, and optional upload support.
+This example uses `FileUploadField`, which includes state management, validation, and optional upload support.
 
 <Preview>
   <SimpleUploadDemo />
@@ -43,11 +43,11 @@ This example uses `FileUploadSimple`, which includes state management, validatio
 
 <CodeBlock>
 ```tsx
-import { FileUploadSimple } from "@px-ui/core";
+import { FileUploadField } from "@px-ui/forms";
 
 export function Uploader() {
   return (
-    <FileUploadSimple
+    <FileUploadField
       accept="image/*,.pdf,.doc,.docx"
       maxSize={10 * 1024 * 1024}
       onFilesChange={(files) => console.log(files)}
@@ -69,11 +69,11 @@ Configure uploads by providing `upload.getPresignedUrl` and `upload.uploadFile`.
 
 <CodeBlock>
 ```tsx
-import { FileUploadSimple } from "@px-ui/core";
+import { FileUploadField } from "@px-ui/forms";
 
 export function UploaderWithUpload() {
   return (
-    <FileUploadSimple
+    <FileUploadField
       accept="image/*,.pdf"
       multiple
       maxFiles={5}
@@ -112,7 +112,7 @@ export function UploaderWithUpload() {
 
 ### Variants (dropzone, button, compact)
 
-`FileUploadSimple` supports three layout variants.
+`FileUploadField` supports three layout variants.
 
 <Preview>
   <SimpleButtonVariantDemo />
@@ -120,16 +120,16 @@ export function UploaderWithUpload() {
 
 <CodeBlock>
 ```tsx
-import { FileUploadSimple } from "@px-ui/core";
+import { FileUploadField } from "@px-ui/forms";
 
 // Dropzone (default)
-<FileUploadSimple variant="dropzone" />
+<FileUploadField variant="dropzone" />
 
 // Button
-<FileUploadSimple variant="button" buttonText="Upload Files" multiple />
+<FileUploadField variant="button" buttonText="Upload Files" multiple />
 
 // Compact
-<FileUploadSimple variant="compact" accept=".pdf,.doc,.docx" />
+<FileUploadField variant="compact" accept=".pdf,.doc,.docx" />
 ````
 
 </CodeBlock>
@@ -144,9 +144,9 @@ For image-first workflows, render a grid instead of a list.
 
 <CodeBlock>
 ```tsx
-import { FileUploadSimple } from "@px-ui/core";
+import { FileUploadField } from "@px-ui/forms";
 
-<FileUploadSimple
+<FileUploadField
   accept="image/*"
   multiple
   maxFiles={8}
@@ -270,7 +270,7 @@ The file upload primitives are designed to be composed together. Most apps follo
 
 ## API Reference
 
-### FileUploadSimple
+### FileUploadField
 
 A ready-to-use upload component that internally uses `useFileUpload` and the `FileUpload.*` primitives.
 

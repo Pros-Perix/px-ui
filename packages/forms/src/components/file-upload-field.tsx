@@ -1,19 +1,19 @@
 import * as React from "react";
-import { FileUpload } from "./file-upload";
-import FileIcon from "../icons/file-icon";
-import UploadIcon from "../icons/upload-icon";
 import {
+  FileIcon,
+  UploadIcon,
+  FileUpload,
   useFileUpload,
   type FileUploadWithUploaderOptions,
   type FileWithPreview,
   type FileWithUploadStatus,
-} from "../hooks/use-file-upload";
+} from "@px-ui/core";
 
 // ============================================================================
 // Types
 // ============================================================================
 
-export interface FileUploadSimpleProps
+export interface FileUploadFieldProps
   extends Omit<FileUploadWithUploaderOptions, "initialFiles"> {
   /** Variant determines the visual layout */
   variant?: "dropzone" | "button" | "compact";
@@ -54,7 +54,7 @@ export interface FileUploadSimpleProps
 // Main Component
 // ============================================================================
 
-export function FileUploadSimple({
+export function FileUploadField({
   variant = "dropzone",
   size = "default",
   dropzoneText = "Paste Or Drag & Drop Files Here",
@@ -75,7 +75,7 @@ export function FileUploadSimple({
   onFilesChange,
   onFilesAdded,
   upload,
-}: FileUploadSimpleProps) {
+}: FileUploadFieldProps) {
   const [state, actions] = useFileUpload({
     maxFiles,
     maxSize,
@@ -272,13 +272,8 @@ export function FileUploadSimple({
   );
 }
 
-// ============================================================================
-// Export hook for direct use
-// ============================================================================
-
-export { useFileUpload } from "../hooks/use-file-upload";
 export type {
   FileWithUploadStatus,
   UploadConfig,
   FileUploadWithUploaderOptions,
-} from "../hooks/use-file-upload";
+} from "@px-ui/core";

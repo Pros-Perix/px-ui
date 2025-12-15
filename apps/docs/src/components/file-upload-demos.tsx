@@ -1,12 +1,12 @@
 import * as React from "react";
 import {
   FileUpload,
-  FileUploadSimple,
   useFileUpload,
   type FileWithUploadStatus,
   type FileWithPreview,
   formatBytes,
 } from "@px-ui/core";
+import { FileUploadField } from "@px-ui/forms";
 
 // ============================================================================
 // Basic Dropzone
@@ -843,7 +843,7 @@ function getFileExtension(filename: string): string {
 }
 
 // ============================================================================
-// FileUploadSimple Demos
+// FileUploadField Demos
 // ============================================================================
 
 // Dummy upload functions (simulated)
@@ -881,7 +881,7 @@ const uploadFile = async (
 export function SimpleUploadDemo() {
   return (
     <div className="w-full max-w-md">
-      <FileUploadSimple
+      <FileUploadField
         accept="image/*,.pdf,.doc,.docx"
         maxSize={10 * 1024 * 1024}
         onFilesChange={(files: FileWithPreview[]) =>
@@ -897,7 +897,7 @@ export function SimpleUploadWithS3Demo() {
 
   return (
     <div className="w-full max-w-md">
-      <FileUploadSimple
+      <FileUploadField
         accept="image/*,.pdf"
         multiple
         maxFiles={5}
@@ -935,7 +935,7 @@ export function SimpleButtonVariantDemo() {
         <p className="text-ppx-neutral-10 mb-2 text-xs font-medium">
           Button Variant
         </p>
-        <FileUploadSimple
+        <FileUploadField
           variant="button"
           buttonText="Upload Files"
           multiple
@@ -949,7 +949,7 @@ export function SimpleButtonVariantDemo() {
         <p className="text-ppx-neutral-10 mb-2 text-xs font-medium">
           Compact Variant
         </p>
-        <FileUploadSimple
+        <FileUploadField
           variant="compact"
           accept=".pdf,.doc,.docx"
           upload={{
@@ -965,7 +965,7 @@ export function SimpleButtonVariantDemo() {
 export function SimpleImageGridDemo() {
   return (
     <div className="w-full max-w-md">
-      <FileUploadSimple
+      <FileUploadField
         accept="image/*"
         multiple
         maxFiles={8}
