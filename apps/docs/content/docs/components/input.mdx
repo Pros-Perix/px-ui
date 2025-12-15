@@ -1,11 +1,16 @@
 ---
 title: Input
-description: A text input component with validation states and multiple sizes
+description: Text input field with size variants, width options, and validation states
 ---
+
+import { InputBasicDemo } from "../../../src/components/input-basic-demo";
+import { InputSizesDemo } from "../../../src/components/input-sizes-demo";
+import { InputWidthVariantsDemo } from "../../../src/components/input-width-variants-demo";
+import { InputInvalidDemo } from "../../../src/components/input-invalid-demo";
 
 ## Overview
 
-The Input component is a styled text input field that supports multiple sizes, validation states, and width variants. It provides consistent styling and accessibility features.
+The Input component provides a styled text input field with support for different sizes, width behaviors, and validation states. It includes automatic styling for focus, disabled, and error states, with proper accessibility attributes.
 
 ## Import
 
@@ -16,12 +21,12 @@ import { Input } from "@px-ui/core";
 ## Usage
 
 <Preview>
-  <Input placeholder="Enter text..." />
+  <InputBasicDemo />
 </Preview>
 
 <CodeBlock>
 ```tsx
-<Input placeholder="Enter text..." />
+<Input placeholder="Enter your email" />
 ```
 </CodeBlock>
 
@@ -29,11 +34,10 @@ import { Input } from "@px-ui/core";
 
 ### Sizes
 
+The Input component supports two size variants for different interface densities.
+
 <Preview>
-  <div className="flex flex-col gap-4 w-full max-w-md">
-    <Input size="sm" placeholder="Small input" />
-    <Input size="default" placeholder="Default input" />
-  </div>
+  <InputSizesDemo />
 </Preview>
 
 <CodeBlock>
@@ -43,76 +47,48 @@ import { Input } from "@px-ui/core";
 ```
 </CodeBlock>
 
-### Input Types
-
-<Preview>
-  <div className="flex flex-col gap-4 w-full max-w-md">
-    <Input type="email" placeholder="Enter email address" />
-    <Input type="password" placeholder="Enter password" />
-    <Input type="number" placeholder="Enter number" />
-    <Input type="search" placeholder="Search..." />
-    <Input type="tel" placeholder="+1 (555) 000-0000" />
-    <Input type="url" placeholder="https://example.com" />
-  </div>
-</Preview>
-
-<CodeBlock>
-```tsx
-<Input type="email" placeholder="Enter email address" />
-<Input type="password" placeholder="Enter password" />
-<Input type="number" placeholder="Enter number" />
-<Input type="search" placeholder="Search..." />
-<Input type="tel" placeholder="+1 (555) 000-0000" />
-<Input type="url" placeholder="https://example.com" />
-```
-</CodeBlock>
-
-### Validation States
-
-<Preview>
-  <div className="flex flex-col gap-4 w-full max-w-md">
-    <Input placeholder="Valid input" defaultValue="Valid value" />
-    <Input invalid placeholder="Invalid input" defaultValue="invalid@example" />
-    <Input disabled placeholder="Disabled input" />
-    <Input disabled defaultValue="Disabled with value" />
-  </div>
-</Preview>
-
-<CodeBlock>
-```tsx
-<Input placeholder="Valid input" defaultValue="Valid value" />
-<Input invalid placeholder="Invalid input" defaultValue="invalid@example" />
-<Input disabled placeholder="Disabled input" />
-<Input disabled defaultValue="Disabled with value" />
-```
-</CodeBlock>
-
 ### Width Variants
 
+Control how the input handles width with two variants: enforced for a fixed minimum width, and full for 100% width.
+
 <Preview>
-  <div className="flex flex-col gap-4 w-full max-w-md">
-    <Input widthVariant="full" placeholder="Full width" />
-    <Input widthVariant="enforced" placeholder="Enforced width" />
-  </div>
+  <InputWidthVariantsDemo />
 </Preview>
 
 <CodeBlock>
 ```tsx
-<Input widthVariant="full" placeholder="Full width" />
 <Input widthVariant="enforced" placeholder="Enforced width" />
+<Input widthVariant="full" placeholder="Full width" />
 ```
 </CodeBlock>
 
-## Props
+### Invalid State
+
+The Input component supports validation states through the `invalid` prop, which applies error styling and sets the appropriate ARIA attributes.
+
+<Preview>
+  <InputInvalidDemo />
+</Preview>
+
+<CodeBlock>
+```tsx
+<Input placeholder="Valid input" />
+<Input invalid placeholder="Invalid input" />
+<Input disabled placeholder="Disabled input" />
+```
+</CodeBlock>
+
+## API Reference
+
+### Input
+
+A styled text input component with size, width, and validation customization.
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `size` | `"default" \| "sm"` | `"default"` | Size of the input |
-| `widthVariant` | `"enforced" \| "full"` | `"full"` | Width behavior of the input |
-| `invalid` | `boolean` | - | Whether the input is in an invalid state |
-| `disabled` | `boolean` | - | Whether the input is disabled |
-| `type` | `string` | `"text"` | The type of input (text, email, password, number, search, tel, url) |
+| `size` | `"default" \| "sm"` | `"default"` | Size variant of the input |
+| `widthVariant` | `"enforced" \| "full"` | `"full"` | Width behavior - enforced uses a fixed minimum width, full stretches to 100% |
+| `invalid` | `boolean` | `false` | When true, applies error styling and sets `aria-invalid` attribute |
 | `className` | `string` | - | Additional CSS classes |
-| `placeholder` | `string` | - | Placeholder text |
 
-Plus all standard HTML input attributes.
+**Inherited Props:** Inherits all props from native HTML `input` element including `type`, `value`, `onChange`, `placeholder`, `disabled`, etc. Note that the native `size` attribute is omitted in favor of the custom `size` prop.

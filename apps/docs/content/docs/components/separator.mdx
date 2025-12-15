@@ -1,11 +1,15 @@
 ---
 title: Separator
-description: A visual separator component for dividing content
+description: Visual divider for separating content sections with horizontal and vertical orientations
 ---
+
+import { SeparatorHorizontalDemo } from "../../../src/components/separator-horizontal-demo";
+import { SeparatorVerticalDemo } from "../../../src/components/separator-vertical-demo";
+import { SeparatorDecorativeDemo } from "../../../src/components/separator-decorative-demo";
 
 ## Overview
 
-The Separator component provides a visual divider between content sections. It can be displayed horizontally or vertically and supports decorative mode for purely visual separators.
+The Separator component provides a visual divider to separate content sections in your interface. It supports both horizontal and vertical orientations with proper ARIA attributes for accessibility, and can be marked as decorative when used purely for visual styling.
 
 ## Import
 
@@ -16,95 +20,84 @@ import { Separator } from "@px-ui/core";
 ## Usage
 
 <Preview>
-  <div className="flex flex-col gap-4 w-full">
-    <div>Content above</div>
-    <Separator orientation="horizontal" />
-    <div>Content below</div>
-  </div>
+  <SeparatorHorizontalDemo />
 </Preview>
 
 <CodeBlock>
 ```tsx
 <div>
-  <div>Content above</div>
-  <Separator orientation="horizontal" />
-  <div>Content below</div>
+  <div className="space-y-1">
+    <h4>Profile Settings</h4>
+    <p>Manage your account preferences</p>
+  </div>
+  <Separator orientation="horizontal" className="my-4" />
+  <div className="flex h-5 items-center space-x-4">
+    <div>Account</div>
+    <Separator orientation="vertical" />
+    <div>Privacy</div>
+    <Separator orientation="vertical" />
+    <div>Security</div>
+  </div>
 </div>
 ```
 </CodeBlock>
 
 ## Examples
 
-### Horizontal
+### Vertical Orientation
+
+Use vertical separators to divide content horizontally, such as in navigation menus or toolbars.
 
 <Preview>
-  <div className="flex flex-col gap-4 w-full">
-    <div>Section 1</div>
-    <Separator orientation="horizontal" />
-    <div>Section 2</div>
-    <Separator orientation="horizontal" />
-    <div>Section 3</div>
-  </div>
+  <SeparatorVerticalDemo />
 </Preview>
 
 <CodeBlock>
 ```tsx
-<div>
-  <div>Section 1</div>
-  <Separator orientation="horizontal" />
-  <div>Section 2</div>
-  <Separator orientation="horizontal" />
-  <div>Section 3</div>
+<div className="flex h-20 items-center space-x-4">
+  <div>Profile</div>
+  <Separator orientation="vertical" />
+  <div>Settings</div>
+  <Separator orientation="vertical" />
+  <div>Help</div>
+  <Separator orientation="vertical" />
+  <div>Logout</div>
 </div>
 ```
 </CodeBlock>
 
-### Vertical
+### Decorative vs Semantic
+
+By default, separators are semantic (announced by screen readers). Use `decorative` when the separator is purely visual and shouldn't be announced.
 
 <Preview>
-  <div className="flex items-center gap-4 h-20">
-    <div>Left</div>
-    <Separator orientation="vertical" />
-    <div>Middle</div>
-    <Separator orientation="vertical" />
-    <div>Right</div>
-  </div>
+  <SeparatorDecorativeDemo />
 </Preview>
 
 <CodeBlock>
 ```tsx
-<div className="flex items-center gap-4 h-20">
-  <div>Left</div>
-  <Separator orientation="vertical" />
-  <div>Middle</div>
-  <Separator orientation="vertical" />
-  <div>Right</div>
-</div>
-```
-</CodeBlock>
+{/* Semantic separator - announced by screen readers */}
+<Separator orientation="horizontal" />
 
-### Decorative
-
-<Preview>
-  <div className="flex flex-col gap-4 w-full">
-    <div>Content</div>
-    <Separator orientation="horizontal" decorative />
-    <div>More content</div>
-  </div>
-</Preview>
-
-<CodeBlock>
-```tsx
+{/* Decorative separator - not announced by screen readers */}
 <Separator orientation="horizontal" decorative />
 ```
 </CodeBlock>
 
-## Props
+## API Reference
+
+### Separator
+
+A visual divider component with configurable orientation and semantic behavior.
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `orientation` | `"horizontal" \| "vertical"` | `"vertical"` | Orientation of the separator |
-| `decorative` | `boolean` | `false` | If true, the separator is decorative and won't be announced by screen readers |
+| `orientation` | `"horizontal" \| "vertical"` | `"vertical"` | Direction of the separator line |
+| `decorative` | `boolean` | `false` | When true, sets `role="none"` to hide from screen readers. When false, uses `role="separator"` |
 | `className` | `string` | - | Additional CSS classes |
 
-Plus all standard HTML div attributes.
+**Inherited Props:** Inherits all props from native HTML `div` element.
+
+**Accessibility:**
+- Non-decorative separators use `role="separator"` and include `aria-orientation` for vertical separators
+- Decorative separators use `role="none"` and are hidden from assistive technologies

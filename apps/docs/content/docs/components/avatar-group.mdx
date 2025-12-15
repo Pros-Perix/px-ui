@@ -1,10 +1,15 @@
 ---
-title: Avatar Group
-description: Display multiple avatars in a group with overflow handling
+title: AvatarGroup
+description: Display a collection of overlapping avatars with overflow handling and interactive popover
 ---
 
+import { AvatarGroupBasicDemo } from "../../../src/components/avatar-group-basic-demo";
+import { AvatarGroupOverflowDemo } from "../../../src/components/avatar-group-overflow-demo";
+import { AvatarGroupSizesDemo } from "../../../src/components/avatar-group-sizes-demo";
+
 ## Overview
-The AvatarGroup component displays multiple avatars in a horizontal group with automatic overflow handling. When the number of avatars exceeds the maximum, it shows a "+N" indicator that opens a popover with the remaining avatars.
+
+The AvatarGroup component displays a collection of avatars in an overlapping layout with smart overflow handling. When the number of avatars exceeds the maximum, it shows a "+N" indicator with a popover containing all overflow avatars. Each avatar includes an individual tooltip on hover.
 
 ## Import
 
@@ -15,26 +20,19 @@ import { AvatarGroup } from "@px-ui/core";
 ## Usage
 
 <Preview>
-  <AvatarGroup
-    avatars={[
-      { name: "John Doe", imgSrc: "https://github.com/shadcn.png", variant: "rounded" },
-      { name: "Jane Smith", imgSrc: "https://github.com/shadcn.png", variant: "rounded" },
-      { name: "Bob Johnson", imgSrc: "https://github.com/shadcn.png", variant: "rounded" },
-    ]}
-    max={2}
-  />
+  <AvatarGroupBasicDemo />
 </Preview>
 
 <CodeBlock>
 ```tsx
-<AvatarGroup
-  avatars={[
-    { name: "John Doe", imgSrc: "https://github.com/shadcn.png", variant: "rounded" },
-    { name: "Jane Smith", imgSrc: "https://github.com/shadcn.png", variant: "rounded" },
-    { name: "Bob Johnson", imgSrc: "https://github.com/shadcn.png", variant: "rounded" },
-  ]}
-  max={2}
-/>
+const avatars = [
+  { name: "Alice Johnson", imgSrc: "https://github.com/shadcn.png", size: "40px" },
+  { name: "Bob Smith", imgSrc: null, size: "40px" },
+  { name: "Carol Williams", imgSrc: null, size: "40px" },
+  { name: "David Brown", imgSrc: null, size: "40px" },
+];
+
+<AvatarGroup avatars={avatars} />
 ```
 </CodeBlock>
 
@@ -42,73 +40,78 @@ import { AvatarGroup } from "@px-ui/core";
 
 ### With Overflow
 
+When there are more avatars than the `max` prop allows, the component shows a "+N" indicator. Hover over it to see all overflow avatars in a popover.
+
 <Preview>
-  <AvatarGroup
-    avatars={[
-      { name: "John Doe", imgSrc: "https://github.com/shadcn.png", variant: "rounded" },
-      { name: "Jane Smith", imgSrc: "https://github.com/shadcn.png", variant: "rounded" },
-      { name: "Bob Johnson", imgSrc: "https://github.com/shadcn.png", variant: "rounded" },
-      { name: "Alice Wilson", imgSrc: "https://github.com/shadcn.png", variant: "rounded" },
-      { name: "Charlie Brown", imgSrc: "https://github.com/shadcn.png", variant: "rounded" },
-    ]}
-    max={3}
-  />
+  <AvatarGroupOverflowDemo />
 </Preview>
 
 <CodeBlock>
 ```tsx
-<AvatarGroup
-  avatars={[
-    { name: "John Doe", imgSrc: "https://github.com/shadcn.png", variant: "rounded" },
-    { name: "Jane Smith", imgSrc: "https://github.com/shadcn.png", variant: "rounded" },
-    { name: "Bob Johnson", imgSrc: "https://github.com/shadcn.png", variant: "rounded" },
-    { name: "Alice Wilson", imgSrc: "https://github.com/shadcn.png", variant: "rounded" },
-    { name: "Charlie Brown", imgSrc: "https://github.com/shadcn.png", variant: "rounded" },
-  ]}
-  max={3}
-/>
+const avatars = [
+  { name: "Alice Johnson", imgSrc: null, size: "40px", variant: "rounded" },
+  { name: "Bob Smith", imgSrc: null, size: "40px", variant: "rounded" },
+  // ... 6 more avatars
+];
+
+<AvatarGroup avatars={avatars} max={4} />
+<AvatarGroup avatars={avatars} max={6} />
 ```
 </CodeBlock>
 
-### Without Images
+### Different Sizes
+
+The AvatarGroup automatically adapts to the size specified in the avatar props, maintaining proper overlap and scaling.
 
 <Preview>
-  <AvatarGroup
-    avatars={[
-      { name: "John Doe", imgSrc: null, variant: "rounded" },
-      { name: "Jane Smith", imgSrc: null, variant: "rounded" },
-      { name: "Bob Johnson", imgSrc: null, variant: "rounded" },
-      { name: "Alice Wilson", imgSrc: null, variant: "rounded" },
-    ]}
-    max={3}
-  />
+  <AvatarGroupSizesDemo />
 </Preview>
 
 <CodeBlock>
 ```tsx
-<AvatarGroup
-  avatars={[
-    { name: "John Doe", imgSrc: null, variant: "rounded" },
-    { name: "Jane Smith", imgSrc: null, variant: "rounded" },
-    { name: "Bob Johnson", imgSrc: null, variant: "rounded" },
-    { name: "Alice Wilson", imgSrc: null, variant: "rounded" },
-  ]}
-  max={3}
-/>
+const smallAvatars = [
+  { name: "Alice Johnson", imgSrc: null, size: "32px", variant: "rounded" },
+  { name: "Bob Smith", imgSrc: null, size: "32px", variant: "rounded" },
+  // ...
+];
+
+const largeAvatars = [
+  { name: "Alice Johnson", imgSrc: null, size: "48px", variant: "rounded" },
+  { name: "Bob Smith", imgSrc: null, size: "48px", variant: "rounded" },
+  // ...
+];
+
+<AvatarGroup avatars={smallAvatars} />
+<AvatarGroup avatars={largeAvatars} />
 ```
 </CodeBlock>
 
-## Props
+## API Reference
+
+### AvatarGroup
+
+A component that displays a collection of overlapping avatars with overflow handling.
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `avatars` | `Array<AvatarProps>` | - | Array of avatar props to display |
-| `max` | `number` | `4` | Maximum number of avatars to display before showing overflow |
-| `className` | `string` | - | Additional CSS classes |
+| `avatars` | `Array<ComponentProps<typeof Avatar>>` | - | Array of avatar configurations. Each item should be a valid Avatar component props object |
+| `max` | `number` | `4` | Maximum number of avatars to display before showing overflow indicator |
+| `className` | `string` | - | Additional CSS classes for the container |
 
-The `avatars` array accepts the same props as the `Avatar` component:
-- `name`: `string \| null \| undefined` - Name for initials and tooltip
-- `imgSrc`: `string \| null \| undefined` - Image source URL
-- `variant`: `"squared" \| "rounded"` - Visual style variant
-- `size`: `` `${number}px` `` - Size of the avatar
-- `className`: `string` - Additional CSS classes
+### Avatar Props
+
+Each object in the `avatars` array accepts all Avatar component props:
+
+| Prop | Type | Description |
+|------|------|-------------|
+| `name` | `string` | User name for initials fallback and tooltip |
+| `imgSrc` | `string \| null` | Image source URL |
+| `size` | `` `${number}px` `` | Size of the avatar (e.g., "40px", "48px") |
+| `variant` | `"squared" \| "rounded"` | Visual style variant |
+
+**Features:**
+- Avatars overlap by 25% of their width for a compact layout
+- Each avatar has a white ring border to separate them visually
+- Z-index stacking ensures proper depth (first avatar appears on top)
+- Overflow avatars are shown in a scrollable popover on hover
+- Individual tooltips show each user's name on hover
