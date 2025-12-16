@@ -1,0 +1,436 @@
+---
+title: File Upload
+description: A composable file upload solution with drag-and-drop, validation, previews, and optional upload progress.
+---
+
+import {
+  SimpleUploadDemo,
+  SimpleUploadWithS3Demo,
+  SimpleButtonVariantDemo,
+  SimpleImageGridDemo,
+  BasicDropzoneDemo,
+  MultipleFilesListDemo,
+  UploadWithProgressDemo,
+  FilesTableDemo,
+  DropzoneSizesDemo,
+  InlineImageUploadDemo,
+  MixedContentCardsDemo,
+  SingleImageUploadDemo,
+  AvatarUploadDemo,
+} from "../../../src/components/file-upload-demos";
+
+## Overview
+
+The File Upload system gives you two ways to build file upload experiences: use `FileUploadField` for a ready-to-use component, or combine `useFileUpload` with the `FileUpload.*` primitives for fully custom UIs.
+
+## Import
+
+```tsx
+// Recommended: ready-to-use component
+import { FileUploadField } from "@px-ui/forms";
+
+// Advanced: hook + composable primitives
+import { FileUpload, useFileUpload } from "@px-ui/core";
+```
+
+## Usage
+
+This example uses `FileUploadField`, which includes state management, validation, and optional upload support.
+
+<Preview>
+  <SimpleUploadDemo />
+</Preview>
+
+<CodeBlock>
+```tsx
+import { FileUploadField } from "@px-ui/forms";
+
+export function Uploader() {
+  return (
+    <FileUploadField
+      accept="image/*,.pdf,.doc,.docx"
+      maxSize={10 * 1024 * 1024}
+      onFilesChange={(files) => console.log(files)}
+    />
+  );
+}
+```
+</CodeBlock>
+
+## Examples
+
+### With S3/presigned uploads
+
+Configure uploads by providing `upload.getPresignedUrl` and `upload.uploadFile`. Progress is handled for you when `uploadFile` calls `onProgress`.
+
+<Preview>
+  <SimpleUploadWithS3Demo />
+</Preview>
+
+<CodeBlock>
+```tsx
+import { FileUploadField } from "@px-ui/forms";
+
+export function UploaderWithUpload() {
+  return (
+    <FileUploadField
+      accept="image/*,.pdf"
+      multiple
+      maxFiles={5}
+      maxSize={5 * 1024 * 1024}
+      upload={{
+        getPresignedUrl: async ({ filename, contentType, size }) => {
+          const res = await fetch("/api/get-upload-url", {
+            method: "POST",
+            body: JSON.stringify({ filename, contentType, size }),
+          });
+          const data = await res.json();
+
+          return {
+            result: {
+              url: data.url,
+              fullPath: data.fullPath,
+            },
+          };
+        },
+        uploadFile: async (url, file, presignedData, onProgress) => {
+          // Implement upload to `url` and call `onProgress(0..100)`.
+          // Return the final URL (or rely on `presignedData.fullPath`).
+          await fetch(url, { method: "PUT", body: file });
+
+          onProgress?.(100);
+          return { result: { url: presignedData.fullPath } };
+        },
+      }}
+    />
+
+);
+}
+
+````
+</CodeBlock>
+
+### Variants (dropzone, button, compact)
+
+`FileUploadField` supports three layout variants.
+
+<Preview>
+  <SimpleButtonVariantDemo />
+</Preview>
+
+<CodeBlock>
+```tsx
+import { FileUploadField } from "@px-ui/forms";
+
+// Dropzone (default)
+<FileUploadField variant="dropzone" />
+
+// Button
+<FileUploadField variant="button" buttonText="Upload Files" multiple />
+
+// Compact
+<FileUploadField variant="compact" accept=".pdf,.doc,.docx" />
+````
+
+</CodeBlock>
+
+### Image uploads with a grid
+
+For image-first workflows, render a grid instead of a list.
+
+<Preview>
+  <SimpleImageGridDemo />
+</Preview>
+
+<CodeBlock>
+```tsx
+import { FileUploadField } from "@px-ui/forms";
+
+<FileUploadField
+  accept="image/*"
+  multiple
+  maxFiles={8}
+  showImageGrid
+  size="sm"
+  dropzoneText="Drop images here"
+  buttonText="Select images"
+/>
+```
+</CodeBlock>
+
+### Fully custom UI (hook + primitives)
+
+Use `useFileUpload` for state/actions and pass them into `FileUpload.Root`. Everything else is composed with `FileUpload.*`.
+
+<Preview>
+  <BasicDropzoneDemo />
+</Preview>
+
+<CodeBlock>
+```tsx
+import { FileUpload, useFileUpload } from "@px-ui/core";
+
+export function CustomDropzone() {
+  const [state, actions] = useFileUpload({
+    onFilesChange: (files) => console.log(files),
+  });
+
+return (
+
+<FileUpload.Root
+  files={state.files}
+  addFiles={actions.addFiles}
+  removeFile={actions.removeFile}
+  clearFiles={actions.clearFiles}
+  openFileDialog={actions.openFileDialog}
+  getInputProps={actions.getInputProps}
+  handleDragEnter={actions.handleDragEnter}
+  handleDragLeave={actions.handleDragLeave}
+  handleDragOver={actions.handleDragOver}
+  handleDrop={actions.handleDrop}
+  isDragActive={state.isDragging}
+>
+  <FileUpload.Dropzone />
+</FileUpload.Root>
+); }
+
+````
+</CodeBlock>
+
+### List view for mixed file types
+
+A list layout is useful for documents and mixed uploads.
+
+<Preview>
+  <MultipleFilesListDemo />
+</Preview>
+
+### Upload progress UI
+
+If you enable uploads (via the hook’s `upload` option), you can surface progress with `ItemProgress` and status with `ItemStatus`.
+
+<Preview>
+  <UploadWithProgressDemo />
+</Preview>
+
+### Table and card layouts
+
+Because the primitives are headless/composable, you can render your own layouts.
+
+<Preview>
+  <FilesTableDemo />
+</Preview>
+
+<Preview>
+  <MixedContentCardsDemo />
+</Preview>
+
+### Dropzone sizes
+
+<Preview>
+  <DropzoneSizesDemo />
+</Preview>
+
+<CodeBlock>
+```tsx
+<FileUpload.Dropzone size="sm" />
+<FileUpload.Dropzone size="default" />
+<FileUpload.Dropzone size="lg" />
+````
+
+</CodeBlock>
+
+### Inline image picker patterns
+
+<Preview>
+  <InlineImageUploadDemo />
+</Preview>
+
+### Single-image patterns
+
+<Preview>
+  <SingleImageUploadDemo />
+</Preview>
+
+<Preview>
+  <AvatarUploadDemo />
+</Preview>
+
+## Anatomy
+
+The file upload primitives are designed to be composed together. Most apps follow this structure:
+
+- **`FileUpload.Root`**: Provides context for all child components
+- **`FileUpload.Dropzone`**: Drag-and-drop area (also supports paste and keyboard)
+- **`FileUpload.Trigger`**: Standalone “open file dialog” button
+- **`FileUpload.ItemList` / `FileUpload.Item`**: Render selected files
+- **`FileUpload.ImageGrid` / `FileUpload.ImageGridItem`**: Render images in a grid
+- **`FileUpload.*` item parts**: `ItemPreview`, `ItemName`, `ItemSize`, `ItemStatus`, `ItemProgress`, `ItemError`, `ItemRetry`, `ItemRemove`
+- **`FileUpload.ClearButton`**: Clear all selected files
+
+## API Reference
+
+### FileUploadField
+
+A ready-to-use upload component that internally uses `useFileUpload` and the `FileUpload.*` primitives.
+
+| Prop             | Type                                                                           | Default                             | Description                              |
+| ---------------- | ------------------------------------------------------------------------------ | ----------------------------------- | ---------------------------------------- |
+| `variant`        | `"dropzone" \| "button" \| "compact"`                                          | `"dropzone"`                        | Layout variant                           |
+| `size`           | `"sm" \| "default" \| "lg"`                                                    | `"default"`                         | Dropzone size (dropzone variant)         |
+| `dropzoneText`   | `string`                                                                       | `"Paste Or Drag & Drop Files Here"` | Dropzone label text                      |
+| `buttonText`     | `string`                                                                       | `"Browse for files"`                | Trigger button label                     |
+| `showFileList`   | `boolean`                                                                      | `true`                              | Show file list below the control         |
+| `showImageGrid`  | `boolean`                                                                      | `false`                             | Show an image grid instead of a list     |
+| `initialFiles`   | `Array<{ id: string; name: string; size: number; type: string; url: string }>` | `[]`                                | Pre-populate with already-uploaded files |
+| `disabled`       | `boolean`                                                                      | `false`                             | Disable all interactions                 |
+| `renderFileItem` | `(file, actions) => React.ReactNode`                                           | -                                   | Custom renderer for list items           |
+| `onError`        | `(error: { type: string; message: string; files?: File[] }) => void`           | -                                   | Validation errors callback               |
+
+**Also accepts hook options:** `accept`, `multiple`, `maxSize`, `maxFiles`, `onFilesChange`, `onFilesAdded`, and `upload`.
+
+---
+
+### useFileUpload
+
+A hook that manages file selection, validation, previews, and (optionally) uploads.
+
+**Options** (partial):
+
+| Option          | Type                   | Default    | Description                                 |
+| --------------- | ---------------------- | ---------- | ------------------------------------------- |
+| `accept`        | `string`               | `"*"`      | Accepted file types (e.g. `"image/*,.pdf"`) |
+| `multiple`      | `boolean`              | `false`    | Allow multiple files                        |
+| `maxSize`       | `number`               | `Infinity` | Max file size in bytes                      |
+| `maxFiles`      | `number`               | `Infinity` | Max file count (only when `multiple`)       |
+| `initialFiles`  | `FileMetadata[]`       | `[]`       | Pre-populate with uploaded files            |
+| `onFilesChange` | `(files) => void`      | -          | Called when files change                    |
+| `onFilesAdded`  | `(addedFiles) => void` | -          | Called with only newly-added files          |
+| `upload`        | `UploadConfig`         | -          | Enables uploads and progress tracking       |
+
+**Returns**: `[state, actions]`
+
+- **State**: `{ files, isDragging, errors, isUploading }`
+- **Actions**: `addFiles`, `removeFile`, `clearFiles`, `clearErrors`, `openFileDialog`, `getInputProps`, drag handlers, plus upload actions `uploadFiles`, `retryUpload`, `cancelUpload`.
+
+---
+
+### FileUpload.Root
+
+Context provider and wiring point for `useFileUpload`.
+
+| Prop              | Type                                  | Required | Description                                              |
+| ----------------- | ------------------------------------- | -------- | -------------------------------------------------------- |
+| `files`           | `FileUploadFile[]`                    | Yes      | Files from `useFileUpload().files`                       |
+| `addFiles`        | `(files: FileList \| File[]) => void` | Yes      | Adds files                                               |
+| `removeFile`      | `(id: string) => void`                | Yes      | Removes a file                                           |
+| `clearFiles`      | `() => void`                          | Yes      | Clears all files                                         |
+| `retryUpload`     | `(id: string) => Promise<void>`       | No       | Enables retry UI (`ItemRetry`, image-grid retry overlay) |
+| `openFileDialog`  | `() => void`                          | Yes      | Opens native file picker                                 |
+| `getInputProps`   | `(props?) => InputProps`              | Yes      | Props for the internal `<input type="file" />`           |
+| `handleDragEnter` | `(e) => void`                         | Yes      | Drag enter handler                                       |
+| `handleDragLeave` | `(e) => void`                         | Yes      | Drag leave handler                                       |
+| `handleDragOver`  | `(e) => void`                         | Yes      | Drag over handler                                        |
+| `handleDrop`      | `(e) => void`                         | Yes      | Drop handler                                             |
+| `isDragActive`    | `boolean`                             | No       | Hook’s `isDragging` state                                |
+| `isUploading`     | `boolean`                             | No       | Hook’s `isUploading` state                               |
+| `accept`          | `string`                              | No       | Accepted types (used by Dropzone/input)                  |
+| `multiple`        | `boolean`                             | No       | Allow multiple file selection                            |
+| `disabled`        | `boolean`                             | No       | Disable all interactions                                 |
+| `className`       | `string`                              | No       | Additional CSS classes                                   |
+
+---
+
+### FileUpload.Dropzone
+
+Drag-and-drop area (also supports paste, and keyboard Enter/Space).
+
+| Prop                 | Type                        | Default                             | Description                                        |
+| -------------------- | --------------------------- | ----------------------------------- | -------------------------------------------------- |
+| `size`               | `"sm" \| "default" \| "lg"` | `"default"`                         | Dropzone size                                      |
+| `dropzoneText`       | `string`                    | `"Paste Or Drag & Drop Files Here"` | Primary label                                      |
+| `browseText`         | `string`                    | `"Browse for files"`                | Button label                                       |
+| `hideDefaultContent` | `boolean`                   | `false`                             | Hide built-in UI so you can render custom children |
+
+**Inherited Props:** All native `div` props.
+
+---
+
+### FileUpload.Trigger
+
+Standalone trigger button for opening the file dialog.
+
+| Prop                 | Type      | Default          | Description                                        |
+| -------------------- | --------- | ---------------- | -------------------------------------------------- |
+| `uploadingText`      | `string`  | `"Uploading..."` | Text shown when `showUploadingState` and uploading |
+| `showUploadingState` | `boolean` | `true`           | Disable + show spinner/text during uploads         |
+
+**Inherited Props:** All `Button` props.
+
+---
+
+### FileUpload.ItemList
+
+Renders nothing when there are no files.
+
+| Prop       | Type                                  | Default | Description                            |
+| ---------- | ------------------------------------- | ------- | -------------------------------------- |
+| `children` | `ReactNode \| ((files) => ReactNode)` | -       | Render prop receives the current files |
+
+**Inherited Props:** All native `div` props.
+
+---
+
+### FileUpload.Item
+
+Wraps a file row and provides item context for `Item*` parts.
+
+| Prop           | Type             | Default | Description                                  |
+| -------------- | ---------------- | ------- | -------------------------------------------- |
+| `file`         | `FileUploadFile` | -       | The file object (required)                   |
+| `statusStyles` | `boolean`        | `true`  | Apply error styling when status is `"error"` |
+
+**Inherited Props:** All native `div` props.
+
+---
+
+### FileUpload.ItemPreview
+
+| Prop       | Type              | Default        | Description                           |
+| ---------- | ----------------- | -------------- | ------------------------------------- |
+| `fallback` | `React.ReactNode` | `<FileIcon />` | Fallback when no preview is available |
+
+**Inherited Props:** All native `div` props.
+
+---
+
+### FileUpload.ItemStatus
+
+| Prop               | Type              | Default         | Description              |
+| ------------------ | ----------------- | --------------- | ------------------------ |
+| `successIcon`      | `React.ReactNode` | `<CheckIcon />` | Custom success icon      |
+| `uploadingContent` | `React.ReactNode` | `"{progress}%"` | Custom uploading content |
+| `errorContent`     | `React.ReactNode` | `"Failed"`      | Custom error content     |
+
+**Inherited Props:** All native `div` props.
+
+---
+
+### FileUpload.ImageGrid
+
+| Prop       | Type                                  | Default | Description                            |
+| ---------- | ------------------------------------- | ------- | -------------------------------------- |
+| `children` | `ReactNode \| ((files) => ReactNode)` | -       | Render prop receives the current files |
+
+**Inherited Props:** All native `div` props.
+
+---
+
+### FileUpload.ImageGridItem
+
+| Prop                | Type             | Default | Description                           |
+| ------------------- | ---------------- | ------- | ------------------------------------- |
+| `file`              | `FileUploadFile` | -       | The file object (required)            |
+| `showStatusOverlay` | `boolean`        | `true`  | Show uploading/error/success overlays |
+
+**Inherited Props:** All native `div` props.
