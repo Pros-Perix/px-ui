@@ -1,5 +1,16 @@
 # @px-ui/forms
 
+## 4.0.0
+
+### Minor Changes
+
+- 2d394da: Introduced file upload component
+
+### Patch Changes
+
+- Updated dependencies [2d394da]
+  - @px-ui/core@2.1.0
+
 ## 3.0.0
 
 ### Major Changes
