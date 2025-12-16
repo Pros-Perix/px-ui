@@ -1,5 +1,16 @@
 # @px-ui/forms
 
+## 3.0.0
+
+### Major Changes
+
+- d710e8f: Test deploy
+
+### Patch Changes
+
+- Updated dependencies [d710e8f]
+  - @px-ui/core@2.0.0
+
 ## 2.0.0
 
 ### Minor Changes
