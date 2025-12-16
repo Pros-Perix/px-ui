@@ -1,5 +1,11 @@
 # @px-ui/core
 
+## 2.1.0
+
+### Minor Changes
+
+- 2d394da: Introduced file upload component
+
 ## 2.0.0
 
 ### Major Changes
