@@ -21,18 +21,23 @@ export default function FormTextareaBasicDemo() {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 w-full max-w-md">
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className="w-full max-w-md space-y-4"
+    >
       <FormTextarea
         control={control}
         name="message"
         label="Message"
         description="Enter your message"
+        placeholder="Type your message here..."
       />
       <FormTextarea
         control={control}
         name="feedback"
         label="Feedback"
         description="Your feedback helps us improve"
+        placeholder="Share your thoughts and suggestions"
         required
       />
       <Button type="submit">Submit</Button>

@@ -21,18 +21,23 @@ export default function FormInputBasicDemo() {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 w-full max-w-sm">
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className="w-full max-w-sm space-y-4"
+    >
       <FormInput
         control={control}
         name="email"
         label="Email"
         description="Enter your email address"
+        placeholder="you@example.com"
       />
       <FormInput
         control={control}
         name="username"
         label="Username"
         description="Choose a unique username"
+        placeholder="Enter username"
       />
       <Button type="submit">Submit</Button>
     </form>
