@@ -25,12 +25,16 @@ export default function FormInputValidationDemo() {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 w-full max-w-sm">
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className="w-full max-w-sm space-y-4"
+    >
       <FormInput
         control={control}
         name="email"
         label="Email"
         description="We'll never share your email"
+        placeholder="Enter your email address"
         required
       />
       <FormInput
@@ -38,6 +42,7 @@ export default function FormInputValidationDemo() {
         name="age"
         label="Age"
         description="Must be 18 or older"
+        placeholder="Enter your age"
         required
       />
       <Button type="submit">Submit</Button>

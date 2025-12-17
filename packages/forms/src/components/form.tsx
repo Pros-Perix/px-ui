@@ -18,6 +18,7 @@ type FormControlProps<
   description?: ReactNode;
   control: ControllerProps<TFieldValues, TName, TTransformedValues>["control"];
   required?: boolean;
+  placeholder?: string;
 };
 
 type FormBaseProps<
@@ -113,12 +114,20 @@ function FormBase<
   );
 }
 
-export const FormInput: FormControlFunc = (props) => {
-  return <FormBase {...props}>{(field) => <Input {...field} />}</FormBase>;
+export const FormInput: FormControlFunc = ({ placeholder, ...props }) => {
+  return (
+    <FormBase {...props}>
+      {(field) => <Input {...field} placeholder={placeholder} />}
+    </FormBase>
+  );
 };
 
-export const FormTextarea: FormControlFunc = (props) => {
-  return <FormBase {...props}>{(field) => <Textarea {...field} />}</FormBase>;
+export const FormTextarea: FormControlFunc = ({ placeholder, ...props }) => {
+  return (
+    <FormBase {...props}>
+      {(field) => <Textarea {...field} placeholder={placeholder} />}
+    </FormBase>
+  );
 };
 
 export const FormCheckbox: FormControlFunc = (props) => {

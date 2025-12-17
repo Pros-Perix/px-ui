@@ -61,12 +61,14 @@ export default function Example() {
         name="email"
         label="Email"
         description="Enter your email address"
+        placeholder="you@example.com"
       />
       <FormInput
         control={control}
         name="username"
         label="Username"
         description="Choose a unique username"
+        placeholder="Enter username"
       />
       <Button type="submit">Submit</Button>
     </form>
@@ -113,6 +115,7 @@ export default function Example() {
         name="email"
         label="Email"
         description="We'll never share your email"
+        placeholder="Enter your email address"
         required
       />
       <FormInput
@@ -120,6 +123,7 @@ export default function Example() {
         name="age"
         label="Age"
         description="Must be 18 or older"
+        placeholder="Enter your age"
         required
       />
       <Button type="submit">Submit</Button>
@@ -165,12 +169,14 @@ export default function Example() {
         name="message"
         label="Message"
         description="Enter your message"
+        placeholder="Type your message here..."
       />
       <FormTextarea
         control={control}
         name="feedback"
         label="Feedback"
         description="Your feedback helps us improve"
+        placeholder="Share your thoughts and suggestions"
         required
       />
       <Button type="submit">Submit</Button>
@@ -280,6 +286,7 @@ export default function Example() {
         name="name"
         label="Name"
         description="Your full name"
+        placeholder="John Doe"
         required
       />
       <FormInput
@@ -287,6 +294,7 @@ export default function Example() {
         name="email"
         label="Email"
         description="We'll never share your email"
+        placeholder="john@example.com"
         required
       />
       <FormTextarea
@@ -294,6 +302,7 @@ export default function Example() {
         name="message"
         label="Message"
         description="Tell us what you think"
+        placeholder="Share your thoughts with us..."
         required
       />
       <FormCheckbox
@@ -319,39 +328,41 @@ export default function Example() {
 
 A form input field that integrates Input with Field and react-hook-form's Controller.
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `control` * | `Control` | - | The control object from `useForm()` hook |
-| `name` * | `string` | - | The name of the form field. Must match a key in your form data type |
-| `label` * | `React.ReactNode` | - | Label text for the input field |
-| `description` | `React.ReactNode` | - | Optional description text shown below the input |
-| `required` | `boolean` | `false` | Whether the field is required. Adds a visual indicator to the label |
+| Prop          | Type              | Default | Description                                                         |
+| ------------- | ----------------- | ------- | ------------------------------------------------------------------- |
+| `control` \*  | `Control`         | -       | The control object from `useForm()` hook                            |
+| `name` \*     | `string`          | -       | The name of the form field. Must match a key in your form data type |
+| `label` \*    | `React.ReactNode` | -       | Label text for the input field                                      |
+| `description` | `React.ReactNode` | -       | Optional description text shown below the input                     |
+| `placeholder` | `string`          | -       | Placeholder text displayed when the input is empty                  |
+| `required`    | `boolean`         | `false` | Whether the field is required. Adds a visual indicator to the label |
 
 ### FormTextarea
 
 A form textarea field that integrates Textarea with Field and react-hook-form's Controller.
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `control` * | `Control` | - | The control object from `useForm()` hook |
-| `name` * | `string` | - | The name of the form field. Must match a key in your form data type |
-| `label` * | `React.ReactNode` | - | Label text for the textarea field |
-| `description` | `React.ReactNode` | - | Optional description text shown below the textarea |
-| `required` | `boolean` | `false` | Whether the field is required. Adds a visual indicator to the label |
+| Prop          | Type              | Default | Description                                                         |
+| ------------- | ----------------- | ------- | ------------------------------------------------------------------- |
+| `control` \*  | `Control`         | -       | The control object from `useForm()` hook                            |
+| `name` \*     | `string`          | -       | The name of the form field. Must match a key in your form data type |
+| `label` \*    | `React.ReactNode` | -       | Label text for the textarea field                                   |
+| `description` | `React.ReactNode` | -       | Optional description text shown below the textarea                  |
+| `placeholder` | `string`          | -       | Placeholder text displayed when the textarea is empty               |
+| `required`    | `boolean`         | `false` | Whether the field is required. Adds a visual indicator to the label |
 
 ### FormCheckbox
 
 A form checkbox field that integrates Checkbox with Field and react-hook-form's Controller. Uses horizontal layout by default with the checkbox appearing before the label.
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `control` * | `Control` | - | The control object from `useForm()` hook |
-| `name` * | `string` | - | The name of the form field. Must match a key in your form data type |
-| `label` * | `React.ReactNode` | - | Label text for the checkbox field |
-| `description` | `React.ReactNode` | - | Optional description text shown below the checkbox |
-| `required` | `boolean` | `false` | Whether the field is required. Adds a visual indicator to the label |
+| Prop          | Type              | Default | Description                                                         |
+| ------------- | ----------------- | ------- | ------------------------------------------------------------------- |
+| `control` \*  | `Control`         | -       | The control object from `useForm()` hook                            |
+| `name` \*     | `string`          | -       | The name of the form field. Must match a key in your form data type |
+| `label` \*    | `React.ReactNode` | -       | Label text for the checkbox field                                   |
+| `description` | `React.ReactNode` | -       | Optional description text shown below the checkbox                  |
+| `required`    | `boolean`         | `false` | Whether the field is required. Adds a visual indicator to the label |
 
-_* Required prop_
+_\* Required prop_
 
 ## Notes
 
