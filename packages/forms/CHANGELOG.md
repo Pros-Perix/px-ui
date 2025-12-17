@@ -1,5 +1,11 @@
 # @px-ui/forms
 
+## 4.1.0
+
+### Minor Changes
+
+- 901cee3: form field accept the placeholder prop
+
 ## 4.0.0
 
 ### Minor Changes
