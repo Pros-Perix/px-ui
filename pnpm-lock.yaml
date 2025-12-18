@@ -81,6 +81,9 @@ importers:
       react:
         specifier: ^19.2.1
         version: 19.2.3
+      react-country-flag:
+        specifier: ^3.1.0
+        version: 3.1.0(react@19.2.3)
       react-dom:
         specifier: ^19.2.1
         version: 19.2.3(react@19.2.3)
@@ -255,6 +258,9 @@ importers:
       react:
         specifier: 19.2.0
         version: 19.2.0
+      react-country-flag:
+        specifier: ^3.1.0
+        version: 3.1.0(react@19.2.0)
       react-dom:
         specifier: 19.2.0
         version: 19.2.0(react@19.2.0)
@@ -434,6 +440,7 @@ packages:
   '@base-ui/react@1.0.0':
     resolution: {integrity: sha512-4USBWz++DUSLTuIYpbYkSgy1F9ZmNG9S/lXvlUN6qMK0P0RlW+6eQmDUB4DgZ7HVvtXl4pvi4z5J2fv6Z3+9hg==}
     engines: {node: '>=14.0.0'}
+    deprecated: Package was renamed to @base-ui/react
     peerDependencies:
       '@types/react': ^17 || ^18 || ^19
       react: ^17 || ^18 || ^19
@@ -4400,6 +4407,12 @@ packages:
   raw-body@3.0.2:
     resolution: {integrity: sha512-K5zQjDllxWkf7Z5xJdV0/B0WTNqx6vxG70zJE4N0kBs4LovmEYWJzQGxC9bS9RAKu3bgM40lrd5zoLJ12MQ5BA==}
     engines: {node: '>= 0.10'}
+
+  react-country-flag@3.1.0:
+    resolution: {integrity: sha512-JWQFw1efdv9sTC+TGQvTKXQg1NKbDU2mBiAiRWcKM9F1sK+/zjhP2yGmm8YDddWyZdXVkR8Md47rPMJmo4YO5g==}
+    engines: {node: '>=12'}
+    peerDependencies:
+      react: '>=16'
 
   react-day-picker@9.12.0:
     resolution: {integrity: sha512-t8OvG/Zrciso5CQJu5b1A7yzEmebvST+S3pOVQJWxwjjVngyG/CA2htN/D15dLI4uTEuLLkbZyS4YYt480FAtA==}
@@ -9717,6 +9730,14 @@ snapshots:
       http-errors: 2.0.1
       iconv-lite: 0.7.1
       unpipe: 1.0.0
+
+  react-country-flag@3.1.0(react@19.2.0):
+    dependencies:
+      react: 19.2.0
+
+  react-country-flag@3.1.0(react@19.2.3):
+    dependencies:
+      react: 19.2.3
 
   react-day-picker@9.12.0(react@19.2.0):
     dependencies:
