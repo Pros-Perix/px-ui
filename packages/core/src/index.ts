@@ -31,6 +31,7 @@ export * from "./components/switch";
 export * from "./components/separator";
 export * from "./components/date-picker";
 export * from "./components/file-upload";
+export * from "./components/collapsible";
 
 // Icons
 export { default as FileIcon } from "./icons/file-icon";
