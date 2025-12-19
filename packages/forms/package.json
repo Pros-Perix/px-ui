@@ -37,6 +37,10 @@
   "publishConfig": {
     "access": "public"
   },
+  "dependencies": {
+    "google-libphonenumber": "^3.2.34",
+    "react-phone-input-2": "^2.15.0"
+  },
   "peerDependencies": {
     "@hookform/resolvers": ">=5.0.0",
     "@px-ui/core": "workspace:*",
@@ -56,6 +60,7 @@
     "@types/node": "^24.10.1",
     "@types/react": "^19.2.0",
     "@types/react-dom": "^19.2.0",
+    "@types/google-libphonenumber": "^7.4.30",
     "@vitejs/plugin-react": "^5.1.1",
     "happy-dom": "^20.0.10",
     "react": "19.2.0",
