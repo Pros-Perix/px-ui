@@ -1,5 +1,4 @@
 // This tells the bundler to include the CSS file on the build output
-import type { Collapsible } from "@base-ui-components/react";
 import "./index.css";
 
 // Components with namespace conflicts - export as namespaces
