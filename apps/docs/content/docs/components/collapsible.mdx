@@ -1,0 +1,145 @@
+---
+title: Collapsible
+description: An interactive component that can show and hide content with smooth animations
+apiReference: https://www.radix-ui.com/primitives/docs/components/collapsible
+---
+
+import { CollapsibleBasicDemo } from "../../../src/components/collapsible-basic-demo";
+
+## Overview
+
+The Collapsible component provides an interactive way to show and hide content. It supports smooth animations and can be controlled or uncontrolled, making it perfect for accordions, expandable sections, and toggleable content areas.
+
+## Import
+
+```tsx
+import { Collapsible, CollapsibleTrigger, CollapsibleContent } from "@px-ui/core";
+```
+
+## Usage
+
+<Preview>
+  <CollapsibleBasicDemo />
+</Preview>
+
+<CodeBlock>
+```tsx
+<Collapsible>
+  <CollapsibleTrigger asChild>
+    <Button variant="outline">Toggle Content</Button>
+  </CollapsibleTrigger>
+  <CollapsibleContent className="mt-2 p-4 border rounded-md">
+    <p>This is the collapsible content.</p>
+  </CollapsibleContent>
+</Collapsible>
+```
+</CodeBlock>
+
+## Examples
+
+### Controlled State
+
+Control the open state of the collapsible programmatically.
+
+<CodeBlock>
+```tsx
+const [open, setOpen] = React.useState(false);
+
+<Collapsible open={open} onOpenChange={setOpen}>
+  <CollapsibleTrigger asChild>
+    <Button>{open ? "Close" : "Open"}</Button>
+  </CollapsibleTrigger>
+  <CollapsibleContent>
+    <p>Controlled collapsible content</p>
+  </CollapsibleContent>
+</Collapsible>
+```
+</CodeBlock>
+
+### With Custom Styling
+
+Apply custom styles to the trigger and content for your design needs.
+
+<CodeBlock>
+```tsx
+<Collapsible>
+  <CollapsibleTrigger className="w-full flex items-center justify-between p-4 bg-neutral-2 rounded-md hover:bg-neutral-3">
+    <span>Click to expand</span>
+    <ChevronDownIcon className="transition-transform data-[state=open]:rotate-180" />
+  </CollapsibleTrigger>
+  <CollapsibleContent className="p-4 border-t border-neutral-5">
+    <p>Custom styled collapsible content</p>
+  </CollapsibleContent>
+</Collapsible>
+```
+</CodeBlock>
+
+## Anatomy
+
+Components that make up the Collapsible component:
+
+### `Collapsible`
+
+The root container that manages the collapsible state and coordination between trigger and content.
+
+**Inherited Props:** Inherits all props from [Radix UI Collapsible.Root](https://www.radix-ui.com/primitives/docs/components/collapsible#root)
+
+---
+
+### `CollapsibleTrigger`
+
+The button that toggles the visibility of the collapsible content.
+
+**Inherited Props:** Inherits all props from [Radix UI Collapsible.Trigger](https://www.radix-ui.com/primitives/docs/components/collapsible#trigger)
+
+---
+
+### `CollapsibleContent`
+
+The content that is shown or hidden based on the collapsible state.
+
+**Inherited Props:** Inherits all props from [Radix UI Collapsible.Content](https://www.radix-ui.com/primitives/docs/components/collapsible#content)
+
+---
+
+## API Reference
+
+### Collapsible
+
+The root component that wraps the collapsible trigger and content.
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `open` | `boolean` | - | Controlled open state |
+| `defaultOpen` | `boolean` | `false` | Uncontrolled default open state |
+| `onOpenChange` | `(open: boolean) => void` | - | Callback fired when open state changes |
+| `disabled` | `boolean` | `false` | Whether the collapsible is disabled |
+
+**Inherited Props:** Inherits all props from native HTML `div` element.
+
+---
+
+### CollapsibleTrigger
+
+The button that toggles the collapsible content visibility.
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `asChild` | `boolean` | `false` | When true, merges props with the child element |
+
+**Inherited Props:** Inherits all props from native HTML `button` element.
+
+---
+
+### CollapsibleContent
+
+The content panel that expands and collapses.
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `className` | `string` | - | Additional CSS classes |
+
+**Inherited Props:** Inherits all props from native HTML `div` element.
+
+**Note:** The content automatically includes smooth animations for expand/collapse transitions.
+

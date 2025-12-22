@@ -1,0 +1,163 @@
+---
+title: Phone Input
+description: A phone number input component with country selection, validation, and automatic formatting
+---
+
+import PhoneInputBasicDemo from "../../../src/components/phone-input-basic-demo.tsx";
+
+## Overview
+
+The PhoneInput component provides an international phone number input with country code selection, automatic validation, and formatting. It uses Google's libphonenumber library for robust phone number validation and formats numbers in E.164 format when valid.
+
+## Import
+
+```tsx
+import { PhoneInput } from "@px-ui/forms";
+```
+
+## Usage
+
+<Preview>
+  <PhoneInputBasicDemo />
+</Preview>
+
+<CodeBlock>
+```tsx
+import { PhoneInput } from "@px-ui/forms";
+import { useState } from "react";
+
+export default function Example() {
+  const [value, setValue] = useState("");
+
+  return (
+    <PhoneInput
+      value={value}
+      onChange={setValue}
+      country="us"
+      placeholder="Enter phone number"
+    />
+  );
+}
+```
+</CodeBlock>
+
+## Examples
+
+### With Error State
+
+Display error state when validation fails or when explicitly set.
+
+<CodeBlock>
+```tsx
+import { PhoneInput } from "@px-ui/forms";
+import { useState } from "react";
+
+export default function Example() {
+  const [value, setValue] = useState("");
+  const [hasError, setHasError] = useState(false);
+
+  return (
+    <PhoneInput
+      value={value}
+      onChange={setValue}
+      country="us"
+      error={hasError}
+      placeholder="Enter phone number"
+    />
+  );
+}
+```
+</CodeBlock>
+
+### Different Countries
+
+Set the default country code for the phone input.
+
+<CodeBlock>
+```tsx
+import { PhoneInput } from "@px-ui/forms";
+import { useState } from "react";
+
+export default function Example() {
+  const [value, setValue] = useState("");
+
+  return (
+    <div className="flex flex-col gap-4">
+      <PhoneInput
+        value={value}
+        onChange={setValue}
+        country="us"
+        placeholder="US phone number"
+      />
+      <PhoneInput
+        value={value}
+        onChange={setValue}
+        country="gb"
+        placeholder="UK phone number"
+      />
+      <PhoneInput
+        value={value}
+        onChange={setValue}
+        country="fr"
+        placeholder="French phone number"
+      />
+    </div>
+  );
+}
+```
+</CodeBlock>
+
+### Disabled State
+
+Disable the phone input to prevent user interaction.
+
+<CodeBlock>
+```tsx
+import { PhoneInput } from "@px-ui/forms";
+
+export default function Example() {
+  return (
+    <PhoneInput
+      value="+1234567890"
+      onChange={() => {}}
+      country="us"
+      disabled
+      placeholder="Enter phone number"
+    />
+  );
+}
+```
+</CodeBlock>
+
+## API Reference
+
+### PhoneInput
+
+A phone number input component with country selection and validation.
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `value` * | `string` | - | The current phone number value |
+| `onChange` * | `(value: string) => void` | - | Callback fired when the phone number changes. Returns E.164 formatted number when valid, otherwise returns raw input |
+| `country` | `string` | `"us"` | Default country code (ISO 3166-1 alpha-2 format) |
+| `error` | `boolean` | `false` | Whether to display error state styling |
+| `placeholder` | `string` | - | Placeholder text for the input |
+| `disabled` | `boolean` | `false` | Whether the input is disabled |
+
+_* Required prop_
+
+## Features
+
+- **Automatic Validation**: Validates phone numbers using Google's libphonenumber library
+- **Country Selection**: Dropdown to select country code with flag icons
+- **E.164 Formatting**: Automatically formats valid numbers to E.164 format (e.g., +1234567890)
+- **Error Handling**: Displays error message and styling for invalid numbers
+- **Region-Specific Validation**: Validates numbers based on the selected country code
+
+## Notes
+
+- The component automatically formats valid phone numbers to E.164 format in the `onChange` callback
+- Invalid numbers are passed through as raw input for user correction
+- Error styling is automatically applied when validation fails or when the `error` prop is true
+- The component uses `react-phone-input-2` for the UI and `google-libphonenumber` for validation
+
