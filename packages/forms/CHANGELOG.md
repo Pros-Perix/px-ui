@@ -1,5 +1,16 @@
 # @px-ui/forms
 
+## 5.0.0
+
+### Major Changes
+
+- 06717d7: Added new phone input, collapsible components
+
+### Patch Changes
+
+- Updated dependencies [06717d7]
+  - @px-ui/core@3.0.0
+
 ## 4.1.0
 
 ### Minor Changes
