@@ -1,17 +1,56 @@
 import * as React from "react";
-import * as CollapsiblePrimitive from "@radix-ui/react-collapsible";
+import { Collapsible as BaseCollapsible } from "@base-ui/react/collapsible";
 
-function Collapsible({ ...props }: React.ComponentProps<typeof CollapsiblePrimitive.Root>) {
-  return <CollapsiblePrimitive.Root data-slot="collapsible" {...props} />;
+import { cn } from "../utils";
+
+function Root({
+  className,
+  ...props
+}: React.ComponentProps<typeof BaseCollapsible.Root>) {
+  return (
+    <BaseCollapsible.Root
+      data-slot="collapsible"
+      className={cn("flex flex-col", className)}
+      {...props}
+    />
+  );
 }
 
-function CollapsibleTrigger({ ...props }: React.ComponentProps<typeof CollapsiblePrimitive.Trigger>) {
-  return <CollapsiblePrimitive.Trigger data-slot="collapsible-trigger" {...props} />;
+function Trigger({
+  className,
+  ...props
+}: React.ComponentProps<typeof BaseCollapsible.Trigger>) {
+  return (
+    <BaseCollapsible.Trigger
+      data-slot="collapsible-trigger"
+      className={cn(
+        "flex w-full items-center justify-between gap-2 rounded-ppx-s px-3 py-2 text-left text-ppx-neutral-18 transition-colors hover:bg-ppx-neutral-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ppx-primary-b-5",
+        className,
+      )}
+      {...props}
+    />
+  );
 }
 
-function CollapsibleContent({ ...props }: React.ComponentProps<typeof CollapsiblePrimitive.Content>) {
-  return <CollapsiblePrimitive.Content data-slot="collapsible-content" {...props} />;
+function Panel({
+  className,
+  ...props
+}: React.ComponentProps<typeof BaseCollapsible.Panel>) {
+  return (
+    <BaseCollapsible.Panel
+      data-slot="collapsible-content"
+      className={cn("w-full data-[state=closed]:hidden", className)}
+      {...props}
+    />
+  );
 }
 
-export { Collapsible, CollapsibleTrigger, CollapsibleContent };
+const Collapsible = Object.assign(Root, {
+  Root,
+  Trigger,
+  Panel,
+});
+
+export { Collapsible, Trigger as CollapsibleTrigger, Panel as CollapsibleContent };
+
 
