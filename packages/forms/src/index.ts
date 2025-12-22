@@ -7,7 +7,9 @@ export {
   PostalCodeLabel,
   POSTAL_CODE_PATTERN,
   getPostalCodePattern,
+  getPostalCodeSchema,
   usePostalCodeField,
+  usePostalCodeValidation,
 } from "./components/postal-code";
 export * as Field from "./components/field";
 export { FormInput, FormTextarea, FormCheckbox } from "./components/form";
