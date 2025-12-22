@@ -6,7 +6,6 @@ apiReference: https://base-ui.com/react/components/combobox
 
 import CurrencySelectFieldBasicDemo from "../../../src/components/currency-select-field-basic-demo.tsx";
 import CurrencySelectFieldWithFieldDemo from "../../../src/components/currency-select-field-with-field-demo.tsx";
-import CurrencySelectFieldCustomFlagDemo from "../../../src/components/currency-select-field-custom-flag-demo.tsx";
 
 ## Overview
 
@@ -89,41 +88,6 @@ export default function Example() {
 }
 ```
 
-### Custom Country Code Mapping
-
-Use `getCountryCode` to map currencies to country codes when the `countryCode` property is not available on your currency objects.
-
-<Preview>
-  <CurrencySelectFieldCustomFlagDemo />
-</Preview>
-
-```tsx
-import { CurrencySelectField, type Currency } from "@px-ui/forms";
-import { useState } from "react";
-
-// Custom mapping for currencies without countryCode
-const CURRENCY_TO_COUNTRY: Record<string, string> = {
-  USD: "US",
-  CAD: "CA",
-  EUR: "EU",
-  GBP: "GB",
-};
-
-export default function Example() {
-  const [value, setValue] = useState<Currency | null>(null);
-
-  return (
-    <CurrencySelectField
-      currencies={currencies}
-      value={value}
-      onValueChange={setValue}
-      placeholder="Select currency"
-      getCountryCode={(currency) => CURRENCY_TO_COUNTRY[currency.abbr]}
-    />
-  );
-}
-```
-
 ## API Reference
 
 ### CurrencySelectField
@@ -146,7 +110,6 @@ The main currency select component.
 | `widthVariant`        | `'enforced' \| 'full'`                   | `'enforced'`        | Width variant for the trigger                                                                                              |
 | `contentWidthVariant` | `'trigger' \| 'fit' \| 'enforced'`       | `'trigger'`         | Width variant for the dropdown content                                                                                     |
 | `triggerClassName`    | `string`                                 | -                   | Additional CSS classes for the trigger element                                                                             |
-| `getCountryCode`      | `(currency: Currency) => string \| null` | -                   | Function to get the country code for a currency. If not provided, uses the `countryCode` property from the currency object |
 | `isLoading`           | `boolean`                                | `false`             | Whether the select is in a loading state                                                                                   |
 | `contentProps`        | `object`                                 | -                   | Additional props for Combobox.Content component                                                                            |
 | `inputRef`            | `React.Ref<HTMLInputElement>`            | -                   | Ref to the input element                                                                                                   |
