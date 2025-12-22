@@ -3,3 +3,10 @@ export { ComboboxField } from "./components/combobox-field";
 export { FileUploadField } from "./components/file-upload-field";
 export * as Field from "./components/field";
 export { FormInput, FormTextarea, FormCheckbox } from "./components/form";
+export {
+  FormPostalCode,
+  PostalCodeInput,
+  PostalCodeLabel,
+  type PostalCodeInputProps,
+  type PostalCodeLabelProps,
+} from "./components/postal-code";

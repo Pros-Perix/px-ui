@@ -1,31 +1,26 @@
-import React, { useMemo } from "react";
+import React, { useState } from "react";
 import { Input, cn } from "@px-ui/core";
-
 import {
-  POSTAL_CODE_PATTERN,
-  type SupportedPostalCountry,
-  getPostalCodePattern,
-  getPostalCodeSchema,
-} from "../schemas/postal-code";
-import { usePostalCodeValidation } from "../hooks/use-postal-code-validation";
+  Controller,
+  type ControllerProps,
+  type FieldPath,
+  type FieldValues,
+} from "react-hook-form";
+import * as Field from "./field";
 
-export {
-  POSTAL_CODE_PATTERN,
-  getPostalCodePattern,
-  getPostalCodeSchema,
-  type SupportedPostalCountry,
-  usePostalCodeValidation,
+// Basic postal code patterns
+const POSTAL_CODE_PATTERNS: Record<string, { regex: string; hint: string }> = {
+  US: { regex: "^\\d{5}(-\\d{4})?$", hint: "e.g. 12345 or 12345-6789" },
+  CA: { regex: "^[A-Za-z]\\d[A-Za-z] ?\\d[A-Za-z]\\d$", hint: "e.g. A1A 1A1" },
+  GB: { regex: "^[A-Z]{1,2}\\d{1,2}[A-Z]? ?\\d[A-Z]{2}$", hint: "e.g. SW1A 1AA" },
+  DEFAULT: { regex: "^[A-Za-z0-9][A-Za-z0-9\\- ]{0,10}[A-Za-z0-9]$", hint: "e.g. 12345" },
 };
 
-export const usePostalCodeField = ({
-  countryAbbr,
-}: { countryAbbr?: string } = {}) =>
-  useMemo(() => {
-    const pattern = getPostalCodePattern(countryAbbr);
-    return { hint: pattern.hint, regex: new RegExp(pattern.regex, "i") };
-  }, [countryAbbr]);
+const getPostalCodePattern = (country?: string) => {
+  return POSTAL_CODE_PATTERNS[country?.toUpperCase() || "DEFAULT"] || POSTAL_CODE_PATTERNS.DEFAULT;
+};
 
-interface PostalCodeLabelProps
+export interface PostalCodeLabelProps
   extends React.HTMLAttributes<HTMLSpanElement> {
   patternHint?: string;
   hintClassName?: string;
@@ -94,19 +89,35 @@ export const PostalCodeInput = React.forwardRef<
       ...restProps
     } = props;
 
-    const { hint, regex, error, onBlur, onChange } = usePostalCodeValidation({
-      country,
-      value,
-    });
-    const pattern = regex.source;
+    const [error, setError] = useState<string>("");
+    const pattern = getPostalCodePattern(country);
+    const regex = new RegExp(pattern.regex, "i");
+    
     const inputTitle =
-      title || (hint ? `Enter ZIP/Postal code in this pattern ${hint}` : undefined);
+      title || (pattern.hint ? `Enter ZIP/Postal code in this pattern ${pattern.hint}` : undefined);
+
+    const handleBlur = (event: React.FocusEvent<HTMLInputElement>) => {
+      const inputValue = event.target.value;
+      if (inputValue && !regex.test(inputValue)) {
+        setError(`Invalid postal code format. Expected: ${pattern.hint}`);
+      } else {
+        setError("");
+      }
+      userOnBlur?.(event);
+    };
+
+    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+      if (error) {
+        setError("");
+      }
+      userOnChange?.(event);
+    };
 
     return (
       <div className={cn("flex flex-col gap-1.5", containerClassName)}>
         <Input
           ref={ref}
-          pattern={pattern}
+          pattern={pattern.regex}
           inputMode="text"
           autoComplete="postal-code"
           title={inputTitle}
@@ -114,21 +125,15 @@ export const PostalCodeInput = React.forwardRef<
           className={className}
           value={value}
           defaultValue={defaultValue}
-          onBlur={(event) => {
-            onBlur(event);
-            userOnBlur?.(event);
-          }}
-          onChange={(event) => {
-            onChange(event);
-            userOnChange?.(event);
-          }}
+          onBlur={handleBlur}
+          onChange={handleChange}
           {...restProps}
         />
         {error ? (
           <p className="text-ppx-xs text-ppx-red-5 font-medium">{error}</p>
-        ) : showHint && hint ? (
+        ) : showHint && pattern.hint ? (
           <p className={cn("text-ppx-xs text-ppx-muted-foreground", hintClassName)}>
-            {hint}
+            {pattern.hint}
           </p>
         ) : null}
       </div>
@@ -138,3 +143,84 @@ export const PostalCodeInput = React.forwardRef<
 
 PostalCodeInput.displayName = "PostalCodeInput";
 
+// Form integration with react-hook-form
+type FormPostalCodeProps<
+  TFieldValues extends FieldValues = FieldValues,
+  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
+  TTransformedValues = TFieldValues,
+> = {
+  name: TName;
+  label: React.ReactNode;
+  description?: React.ReactNode;
+  control: ControllerProps<TFieldValues, TName, TTransformedValues>["control"];
+  required?: boolean;
+  placeholder?: string;
+  country?: string;
+  showHint?: boolean;
+  hintClassName?: string;
+  containerClassName?: string;
+};
+
+export function FormPostalCode<
+  TFieldValues extends FieldValues = FieldValues,
+  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
+  TTransformedValues = TFieldValues,
+>({
+  control,
+  name,
+  label,
+  description,
+  required,
+  placeholder,
+  country,
+  showHint = true,
+  hintClassName,
+  containerClassName,
+}: FormPostalCodeProps<TFieldValues, TName, TTransformedValues>) {
+  return (
+    <Controller
+      control={control}
+      name={name}
+      render={({ field, fieldState }) => {
+        const labelElement = (
+          <Field.Label
+            className={required ? "required" : ""}
+            htmlFor={field.name}
+          >
+            {label}
+          </Field.Label>
+        );
+
+        const descriptionElement = description ? (
+          <Field.Description>{description}</Field.Description>
+        ) : null;
+
+        const controlElement = (
+          <PostalCodeInput
+            {...field}
+            id={field.name}
+            country={country}
+            showHint={showHint}
+            hintClassName={hintClassName}
+            containerClassName={containerClassName}
+            placeholder={placeholder}
+            invalid={fieldState.invalid}
+          />
+        );
+
+        const errorElement = fieldState.invalid && (
+          <Field.Error errors={[fieldState.error]} />
+        );
+
+        return (
+          <Field.Root>
+            {labelElement}
+            {controlElement}
+            {descriptionElement}
+            {errorElement}
+          </Field.Root>
+        );
+      }}
+    />
+  );
+}
