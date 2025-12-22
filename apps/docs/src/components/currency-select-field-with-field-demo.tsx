@@ -2,12 +2,12 @@ import { CurrencySelectField, Field, type Currency } from "@px-ui/forms";
 import { useState } from "react";
 
 const currencies: Currency[] = [
-  { abbr: "USD", name: "United States dollar", countryCode: "US" },
-  { abbr: "CAD", name: "Canadian dollar", countryCode: "CA" },
-  { abbr: "EUR", name: "Euro", countryCode: "EU" },
-  { abbr: "GBP", name: "British Pound", countryCode: "GB" },
-  { abbr: "INR", name: "Indian Rupee", countryCode: "IN" },
-  { abbr: "AUD", name: "Australian Dollar", countryCode: "AU" },
+  { id: "1", abbr: "USD", name: "United States dollar", value: "USD" },
+  { id: "2", abbr: "CAD", name: "Canadian dollar", value: "CAD" },
+  { id: "3", abbr: "EUR", name: "Euro", value: "EUR" },
+  { id: "4", abbr: "GBP", name: "British Pound", value: "GBP" },
+  { id: "5", abbr: "INR", name: "Indian Rupee", value: "INR" },
+  { id: "6", abbr: "AUD", name: "Australian Dollar", value: "AUD" },
 ];
 
 export default function CurrencySelectFieldWithFieldDemo() {

@@ -1,6 +1,7 @@
 import * as React from "react";
 import { Combobox, cn, InputGroup, ChevronDownIcon } from "@px-ui/core";
 import ReactCountryFlag from "react-country-flag";
+import { CURRENCY_FLAG_CODE } from "../constants/currency-flag-code";
 const { BaseCombobox } = Combobox;
 
 // ============================================================================
@@ -11,12 +12,14 @@ const { BaseCombobox } = Combobox;
  * Currency type representing a currency option
  */
 export interface Currency {
-  /** Currency abbreviation (e.g., "USD", "EUR") */
-  abbr: string;
+  /** Unique identifier for the currency */
+  id: string;
   /** Full currency name (e.g., "United States dollar") */
   name: string;
-  /** Optional country code for flag display (e.g., "US", "EU") */
-  countryCode?: string;
+  /** Currency abbreviation (e.g., "USD", "EUR") */
+  abbr: string;
+  /** Currency value/code used for form submission */
+  value: string;
 }
 
 type AllRootProps = React.ComponentProps<
@@ -112,13 +115,11 @@ function CurrencyFlag({ countryCode, className }: CurrencyFlagProps) {
 
 interface CurrencyOptionContentProps {
   currency: Currency;
-  countryCode: string | null | undefined;
 }
 
-function CurrencyOptionContent({
-  currency,
-  countryCode,
-}: CurrencyOptionContentProps) {
+function CurrencyOptionContent({ currency }: CurrencyOptionContentProps) {
+  const countryCode = CURRENCY_FLAG_CODE[currency.abbr];
+
   return (
     <div className="flex items-center gap-2.5">
       <CurrencyFlag countryCode={countryCode} />
@@ -135,14 +136,16 @@ function CurrencyOptionContent({
 // ============================================================================
 
 /**
- * A currency select component with flag display and search functionality.
+ * A currency select component with search functionality and flag display.
+ * Country flags are automatically displayed based on the currency abbreviation
+ * using the built-in CURRENCY_FLAG_CODE mapping.
  *
  * @example
  * ```tsx
  * const currencies = [
- *   { abbr: "USD", name: "United States dollar", countryCode: "US" },
- *   { abbr: "EUR", name: "Euro", countryCode: "EU" },
- *   { abbr: "GBP", name: "British Pound", countryCode: "GB" },
+ *   { id: "1", abbr: "USD", name: "United States dollar", value: "USD" },
+ *   { id: "2", abbr: "EUR", name: "Euro", value: "EUR" },
+ *   { id: "3", abbr: "GBP", name: "British Pound", value: "GBP" },
  * ];
  *
  * <CurrencySelectField
@@ -186,7 +189,7 @@ export function CurrencySelectField({
       disabled={disabled}
       invalid={invalid}
       isLoading={isLoading}
-      isItemEqualToValue={(item, val) => item.abbr === val.abbr}
+      isItemEqualToValue={(item, val) => item.id === val.id}
       itemToStringLabel={itemToStringLabel}
       inputRef={inputRef}
       readOnly={readOnly}
@@ -201,7 +204,7 @@ export function CurrencySelectField({
       >
         {value && (
           <InputGroup.Addon align="inline-start" className="pl-3 pr-0">
-            <CurrencyFlag countryCode={value.countryCode} />
+            <CurrencyFlag countryCode={CURRENCY_FLAG_CODE[value.abbr]} />
           </InputGroup.Addon>
         )}
 
@@ -229,7 +232,7 @@ export function CurrencySelectField({
         </InputGroup.Addon>
       </InputGroup.Root>
 
-      <input type="hidden" name={name} value={value?.abbr ?? ""} />
+      <input type="hidden" name={name} value={value?.value ?? ""} />
 
       <Combobox.Content
         widthVariant={contentWidthVariant}
@@ -239,11 +242,8 @@ export function CurrencySelectField({
       >
         <Combobox.List>
           {(currency: Currency) => (
-            <Combobox.Item key={currency.abbr} value={currency}>
-              <CurrencyOptionContent
-                currency={currency}
-                countryCode={currency.countryCode}
-              />
+            <Combobox.Item key={currency.id} value={currency}>
+              <CurrencyOptionContent currency={currency} />
             </Combobox.Item>
           )}
         </Combobox.List>

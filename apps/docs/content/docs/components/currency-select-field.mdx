@@ -1,6 +1,6 @@
 ---
 title: Currency Select Field
-description: A specialized select component for currency selection with flag display and search functionality
+description: A specialized select component for currency selection with search functionality and automatic flag display
 apiReference: https://base-ui.com/react/components/combobox
 ---
 
@@ -9,7 +9,7 @@ import CurrencySelectFieldWithFieldDemo from "../../../src/components/currency-s
 
 ## Overview
 
-CurrencySelectField is a specialized select component designed for currency selection. It displays currencies with their flags, abbreviations, and full names, and includes built-in search functionality to quickly filter through currency options.
+CurrencySelectField is a specialized select component designed for currency selection. It displays currencies with their country flags, abbreviations, and full names. The component includes built-in search functionality and automatically displays country flags based on the currency abbreviation using the built-in `CURRENCY_FLAG_CODE` mapping.
 
 ## Import
 
@@ -28,12 +28,12 @@ import { CurrencySelectField, type Currency } from "@px-ui/forms";
 import { useState } from "react";
 
 const currencies: Currency[] = [
-  { abbr: "USD", name: "United States dollar", countryCode: "US" },
-  { abbr: "CAD", name: "Canadian dollar", countryCode: "CA" },
-  { abbr: "EUR", name: "Euro", countryCode: "EU" },
-  { abbr: "GBP", name: "British Pound", countryCode: "GB" },
-  { abbr: "INR", name: "Indian Rupee", countryCode: "IN" },
-  { abbr: "AUD", name: "Australian Dollar", countryCode: "AU" },
+  { id: "1", abbr: "USD", name: "United States dollar", value: "USD" },
+  { id: "2", abbr: "CAD", name: "Canadian dollar", value: "CAD" },
+  { id: "3", abbr: "EUR", name: "Euro", value: "EUR" },
+  { id: "4", abbr: "GBP", name: "British Pound", value: "GBP" },
+  { id: "5", abbr: "INR", name: "Indian Rupee", value: "INR" },
+  { id: "6", abbr: "AUD", name: "Australian Dollar", value: "AUD" },
 ];
 
 export default function Example() {
@@ -105,7 +105,7 @@ The main currency select component.
 | `disabled`            | `boolean`                                | `false`             | Whether the select is disabled                                                                                             |
 | `invalid`             | `boolean`                                | `false`             | Whether the select is in an invalid state                                                                                  |
 | `readOnly`            | `boolean`                                | `false`             | Whether the select is read-only                                                                                            |
-| `name`                | `string`                                 | -                   | Name attribute for form submission (submits the currency abbreviation)                                                     |
+| `name`                | `string`                                 | -                   | Name attribute for form submission (submits the currency value)                                                            |
 | `size`                | `'default' \| 'sm'`                      | `'default'`         | Size variant for the trigger                                                                                               |
 | `widthVariant`        | `'enforced' \| 'full'`                   | `'enforced'`        | Width variant for the trigger                                                                                              |
 | `contentWidthVariant` | `'trigger' \| 'fit' \| 'enforced'`       | `'trigger'`         | Width variant for the dropdown content                                                                                     |
@@ -120,18 +120,33 @@ _\* Required prop_
 
 ```tsx
 interface Currency {
-  /** Currency abbreviation (e.g., "USD", "EUR") */
-  abbr: string;
+  /** Unique identifier for the currency */
+  id: string;
   /** Full currency name (e.g., "United States dollar") */
   name: string;
-  /** Optional country code for flag display (e.g., "US", "EU") */
-  countryCode?: string;
+  /** Currency abbreviation (e.g., "USD", "EUR") */
+  abbr: string;
+  /** Currency value/code used for form submission */
+  value: string;
 }
 ```
 
 ## Notes
 
-- The component uses `react-country-flag` for SVG flag rendering - ensure you have it installed as a peer dependency
 - Search/filter functionality is built-in - users can type to filter currencies by abbreviation or name
-- The `name` prop submits the currency abbreviation (e.g., "USD") to forms
-- For currencies like EUR that don't map to a single country, you can use special country codes like "EU"
+- The `name` prop submits the currency `value` to forms
+- Currencies are compared by their `id` property for selection state
+- Country flags are automatically displayed based on the currency `abbr` using the built-in `CURRENCY_FLAG_CODE` mapping
+- The component uses `react-country-flag` for SVG flag rendering
+- For currencies like EUR that don't map to a single country, the mapping uses special codes like "EU"
+
+## CURRENCY_FLAG_CODE
+
+The component exports `CURRENCY_FLAG_CODE`, a constant that maps currency abbreviations to country codes. This is used internally to display country flags. You can import it if you need to check which currencies have flag support:
+
+```tsx
+import { CURRENCY_FLAG_CODE } from "@px-ui/forms";
+
+// Check if a currency has a flag mapping
+const hasFlag = currency.abbr in CURRENCY_FLAG_CODE;
+```
