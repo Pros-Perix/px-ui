@@ -1,0 +1,197 @@
+---
+title: Postal Code Input
+description: Country-aware ZIP/Postal code input with pattern hints and validation helpers
+---
+
+import PostalCodeBasicDemo from "../../../src/components/postal-code-basic-demo.tsx";
+import PostalCodeFormDemo from "../../../src/components/postal-code-form-demo.tsx";
+
+## Overview
+
+The PostalCodeInput component provides ZIP/Postal code entry with country-aware regex patterns and optional hints. It ships with helper utilities to fetch patterns, display label hints, and wire validation rules for form libraries like react-hook-form. Pass a country name or ISO code directly—no dropdown needed. Hint text is shown alongside the label (not inside the input).
+
+## Import
+
+```tsx
+import {
+  PostalCodeInput,
+  PostalCodeLabel,
+  usePostalCodeField,
+} from "@px-ui/forms";
+```
+
+## Usage
+
+<Preview>
+  <PostalCodeBasicDemo />
+</Preview>
+
+<CodeBlock>
+```tsx
+import {
+  PostalCodeInput,
+  PostalCodeLabel,
+  usePostalCodeField,
+} from "@px-ui/forms";
+import { useState } from "react";
+
+const countries = [
+  "United States",
+  "Canada",
+  "United Kingdom",
+  "India",
+  "Ireland",
+];
+
+export default function Example() {
+  const [country, setCountry] = useState("United States");
+  const [postalCode, setPostalCode] = useState("");
+  const { hint } = usePostalCodeField({ countryAbbr: country });
+
+  return (
+    <div className="flex flex-col gap-2">
+      <label className="text-ppx-sm font-medium">
+        Country
+        <select
+          className="mt-1 h-input w-full rounded-input border border-ppx-neutral-5 bg-white px-3 text-ppx-sm text-ppx-foreground outline-none focus:border-ppx-primary-focus"
+          value={country}
+          onChange={(e) => setCountry(e.target.value)}
+        >
+          {countries.map((name) => (
+            <option key={name} value={name}>
+              {name}
+            </option>
+          ))}
+        </select>
+      </label>
+
+      <PostalCodeLabel patternHint={hint}>ZIP/Postal Code</PostalCodeLabel>
+      <PostalCodeInput
+        country={country}
+        value={postalCode}
+        onChange={(event) => setPostalCode(event.target.value)}
+        placeholder="Enter ZIP/Postal Code"
+      />
+    </div>
+  );
+}
+```
+</CodeBlock>
+
+## Examples
+
+### With react-hook-form
+
+Use `usePostalCodeField` to set validation rules and show the expected pattern hint alongside the label.
+
+<Preview>
+  <PostalCodeFormDemo />
+</Preview>
+
+<CodeBlock>
+```tsx
+import { Controller, useForm } from "react-hook-form";
+import { Button } from "@px-ui/core";
+import {
+  PostalCodeInput,
+  PostalCodeLabel,
+  usePostalCodeField,
+} from "@px-ui/forms";
+
+interface FormData {
+  postalCode: string;
+}
+
+export default function Example() {
+  const country = "Ireland";
+  const { control, handleSubmit, formState: { errors } } = useForm<FormData>({
+    defaultValues: { postalCode: "" },
+  });
+
+  const { regex, hint } = usePostalCodeField({ countryAbbr: country });
+
+  return (
+    <form onSubmit={handleSubmit(console.log)} className="space-y-3">
+      <PostalCodeLabel patternHint={hint}>
+        ZIP/Postal Code ({country})
+      </PostalCodeLabel>
+      <Controller
+        control={control}
+        name="postalCode"
+        rules={{
+          required: "Postal code is required",
+          pattern: {
+            value: regex,
+            message: hint
+              ? `Use a postal code like ${hint}`
+              : "Enter a valid postal code",
+          },
+        }}
+        render={({ field }) => (
+          <PostalCodeInput
+            {...field}
+            country={country}
+            invalid={!!errors.postalCode}
+          />
+        )}
+      />
+      {errors.postalCode ? (
+        <p className="text-ppx-xs text-ppx-red-5">
+          {errors.postalCode.message}
+        </p>
+      ) : null}
+
+      <Button type="submit">Validate</Button>
+    </form>
+  );
+}
+```
+</CodeBlock>
+
+## API Reference
+
+### PostalCodeInput
+
+Country-aware ZIP/Postal code input.
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `country` | `string` | `"DEFAULT"` | Country name (e.g., `"United States"`) or ISO-3166 alpha-2 code used to pick the regex pattern |
+| `containerClassName` | `string` | - | Classes for the wrapping container |
+| `hintClassName` | `string` | - | Classes for the hint text (via `PostalCodeLabel`) |
+
+**Inherited Props:** All props from `Input` including `value`, `onChange`, `placeholder`, `disabled`, and `invalid` for error styling.
+
+### PostalCodeLabel
+
+Label helper that displays the pattern hint alongside your field label.
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `patternHint` | `string` | - | Hint text that appears to the right of the label |
+| `hintClassName` | `string` | - | Classes for the hint text |
+
+### usePostalCodeField
+
+Returns the regex and hint for the provided country code.
+
+| Return | Type | Description |
+| --- | --- | --- |
+| `regex` | `RegExp` | Regex for the country (case-insensitive) |
+| `hint` | `string` | Human friendly hint such as `(e.g. 01505)` |
+
+### getPostalCodePattern
+
+Retrieve the raw pattern object without creating a RegExp instance.
+
+| Param | Type | Description |
+| --- | --- | --- |
+| `country` | `string` | ISO-3166 alpha-2 code |
+
+## Notes
+
+- Supported patterns cover US, CA, GB, IN, and IE, with a reasonable default fallback. Pass either the country name (e.g., `"Canada"`) or its ISO code (e.g., `"CA"`).
+- Regex matching is case-insensitive to allow lowercase postal codes.
+- Show pattern hints with `PostalCodeLabel`; the input itself no longer renders hint text.
+- The `pattern` attribute is applied to the underlying input, so native validation complements your form library.
+

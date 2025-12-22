@@ -1,5 +1,33 @@
 # @px-ui/forms
 
+## 4.1.0
+
+### Minor Changes
+
+- 901cee3: form field accept the placeholder prop
+
+## 4.0.0
+
+### Minor Changes
+
+- 2d394da: Introduced file upload component
+
+### Patch Changes
+
+- Updated dependencies [2d394da]
+  - @px-ui/core@2.1.0
+
+## 3.0.0
+
+### Major Changes
+
+- d710e8f: Test deploy
+
+### Patch Changes
+
+- Updated dependencies [d710e8f]
+  - @px-ui/core@2.0.0
+
 ## 2.0.0
 
 ### Minor Changes

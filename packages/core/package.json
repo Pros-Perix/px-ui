@@ -1,6 +1,6 @@
 {
   "name": "@px-ui/core",
-  "version": "1.5.0",
+  "version": "2.1.0",
   "description": "A modern React component library built with Tailwind CSS",
   "type": "module",
   "module": "./dist/index.js",
@@ -46,6 +46,7 @@
     "react-dom": ">=16.8.0"
   },
   "dependencies": {
+    "@base-ui/react": "^1.0.0",
     "@base-ui-components/react": "1.0.0-beta.4",
     "class-variance-authority": "^0.7.1",
     "classnames": ">2.0.0",

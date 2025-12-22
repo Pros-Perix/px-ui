@@ -26,12 +26,16 @@ export default function FormMixedDemo() {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 w-full max-w-md">
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className="w-full max-w-md space-y-4"
+    >
       <FormInput
         control={control}
         name="name"
         label="Name"
         description="Your full name"
+        placeholder="John Doe"
         required
       />
       <FormInput
@@ -39,6 +43,7 @@ export default function FormMixedDemo() {
         name="email"
         label="Email"
         description="We'll never share your email"
+        placeholder="john@example.com"
         required
       />
       <FormTextarea
@@ -46,6 +51,7 @@ export default function FormMixedDemo() {
         name="message"
         label="Message"
         description="Tell us what you think"
+        placeholder="Share your thoughts with us..."
         required
       />
       <FormCheckbox
