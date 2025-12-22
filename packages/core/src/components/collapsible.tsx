@@ -1,9 +1,10 @@
 import * as React from "react";
-import { Collapsible as BaseCollapsible } from "@base-ui/react/collapsible";
+import { Collapsible as BaseCollapsible } from "@base-ui-components/react";
 
 import { cn } from "../utils";
+import ChevronDownIcon from "../icons/chevron-down-icon";
 
-function Root({
+export function Root({
   className,
   ...props
 }: React.ComponentProps<typeof BaseCollapsible.Root>) {
@@ -16,15 +17,27 @@ function Root({
   );
 }
 
-function Trigger({
-  className,
-  ...props
-}: React.ComponentProps<typeof BaseCollapsible.Trigger>) {
+export function Trigger(
+  props: React.ComponentProps<typeof BaseCollapsible.Trigger>,
+) {
   return (
     <BaseCollapsible.Trigger
       data-slot="collapsible-trigger"
+      {...props}
+      className={cn("group flex items-center gap-2", props.className)}
+    />
+  );
+}
+
+export function Panel({
+  className,
+  ...props
+}: React.ComponentProps<typeof BaseCollapsible.Panel>) {
+  return (
+    <BaseCollapsible.Panel
+      data-slot="collapsible-content"
       className={cn(
-        "flex w-full items-center justify-between gap-2 rounded-ppx-s px-3 py-2 text-left text-ppx-neutral-18 transition-colors hover:bg-ppx-neutral-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ppx-primary-b-5",
+        "flex h-[var(--collapsible-panel-height)] w-full flex-col overflow-hidden transition-all duration-150 ease-out data-[ending-style]:h-0 data-[starting-style]:h-0 [&[hidden]:not([hidden='until-found'])]:hidden",
         className,
       )}
       {...props}
@@ -32,25 +45,8 @@ function Trigger({
   );
 }
 
-function Panel({
-  className,
-  ...props
-}: React.ComponentProps<typeof BaseCollapsible.Panel>) {
+export function ToggleIcon() {
   return (
-    <BaseCollapsible.Panel
-      data-slot="collapsible-content"
-      className={cn("w-full data-[state=closed]:hidden", className)}
-      {...props}
-    />
+    <ChevronDownIcon className="rotate-270 group-data-[panel-open]:rotate-360 transition-all ease-out" />
   );
 }
-
-const Collapsible = Object.assign(Root, {
-  Root,
-  Trigger,
-  Panel,
-});
-
-export { Collapsible, Trigger as CollapsibleTrigger, Panel as CollapsibleContent };
-
-

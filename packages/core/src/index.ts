@@ -1,4 +1,5 @@
 // This tells the bundler to include the CSS file on the build output
+import type { Collapsible } from "@base-ui-components/react";
 import "./index.css";
 
 // Components with namespace conflicts - export as namespaces
@@ -16,6 +17,7 @@ export * as BlockCheckboxGroup from "./components/block-checkbox-group";
 export * as BlockRadioGroup from "./components/block-radio-group";
 export * as Breadcrumbs from "./components/breadcrumbs";
 export * as RadioGroup from "./components/radio-group";
+export * as Collapsible from "./components/collapsible";
 export { Calendar } from "./components/calendar";
 
 // Simple components - export directly
@@ -31,7 +33,6 @@ export * from "./components/switch";
 export * from "./components/separator";
 export * from "./components/date-picker";
 export * from "./components/file-upload";
-export * from "./components/collapsible";
 
 // Icons
 export { default as FileIcon } from "./icons/file-icon";
