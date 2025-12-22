@@ -16,6 +16,7 @@ export * as BlockCheckboxGroup from "./components/block-checkbox-group";
 export * as BlockRadioGroup from "./components/block-radio-group";
 export * as Breadcrumbs from "./components/breadcrumbs";
 export * as RadioGroup from "./components/radio-group";
+export * as Collapsible from "./components/collapsible";
 export { Calendar } from "./components/calendar";
 
 // Simple components - export directly

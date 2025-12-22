@@ -1,0 +1,184 @@
+---
+title: Collapsible
+description: A component that shows or hides content with a smooth expand/collapse animation
+apiReference: https://base-ui.com/react/components/collapsible
+---
+
+import { CollapsibleBasicDemo } from "../../../src/components/collapsible-basic-demo";
+import { CollapsibleWithIconDemo } from "../../../src/components/collapsible-with-icon-demo";
+import { CollapsibleNestedDemo } from "../../../src/components/collapsible-nested-demo";
+import { CollapsibleControlledDemo } from "../../../src/components/collapsible-controlled-demo";
+
+## Overview
+
+The Collapsible component provides an expandable/collapsible container for content. It includes smooth height-based animations and a toggle icon that rotates to indicate the open/closed state.
+
+## Import
+
+```tsx
+import { Collapsible } from "@px-ui/core";
+```
+
+## Usage
+
+<Preview>
+  <CollapsibleBasicDemo />
+</Preview>
+
+<CodeBlock>
+```tsx
+<Collapsible.Root className="w-md mx-auto">
+      <Collapsible.Trigger className="text-ppx-sm">
+        <Collapsible.ToggleIcon />
+        <span>Show more details</span>
+      </Collapsible.Trigger>
+      <Collapsible.Panel>
+        <div className="text-ppx-sm mt-2">
+          <p>
+            This is the collapsible content that can be expanded or collapsed.
+            Click the trigger above to toggle visibility.
+          </p>
+        </div>
+      </Collapsible.Panel>
+    </Collapsible.Root>
+```
+</CodeBlock>
+
+## Examples
+
+### With Custom Trigger
+
+Use a custom styled trigger with the toggle icon to create an interactive header.
+
+<Preview>
+  <CollapsibleWithIconDemo />
+</Preview>
+
+<CodeBlock>
+```tsx
+<Collapsible.Root>
+  <Collapsible.Trigger className="group flex w-full items-center justify-between rounded-md border px-4 py-3 hover:bg-gray-50">
+    <span className="font-medium">Advanced Settings</span>
+    <Collapsible.ToggleIcon />
+  </Collapsible.Trigger>
+  <Collapsible.Panel>
+    <div className="px-4 py-3">
+      <p>Configure advanced options here.</p>
+    </div>
+  </Collapsible.Panel>
+</Collapsible.Root>
+```
+</CodeBlock>
+
+### Nested Collapsibles
+
+Collapsible components can be nested to create hierarchical content structures.
+
+<Preview>
+  <CollapsibleNestedDemo />
+</Preview>
+
+<CodeBlock>
+```tsx
+<Collapsible.Root>
+  <Collapsible.Trigger className="group flex items-center gap-2">
+    <Collapsible.ToggleIcon />
+    <span>Parent Section</span>
+  </Collapsible.Trigger>
+  <Collapsible.Panel>
+    <div className="ml-4">
+      <Collapsible.Root>
+        <Collapsible.Trigger className="group flex items-center gap-2">
+          <Collapsible.ToggleIcon />
+          <span>Child Section</span>
+        </Collapsible.Trigger>
+        <Collapsible.Panel>
+          <p>Nested content here.</p>
+        </Collapsible.Panel>
+      </Collapsible.Root>
+    </div>
+  </Collapsible.Panel>
+</Collapsible.Root>
+```
+</CodeBlock>
+
+### Controlled
+
+Use the `open` and `onOpenChange` props to control the collapsible state externally.
+
+<Preview>
+  <CollapsibleControlledDemo />
+</Preview>
+
+<CodeBlock>
+```tsx
+const [open, setOpen] = React.useState(false);
+
+<Collapsible.Root open={open} onOpenChange={setOpen}>
+  <Collapsible.Trigger className="text-ppx-sm">
+    <Collapsible.ToggleIcon />
+    <span>Click here or use button above</span>
+  </Collapsible.Trigger>
+  <Collapsible.Panel>
+    <div className="mt-2 text-ppx-sm text-gray-600">
+      <p>This collapsible is controlled externally.</p>
+    </div>
+  </Collapsible.Panel>
+</Collapsible.Root>
+```
+</CodeBlock>
+
+## Anatomy
+
+Components that make up `Collapsible`:
+
+### `Collapsible.Root`
+
+The root container that manages the collapsible state and coordinates all child components.
+
+**Custom Props:**
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `className` | `string` | - | Additional CSS classes |
+| `open` | `boolean` | - | Controlled open state |
+| `defaultOpen` | `boolean` | `false` | Default open state (uncontrolled) |
+| `onOpenChange` | `(open: boolean) => void` | - | Callback when open state changes |
+
+**Inherited Props:** Inherits all props from [Base UI Collapsible.Root](https://base-ui.com/react/components/collapsible#root)
+
+---
+
+### `Collapsible.Trigger`
+
+The interactive element that toggles the collapsible open/closed state. Should be used with `group` class to enable icon rotation.
+
+**Inherited Props:** Inherits all props from [Base UI Collapsible.Trigger](https://base-ui.com/react/components/collapsible#trigger)
+
+---
+
+### `Collapsible.Panel`
+
+The container for content that expands and collapses with a smooth animation.
+
+**Custom Props:**
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `className` | `string` | - | Additional CSS classes |
+
+**Inherited Props:** Inherits all props from [Base UI Collapsible.Panel](https://base-ui.com/react/components/collapsible#panel)
+
+---
+
+### `Collapsible.ToggleIcon`
+
+A chevron icon that rotates 90 degrees when the collapsible is open. Must be used inside a trigger with `group` class.
+
+**Note:** This component has no props. It uses the parent trigger's `group-data-[panel-open]` state to rotate.
+
+---
+
+## API Reference
+
+See the [Anatomy](#anatomy) section above for detailed component props.
