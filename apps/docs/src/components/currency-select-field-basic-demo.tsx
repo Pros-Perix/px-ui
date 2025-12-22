@@ -2,18 +2,18 @@ import { CurrencySelectField, type Currency } from "@px-ui/forms";
 import { useState } from "react";
 
 const currencies: Currency[] = [
-  { abbr: "USD", name: "United States dollar", countryCode: "US" },
-  { abbr: "CAD", name: "Canadian dollar", countryCode: "CA" },
-  { abbr: "EUR", name: "Euro", countryCode: "EU" },
-  { abbr: "GBP", name: "British Pound", countryCode: "GB" },
-  { abbr: "INR", name: "Indian Rupee", countryCode: "IN" },
-  { abbr: "AUD", name: "Australian Dollar", countryCode: "AU" },
-  { abbr: "NZD", name: "New Zealand Dollar", countryCode: "NZ" },
-  { abbr: "BGN", name: "Bulgarian Lev", countryCode: "BG" },
-  { abbr: "CZK", name: "Czech Koruna", countryCode: "CZ" },
-  { abbr: "JPY", name: "Japanese Yen", countryCode: "JP" },
-  { abbr: "CHF", name: "Swiss Franc", countryCode: "CH" },
-  { abbr: "CNY", name: "Chinese Yuan", countryCode: "CN" },
+  { id: "1", abbr: "USD", name: "United States dollar", value: "USD" },
+  { id: "2", abbr: "CAD", name: "Canadian dollar", value: "CAD" },
+  { id: "3", abbr: "EUR", name: "Euro", value: "EUR" },
+  { id: "4", abbr: "GBP", name: "British Pound", value: "GBP" },
+  { id: "5", abbr: "INR", name: "Indian Rupee", value: "INR" },
+  { id: "6", abbr: "AUD", name: "Australian Dollar", value: "AUD" },
+  { id: "7", abbr: "NZD", name: "New Zealand Dollar", value: "NZD" },
+  { id: "8", abbr: "BGN", name: "Bulgarian Lev", value: "BGN" },
+  { id: "9", abbr: "CZK", name: "Czech Koruna", value: "CZK" },
+  { id: "10", abbr: "JPY", name: "Japanese Yen", value: "JPY" },
+  { id: "11", abbr: "CHF", name: "Swiss Franc", value: "CHF" },
+  { id: "12", abbr: "CNY", name: "Chinese Yuan", value: "CNY" },
 ];
 
 export default function CurrencySelectFieldBasicDemo() {
