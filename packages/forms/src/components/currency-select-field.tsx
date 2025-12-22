@@ -67,12 +67,6 @@ export interface CurrencySelectFieldProps extends RootProps {
   triggerClassName?: string;
 
   /**
-   * Function to get the country code for a currency (used for flag display)
-   * If not provided, uses the `countryCode` property from the currency object
-   */
-  getCountryCode?: (currency: Currency) => string | null | undefined;
-
-  /**
    * Whether the select is loading
    */
   isLoading?: boolean;
@@ -171,24 +165,12 @@ export function CurrencySelectField({
   widthVariant,
   contentWidthVariant = "trigger",
   triggerClassName,
-  getCountryCode,
   isLoading,
   contentProps,
   inputRef,
   readOnly,
 }: CurrencySelectFieldProps) {
   const triggerRef = React.useRef<HTMLDivElement>(null);
-
-  // Helper to get country code for a currency
-  const resolveCountryCode = React.useCallback(
-    (currency: Currency): string | null | undefined => {
-      if (getCountryCode) {
-        return getCountryCode(currency);
-      }
-      return currency.countryCode;
-    },
-    [getCountryCode],
-  );
 
   // Convert currency to string label for accessibility and input
   const itemToStringLabel = React.useCallback(
@@ -219,7 +201,7 @@ export function CurrencySelectField({
       >
         {value && (
           <InputGroup.Addon align="inline-start" className="pl-3 pr-0">
-            <CurrencyFlag countryCode={resolveCountryCode(value)} />
+            <CurrencyFlag countryCode={value.countryCode} />
           </InputGroup.Addon>
         )}
 
@@ -260,7 +242,7 @@ export function CurrencySelectField({
             <Combobox.Item key={currency.abbr} value={currency}>
               <CurrencyOptionContent
                 currency={currency}
-                countryCode={resolveCountryCode(currency)}
+                countryCode={currency.countryCode}
               />
             </Combobox.Item>
           )}
