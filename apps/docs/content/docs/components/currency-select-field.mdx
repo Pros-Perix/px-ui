@@ -1,0 +1,152 @@
+---
+title: Currency Select Field
+description: A specialized select component for currency selection with search functionality and automatic flag display
+apiReference: https://base-ui.com/react/components/combobox
+---
+
+import CurrencySelectFieldBasicDemo from "../../../src/components/currency-select-field-basic-demo.tsx";
+import CurrencySelectFieldWithFieldDemo from "../../../src/components/currency-select-field-with-field-demo.tsx";
+
+## Overview
+
+CurrencySelectField is a specialized select component designed for currency selection. It displays currencies with their country flags, abbreviations, and full names. The component includes built-in search functionality and automatically displays country flags based on the currency abbreviation using the built-in `CURRENCY_FLAG_CODE` mapping.
+
+## Import
+
+```tsx
+import { CurrencySelectField, type Currency } from "@px-ui/forms";
+```
+
+## Usage
+
+<Preview>
+  <CurrencySelectFieldBasicDemo />
+</Preview>
+
+```tsx
+import { CurrencySelectField, type Currency } from "@px-ui/forms";
+import { useState } from "react";
+
+const currencies: Currency[] = [
+  { id: "1", abbr: "USD", name: "United States dollar", value: "USD" },
+  { id: "2", abbr: "CAD", name: "Canadian dollar", value: "CAD" },
+  { id: "3", abbr: "EUR", name: "Euro", value: "EUR" },
+  { id: "4", abbr: "GBP", name: "British Pound", value: "GBP" },
+  { id: "5", abbr: "INR", name: "Indian Rupee", value: "INR" },
+  { id: "6", abbr: "AUD", name: "Australian Dollar", value: "AUD" },
+];
+
+export default function Example() {
+  const [value, setValue] = useState<Currency | null>(null);
+
+  return (
+    <CurrencySelectField
+      currencies={currencies}
+      value={value}
+      onValueChange={setValue}
+      placeholder="Select currency"
+    />
+  );
+}
+```
+
+## Examples
+
+### With Field Component
+
+Use with the Field component for form layouts with labels and error states.
+
+<Preview>
+  <CurrencySelectFieldWithFieldDemo />
+</Preview>
+
+```tsx
+import { CurrencySelectField, Field, type Currency } from "@px-ui/forms";
+import { useState } from "react";
+
+export default function Example() {
+  const [value, setValue] = useState<Currency | null>(null);
+  const [error, setError] = useState<string | null>(null);
+
+  return (
+    <Field.Root data-invalid={!!error}>
+      <Field.Label>
+        Currency <span className="text-ppx-red-5">*</span>
+      </Field.Label>
+      <Field.Content>
+        <CurrencySelectField
+          currencies={currencies}
+          value={value}
+          onValueChange={setValue}
+          placeholder="Select currency"
+          invalid={!!error}
+        />
+        {error && <Field.Error>{error}</Field.Error>}
+      </Field.Content>
+    </Field.Root>
+  );
+}
+```
+
+## API Reference
+
+### CurrencySelectField
+
+The main currency select component.
+
+#### Props
+
+| Prop                  | Type                                     | Default             | Description                                                                                                                |
+| --------------------- | ---------------------------------------- | ------------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| `currencies` \*       | `ReadonlyArray<Currency>`                | -                   | Array of currency options to display                                                                                       |
+| `value`               | `Currency \| null`                       | -                   | The currently selected currency                                                                                            |
+| `onValueChange`       | `(value: Currency \| null) => void`      | -                   | Callback fired when the selected currency changes                                                                          |
+| `placeholder`         | `string`                                 | `"Select currency"` | Placeholder text when no currency is selected                                                                              |
+| `disabled`            | `boolean`                                | `false`             | Whether the select is disabled                                                                                             |
+| `invalid`             | `boolean`                                | `false`             | Whether the select is in an invalid state                                                                                  |
+| `readOnly`            | `boolean`                                | `false`             | Whether the select is read-only                                                                                            |
+| `name`                | `string`                                 | -                   | Name attribute for form submission (submits the currency value)                                                            |
+| `size`                | `'default' \| 'sm'`                      | `'default'`         | Size variant for the trigger                                                                                               |
+| `widthVariant`        | `'enforced' \| 'full'`                   | `'enforced'`        | Width variant for the trigger                                                                                              |
+| `contentWidthVariant` | `'trigger' \| 'fit' \| 'enforced'`       | `'trigger'`         | Width variant for the dropdown content                                                                                     |
+| `triggerClassName`    | `string`                                 | -                   | Additional CSS classes for the trigger element                                                                             |
+| `isLoading`           | `boolean`                                | `false`             | Whether the select is in a loading state                                                                                   |
+| `contentProps`        | `object`                                 | -                   | Additional props for Combobox.Content component                                                                            |
+| `inputRef`            | `React.Ref<HTMLInputElement>`            | -                   | Ref to the input element                                                                                                   |
+
+_\* Required prop_
+
+### Currency Type
+
+```tsx
+interface Currency {
+  /** Unique identifier for the currency */
+  id: string;
+  /** Full currency name (e.g., "United States dollar") */
+  name: string;
+  /** Currency abbreviation (e.g., "USD", "EUR") */
+  abbr: string;
+  /** Currency value/code used for form submission */
+  value: string;
+}
+```
+
+## Notes
+
+- Search/filter functionality is built-in - users can type to filter currencies by abbreviation or name
+- The `name` prop submits the currency `value` to forms
+- Currencies are compared by their `id` property for selection state
+- Country flags are automatically displayed based on the currency `abbr` using the built-in `CURRENCY_FLAG_CODE` mapping
+- The component uses `react-country-flag` for SVG flag rendering
+- For currencies like EUR that don't map to a single country, the mapping uses special codes like "EU"
+
+## CURRENCY_FLAG_CODE
+
+The component exports `CURRENCY_FLAG_CODE`, a constant that maps currency abbreviations to country codes. This is used internally to display country flags. You can import it if you need to check which currencies have flag support:
+
+```tsx
+import { CURRENCY_FLAG_CODE } from "@px-ui/forms";
+
+// Check if a currency has a flag mapping
+const hasFlag = currency.abbr in CURRENCY_FLAG_CODE;
+```
