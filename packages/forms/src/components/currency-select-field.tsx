@@ -194,7 +194,6 @@ export function CurrencySelectField({
       inputRef={inputRef}
       readOnly={readOnly}
     >
-      {/* Custom trigger without clear button */}
       <InputGroup.Root
         size={size}
         widthVariant={widthVariant}
@@ -231,8 +230,6 @@ export function CurrencySelectField({
           />
         </InputGroup.Addon>
       </InputGroup.Root>
-
-      <input type="hidden" name={name} value={value?.value ?? ""} />
 
       <Combobox.Content
         widthVariant={contentWidthVariant}
