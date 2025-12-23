@@ -57,12 +57,14 @@ export interface CurrencySelectFieldProps extends RootProps {
   /**
    * Width variant for trigger
    */
-  widthVariant?: "enforced" | "full";
+  widthVariant?: React.ComponentProps<typeof InputGroup.Root>["widthVariant"];
 
   /**
    * Width variant for the dropdown content
    */
-  contentWidthVariant?: "trigger" | "fit" | "enforced";
+  contentWidthVariant?: React.ComponentProps<
+    typeof Combobox.Content
+  >["widthVariant"];
 
   /**
    * Additional className for the trigger
@@ -94,7 +96,7 @@ interface CurrencyFlagProps {
 
 function CurrencyFlag({ countryCode, className }: CurrencyFlagProps) {
   if (!countryCode) {
-    return <span className={cn("inline-block w-[14px]", className)} />;
+    return <span className={cn("inline-block w-4", className)} />;
   }
 
   return (
@@ -108,6 +110,7 @@ function CurrencyFlag({ countryCode, className }: CurrencyFlagProps) {
           width: "14px",
           height: "14px",
         }}
+        aria-label={`Flag of ${countryCode}`}
       />
     </div>
   );
