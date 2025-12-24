@@ -1,4 +1,4 @@
-import { Avatar as AvatarBase } from "@base-ui-components/react/avatar";
+import { Avatar as AvatarBase } from "@base-ui/react/avatar";
 import { cn } from "../utils";
 import { useMemo } from "react";
 import * as Tooltip from "./tooltip";

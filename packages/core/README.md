@@ -8,7 +8,7 @@ All components are written in TypeScript and include full type definitions.
 
 ## Accessibility
 
-Components are built with accessibility in mind using [@base-ui-components/react](https://github.com/mui/base-ui) primitives, ensuring:
+Components are built with accessibility in mind using [@base-ui/react](https://github.com/mui/base-ui) primitives, ensuring:
 
 - Proper ARIA attributes
 - Keyboard navigation

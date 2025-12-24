@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Collapsible as BaseCollapsible } from "@base-ui-components/react";
+import { Collapsible as BaseCollapsible } from "@base-ui/react";
 
 import { cn } from "../utils";
 import ChevronDownIcon from "../icons/chevron-down-icon";

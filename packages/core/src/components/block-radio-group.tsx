@@ -1,6 +1,6 @@
 import { cn } from "../utils";
 import { Item as RadioGroupItemPrimitive } from "./radio-group";
-import { RadioGroup as BaseRadioGroup } from "@base-ui-components/react/radio-group";
+import { RadioGroup as BaseRadioGroup } from "@base-ui/react/radio-group";
 
 export function Group({
   className,

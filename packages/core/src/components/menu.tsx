@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Menu } from "@base-ui-components/react/menu";
+import { Menu } from "@base-ui/react/menu";
 import { cn } from "../utils";
 import ChevronDownIcon from "../icons/chevron-down-icon";
 import {

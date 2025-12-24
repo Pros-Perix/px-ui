@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Combobox } from "@base-ui-components/react/combobox";
+import { Combobox } from "@base-ui/react/combobox";
 import { cn } from "../utils";
 import useInfiniteScroll from "../hooks/use-infinite-scroll";
 import { Spinner } from "./spinner";

@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Dialog as BaseDialog } from "@base-ui-components/react";
+import { Dialog as BaseDialog } from "@base-ui/react";
 
 import { cn } from "../utils";
 import { Button } from "./button";

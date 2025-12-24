@@ -1,5 +1,5 @@
 import { cn } from "../utils";
-import { CheckboxGroup as BaseCheckboxGroup } from "@base-ui-components/react/checkbox-group";
+import { CheckboxGroup as BaseCheckboxGroup } from "@base-ui/react/checkbox-group";
 import { Checkbox } from "./checkbox";
 
 export function Group({

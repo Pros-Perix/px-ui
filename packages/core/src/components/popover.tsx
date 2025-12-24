@@ -1,4 +1,4 @@
-import { Popover as BasePopover } from "@base-ui-components/react/popover";
+import { Popover as BasePopover } from "@base-ui/react/popover";
 
 import { cn } from "../utils";
 import CloseIcon from "../icons/close-icon";

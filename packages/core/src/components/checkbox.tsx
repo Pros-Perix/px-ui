@@ -1,4 +1,4 @@
-import { Checkbox as BaseCheckbox } from "@base-ui-components/react/checkbox";
+import { Checkbox as BaseCheckbox } from "@base-ui/react/checkbox";
 
 import { cn } from "../utils";
 import { cva, type VariantProps } from "class-variance-authority";

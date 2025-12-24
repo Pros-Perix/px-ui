@@ -1,7 +1,7 @@
 import * as React from "react";
 import { cn } from "../utils";
 import { cva, type VariantProps } from "class-variance-authority";
-import { Progress } from "@base-ui-components/react/progress";
+import { Progress } from "@base-ui/react/progress";
 
 const progressTrackVariants = cva(
   "relative h-2 w-full overflow-hidden rounded-full bg-ppx-neutral-3",
