@@ -1,5 +1,11 @@
 # @px-ui/core
 
+## 3.0.0
+
+### Major Changes
+
+- 06717d7: Added new phone input, collapsible components
+
 ## 2.1.0
 
 ### Minor Changes
