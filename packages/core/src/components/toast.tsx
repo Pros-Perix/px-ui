@@ -202,10 +202,10 @@ function AnchoredToasts() {
             >
               <Toast.Root
                 className={cn(
-                  "bg-popover text-popover-foreground data-ending-style:scale-98 data-starting-style:scale-98 data-ending-style:opacity-0 data-starting-style:opacity-0 relative text-balance border bg-clip-padding text-xs transition-[scale,opacity] before:pointer-events-none before:absolute before:inset-0 before:shadow-[0_1px_--theme(--color-black/4%)] dark:bg-clip-border dark:before:shadow-[0_-1px_--theme(--color-white/8%)]",
+                  "bg-ppx-background text-ppx-foreground data-ending-style:scale-98 data-starting-style:scale-98 data-ending-style:opacity-0 data-starting-style:opacity-0 text-ppx-sm relative text-balance border bg-clip-padding transition-[scale,opacity] before:pointer-events-none before:absolute before:inset-0 before:shadow-[0_1px_--theme(--color-black/4%)]",
                   tooltipStyle
-                    ? "rounded-md shadow-md shadow-black/5 before:rounded-[calc(var(--radius-md)-1px)]"
-                    : "rounded-lg shadow-lg before:rounded-[calc(var(--radius-lg)-1px)]",
+                    ? "rounded-ppx-m shadow-md shadow-black/5 before:rounded-[calc(var(--radius-md)-1px)]"
+                    : "rounded-ppx-l shadow-lg before:rounded-[calc(var(--radius-ppx-m)-1px)]",
                 )}
                 data-slot="toast-popup"
                 toast={toast}
@@ -215,14 +215,14 @@ function AnchoredToasts() {
                     <Toast.Title data-slot="toast-title" />
                   </Toast.Content>
                 ) : (
-                  <Toast.Content className="pointer-events-auto flex items-center justify-between gap-1.5 overflow-hidden px-3.5 py-3 text-sm">
+                  <Toast.Content className="text-ppx-sm pointer-events-auto flex items-center justify-between gap-1.5 overflow-hidden px-3.5 py-3">
                     <div className="flex gap-2">
                       {Icon && (
                         <div
                           className="[&>svg]:h-lh [&>svg]:w-4 [&_svg]:pointer-events-none [&_svg]:shrink-0"
                           data-slot="toast-icon"
                         >
-                          <Icon className="in-data-[type=loading]:animate-spin in-data-[type=error]:text-destructive in-data-[type=info]:text-info in-data-[type=success]:text-success in-data-[type=warning]:text-warning in-data-[type=loading]:opacity-80" />
+                          <Icon className="in-data-[type=loading]:animate-spin in-data-[type=error]:text-ppx-red-5 in-data-[type=info]:text-info in-data-[type=success]:text-ppx-green-5 in-data-[type=warning]:text-ppx-yellow-5 in-data-[type=loading]:opacity-80" />
                         </div>
                       )}
 
@@ -232,7 +232,7 @@ function AnchoredToasts() {
                           data-slot="toast-title"
                         />
                         <Toast.Description
-                          className="text-muted-foreground"
+                          className="text-ppx-muted-foreground"
                           data-slot="toast-description"
                         />
                       </div>

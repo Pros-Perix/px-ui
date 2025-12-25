@@ -3,7 +3,7 @@ import { AnchoredToastProvider, ToastProvider } from "../components/toast";
 
 const PXUIContext = createContext(null);
 
-function PXUIProvider(props: React.PropsWithChildren) {
+export function PXUIProvider(props: React.PropsWithChildren) {
   return (
     <PXUIContext.Provider value={null}>
       <ToastProvider>

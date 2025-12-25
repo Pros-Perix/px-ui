@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { HomeLayout } from "fumadocs-ui/layouts/home";
 import { baseOptions } from "@/lib/layout.shared";
-import { buttonVariants } from "@px-ui/core";
+import { buttonVariants, toast } from "@px-ui/core";
 import PpxLogo from "@/assets/ppx-colored-logo";
 
 export const Route = createFileRoute("/")({
@@ -15,6 +15,17 @@ function Home() {
         <div className="mb-4 flex items-center gap-3">
           <PpxLogo className="size-10" />
           <h1 className="text-ppx-h1 font-sans-b text-ppx-foreground">PX-UI</h1>
+
+          <button
+            onClick={() => {
+              toast.add({
+                title: "Success",
+                description: "Job added successfully",
+              });
+            }}
+          >
+            show taost
+          </button>
         </div>
         <p className="text-ppx-base text-ppx-muted-foreground mb-8 max-w-md text-center">
           A modern, accessible, TypeScript‑first React component library built

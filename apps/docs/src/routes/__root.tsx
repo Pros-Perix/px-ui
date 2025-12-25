@@ -7,6 +7,7 @@ import {
 import * as React from "react";
 import appCss from "@/styles/app.css?url";
 import { RootProvider } from "fumadocs-ui/provider/tanstack";
+import { PXUIProvider } from "@px-ui/core";
 
 export const Route = createRootRoute({
   head: () => ({
@@ -44,7 +45,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
       <body className="flex min-h-screen flex-col">
         <div className="root">
           <RootProvider theme={{ enabled: false, defaultTheme: "light" }}>
-            {children}
+            <PXUIProvider>{children}</PXUIProvider>
           </RootProvider>
           <Scripts />
         </div>
