@@ -191,6 +191,9 @@ importers:
       react-dom:
         specifier: 19.2.0
         version: 19.2.0(react@19.2.0)
+      tailwindcss:
+        specifier: ^4.1.18
+        version: 4.1.18
       tsdown:
         specifier: ^0.16.4
         version: 0.16.8(typescript@5.9.3)
