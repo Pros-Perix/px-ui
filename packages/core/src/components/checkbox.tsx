@@ -4,7 +4,7 @@ import { cn } from "../utils";
 import { cva, type VariantProps } from "class-variance-authority";
 
 const checkboxVariants = cva(
-  "peer aria-invalid:border-ppx-red-5 aria-invalid:text-shadow-ppx-red-5 flex items-center justify-center rounded-sm border transition-colors duration-150 outline-none focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-50",
+  "peer aria-invalid:border-ppx-red-5 aria-invalid:text-shadow-ppx-red-5 flex items-center justify-center rounded-sm border transition-colors duration-150 outline-none focus-visible:ring-2 data-disabled:cursor-not-allowed data-disabled:opacity-50",
   {
     variants: {
       variant: {

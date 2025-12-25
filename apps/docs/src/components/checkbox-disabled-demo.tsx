@@ -1,25 +1,15 @@
-import { Checkbox } from "@px-ui/core";
+import { Checkbox, Label } from "@px-ui/core";
 
 export function CheckboxDisabledDemo() {
   return (
     <div className="flex flex-col gap-4">
       <div className="flex items-center gap-2">
         <Checkbox id="disabled-unchecked" disabled />
-        <label
-          htmlFor="disabled-unchecked"
-          className="text-ppx-sm cursor-pointer"
-        >
-          Disabled unchecked
-        </label>
+        <Label htmlFor="disabled-unchecked">Disabled unchecked</Label>
       </div>
       <div className="flex items-center gap-2">
         <Checkbox id="disabled-checked" disabled defaultChecked />
-        <label
-          htmlFor="disabled-checked"
-          className="text-ppx-sm cursor-pointer"
-        >
-          Disabled checked
-        </label>
+        <Label htmlFor="disabled-checked">Disabled checked</Label>
       </div>
       <div className="flex items-center gap-2">
         <Checkbox
@@ -28,12 +18,7 @@ export function CheckboxDisabledDemo() {
           indeterminate
           defaultChecked
         />
-        <label
-          htmlFor="disabled-indeterminate"
-          className="text-ppx-sm cursor-pointer"
-        >
-          Disabled indeterminate
-        </label>
+        <Label htmlFor="disabled-indeterminate">Disabled indeterminate</Label>
       </div>
     </div>
   );

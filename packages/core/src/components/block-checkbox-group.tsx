@@ -7,7 +7,7 @@ export function Group({
   ...props
 }: React.ComponentProps<typeof BaseCheckboxGroup>) {
   return (
-    <BaseCheckboxGroup className={cn("gap-4 flex", className)} {...props} />
+    <BaseCheckboxGroup className={cn("flex gap-4", className)} {...props} />
   );
 }
 
@@ -23,7 +23,7 @@ export function Item({
   return (
     <label
       className={cn(
-        "gap-2 p-5 flex min-h-[155px] justify-between rounded-ppx-s border-2 border-ppx-neutral-3 shadow-[0px_0px_12px_#0000001F] transition-colors duration-300 has-not-disabled:hover:border-ppx-neutral-6 has-disabled:cursor-not-allowed has-disabled:opacity-60 has-disabled:hover:border-ppx-neutral-3 has-aria-invalid:shadow-ppx-red-2 has-data-checked:border-ppx-primary-5!",
+        "rounded-ppx-s border-ppx-neutral-3 has-not-data-disabled:hover:border-ppx-neutral-6 has-data-disabled:cursor-not-allowed has-data-disabled:opacity-60 has-data-disabled:hover:border-ppx-neutral-3 has-aria-invalid:shadow-ppx-red-2 has-data-checked:border-ppx-primary-5! flex min-h-[155px] justify-between gap-2 border-2 p-5 shadow-[0px_0px_12px_#0000001F] transition-colors duration-300",
         className,
       )}
     >
@@ -40,7 +40,7 @@ export function Item({
 
 export function Header(props: React.PropsWithChildren<{ className?: string }>) {
   return (
-    <div className={cn("mb-5 gap-2 flex items-center", props.className)}>
+    <div className={cn("mb-5 flex items-center gap-2", props.className)}>
       {props.children}
     </div>
   );
@@ -65,7 +65,7 @@ export function Description(
   return (
     <p
       className={cn(
-        "mb-5 text-ppx-sm text-ppx-muted-foreground",
+        "text-ppx-sm text-ppx-muted-foreground mb-5",
         props.className,
       )}
     >

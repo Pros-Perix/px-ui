@@ -6,7 +6,10 @@ export function RadioGroupWithDescriptionsDemo() {
       <div className="flex items-start gap-3">
         <RadioGroup.Item value="card" id="payment-card" className="mt-0.5" />
         <div className="flex flex-col gap-1">
-          <label htmlFor="payment-card" className="text-ppx-sm font-medium cursor-pointer">
+          <label
+            htmlFor="payment-card"
+            className="text-ppx-sm cursor-pointer font-medium"
+          >
             Credit Card
           </label>
           <p className="text-ppx-xs text-ppx-neutral-11">
@@ -15,9 +18,16 @@ export function RadioGroupWithDescriptionsDemo() {
         </div>
       </div>
       <div className="flex items-start gap-3">
-        <RadioGroup.Item value="paypal" id="payment-paypal" className="mt-0.5" />
+        <RadioGroup.Item
+          value="paypal"
+          id="payment-paypal"
+          className="mt-0.5"
+        />
         <div className="flex flex-col gap-1">
-          <label htmlFor="payment-paypal" className="text-ppx-sm font-medium cursor-pointer">
+          <label
+            htmlFor="payment-paypal"
+            className="text-ppx-sm cursor-pointer font-medium"
+          >
             PayPal
           </label>
           <p className="text-ppx-xs text-ppx-neutral-11">
@@ -28,7 +38,10 @@ export function RadioGroupWithDescriptionsDemo() {
       <div className="flex items-start gap-3">
         <RadioGroup.Item value="bank" id="payment-bank" className="mt-0.5" />
         <div className="flex flex-col gap-1">
-          <label htmlFor="payment-bank" className="text-ppx-sm font-medium cursor-pointer">
+          <label
+            htmlFor="payment-bank"
+            className="text-ppx-sm cursor-pointer font-medium"
+          >
             Bank Transfer
           </label>
           <p className="text-ppx-xs text-ppx-neutral-11">

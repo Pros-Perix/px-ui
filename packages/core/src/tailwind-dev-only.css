@@ -1,0 +1,9 @@
+/*
+* This file is only for development mode
+* We need this tailwind configuration in order for the tailwind intellisense to work
+* We actually don't need tailwindcss package at all in our component library,
+* because the consumer of this package is going to resolve all these styles.
+* */
+
+@import "tailwindcss";
+@import "./index.css";
