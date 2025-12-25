@@ -29,7 +29,7 @@ export function Item({
   return (
     <label
       className={cn(
-        "rounded-ppx-s border-ppx-neutral-3 has-not-disabled:hover:border-ppx-neutral-6 has-disabled:cursor-not-allowed has-disabled:opacity-60 has-disabled:hover:border-ppx-neutral-3 has-aria-invalid:shadow-ppx-red-2 has-data-checked:border-ppx-primary-5! flex min-h-[155px] justify-between gap-2 border-2 p-5 shadow-[0px_0px_12px_#0000001F] transition-colors duration-300",
+        "rounded-ppx-s border-ppx-neutral-3 has-not-data-disabled:hover:border-ppx-neutral-6 has-data-disabled:cursor-not-allowed has-data-disabled:opacity-60 has-data-disabled:hover:border-ppx-neutral-3 has-aria-invalid:shadow-ppx-red-2 has-data-checked:border-ppx-primary-5! flex min-h-[155px] justify-between gap-2 border-2 p-5 shadow-[0px_0px_12px_#0000001F] transition-colors duration-300",
         className,
       )}
     >

@@ -5,7 +5,7 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "../utils";
 
 const segmentedControlItemVariants = cva(
-  "relative flex items-center justify-center px-4 py-2 text-sm font-medium transition-all duration-200 ease-in-out cursor-pointer rounded-full whitespace-nowrap outline-none focus-visible:ring-2 focus-visible:ring-ppx-primary-5 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
+  "relative flex items-center justify-center px-4 py-2 text-sm font-medium transition-all duration-200 ease-in-out cursor-pointer rounded-full whitespace-nowrap outline-none focus-visible:ring-2 focus-visible:ring-ppx-primary-5 focus-visible:ring-offset-2 data-disabled:cursor-not-allowed data-disabled:opacity-50",
   {
     variants: {
       variant: {
@@ -33,7 +33,7 @@ export function Root({
     <BaseRadioGroup
       data-slot="segmented-control"
       className={cn(
-        "p-1 inline-flex items-center rounded-full bg-ppx-neutral-3",
+        "bg-ppx-neutral-3 inline-flex items-center rounded-full p-1",
         className,
       )}
       {...props}
