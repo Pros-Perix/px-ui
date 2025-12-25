@@ -25,7 +25,7 @@ const SINGLE_TEXT_CONTENT_CN =
 export const List = Combobox.List;
 
 type ComboboxContextValues = React.ComponentProps<
-  typeof Combobox.Root<any, any, any>
+  typeof Combobox.Root<any, any>
 > & {
   chipsTriggerRef: React.RefObject<HTMLDivElement | null>;
   searchableTriggerRef: React.RefObject<HTMLDivElement | null>;
@@ -41,16 +41,10 @@ const ComboboxContext = React.createContext<ComboboxContextValues>(
   {} as ComboboxContextValues,
 );
 
-export function Root<
-  ItemValue,
-  SelectedValue = ItemValue,
-  Multiple extends boolean | undefined = false,
->({
+export function Root<ItemValue, Multiple extends boolean | undefined = false>({
   children,
   ...props
-}: React.ComponentProps<
-  typeof Combobox.Root<ItemValue, SelectedValue, Multiple>
-> &
+}: React.ComponentProps<typeof Combobox.Root<ItemValue, Multiple>> &
   Pick<
     ComboboxContextValues,
     | "isLoading"
@@ -350,7 +344,7 @@ export function Value({
   ...props
 }: {
   placeholder?: string;
-  children: React.ReactNode | ((selectedValue: any) => React.ReactNode);
+  children?: React.ReactNode | ((selectedValue: any) => React.ReactNode);
   className?: string;
 }) {
   return (

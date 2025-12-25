@@ -53,8 +53,8 @@ export function AvatarGroup({ max = 4, avatars, className }: AvatarGroupProps) {
               zIndex: 0,
             }}
           >
-            <Popover.Root openOnHover>
-              <Popover.Trigger>
+            <Popover.Root>
+              <Popover.Trigger openOnHover>
                 <div
                   className={cn(
                     "bg-ppx-neutral-3 text-ppx-neutral-18 hover:bg-ppx-neutral-4 flex cursor-pointer items-center justify-center font-medium transition-colors",

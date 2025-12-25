@@ -21,6 +21,8 @@ export default function ComboboxFieldBasicDemo() {
         items={items}
         value={value}
         onValueChange={setValue}
+        renderOption={(opt) => opt}
+        renderLabel={(opt) => opt}
         placeholder="Search for a fruit..."
       />
     </div>

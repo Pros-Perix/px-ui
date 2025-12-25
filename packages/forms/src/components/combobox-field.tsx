@@ -3,18 +3,14 @@ import { Combobox } from "@px-ui/core";
 
 type AllRootProps<
   TItem = any,
-  TSelectedValue = TItem,
   TMultiple extends boolean | undefined = false,
-> = React.ComponentProps<
-  typeof Combobox.Root<TItem, TSelectedValue, TMultiple>
->;
+> = React.ComponentProps<typeof Combobox.Root<TItem, TMultiple>>;
 
 type RootProps<
   TItem = any,
-  TSelectedValue = TItem,
   TMultiple extends boolean | undefined = false,
 > = Pick<
-  AllRootProps<TItem, TSelectedValue, TMultiple>,
+  AllRootProps<TItem, TMultiple>,
   | "items"
   | "loadOptions"
   | "value"
@@ -29,9 +25,8 @@ type RootProps<
 
 interface ComboboxFieldProps<
   TItem = any,
-  TSelectedValue = TItem,
   TMultiple extends boolean | undefined = false,
-> extends RootProps<TItem, TSelectedValue, TMultiple> {
+> extends RootProps<TItem, TMultiple> {
   /**
    * Function to render the label in the trigger for the selected item(s)
    * - For single select: receives a single item
@@ -39,8 +34,8 @@ interface ComboboxFieldProps<
    * If not provided and item has a 'label' property, it will be used automatically
    */
   renderLabel?: TMultiple extends true
-    ? (items: TSelectedValue[]) => React.ReactNode
-    : (item: TSelectedValue) => string | React.ReactNode;
+    ? (items: TItem[]) => React.ReactNode
+    : (item: TItem) => string | React.ReactNode;
 
   /**
    * Function to render each option in the dropdown
@@ -52,7 +47,7 @@ interface ComboboxFieldProps<
    * Function to render each chip in ChipsTrigger (multiple selection only)
    * If not provided, renderLabel or auto-detected label will be used
    */
-  renderChip?: (item: TSelectedValue) => React.ReactNode | string;
+  renderChip?: (item: TItem) => React.ReactNode | string;
 
   /**
    * Placeholder text when no value is selected
@@ -134,9 +129,8 @@ interface ComboboxFieldProps<
  */
 export function ComboboxField<
   TItem = any,
-  TSelectedValue = TItem,
   TMultiple extends boolean | undefined = false,
->(props: ComboboxFieldProps<TItem, TSelectedValue, TMultiple>) {
+>(props: ComboboxFieldProps<TItem, TMultiple>) {
   const {
     items,
     loadOptions,
@@ -193,9 +187,9 @@ export function ComboboxField<
   };
 
   // Helper to render selected value label (single item)
-  const renderSingleValueLabel = (item: TSelectedValue): React.ReactNode => {
+  const renderSingleValueLabel = (item: TItem): React.ReactNode => {
     if (renderLabel && !multiple) {
-      return (renderLabel as (item: TSelectedValue) => React.ReactNode)(item);
+      return (renderLabel as (item: TItem) => React.ReactNode)(item);
     }
     // Auto-detect label property
     if (item && typeof item === "object" && "label" in item) {
@@ -206,20 +200,16 @@ export function ComboboxField<
   };
 
   // Helper to render selected value label (multiple items)
-  const renderMultipleValueLabel = (
-    items: TSelectedValue[],
-  ): React.ReactNode => {
+  const renderMultipleValueLabel = (items: TItem[]): React.ReactNode => {
     if (renderLabel && multiple) {
-      return (renderLabel as (items: TSelectedValue[]) => React.ReactNode)(
-        items,
-      );
+      return (renderLabel as (items: TItem[]) => React.ReactNode)(items);
     }
     // Default: show count
     return `${items.length} selected`;
   };
 
   // Helper to render chip content
-  const renderChipContent = (item: TSelectedValue): React.ReactNode => {
+  const renderChipContent = (item: TItem): React.ReactNode => {
     if (renderChip) {
       return renderChip(item);
     }
@@ -227,7 +217,7 @@ export function ComboboxField<
   };
 
   return (
-    <Combobox.Root<TItem, TSelectedValue, TMultiple>
+    <Combobox.Root<TItem, TMultiple>
       items={items}
       loadOptions={loadOptions}
       value={value}
@@ -275,7 +265,7 @@ export function ComboboxField<
           widthVariant={widthVariant}
           className={triggerClassName}
         >
-          {(item: TSelectedValue) => (
+          {(item: TItem) => (
             <Combobox.Chip key={getItemKey(item as any, 0)}>
               {renderChipContent(item)}
             </Combobox.Chip>
