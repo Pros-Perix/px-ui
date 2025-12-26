@@ -58,9 +58,16 @@ function Toasts(props: { position: ToastPosition }) {
   const { toasts } = Toast.useToastManager();
 
   const isTop = position.startsWith("top");
+  const hasLoadingToast = toasts.some((t) => t.type === "loading");
 
   return (
     <Toast.Portal data-slot="toast-portal">
+      {hasLoadingToast && (
+        <div
+          className="bg-ppx-foreground/20 fixed inset-0 z-40 transition-opacity"
+          data-slot="toast-backdrop"
+        />
+      )}
       <Toast.Viewport
         className={cn(
           "max-w-90 fixed z-50 mx-auto flex w-[calc(100%-var(--toast-inset)*2)] [--toast-inset:--spacing(4)] sm:[--toast-inset:--spacing(8)]",
