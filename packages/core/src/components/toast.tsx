@@ -90,7 +90,7 @@ function Toasts(props: { position: ToastPosition }) {
           return (
             <Toast.Root
               className={cn(
-                "h-(--toast-calc-height) bg-ppx-background text-ppx-foreground rounded-ppx-m absolute z-[calc(9999-var(--toast-index))] w-full select-none border bg-clip-padding shadow-lg [transition:transform_.5s_cubic-bezier(.22,1,.36,1),opacity_.5s,height_.15s] before:pointer-events-none before:absolute before:inset-0 before:rounded-[calc(var(--radius-ppx-m)-1px)] before:shadow-[0_1px_--theme(--color-black/4%)]",
+                "h-(--toast-calc-height) bg-ppx-background text-ppx-foreground rounded-ppx-m border-ppx-neutral-4 absolute z-[calc(9999-var(--toast-index))] w-full select-none border bg-clip-padding shadow-lg [transition:transform_.5s_cubic-bezier(.22,1,.36,1),opacity_.5s,height_.15s] before:pointer-events-none before:absolute before:inset-0 before:rounded-[calc(var(--radius-ppx-m)-1px)] before:shadow-[0_1px_--theme(--color-black/4%)]",
                 // Base positioning using data-position
                 "data-[position*=right]:left-auto data-[position*=right]:right-0",
                 "data-[position*=left]:left-0 data-[position*=left]:right-auto",
