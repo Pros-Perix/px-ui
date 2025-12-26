@@ -1,5 +1,11 @@
 # @px-ui/core
 
+## 3.1.1
+
+### Patch Changes
+
+- 3acd469: minor style update
+
 ## 3.1.0
 
 ### Minor Changes
