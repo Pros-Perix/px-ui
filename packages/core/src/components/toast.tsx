@@ -139,7 +139,7 @@ function Toasts(props: { position: ToastPosition }) {
               }
               toast={toast}
             >
-              <Toast.Content className="duration-250 data-behind:pointer-events-none data-behind:opacity-0 data-expanded:opacity-100 text-ppx-sm pointer-events-auto flex items-center justify-between gap-1.5 overflow-hidden px-3.5 py-4 transition-opacity">
+              <Toast.Content className="duration-250 data-behind:pointer-events-none data-behind:opacity-0 data-expanded:opacity-100 text-ppx-sm pointer-events-auto flex flex-col gap-2.5 overflow-hidden px-3.5 py-4 transition-opacity">
                 <div className="flex gap-2">
                   {Icon && (
                     <div
@@ -176,7 +176,9 @@ function Toasts(props: { position: ToastPosition }) {
                 </div>
                 {toast.actionProps && (
                   <Toast.Action
-                    className={buttonVariants({ size: "sm" })}
+                    className={buttonVariants({
+                      size: "sm",
+                    })}
                     data-slot="toast-action"
                   >
                     {toast.actionProps.children}
