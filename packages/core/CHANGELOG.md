@@ -1,5 +1,11 @@
 # @px-ui/core
 
+## 3.1.0
+
+### Minor Changes
+
+- b83935a: Added new toast component, and some minor upgrades
+
 ## 3.0.0
 
 ### Major Changes
