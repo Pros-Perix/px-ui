@@ -3,18 +3,27 @@ import CircleAlertIcon from "../icons/circle-alert-icon";
 import CircleCheckIcon from "../icons/circle-check-icon";
 import InfoIcon from "../icons/info-icon";
 import TriangleAlertIcon from "../icons/triangle-alert-icon";
+import SpinnerIcon from "../icons/spinner-icon";
 
 import { cn } from "../utils";
 import { buttonVariants } from "./button";
-import { Spinner } from "./spinner";
+import CloseIcon from "../icons/close-icon";
 
 const toast = Toast.createToastManager();
 const anchoredToast = Toast.createToastManager();
 
-const TOAST_ICONS = {
+type ToastVariants =
+  | "success"
+  | "info"
+  | "loading"
+  | "success"
+  | "warning"
+  | "error";
+
+const TOAST_ICONS: Record<ToastVariants, any> = {
   error: CircleAlertIcon,
   info: InfoIcon,
-  loading: Spinner,
+  loading: SpinnerIcon,
   success: CircleCheckIcon,
   warning: TriangleAlertIcon,
 } as const;
@@ -33,7 +42,7 @@ interface ToastProviderProps extends Toast.Provider.Props {
 
 function ToastProvider({
   children,
-  position = "bottom-right",
+  position = "top-center",
   ...props
 }: ToastProviderProps) {
   return (
@@ -44,8 +53,10 @@ function ToastProvider({
   );
 }
 
-function Toasts({ position = "bottom-right" }: { position: ToastPosition }) {
+function Toasts(props: { position: ToastPosition }) {
+  const { position = "top-center" } = props;
   const { toasts } = Toast.useToastManager();
+
   const isTop = position.startsWith("top");
 
   return (
@@ -72,7 +83,7 @@ function Toasts({ position = "bottom-right" }: { position: ToastPosition }) {
           return (
             <Toast.Root
               className={cn(
-                "h-(--toast-calc-height) bg-popover text-popover-foreground absolute z-[calc(9999-var(--toast-index))] w-full select-none rounded-lg border bg-clip-padding shadow-lg [transition:transform_.5s_cubic-bezier(.22,1,.36,1),opacity_.5s,height_.15s] before:pointer-events-none before:absolute before:inset-0 before:rounded-[calc(var(--radius-lg)-1px)] before:shadow-[0_1px_--theme(--color-black/4%)] dark:bg-clip-border dark:before:shadow-[0_-1px_--theme(--color-white/8%)]",
+                "h-(--toast-calc-height) bg-ppx-background text-ppx-foreground rounded-ppx-m absolute z-[calc(9999-var(--toast-index))] w-full select-none border bg-clip-padding shadow-lg [transition:transform_.5s_cubic-bezier(.22,1,.36,1),opacity_.5s,height_.15s] before:pointer-events-none before:absolute before:inset-0 before:rounded-[calc(var(--radius-ppx-m)-1px)] before:shadow-[0_1px_--theme(--color-black/4%)]",
                 // Base positioning using data-position
                 "data-[position*=right]:left-auto data-[position*=right]:right-0",
                 "data-[position*=left]:left-0 data-[position*=left]:right-auto",
@@ -101,7 +112,8 @@ function Toasts({ position = "bottom-right" }: { position: ToastPosition }) {
                 "data-[position*=bottom]:data-starting-style:transform-[translateY(calc(100%+var(--toast-inset)))]",
                 "data-ending-style:opacity-0",
                 // Ending animations (direction-aware)
-                "data-ending-style:not-data-limited:not-data-swipe-direction:transform-[translateY(calc(100%+var(--toast-inset)))]",
+                "data-[position*=top]:data-ending-style:not-data-limited:not-data-swipe-direction:transform-[translateY(calc(-100%-var(--toast-inset)))]",
+                "data-[position*=bottom]:data-ending-style:not-data-limited:not-data-swipe-direction:transform-[translateY(calc(100%+var(--toast-inset)))]",
                 "data-ending-style:data-[swipe-direction=left]:transform-[translateX(calc(var(--toast-swipe-movement-x)-100%-var(--toast-inset)))_translateY(var(--toast-calc-offset-y))]",
                 "data-ending-style:data-[swipe-direction=right]:transform-[translateX(calc(var(--toast-swipe-movement-x)+100%+var(--toast-inset)))_translateY(var(--toast-calc-offset-y))]",
                 "data-ending-style:data-[swipe-direction=up]:transform-[translateY(calc(var(--toast-swipe-movement-y)-100%-var(--toast-inset)))]",
@@ -111,6 +123,10 @@ function Toasts({ position = "bottom-right" }: { position: ToastPosition }) {
                 "data-expanded:data-ending-style:data-[swipe-direction=right]:transform-[translateX(calc(var(--toast-swipe-movement-x)+100%+var(--toast-inset)))_translateY(var(--toast-calc-offset-y))]",
                 "data-expanded:data-ending-style:data-[swipe-direction=up]:transform-[translateY(calc(var(--toast-swipe-movement-y)-100%-var(--toast-inset)))]",
                 "data-expanded:data-ending-style:data-[swipe-direction=down]:transform-[translateY(calc(var(--toast-swipe-movement-y)+100%+var(--toast-inset)))]",
+                toast.type === "success" && "bg-ppx-green-1",
+                toast.type === "info" && "bg-ppx-primary-b-1",
+                toast.type === "warning" && "bg-ppx-yellow-1",
+                toast.type === "error" && "bg-ppx-red-1",
               )}
               data-position={position}
               key={toast.id}
@@ -123,26 +139,39 @@ function Toasts({ position = "bottom-right" }: { position: ToastPosition }) {
               }
               toast={toast}
             >
-              <Toast.Content className="duration-250 data-behind:pointer-events-none data-behind:opacity-0 data-expanded:opacity-100 pointer-events-auto flex items-center justify-between gap-1.5 overflow-hidden px-3.5 py-3 text-sm transition-opacity">
+              <Toast.Content className="duration-250 data-behind:pointer-events-none data-behind:opacity-0 data-expanded:opacity-100 text-ppx-sm pointer-events-auto flex items-center justify-between gap-1.5 overflow-hidden px-3.5 py-4 transition-opacity">
                 <div className="flex gap-2">
                   {Icon && (
                     <div
                       className="[&>svg]:h-lh [&>svg]:w-4 [&_svg]:pointer-events-none [&_svg]:shrink-0"
                       data-slot="toast-icon"
                     >
-                      <Icon className="in-data-[type=loading]:animate-spin in-data-[type=error]:text-destructive in-data-[type=info]:text-info in-data-[type=success]:text-success in-data-[type=warning]:text-warning in-data-[type=loading]:opacity-80" />
+                      <Icon className="in-data-[type=loading]:animate-spin in-data-[type=error]:text-ppx-red-5 in-data-[type=info]:text-ppx-primary-b-5 in-data-[type=success]:text-ppx-green-5 in-data-[type=warning]:text-ppx-yellow-5 in-data-[type=loading]:opacity-80" />
                     </div>
                   )}
 
-                  <div className="flex flex-col gap-0.5">
+                  <div className="flex flex-col gap-1.5">
                     <Toast.Title
-                      className="font-medium"
+                      className="text-ppx-base font-medium leading-none"
                       data-slot="toast-title"
                     />
                     <Toast.Description
-                      className="text-muted-foreground"
+                      className="text-ppx-muted-foreground"
                       data-slot="toast-description"
                     />
+
+                    {toast.type === "loading" ? null : (
+                      <Toast.Close
+                        className={buttonVariants({
+                          size: "icon-sm",
+                          variant: "ghost",
+                          className: "absolute right-2 top-2 shrink-0",
+                        })}
+                        aria-label="Close"
+                      >
+                        <CloseIcon className="size-4" />
+                      </Toast.Close>
+                    )}
                   </div>
                 </div>
                 {toast.actionProps && (
@@ -204,8 +233,12 @@ function AnchoredToasts() {
                 className={cn(
                   "bg-ppx-background text-ppx-foreground data-ending-style:scale-98 data-starting-style:scale-98 data-ending-style:opacity-0 data-starting-style:opacity-0 text-ppx-sm relative text-balance border bg-clip-padding transition-[scale,opacity] before:pointer-events-none before:absolute before:inset-0 before:shadow-[0_1px_--theme(--color-black/4%)]",
                   tooltipStyle
-                    ? "rounded-ppx-m shadow-md shadow-black/5 before:rounded-[calc(var(--radius-md)-1px)]"
+                    ? "rounded-ppx-m shadow-md shadow-black/5 before:rounded-[calc(var(--radius-ppx-s)-1px)]"
                     : "rounded-ppx-l shadow-lg before:rounded-[calc(var(--radius-ppx-m)-1px)]",
+                  toast.type === "success" && "bg-ppx-green-1",
+                  toast.type === "info" && "bg-ppx-primary-b-1",
+                  toast.type === "warning" && "bg-ppx-yellow-1",
+                  toast.type === "error" && "bg-ppx-red-1",
                 )}
                 data-slot="toast-popup"
                 toast={toast}
@@ -215,20 +248,20 @@ function AnchoredToasts() {
                     <Toast.Title data-slot="toast-title" />
                   </Toast.Content>
                 ) : (
-                  <Toast.Content className="text-ppx-sm pointer-events-auto flex items-center justify-between gap-1.5 overflow-hidden px-3.5 py-3">
+                  <Toast.Content className="text-ppx-sm pointer-events-auto relative flex items-center justify-between gap-1.5 overflow-hidden px-3.5 py-3">
                     <div className="flex gap-2">
                       {Icon && (
                         <div
                           className="[&>svg]:h-lh [&>svg]:w-4 [&_svg]:pointer-events-none [&_svg]:shrink-0"
                           data-slot="toast-icon"
                         >
-                          <Icon className="in-data-[type=loading]:animate-spin in-data-[type=error]:text-ppx-red-5 in-data-[type=info]:text-info in-data-[type=success]:text-ppx-green-5 in-data-[type=warning]:text-ppx-yellow-5 in-data-[type=loading]:opacity-80" />
+                          <Icon className="in-data-[type=loading]:animate-spin in-data-[type=error]:text-ppx-red-5 in-data-[type=info]:text-ppx-primary-b-5 in-data-[type=success]:text-ppx-green-5 in-data-[type=warning]:text-ppx-yellow-5 in-data-[type=loading]:opacity-80" />
                         </div>
                       )}
 
                       <div className="flex flex-col gap-0.5">
                         <Toast.Title
-                          className="font-medium"
+                          className="text-ppx-base font-medium leading-none"
                           data-slot="toast-title"
                         />
                         <Toast.Description

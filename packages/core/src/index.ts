@@ -45,6 +45,7 @@ export * from "./hooks/use-file-upload";
 export * from "./hooks/use-async-options";
 export * from "./hooks/use-infinite-scroll";
 export * from "./hooks/use-intersection-observer";
+export * from "./hooks/use-mobile";
 
 // Utils
 export * from "./utils";

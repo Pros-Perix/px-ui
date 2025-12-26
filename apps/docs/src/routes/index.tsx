@@ -20,11 +20,62 @@ function Home() {
             onClick={() => {
               toast.add({
                 title: "Success",
-                description: "Job added successfully",
+                description: "Digital profile updated successfully",
+                type: "success",
+                timeout: 0,
               });
             }}
           >
-            show taost
+            show success
+          </button>
+
+          <button
+            onClick={() => {
+              toast.add({
+                title: "Success",
+                description: "Digital profile updated successfully",
+                type: "info",
+                timeout: 0,
+              });
+            }}
+          >
+            show info
+          </button>
+          <button
+            onClick={() => {
+              toast.add({
+                title: "Success",
+                description: "Digital profile updated successfully",
+                type: "warning",
+                timeout: 0,
+              });
+            }}
+          >
+            show warning
+          </button>
+          <button
+            onClick={() => {
+              toast.add({
+                title: "Success",
+                description: "Digital profile updated successfully",
+                type: "error",
+                timeout: 0,
+              });
+            }}
+          >
+            show error
+          </button>
+
+          <button
+            onClick={() => {
+              toast.add({
+                title: "Nice",
+                description: "Digital profile updated successfully",
+                timeout: 0,
+              });
+            }}
+          >
+            show no type
           </button>
         </div>
         <p className="text-ppx-base text-ppx-muted-foreground mb-8 max-w-md text-center">
