@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { HomeLayout } from "fumadocs-ui/layouts/home";
 import { baseOptions } from "@/lib/layout.shared";
-import { buttonVariants, toast } from "@px-ui/core";
+import { buttonVariants } from "@px-ui/core";
 import PpxLogo from "@/assets/ppx-colored-logo";
 
 export const Route = createFileRoute("/")({
@@ -15,68 +15,6 @@ function Home() {
         <div className="mb-4 flex items-center gap-3">
           <PpxLogo className="size-10" />
           <h1 className="text-ppx-h1 font-sans-b text-ppx-foreground">PX-UI</h1>
-
-          <button
-            onClick={() => {
-              toast.add({
-                title: "Success",
-                description: "Digital profile updated successfully",
-                type: "success",
-                timeout: 0,
-              });
-            }}
-          >
-            show success
-          </button>
-
-          <button
-            onClick={() => {
-              toast.add({
-                title: "Success",
-                description: "Digital profile updated successfully",
-                type: "info",
-                timeout: 0,
-              });
-            }}
-          >
-            show info
-          </button>
-          <button
-            onClick={() => {
-              toast.add({
-                title: "Success",
-                description: "Digital profile updated successfully",
-                type: "warning",
-                timeout: 0,
-              });
-            }}
-          >
-            show warning
-          </button>
-          <button
-            onClick={() => {
-              toast.add({
-                title: "Success",
-                description: "Digital profile updated successfully",
-                type: "error",
-                timeout: 0,
-              });
-            }}
-          >
-            show error
-          </button>
-
-          <button
-            onClick={() => {
-              toast.add({
-                title: "Nice",
-                description: "Digital profile updated successfully",
-                timeout: 0,
-              });
-            }}
-          >
-            show no type
-          </button>
         </div>
         <p className="text-ppx-base text-ppx-muted-foreground mb-8 max-w-md text-center">
           A modern, accessible, TypeScript‑first React component library built
