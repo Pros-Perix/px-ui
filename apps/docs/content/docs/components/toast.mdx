@@ -1,0 +1,285 @@
+---
+title: Toast
+description: Display brief, temporary notifications to provide feedback about an action or event
+apiReference: https://base-ui.com/react/components/toast
+---
+
+import { ToastBasicDemo } from "../../../src/components/toast-basic-demo";
+import { ToastTypesDemo } from "../../../src/components/toast-types-demo";
+import { ToastLoadingDemo } from "../../../src/components/toast-loading-demo";
+import { ToastWithActionDemo } from "../../../src/components/toast-with-action-demo";
+import { ToastPromiseDemo } from "../../../src/components/toast-promise-demo";
+import { ToastAnchoredDemo } from "../../../src/components/toast-anchored-demo";
+
+## Overview
+
+The Toast component displays brief, non-blocking notifications that automatically dismiss after a set duration. It supports multiple toast types (success, error, warning, info, loading), customizable positions, swipe-to-dismiss gestures, and action buttons.
+
+## Import
+
+```tsx
+import { ToastProvider, toast, AnchoredToastProvider, anchoredToast } from "@px-ui/core";
+```
+
+## Setup
+
+Add the `ToastProvider` and `AnchoredToastProvider` to your app layout:
+
+```tsx title="app/layout.tsx"
+import { ToastProvider, AnchoredToastProvider } from "@px-ui/core";
+
+export default function RootLayout({ children }) {
+  return (
+    <ToastProvider>
+      <AnchoredToastProvider>
+        <main>{children}</main>
+      </AnchoredToastProvider>
+    </ToastProvider>
+  );
+}
+```
+
+## Usage
+
+<Preview>
+  <ToastBasicDemo />
+</Preview>
+
+<CodeBlock>
+```tsx
+import { toast } from "@px-ui/core";
+
+toast.add({
+  title: "Event has been created",
+  description: "Monday, January 3rd at 6:00pm",
+});
+```
+</CodeBlock>
+
+By default, toasts appear in the **top-center** position. You can change this by setting the `position` prop on `ToastProvider`:
+
+```tsx
+<ToastProvider position="bottom-right">{children}</ToastProvider>
+```
+
+Allowed values: `top-left`, `top-center`, `top-right`, `bottom-left`, `bottom-center`, `bottom-right`.
+
+## Examples
+
+### With Status
+
+Display different toast types to convey the nature of the notification. Each type has a distinct icon and background color.
+
+<Preview>
+  <ToastTypesDemo />
+</Preview>
+
+<CodeBlock>
+```tsx
+toast.add({
+  title: "Success",
+  description: "Your changes have been saved.",
+  type: "success",
+});
+
+toast.add({
+  title: "Error",
+  description: "Something went wrong. Please try again.",
+  type: "error",
+});
+
+toast.add({
+  title: "Warning",
+  description: "Your session will expire in 5 minutes.",
+  type: "warning",
+});
+
+toast.add({
+  title: "Info",
+  description: "A new version is available.",
+  type: "info",
+});
+```
+</CodeBlock>
+
+### Loading
+
+Show a loading toast for ongoing operations. Loading toasts don't have a close button by default.
+
+<Preview>
+  <ToastLoadingDemo />
+</Preview>
+
+<CodeBlock>
+```tsx
+const toastId = toast.add({
+  title: "Uploading...",
+  description: "Please wait while we process your file.",
+  type: "loading",
+});
+
+// Later, update the toast when complete
+toast.update(toastId, {
+  title: "Upload complete!",
+  description: "Your file has been uploaded successfully.",
+  type: "success",
+});
+```
+</CodeBlock>
+
+### With Action
+
+Add an action button to toasts for quick user interactions.
+
+<Preview>
+  <ToastWithActionDemo />
+</Preview>
+
+<CodeBlock>
+```tsx
+toast.add({
+  title: "File deleted",
+  description: "The file has been moved to trash.",
+  type: "info",
+  actionProps: {
+    children: "Undo",
+    onClick: () => {
+      // Restore the file
+    },
+  },
+});
+```
+</CodeBlock>
+
+### Promise
+
+Handle async operations with automatic loading, success, and error states.
+
+<Preview>
+  <ToastPromiseDemo />
+</Preview>
+
+<CodeBlock>
+```tsx
+toast.promise(
+  fetch("/api/save"),
+  {
+    loading: { title: "Saving...", description: "Please wait" },
+    success: { title: "Saved!", description: "Your changes are live" },
+    error: { title: "Failed", description: "Could not save changes" },
+  }
+);
+```
+</CodeBlock>
+
+### Anchored Toasts
+
+For toasts positioned relative to a specific element, use `anchoredToast`. This is useful for contextual feedback like copy buttons.
+
+<Preview>
+  <ToastAnchoredDemo />
+</Preview>
+
+<CodeBlock>
+```tsx
+import { anchoredToast } from "@px-ui/core";
+
+const buttonRef = useRef(null);
+
+<Button ref={buttonRef} onClick={() => {
+  navigator.clipboard.writeText("Copied text");
+  anchoredToast.add({
+    title: "Copied!",
+    positionerProps: {
+      anchor: buttonRef.current,
+    },
+  });
+}}>
+  Copy
+</Button>
+```
+</CodeBlock>
+
+You can style anchored toasts like tooltips by passing `data: { tooltipStyle: true }`. When using tooltip style, only the `title` is displayed:
+
+```tsx
+anchoredToast.add({
+  title: "Copied!",
+  positionerProps: {
+    anchor: buttonRef.current,
+  },
+  data: {
+    tooltipStyle: true,
+  },
+});
+```
+
+## API Reference
+
+### ToastProvider
+
+Wraps your application to provide toast context and render stacked toasts.
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `position` | `ToastPosition` | `"top-center"` | Where toasts appear on screen |
+
+**Inherited Props:** Inherits all props from [Base UI Toast.Provider](https://base-ui.com/react/components/toast#provider) including `limit` and `timeout`.
+
+---
+
+### AnchoredToastProvider
+
+Provider for anchored toasts that position relative to specific elements.
+
+**Inherited Props:** Inherits all props from [Base UI Toast.Provider](https://base-ui.com/react/components/toast#provider)
+
+---
+
+### toast
+
+Global toast manager for triggering stacked toasts.
+
+| Method | Signature | Description |
+|--------|-----------|-------------|
+| `add` | `(options: ToastOptions) => string` | Create a new toast, returns toast ID |
+| `update` | `(id: string, options: Partial<ToastOptions>) => void` | Update an existing toast |
+| `close` | `(id: string) => void` | Dismiss a toast |
+| `promise` | `(promise: Promise, options: PromiseOptions) => string` | Handle async operations |
+
+---
+
+### anchoredToast
+
+Global toast manager for triggering anchored toasts.
+
+Same methods as `toast`, but toasts require `positionerProps.anchor` to specify the anchor element.
+
+---
+
+### ToastOptions
+
+| Option | Type | Description |
+|--------|------|-------------|
+| `title` | `ReactNode` | Toast heading |
+| `description` | `ReactNode` | Toast message body |
+| `type` | `"success" \| "error" \| "warning" \| "info" \| "loading"` | Toast variant with icon and color |
+| `timeout` | `number` | Override default auto-dismiss duration (ms) |
+| `actionProps` | `ButtonProps` | Action button configuration |
+| `onClose` | `() => void` | Callback when toast is dismissed |
+| `positionerProps` | `object` | For anchored toasts: `{ anchor, side, sideOffset }` |
+| `data` | `object` | Custom data, e.g. `{ tooltipStyle: true }` for anchored toasts |
+
+---
+
+### ToastPosition
+
+```tsx
+type ToastPosition =
+  | "top-left"
+  | "top-center"
+  | "top-right"
+  | "bottom-left"
+  | "bottom-center"
+  | "bottom-right";
+```
