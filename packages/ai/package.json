@@ -1,0 +1,65 @@
+{
+  "name": "@px-ui/ai",
+  "version": "0.0.1",
+  "description": "AI components built on top of px-ui-core",
+  "type": "module",
+  "module": "./dist/index.js",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": "./dist/index.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "lint": "eslint src --ext .ts,.tsx",
+    "build": "tsdown",
+    "dev": "tsdown --watch",
+    "test": "vitest",
+    "typecheck": "tsc --noEmit",
+    "prepublishOnly": "pnpm run build"
+  },
+  "keywords": [
+    "react",
+    "components",
+    "ui",
+    "tailwind",
+    "design-system",
+    "ai",
+    "chatbot"
+  ],
+  "author": "",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Pros-Perix/px-ui.git",
+    "directory": "packages/ai"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "peerDependencies": {
+    "@px-ui/core": "workspace:*",
+    "react": ">=19.0.0",
+    "react-dom": ">=19.0.0"
+  },
+  "devDependencies": {
+    "@px-ui/core": "workspace:*",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.0",
+    "@tsconfig/strictest": "^2.0.8",
+    "@types/node": "^24.10.1",
+    "@types/react": "^19.2.0",
+    "@types/react-dom": "^19.2.0",
+    "@vitejs/plugin-react": "^5.1.1",
+    "happy-dom": "^20.0.10",
+    "react": "19.2.0",
+    "react-dom": "19.2.0",
+    "tsdown": "^0.16.4",
+    "typescript": "^5.9.3",
+    "vite": "npm:rolldown-vite@^7.2.5",
+    "vitest": "^4.0.9"
+  }
+}
+
