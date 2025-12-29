@@ -22,9 +22,7 @@ export interface Currency {
   value: string;
 }
 
-type AllRootProps = React.ComponentProps<
-  typeof Combobox.Root<Currency, Currency, false>
->;
+type AllRootProps = React.ComponentProps<typeof Combobox.Root<Currency, false>>;
 
 type RootProps = Pick<
   AllRootProps,
@@ -185,7 +183,7 @@ export function CurrencySelectField({
   );
 
   return (
-    <Combobox.Root<Currency, Currency, false>
+    <Combobox.Root<Currency, false>
       items={currencies as Currency[]}
       value={value}
       onValueChange={onValueChange}
@@ -196,6 +194,7 @@ export function CurrencySelectField({
       itemToStringLabel={itemToStringLabel}
       inputRef={inputRef}
       readOnly={readOnly}
+      name={name}
     >
       <InputGroup.Root
         size={size}
