@@ -44,6 +44,9 @@
     "react": ">=19.0.0",
     "react-dom": ">=19.0.0"
   },
+  "dependencies": {
+    "class-variance-authority": "^0.7.1"
+  },
   "devDependencies": {
     "@px-ui/core": "workspace:*",
     "@testing-library/jest-dom": "^6.9.1",
