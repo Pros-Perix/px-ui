@@ -13,9 +13,7 @@ import {
   UploadWithProgressDemo,
   FilesTableDemo,
   DropzoneSizesDemo,
-  InlineImageUploadDemo,
   MixedContentCardsDemo,
-  SingleImageUploadDemo,
   AvatarUploadDemo,
 } from "../../../src/components/file-upload-demos";
 
@@ -240,21 +238,65 @@ Because the primitives are headless/composable, you can render your own layouts.
 
 </CodeBlock>
 
-### Inline image picker patterns
-
-<Preview>
-  <InlineImageUploadDemo />
-</Preview>
-
-### Single-image patterns
-
-<Preview>
-  <SingleImageUploadDemo />
-</Preview>
+### Avatar upload
 
 <Preview>
   <AvatarUploadDemo />
 </Preview>
+
+<CodeBlock>
+```tsx
+export function AvatarUploadDemo() {
+  const [state, actions] = useFileUpload({
+    accept: "image/*",
+    maxSize: 2 * 1024 * 1024,
+    multiple: false,
+  });
+
+  return (
+    <div className="flex flex-col items-center gap-4">
+      <FileUpload.Root
+        files={state.files}
+        addFiles={actions.addFiles}
+        removeFile={actions.removeFile}
+        clearFiles={actions.clearFiles}
+        openFileDialog={actions.openFileDialog}
+        getInputProps={actions.getInputProps}
+        handleDragEnter={actions.handleDragEnter}
+        handleDragLeave={actions.handleDragLeave}
+        handleDragOver={actions.handleDragOver}
+        handleDrop={actions.handleDrop}
+        isDragActive={state.isDragging}
+        accept="image/*"
+      >
+        <FileUpload.Trigger hideDefaultContent>
+          <FileUpload.Dropzone
+            hideDefaultContent
+            className="size-32 min-h-0 rounded-full p-0"
+          >
+            {state.files.length > 0 ? (
+              <img
+                src={state.files[0].preview}
+                alt="Avatar"
+                className="size-full rounded-full object-cover"
+              />
+            ) : (
+              <div className="text-ppx-neutral-10 flex flex-col items-center justify-center">
+                <UserIcon className="size-10" />
+                <span className="mt-1 text-xs">Upload</span>
+              </div>
+            )}
+          </FileUpload.Dropzone>
+        </FileUpload.Trigger>
+      </FileUpload.Root>
+      <p className="text-ppx-neutral-10 text-xs">
+        Click or drag to upload avatar
+      </p>
+    </div>
+  );
+}
+```
+</CodeBlock>
 
 ## Anatomy
 
@@ -434,3 +476,4 @@ Wraps a file row and provides item context for `Item*` parts.
 | `showStatusOverlay` | `boolean`        | `true`  | Show uploading/error/success overlays |
 
 **Inherited Props:** All native `div` props.
+```

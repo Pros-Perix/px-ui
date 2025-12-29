@@ -348,12 +348,15 @@ export interface TriggerProps extends React.ComponentProps<typeof Button> {
   uploadingText?: string;
   /** Show uploading state */
   showUploadingState?: boolean;
+  /** Hide the default content */
+  hideDefaultContent?: boolean;
 }
 
 function Trigger({
   children,
   uploadingText = "Uploading...",
   showUploadingState = true,
+  hideDefaultContent = false,
   ...props
 }: TriggerProps) {
   const { openFileDialog, disabled, isUploading } = useFileUploadContext();
@@ -366,6 +369,11 @@ function Trigger({
       onClick={openFileDialog}
       disabled={isDisabled}
       data-slot="file-upload-trigger"
+      className={cn(
+        hideDefaultContent &&
+          "not-disabled:hover:bg-transparent h-auto border-none bg-transparent p-0 shadow-none hover:bg-transparent focus-visible:ring-0 active:bg-transparent",
+        props.className,
+      )}
       {...props}
     >
       {showUploadingState && isUploading ? (
