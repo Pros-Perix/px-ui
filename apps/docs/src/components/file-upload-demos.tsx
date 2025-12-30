@@ -36,7 +36,6 @@ export function BasicDropzoneDemo() {
   );
 }
 
-
 // ============================================================================
 // Avatar Upload
 // ============================================================================
@@ -64,7 +63,7 @@ export function AvatarUploadDemo() {
         isDragActive={state.isDragging}
         accept="image/*"
       >
-        <FileUpload.Trigger hideDefaultContent>
+        <FileUpload.Trigger variant="outline">
           <FileUpload.Dropzone
             hideDefaultContent
             className="size-32 min-h-0 rounded-full p-0"
@@ -241,7 +240,7 @@ export function CompactUploadDemo() {
         accept=".pdf,.doc,.docx"
       >
         <div className="flex items-center gap-3">
-          <FileUpload.Trigger variant="outline" size="sm">
+          <FileUpload.Trigger>
             <UploadIcon className="size-4" />
             Upload document
           </FileUpload.Trigger>
@@ -365,9 +364,7 @@ export function FilesTableDemo() {
                 Files ({state.files.length})
               </span>
               <div className="flex gap-2">
-                <FileUpload.Trigger size="sm" variant="ghost">
-                  Add files
-                </FileUpload.Trigger>
+                <FileUpload.Trigger>Add files</FileUpload.Trigger>
                 <FileUpload.ClearButton
                   size="sm"
                   variant="ghost"
@@ -821,6 +818,7 @@ export function SimpleButtonVariantDemo() {
             getPresignedUrl: getPresignedUrl,
             uploadFile: uploadFile,
           }}
+          size="sm"
         />
       </div>
       <div>
@@ -834,6 +832,7 @@ export function SimpleButtonVariantDemo() {
             getPresignedUrl: getPresignedUrl,
             uploadFile: uploadFile,
           }}
+          size="sm"
         />
       </div>
     </div>

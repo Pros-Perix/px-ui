@@ -192,21 +192,11 @@ export function FileUploadField({
       <FileUpload.Root {...rootProps} className={className}>
         <div className="flex items-center gap-3">
           <FileUpload.Trigger
-            variant={variant === "compact" ? "outline" : "default"}
-            size={variant === "compact" ? "sm" : "default"}
-            showUploadingState
-          >
-            <UploadIcon className="size-4" />
-            {buttonText}
-          </FileUpload.Trigger>
-
-          {variant === "compact" && files.length > 0 && (
-            <span className="text-ppx-neutral-12 truncate text-sm">
-              {files.length === 1
-                ? files[0].file.name
-                : `${files.length} files selected`}
-            </span>
-          )}
+            uploadingText={buttonText}
+            showUploadingState={variant === "compact"}
+            variant={variant === "button" ? "default" : "outline"}
+            size={size}
+          />
         </div>
 
         {/* File List */}
