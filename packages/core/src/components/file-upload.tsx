@@ -1,7 +1,9 @@
 import * as React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
+import { useRender } from "@base-ui/react/use-render";
+import { mergeProps } from "@base-ui/react/merge-props";
 import { cn } from "../utils";
-import { Button } from "./button";
+import { Button, buttonVariants } from "./button";
 import UploadCloudIcon from "../icons/upload-cloud-icon";
 import CloseIcon from "../icons/close-icon";
 import CheckIcon from "../icons/check-icon";
@@ -339,58 +341,49 @@ function Dropzone({
   );
 }
 
-// ============================================================================
-// Trigger Component (standalone button)
-// ============================================================================
-
-export interface TriggerProps extends React.ComponentProps<typeof Button> {
+export interface TriggerProps extends useRender.ComponentProps<typeof Button> {
   /** Text to show while uploading */
   uploadingText?: string;
   /** Show uploading state */
   showUploadingState?: boolean;
-  /** Hide the default content */
-  hideDefaultContent?: boolean;
 }
 
 function Trigger({
   children,
   uploadingText = "Uploading...",
   showUploadingState = true,
-  hideDefaultContent = false,
+  render,
+  variant,
+  size,
   ...props
 }: TriggerProps) {
   const { openFileDialog, disabled, isUploading } = useFileUploadContext();
 
   const isDisabled = disabled || (showUploadingState && isUploading);
 
-  return (
-    <Button
-      type="button"
-      onClick={openFileDialog}
-      disabled={isDisabled}
-      data-slot="file-upload-trigger"
-      className={cn(
-        hideDefaultContent &&
-          "not-disabled:hover:bg-transparent h-auto border-none bg-transparent p-0 shadow-none hover:bg-transparent focus-visible:ring-0 active:bg-transparent",
-        props.className,
-      )}
-      {...props}
-    >
-      {showUploadingState && isUploading ? (
-        <>
+  const defaultProps: useRender.ElementProps<"button"> = {
+    onClick: () => openFileDialog(),
+    disabled: isDisabled,
+    className: buttonVariants({ variant, size }),
+    children: (
+      <React.Fragment>
+        <UploadIcon className="size-4" />
+        {uploadingText ?? "Select files"}
+        {showUploadingState && isUploading && (
           <SpinnerIcon className="size-4 animate-spin" />
-          {uploadingText}
-        </>
-      ) : (
-        (children ?? (
-          <>
-            <UploadIcon className="size-4" />
-            Select files
-          </>
-        ))
-      )}
-    </Button>
-  );
+        )}
+      </React.Fragment>
+    ),
+    "aria-label": `Upload files`,
+  };
+
+  const element = useRender({
+    defaultTagName: "button",
+    render,
+    props: mergeProps<"button">(defaultProps, props),
+  });
+
+  return element;
 }
 
 // ============================================================================
