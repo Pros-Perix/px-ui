@@ -2,7 +2,10 @@ import { BlockCheckboxGroup } from "@px-ui/core";
 
 export function BlockCheckboxGroupMultipleDemo() {
   return (
-    <BlockCheckboxGroup.Group defaultValue={["react", "typescript", "tailwind"]}>
+    <BlockCheckboxGroup.Group
+      defaultValue={["react", "typescript", "tailwind"]}
+      className="grid grid-cols-3"
+    >
       <BlockCheckboxGroup.Item value="react">
         <BlockCheckboxGroup.Header>
           <BlockCheckboxGroup.Title>React</BlockCheckboxGroup.Title>

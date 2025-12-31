@@ -2,10 +2,15 @@ import { BlockCheckboxGroup } from "@px-ui/core";
 
 export function BlockCheckboxGroupBasicDemo() {
   return (
-    <BlockCheckboxGroup.Group defaultValue={["email"]}>
+    <BlockCheckboxGroup.Group
+      defaultValue={["email"]}
+      className="grid grid-cols-2"
+    >
       <BlockCheckboxGroup.Item value="email">
         <BlockCheckboxGroup.Header>
-          <BlockCheckboxGroup.Title>Email Notifications</BlockCheckboxGroup.Title>
+          <BlockCheckboxGroup.Title>
+            Email Notifications
+          </BlockCheckboxGroup.Title>
         </BlockCheckboxGroup.Header>
         <BlockCheckboxGroup.Description>
           Receive notifications via email when there's activity on your account

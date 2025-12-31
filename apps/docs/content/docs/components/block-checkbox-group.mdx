@@ -1,5 +1,5 @@
 ---
-title: BlockCheckboxGroup
+title: Block Checkbox Group
 description: Large card-style checkboxes for selecting multiple options with rich content
 apiReference: https://base-ui.com/react/components/checkbox-group
 ---
@@ -26,7 +26,7 @@ import { BlockCheckboxGroup } from "@px-ui/core";
 
 <CodeBlock>
 ```tsx
-<BlockCheckboxGroup.Group defaultValue={["email"]}>
+<BlockCheckboxGroup.Group defaultValue={["email"]} className="grid grid-cols-2">
   <BlockCheckboxGroup.Item value="email">
     <BlockCheckboxGroup.Header>
       <BlockCheckboxGroup.Title>Email Notifications</BlockCheckboxGroup.Title>
@@ -60,7 +60,7 @@ Users can select multiple options simultaneously.
 
 <CodeBlock>
 ```tsx
-<BlockCheckboxGroup.Group defaultValue={["react", "typescript", "tailwind"]}>
+<BlockCheckboxGroup.Group defaultValue={["react", "typescript", "tailwind"]} className="grid grid-cols-3">
   <BlockCheckboxGroup.Item value="react">
     <BlockCheckboxGroup.Header>
       <BlockCheckboxGroup.Title>React</BlockCheckboxGroup.Title>
