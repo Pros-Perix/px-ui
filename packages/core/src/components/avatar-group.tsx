@@ -20,8 +20,8 @@ export function AvatarGroup({ max = 4, avatars, className }: AvatarGroupProps) {
         className={cn("flex items-center", className)}
         data-slot="avatar-group"
       >
-        {avatars.map((avatar, index) => (
-          <React.Fragment key={avatar.name}>
+        {avatars.slice(0, max).map((avatar, index) => (
+          <React.Fragment key={index}>
             <Tooltip.BaseRoot>
               <Tooltip.Trigger
                 render={(tooltipProps) => (
@@ -49,7 +49,7 @@ export function AvatarGroup({ max = 4, avatars, className }: AvatarGroupProps) {
           <div
             className="relative"
             style={{
-              marginLeft: `-${parseInt(avatars[0].size ?? "100px") * 0.25}px`,
+              marginLeft: `-${parseInt(avatars[max - 1]?.size ?? "100px") * 0.25}px`,
               zIndex: 0,
             }}
           >
@@ -58,14 +58,14 @@ export function AvatarGroup({ max = 4, avatars, className }: AvatarGroupProps) {
                 <div
                   className={cn(
                     "bg-ppx-neutral-3 text-ppx-neutral-18 hover:bg-ppx-neutral-4 flex cursor-pointer items-center justify-center font-medium transition-colors",
-                    avatars[0].variant === "rounded"
+                    avatars[max - 1]?.variant === "rounded"
                       ? "rounded-full"
                       : "rounded-ppx-s",
                   )}
                   style={{
-                    width: avatars[0].size ?? "100px",
-                    height: avatars[0].size ?? "100px",
-                    fontSize: `${parseInt(avatars[0].size ?? "100px") * 0.3}px`,
+                    width: avatars[max - 1]?.size ?? "100px",
+                    height: avatars[max - 1]?.size ?? "100px",
+                    fontSize: `${parseInt(avatars[max - 1]?.size ?? "100px") * 0.3}px`,
                   }}
                 >
                   +{overflowAvatars.length}
@@ -77,9 +77,9 @@ export function AvatarGroup({ max = 4, avatars, className }: AvatarGroupProps) {
                 positionerProps={{ align: "start", side: "top" }}
               >
                 <div className="max-h-64 space-y-2 overflow-y-auto">
-                  {overflowAvatars.map((avatar) => (
+                  {overflowAvatars.map((avatar, index) => (
                     <div
-                      key={avatar.name}
+                      key={index}
                       className="flex items-center gap-3 rounded-md p-2"
                     >
                       <Avatar {...avatar} size="24px" hideTooltip />

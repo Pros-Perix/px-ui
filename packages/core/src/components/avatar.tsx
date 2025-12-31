@@ -73,7 +73,10 @@ interface AvatarProps {
   imgSrc: string | null | undefined;
   name: string | null | undefined;
   variant?: AvatarVariant;
-  size?: `${number}px`;
+  /**
+   * example: "20px"
+   */
+  size?: string;
   className?: string;
   children?: React.ReactNode;
   hideTooltip?: boolean;
@@ -130,7 +133,7 @@ export function AvatarImpl(props: AvatarImplProps) {
       <AvatarBase.Fallback
         data-slot="avatar-fallback"
         className={cn(
-          "font-medium flex size-full items-center justify-center text-[40cqw] select-none",
+          "flex size-full select-none items-center justify-center text-[40cqw] font-medium",
         )}
         style={colorStyle}
       >
