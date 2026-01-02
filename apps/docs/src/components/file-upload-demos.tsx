@@ -36,69 +36,6 @@ export function BasicDropzoneDemo() {
   );
 }
 
-// ============================================================================
-// Single Image Upload with Preview
-// ============================================================================
-
-export function SingleImageUploadDemo() {
-  const [state, actions] = useFileUpload({
-    accept: "image/*",
-    maxSize: 5 * 1024 * 1024,
-    multiple: false,
-  });
-
-  return (
-    <div className="w-full max-w-sm">
-      <FileUpload.Root
-        files={state.files}
-        addFiles={actions.addFiles}
-        removeFile={actions.removeFile}
-        clearFiles={actions.clearFiles}
-        openFileDialog={actions.openFileDialog}
-        getInputProps={actions.getInputProps}
-        handleDragEnter={actions.handleDragEnter}
-        handleDragLeave={actions.handleDragLeave}
-        handleDragOver={actions.handleDragOver}
-        handleDrop={actions.handleDrop}
-        isDragActive={state.isDragging}
-        accept="image/*"
-      >
-        {state.files.length === 0 ? (
-          <FileUpload.Dropzone
-            size="sm"
-            dropzoneText="Drop your image here"
-            browseText="Select image"
-          />
-        ) : (
-          <div className="relative">
-            <img
-              src={state.files[0].preview}
-              alt={state.files[0].file.name}
-              className="rounded-ppx-m h-48 w-full object-cover"
-            />
-            <button
-              onClick={actions.clearFiles}
-              className="absolute right-2 top-2 flex size-8 items-center justify-center rounded-full bg-black/60 text-white transition-opacity hover:bg-black/80"
-            >
-              <CloseIcon className="size-4" />
-            </button>
-            <div className="rounded-b-ppx-m absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-3">
-              <p className="truncate text-sm font-medium text-white">
-                {state.files[0].file.name}
-              </p>
-              <p className="text-xs text-white/70">
-                {formatBytes(state.files[0].file.size)}
-              </p>
-            </div>
-          </div>
-        )}
-      </FileUpload.Root>
-      <p className="text-ppx-neutral-10 mt-2 text-center text-xs">
-        Max size: 5MB • PNG, JPG, GIF
-      </p>
-    </div>
-  );
-}
 
 // ============================================================================
 // Avatar Upload
@@ -127,23 +64,25 @@ export function AvatarUploadDemo() {
         isDragActive={state.isDragging}
         accept="image/*"
       >
-        <FileUpload.Dropzone
-          hideDefaultContent
-          className="size-32 min-h-0 rounded-full p-0"
-        >
-          {state.files.length > 0 ? (
-            <img
-              src={state.files[0].preview}
-              alt="Avatar"
-              className="size-full rounded-full object-cover"
-            />
-          ) : (
-            <div className="text-ppx-neutral-10 flex flex-col items-center justify-center">
-              <UserIcon className="size-10" />
-              <span className="mt-1 text-xs">Upload</span>
-            </div>
-          )}
-        </FileUpload.Dropzone>
+        <FileUpload.Trigger hideDefaultContent>
+          <FileUpload.Dropzone
+            hideDefaultContent
+            className="size-32 min-h-0 rounded-full p-0"
+          >
+            {state.files.length > 0 ? (
+              <img
+                src={state.files[0].preview}
+                alt="Avatar"
+                className="size-full rounded-full object-cover"
+              />
+            ) : (
+              <div className="text-ppx-neutral-10 flex flex-col items-center justify-center">
+                <UserIcon className="size-10" />
+                <span className="mt-1 text-xs">Upload</span>
+              </div>
+            )}
+          </FileUpload.Dropzone>
+        </FileUpload.Trigger>
       </FileUpload.Root>
       <p className="text-ppx-neutral-10 text-xs">
         Click or drag to upload avatar
@@ -387,67 +326,6 @@ export function UploadWithProgressDemo() {
             }
           </FileUpload.ItemList>
         )}
-      </FileUpload.Root>
-    </div>
-  );
-}
-
-// ============================================================================
-// Inline Image Upload
-// ============================================================================
-
-export function InlineImageUploadDemo() {
-  const [state, actions] = useFileUpload({
-    accept: "image/*",
-    maxFiles: 4,
-    multiple: true,
-  });
-
-  return (
-    <div className="w-full max-w-md">
-      <FileUpload.Root
-        files={state.files}
-        addFiles={actions.addFiles}
-        removeFile={actions.removeFile}
-        clearFiles={actions.clearFiles}
-        openFileDialog={actions.openFileDialog}
-        getInputProps={actions.getInputProps}
-        handleDragEnter={actions.handleDragEnter}
-        handleDragLeave={actions.handleDragLeave}
-        handleDragOver={actions.handleDragOver}
-        handleDrop={actions.handleDrop}
-        isDragActive={state.isDragging}
-        accept="image/*"
-        multiple
-      >
-        <div className="flex flex-wrap items-center gap-2">
-          {state.files.map((file) => (
-            <div
-              key={file.id}
-              className="rounded-ppx-s group relative size-16 overflow-hidden"
-            >
-              <img
-                src={file.preview}
-                alt={file.file.name}
-                className="size-full object-cover"
-              />
-              <button
-                onClick={() => actions.removeFile(file.id)}
-                className="absolute inset-0 flex items-center justify-center bg-black/50 opacity-0 transition-opacity group-hover:opacity-100"
-              >
-                <CloseIcon className="size-4 text-white" />
-              </button>
-            </div>
-          ))}
-          {state.files.length < 4 && (
-            <FileUpload.Dropzone
-              hideDefaultContent
-              className="rounded-ppx-s border-ppx-neutral-5 hover:border-ppx-primary-5 hover:bg-ppx-primary-1 size-16 min-h-0 cursor-pointer border-2 border-dashed p-0"
-            >
-              <PlusIcon className="text-ppx-neutral-8 size-6" />
-            </FileUpload.Dropzone>
-          )}
-        </div>
       </FileUpload.Root>
     </div>
   );
