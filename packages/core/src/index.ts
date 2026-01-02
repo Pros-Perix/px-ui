@@ -38,6 +38,7 @@ export * from "./components/file-upload";
 // Icons
 export { default as FileIcon } from "./icons/file-icon";
 export { default as UploadIcon } from "./icons/upload-icon";
+export { default as ChevronDownIcon } from "./icons/chevron-down-icon";
 
 // Hooks
 export * from "./hooks/use-debounce";
