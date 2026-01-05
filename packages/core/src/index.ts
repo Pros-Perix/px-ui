@@ -34,6 +34,10 @@ export * from "./components/switch";
 export * from "./components/separator";
 export * from "./components/date-picker";
 export * from "./components/file-upload";
+export * from "./components/otp-input";
+
+// Re-export input-otp package components for composable usage
+export * from "input-otp";
 
 // Icons
 export { default as FileIcon } from "./icons/file-icon";

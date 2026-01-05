@@ -1,0 +1,417 @@
+---
+title: Input OTP
+description: One-time password input component with prop-config-driven API and composable components
+---
+
+import { OtpInputDemo } from "../../../src/components/input-otp-demo";
+import { OtpInputSizesDemo } from "../../../src/components/input-otp-sizes-demo";
+
+## Overview
+
+The Input OTP component provides a styled one-time password input field with two usage patterns:
+- **Prop-config-driven**: Simple API for common use cases
+- **Composable**: Full control over layout and structure
+
+It includes automatic styling for focus, disabled, and error states, with proper accessibility attributes and a visual caret indicator. Built on top of [input-otp](https://github.com/guilhermerodz/input-otp) by @guilhermerodz.
+
+## Import
+
+### Prop-config-driven API
+
+```tsx
+import { OtpInput } from "@px-ui/core";
+```
+
+### Composable API
+
+```tsx
+import {
+  OTPInput,
+  OtpInputGroup,
+  OtpInputSlot,
+  OtpInputSeparator,
+  OTPInputContext,
+} from "@px-ui/core";
+```
+
+## Usage
+
+<Preview>
+  <OtpInputDemo />
+</Preview>
+
+## Prop-Config-Driven API
+
+The simplest way to use the OTP input is with the prop-config-driven `OtpInput` component. It handles the layout automatically based on props.
+
+### Basic Usage
+
+<CodeBlock>
+```tsx
+import { OtpInput } from "@px-ui/core";
+
+<OtpInput length={6} />
+```
+</CodeBlock>
+
+### With Separator
+
+Add separators at specific positions using the `separatorAfter` prop (0-indexed positions).
+
+<CodeBlock>
+```tsx
+<OtpInput length={6} separatorAfter={[2]} />
+// Adds separator after the 3rd digit (index 2)
+```
+</CodeBlock>
+
+### Sizes
+
+The OtpInput component supports two size variants for different interface densities.
+
+<Preview>
+  <OtpInputSizesDemo />
+</Preview>
+
+<CodeBlock>
+```tsx
+<OtpInput size="sm" length={6} />
+<OtpInput size="default" length={6} />
+```
+</CodeBlock>
+
+### Different Lengths
+
+Configure the OTP input for different use cases.
+
+<CodeBlock>
+```tsx
+// 4-digit PIN
+<OtpInput length={4} />
+
+// 6-digit OTP
+<OtpInput length={6} />
+
+// 8-digit code
+<OtpInput length={8} separatorAfter={[2, 5]} />
+```
+</CodeBlock>
+
+### Controlled Value
+
+Use controlled value and onChange handlers.
+
+<CodeBlock>
+```tsx
+const [value, setValue] = React.useState("");
+
+<OtpInput
+  length={6}
+  value={value}
+  onChange={(value) => setValue(value)}
+/>
+```
+</CodeBlock>
+
+### Validation States
+
+The `OtpInput` component supports validation states through the `invalid` prop, which applies error styling and sets the appropriate ARIA attributes.
+
+<CodeBlock>
+```tsx
+// Valid state (default)
+<OtpInput length={6} />
+
+// Invalid state
+<OtpInput length={6} invalid />
+
+// Disabled state
+<OtpInput length={6} disabled />
+
+// Invalid and disabled
+<OtpInput length={6} invalid disabled />
+```
+</CodeBlock>
+
+## Composable API
+
+For advanced use cases where you need full control over the layout, use the composable API with `OTPInput` from `input-otp`. You'll need to create your own styled `Group`, `Slot`, and `Separator` components using the `OTPInputContext`.
+
+### Creating Styled Components
+
+First, create your own styled components using `OTPInputContext`:
+
+<CodeBlock>
+```tsx
+import { OTPInput, OTPInputContext } from "@px-ui/core";
+import * as React from "react";
+
+function OtpInputGroup({ className, ...props }: React.ComponentProps<"div">) {
+  return <div className={`flex items-center ${className || ""}`} {...props} />;
+}
+
+function OtpInputSlot({
+  index,
+  className,
+  ...props
+}: React.ComponentProps<"div"> & { index: number }) {
+  const inputOTPContext = React.useContext(OTPInputContext);
+  const { char, hasFakeCaret, isActive } = inputOTPContext?.slots[index] ?? {};
+
+  return (
+    <div
+      data-active={isActive}
+      className={`data-[active=true]:border-ring border-input relative flex h-9 w-9 items-center justify-center border-y border-r text-sm first:rounded-l-md first:border-l last:rounded-r-md ${className || ""}`}
+      {...props}
+    >
+      {char}
+      {hasFakeCaret && (
+        <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+          <div className="animate-caret-blink bg-foreground h-4 w-px duration-1000" />
+        </div>
+      )}
+    </div>
+  );
+}
+
+function OtpInputSeparator({ className, ...props }: React.ComponentProps<"div">) {
+  return (
+    <div className={`flex items-center ${className || ""}`} {...props}>
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="none" className="h-4 w-4">
+        <path d="M2 6h8" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+      </svg>
+    </div>
+  );
+}
+```
+</CodeBlock>
+
+### Basic Composable Usage
+
+<CodeBlock>
+```tsx
+import { OTPInput } from "@px-ui/core";
+
+<OTPInput maxLength={6}>
+  <OtpInputGroup>
+    <OtpInputSlot index={0} />
+    <OtpInputSlot index={1} />
+    <OtpInputSlot index={2} />
+    <OtpInputSlot index={3} />
+    <OtpInputSlot index={4} />
+    <OtpInputSlot index={5} />
+  </OtpInputGroup>
+</OTPInput>
+```
+</CodeBlock>
+
+### With Separator
+
+You can use the `<OtpInputSeparator />` component to add a separator between the input groups.
+
+<CodeBlock>
+```tsx
+import { OTPInput } from "@px-ui/core";
+// Note: You need to create your own OtpInputGroup, OtpInputSlot, and OtpInputSeparator components
+
+<OTPInput maxLength={6}>
+  <OtpInputGroup>
+    <OtpInputSlot index={0} />
+    <OtpInputSlot index={1} />
+    <OtpInputSlot index={2} />
+  </OtpInputGroup>
+  <OtpInputSeparator />
+  <OtpInputGroup>
+    <OtpInputSlot index={3} />
+    <OtpInputSlot index={4} />
+    <OtpInputSlot index={5} />
+  </OtpInputGroup>
+</OTPInput>
+```
+</CodeBlock>
+
+### Custom Layouts
+
+Create any custom layout you need.
+
+<CodeBlock>
+```tsx
+// 8-digit code with custom grouping (3-3-2)
+<OTPInput maxLength={8}>
+  <OtpInputGroup>
+    <OtpInputSlot index={0} />
+    <OtpInputSlot index={1} />
+    <OtpInputSlot index={2} />
+  </OtpInputGroup>
+  <OtpInputSeparator />
+  <OtpInputGroup>
+    <OtpInputSlot index={3} />
+    <OtpInputSlot index={4} />
+    <OtpInputSlot index={5} />
+  </OtpInputGroup>
+  <OtpInputSeparator />
+  <OtpInputGroup>
+    <OtpInputSlot index={6} />
+    <OtpInputSlot index={7} />
+  </OtpInputGroup>
+</OTPInput>
+```
+</CodeBlock>
+
+### Pattern
+
+Use the `pattern` prop to define a custom pattern for the OTP input.
+
+<CodeBlock>
+```tsx
+import { REGEXP_ONLY_DIGITS_AND_CHARS } from "input-otp";
+import { OTPInput } from "@px-ui/core";
+// Note: OtpInputGroup and OtpInputSlot are custom components you create
+
+<OTPInput maxLength={6} pattern={REGEXP_ONLY_DIGITS_AND_CHARS}>
+  <OtpInputGroup>
+    <OtpInputSlot index={0} />
+    <OtpInputSlot index={1} />
+    <OtpInputSlot index={2} />
+    <OtpInputSlot index={3} />
+    <OtpInputSlot index={4} />
+    <OtpInputSlot index={5} />
+  </OtpInputGroup>
+</OTPInput>
+```
+</CodeBlock>
+
+### Controlled
+
+You can use the `value` and `onChange` props to control the input value.
+
+<CodeBlock>
+```tsx
+import { OTPInput } from "@px-ui/core";
+// Note: OtpInputGroup and OtpInputSlot are custom components you create
+
+const [value, setValue] = React.useState("");
+
+<OTPInput
+  maxLength={6}
+  value={value}
+  onChange={(value) => setValue(value)}
+>
+  <OtpInputGroup>
+    <OtpInputSlot index={0} />
+    <OtpInputSlot index={1} />
+    <OtpInputSlot index={2} />
+    <OtpInputSlot index={3} />
+    <OtpInputSlot index={4} />
+    <OtpInputSlot index={5} />
+  </OtpInputGroup>
+</OTPInput>
+```
+</CodeBlock>
+
+### Advanced: Using Context
+
+Access the OTP input context for custom slot implementations.
+
+<CodeBlock>
+```tsx
+import { OTPInputContext } from "@px-ui/core";
+
+function CustomSlot({ index }: { index: number }) {
+  const context = React.useContext(OTPInputContext);
+  const slot = context?.slots[index];
+  
+  return (
+    <div>
+      {slot?.char || ""}
+      {slot?.isActive && <span>Active</span>}
+    </div>
+  );
+}
+```
+</CodeBlock>
+
+## API Reference
+
+### OtpInput (Prop-Config-Driven)
+
+A simple, prop-config-driven component for common OTP input use cases.
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `length` | `number` | `6` | Number of OTP digits |
+| `size` | `"default" \| "sm"` | `"default"` | Size variant of the OTP input |
+| `separatorAfter` | `number[]` | `[]` | Positions after which to insert separators (0-indexed) |
+| `value` | `string` | - | Controlled value |
+| `onChange` | `(value: string) => void` | - | Callback fired when value changes |
+| `disabled` | `boolean` | `false` | When true, disables the input |
+| `invalid` | `boolean` | `false` | When true, applies error styling and sets `aria-invalid` attribute |
+| `maxLength` | `number` | - | Maximum length (overrides `length` if provided) |
+| `className` | `string` | - | Additional CSS classes for the input |
+| `containerClassName` | `string` | - | Additional CSS classes for the container |
+| `slotClassName` | `string` | - | Additional CSS classes for slots |
+| `separatorClassName` | `string` | - | Additional CSS classes for separator |
+
+**Inherited Props:** Inherits all props from the underlying `input-otp` library's `OTPInput` component (except `children` and `render`).
+
+### OTPInput (Composable)
+
+The base component from `input-otp` library. Use this for composable layouts. You'll need to create your own styled `Group`, `Slot`, and `Separator` components using `OTPInputContext`.
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `maxLength` | `number` | - | **Required.** Maximum number of characters |
+| `value` | `string` | - | Controlled value |
+| `onChange` | `(value: string) => void` | - | Callback fired when value changes |
+| `disabled` | `boolean` | `false` | When true, disables the input |
+| `pattern` | `RegExp` | - | Pattern to validate input against |
+| `className` | `string` | - | Additional CSS classes |
+| `containerClassName` | `string` | - | Additional CSS classes for the container |
+
+**Inherited Props:** See [input-otp documentation](https://github.com/guilhermerodz/input-otp) for full API.
+
+**Note:** `input-otp` doesn't provide styled `Group`, `Slot`, or `Separator` components. You need to create your own styled components using `OTPInputContext` to access slot state. See the "Creating Styled Components" section above for examples.
+
+### OTPInputContext
+
+React context from `input-otp` library. Use this to access slot state for custom implementations.
+
+**Context Value:**
+```tsx
+{
+  slots: Array<{
+    char: string
+    isActive: boolean
+    hasFakeCaret: boolean
+  }>
+  // ... other internal state
+}
+```
+
+## When to Use Which API
+
+### Use Prop-Config-Driven (`OtpInput`) when:
+- You need a simple, standard OTP input
+- You want less boilerplate code
+- Standard layouts (4, 6, or 8 digits) are sufficient
+- You need quick implementation
+
+### Use Composable API (`OTPInput` from `input-otp`) when:
+- You need custom layouts that don't fit standard patterns
+- You want full control over slot rendering
+- You need to integrate with custom UI components
+- You're building a complex authentication flow
+- You need pattern validation or other advanced features
+- You want to create your own styled components
+
+## Notes
+
+- The prop-driven `OtpInput` component uses the `input-otp` library under the hood for core functionality
+- For composable usage, you need to create your own styled components using `OTPInputContext`
+- Each slot component must have a unique `index` prop matching its position (0, 1, 2, etc.)
+- The number of slots should match the `maxLength` prop value
+- The component automatically handles focus management and character input
+- Error states are controlled via the `invalid` prop (sets `aria-invalid` attribute automatically)
+- The `separatorAfter` prop in the config-driven API uses 0-indexed positions (e.g., `[2]` adds a separator after the 3rd digit)
+- For pattern validation, import regex patterns from `input-otp` (e.g., `REGEXP_ONLY_DIGITS_AND_CHARS`)
+- All `input-otp` exports are available from `@px-ui/core` for composable usage
