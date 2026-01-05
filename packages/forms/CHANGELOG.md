@@ -1,5 +1,18 @@
 # @px-ui/forms
 
+## 7.0.0
+
+### Minor Changes
+
+- 3bb3bac: currency select component
+
+### Patch Changes
+
+- Updated dependencies [3bb3bac]
+- Updated dependencies [5aa8c97]
+- Updated dependencies [e0426f1]
+  - @px-ui/core@4.0.0
+
 ## 6.0.1
 
 ### Patch Changes

@@ -1,5 +1,16 @@
 # @px-ui/core
 
+## 4.0.0
+
+### Major Changes
+
+- 5aa8c97: Add Otp input component
+
+### Minor Changes
+
+- 3bb3bac: currency select component
+- e0426f1: fix file upload avatar demo
+
 ## 3.1.1
 
 ### Patch Changes
