@@ -1,0 +1,87 @@
+---
+title: Xandi
+description: AI chatbot component powered by Vercel AI SDK
+---
+
+import { XandiBasicDemo } from "../../../src/components/xandi-basic-demo";
+
+## Overview
+
+Xandi is an AI chatbot component built on top of Vercel's AI SDK (`@ai-sdk/react`). It provides a simple, ready-to-use chat interface that connects to your AI backend.
+
+## Import
+
+```tsx
+import { Xandi } from "@px-ui/ai";
+```
+
+## Usage
+
+<Preview>
+  <XandiBasicDemo />
+</Preview>
+
+<CodeBlock>
+```tsx
+import { Xandi } from "@px-ui/ai";
+
+function MyPage() {
+  return <Xandi api="/api/chat" />;
+}
+```
+</CodeBlock>
+
+## Backend Setup
+
+Xandi expects an API endpoint that follows the Vercel AI SDK streaming protocol. Here's an example using Next.js:
+
+<CodeBlock>
+```tsx
+// app/api/chat/route.ts
+import { openai } from "@ai-sdk/openai";
+import { streamText } from "ai";
+
+export async function POST(req: Request) {
+  const { messages } = await req.json();
+
+  const result = streamText({
+    model: openai("gpt-4"),
+    messages,
+  });
+
+  return result.toDataStreamResponse();
+}
+```
+</CodeBlock>
+
+## How It Works
+
+Xandi uses the `useChat` hook from `@ai-sdk/react` with `DefaultChatTransport` to handle:
+
+- **Message state management** - Automatically manages the conversation history
+- **Streaming responses** - Displays AI responses as they stream in
+- **Connection status** - Tracks status (`ready`, `loading`, etc.) to disable input during generation
+
+## API Reference
+
+### Xandi
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `api` | `string` | `"/api/chat"` | The API endpoint for the chat backend |
+
+## Dependencies
+
+Xandi requires the following peer dependencies:
+
+| Package | Version |
+|---------|---------|
+| `@ai-sdk/react` | >= 3.0.0 |
+| `ai` | >= 6.0.0 |
+| `react` | >= 19.0.0 |
+
+## Installation
+
+```bash
+pnpm add @px-ui/ai @ai-sdk/react ai
+```
