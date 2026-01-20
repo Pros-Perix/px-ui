@@ -57,13 +57,51 @@ export function Root<ItemValue, Multiple extends boolean | undefined = false>({
   const chipsTriggerRef = React.useRef<HTMLDivElement>(null);
   const searchableTriggerRef = React.useRef<HTMLDivElement>(null);
   const [isOpen, setIsOpen] = React.useState(false);
-  const [inputValue, setInputValue] = React.useState("");
+  const [searchQuery, setSearchQuery] = React.useState("");
+
+  // Get label from value for display when dropdown is closed
+  const getValueLabel = (): string => {
+    if (props.value == null) return "";
+    if (
+      props.itemToStringLabel &&
+      typeof props.itemToStringLabel === "function"
+    ) {
+      return props.itemToStringLabel(props.value as ItemValue) ?? "";
+    }
+    if (
+      props.value &&
+      typeof props.value === "object" &&
+      "label" in props.value
+    ) {
+      return (props.value as any).label ?? "";
+    }
+    if (typeof props.value === "string") {
+      return props.value;
+    }
+    return "";
+  };
+
+  // Derive inputValue: when open show search query, when closed show value label
+  const inputValue =
+    props.inputValue !== undefined
+      ? props.inputValue
+      : isOpen
+        ? searchQuery
+        : getValueLabel();
+
+  const handleOpenChange = (open: boolean) => {
+    setIsOpen(open);
+    if (open) {
+      // Clear search when opening
+      setSearchQuery("");
+    }
+  };
 
   const fallbackProps = {
     open: isOpen,
-    onOpenChange: setIsOpen,
+    onOpenChange: handleOpenChange,
     inputValue,
-    onInputValueChange: setInputValue,
+    onInputValueChange: setSearchQuery,
   };
 
   const mergedProps = {
