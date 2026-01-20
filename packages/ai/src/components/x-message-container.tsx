@@ -21,7 +21,7 @@ export function XMessageContainer({ messages, height = 400 }: XMessageContainerP
   return (
     <div
       ref={containerRef}
-      className="overflow-y-auto py-10p"
+      className="overflow-y-auto py-[10px]"
       style={{ height: typeof height === "number" ? `${height}px` : height }}
     >
       <div className="flex flex-col gap-5 p-4">
