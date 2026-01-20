@@ -1,6 +1,8 @@
-"use client";
-
 import { useState } from "react";
+
+import { XMainIntake, type Suggestion } from "./x-main-intake";
+import { XMessageContainer } from "./x-message-container";
+import { XWelcome } from "./x-welcome";
 
 export interface Message {
   id: string;
@@ -11,17 +13,20 @@ export interface Message {
 export interface XandiProps {
   api?: string;
   headers?: Record<string, string>;
+  welcomeMessage?: string;
+  suggestions?: Suggestion[];
 }
 
-export function Xandi({ 
+export function Xandi({
   api = "http://localhost:3001/query",
   headers = {
     "x-org-id": "e37723a6-4363-4831-86e0-5e4950ed15ec",
     "x-user-id": "0108e28d-ec3b-4648-9178-b4a2c0d582ba",
   },
+  welcomeMessage = "How can I help you today?",
+  suggestions = [],
 }: XandiProps) {
   const [messages, setMessages] = useState<Message[]>([]);
-  const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
   const sendMessage = async (text: string) => {
@@ -34,7 +39,6 @@ export function Xandi({
       content: text,
     };
     setMessages((prev) => [...prev, userMessage]);
-    setInput("");
     setIsLoading(true);
 
     try {
@@ -64,31 +68,20 @@ export function Xandi({
     }
   };
 
-  return (
-    <>
-      {messages.map((message) => (
-        <div key={message.id}>
-          {message.role === "user" ? "User: " : "AI: "}
-          {message.content}
-        </div>
-      ))}
+  const isEmpty = messages.length === 0;
 
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          sendMessage(input);
-        }}
-      >
-        <input
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          disabled={isLoading}
-          placeholder="Say something..."
-        />
-        <button type="submit" disabled={isLoading || !input.trim()}>
-          {isLoading ? "Sending..." : "Submit"}
-        </button>
-      </form>
-    </>
+  return (
+    <div className="flex flex-col">
+      {isEmpty ? (
+        <XWelcome message={welcomeMessage} />
+      ) : (
+        <XMessageContainer messages={messages} />
+      )}
+      <XMainIntake 
+        isLoading={isLoading} 
+        onSend={sendMessage} 
+        suggestions={isEmpty ? suggestions : []}
+      />
+    </div>
   );
 }
