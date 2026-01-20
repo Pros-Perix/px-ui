@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import { Button, FileIcon, SendIcon, Spinner } from "@px-ui/core";
+import { Button, FileIcon, SendIcon, StopIcon } from "@px-ui/core";
 
 export interface Suggestion {
   id: string;
@@ -67,7 +67,7 @@ export function XMainIntake({
             className="flex h-8 w-8 items-center justify-center rounded-full bg-ppx-green-5 text-white transition-all hover:bg-ppx-green-4 hover:shadow-[0_0_12px_rgba(40,182,116,0.6)] disabled:bg-ppx-neutral-5 disabled:text-ppx-neutral-10 disabled:shadow-none"
           >
             {isLoading ? (
-              <Spinner size="small" />
+              <StopIcon width={14} />
             ) : (
               <SendIcon width={16} />
             )}

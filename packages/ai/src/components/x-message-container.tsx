@@ -2,21 +2,23 @@ import { useEffect, useRef } from "react";
 
 import type { Message } from "./xandi";
 import { XMessageItem } from "./x-message-item";
+import { XTypingIndicator } from "./x-typing-indicator";
 
 export interface XMessageContainerProps {
   messages: Message[];
   height?: string | number;
+  isLoading?: boolean;
 }
 
-export function XMessageContainer({ messages, height = 400 }: XMessageContainerProps) {
+export function XMessageContainer({ messages, height = 400, isLoading }: XMessageContainerProps) {
   const containerRef = useRef<HTMLDivElement>(null);
 
-  // Auto-scroll to bottom when new messages arrive
+  // Auto-scroll to bottom when new messages arrive or loading state changes
   useEffect(() => {
     if (containerRef.current) {
       containerRef.current.scrollTop = containerRef.current.scrollHeight;
     }
-  }, [messages]);
+  }, [messages, isLoading]);
 
   return (
     <div
@@ -28,8 +30,8 @@ export function XMessageContainer({ messages, height = 400 }: XMessageContainerP
         {messages.map((message) => (
           <XMessageItem key={message.id} message={message} />
         ))}
+        {isLoading && <XTypingIndicator />}
       </div>
     </div>
   );
 }
-

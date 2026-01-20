@@ -75,7 +75,7 @@ export function Xandi({
       {isEmpty ? (
         <XWelcome message={welcomeMessage} />
       ) : (
-        <XMessageContainer messages={messages} />
+        <XMessageContainer messages={messages} isLoading={isLoading} />
       )}
       <XMainIntake 
         isLoading={isLoading} 
