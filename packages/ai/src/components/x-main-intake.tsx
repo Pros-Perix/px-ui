@@ -1,6 +1,7 @@
 import { useState } from "react";
 
 import { Button, FileIcon, SendIcon, StopIcon } from "@px-ui/core";
+import { useXandi } from "../context/xandi-context";
 
 export interface Suggestion {
   id: string;
@@ -9,24 +10,21 @@ export interface Suggestion {
 }
 
 export interface XMainIntakeProps {
-  isLoading?: boolean;
-  onSend: (message: string) => void;
   placeholder?: string;
   suggestions?: Suggestion[];
 }
 
 export function XMainIntake({ 
-  isLoading, 
-  onSend, 
   placeholder = "Ask about jobs, candidates, timesheets, or anything workforce...",
   suggestions = [],
 }: XMainIntakeProps) {
+  const { isLoading, sendMessage } = useXandi();
   const [input, setInput] = useState("");
 
   const handleSubmit = (e?: React.FormEvent) => {
     e?.preventDefault();
     if (input.trim() && !isLoading) {
-      onSend(input);
+      sendMessage(input);
       setInput("");
     }
   };

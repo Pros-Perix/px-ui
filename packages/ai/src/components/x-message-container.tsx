@@ -1,16 +1,15 @@
 import { useEffect, useRef } from "react";
 
-import type { Message } from "./xandi";
 import { XMessageItem } from "./x-message-item";
 import { XTypingIndicator } from "./x-typing-indicator";
+import { useXandi } from "../context/xandi-context";
 
 export interface XMessageContainerProps {
-  messages: Message[];
   height?: string | number;
-  isLoading?: boolean;
 }
 
-export function XMessageContainer({ messages, height = 400, isLoading }: XMessageContainerProps) {
+export function XMessageContainer({ height = 400 }: XMessageContainerProps) {
+  const { messages, isLoading } = useXandi();
   const containerRef = useRef<HTMLDivElement>(null);
 
   // Auto-scroll to bottom when new messages arrive or loading state changes
