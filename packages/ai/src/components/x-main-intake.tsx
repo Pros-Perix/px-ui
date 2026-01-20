@@ -18,7 +18,7 @@ export interface XMainIntakeProps {
 export function XMainIntake({ 
   isLoading, 
   onSend, 
-  placeholder = "Say something...",
+  placeholder = "Ask about jobs, candidates, timesheets, or anything workforce...",
   suggestions = [],
 }: XMainIntakeProps) {
   const [input, setInput] = useState("");
@@ -76,15 +76,16 @@ export function XMainIntake({
       </form>
 
       {suggestions.length > 0 && (
-        <div className="flex flex-wrap gap-2">
-          {suggestions.map((suggestion) => (
+        <div className="flex flex-wrap justify-center gap-2">
+          {suggestions.map((suggestion, index) => (
             <Button
               key={suggestion.id}
               type="button"
               variant="outline"
               size="sm"
               onClick={() => handleSuggestionClick(suggestion.prompt)}
-              className="rounded-full"
+              className="animate-[popUp_0.3s_ease-out_forwards] rounded-full opacity-0"
+              style={{ animationDelay: `${index * 0.1}s` }}
             >
               {suggestion.label}
             </Button>
