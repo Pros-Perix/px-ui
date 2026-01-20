@@ -68,12 +68,8 @@ export function Root<ItemValue, Multiple extends boolean | undefined = false>({
     ) {
       return props.itemToStringLabel(props.value as ItemValue) ?? "";
     }
-    if (
-      props.value &&
-      typeof props.value === "object" &&
-      "label" in props.value
-    ) {
-      return (props.value as any).label ?? "";
+    if (typeof props.value === "object" && "label" in props.value) {
+      return (props.value as { label?: string }).label ?? "";
     }
     if (typeof props.value === "string") {
       return props.value;
