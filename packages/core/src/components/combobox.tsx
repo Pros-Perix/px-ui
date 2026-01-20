@@ -58,6 +58,7 @@ export function Root<ItemValue, Multiple extends boolean | undefined = false>({
   const searchableTriggerRef = React.useRef<HTMLDivElement>(null);
   const [isOpen, setIsOpen] = React.useState(false);
   const [searchQuery, setSearchQuery] = React.useState("");
+  const openedByTypingRef = React.useRef(false);
 
   // Get label from value for display when dropdown is closed
   const getValueLabel = (): string => {
@@ -88,16 +89,29 @@ export function Root<ItemValue, Multiple extends boolean | undefined = false>({
   const handleOpenChange = (open: boolean) => {
     setIsOpen(open);
     if (open) {
-      // Clear search when opening
+      if (openedByTypingRef.current) {
+        openedByTypingRef.current = false;
+        return;
+      }
+      // Clear search when opening via trigger.
       setSearchQuery("");
+    } else {
+      openedByTypingRef.current = false;
     }
+  };
+
+  const handleInputValueChange = (value: string) => {
+    if (!isOpen) {
+      openedByTypingRef.current = true;
+    }
+    setSearchQuery(value);
   };
 
   const fallbackProps = {
     open: isOpen,
     onOpenChange: handleOpenChange,
     inputValue,
-    onInputValueChange: setSearchQuery,
+    onInputValueChange: handleInputValueChange,
   };
 
   const mergedProps = {
