@@ -2,7 +2,7 @@ import { Xandi } from "@px-ui/ai";
 
 export function XandiBasicDemo() {
   return (
-    <div className="border border-ppx-neutral-5 rounded-ppx-m p-4 bg-ppx-background">
+    <div className="bg-ppx-background w-full">
       <Xandi api="http://localhost:3001/query" />
     </div>
   );
