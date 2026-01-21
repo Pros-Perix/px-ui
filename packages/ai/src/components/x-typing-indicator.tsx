@@ -1,6 +1,6 @@
 import { Avatar } from "@px-ui/core";
 
-const XANDI_AVATAR_URL = "https://prosperix.ai/assets/xandi-avatar-CbNInruf.png";
+import { XANDI_AVATAR_URL } from "../constants";
 
 export function XTypingIndicator() {
   return (
