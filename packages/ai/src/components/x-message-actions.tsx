@@ -48,20 +48,22 @@ export function Feedback({ messageId }: FeedbackProps) {
     <>
       {/* Thumbs Up */}
       <Tooltip.Root>
-        <Tooltip.Trigger>
-          <Button
-            variant="ghost"
-            size="icon-sm"
-            onClick={() => handleFeedback("up")}
-            className={`h-7 w-7 ${
-              feedback === "up"
-                ? "bg-ppx-green-2 text-ppx-green-5"
-                : "text-ppx-neutral-10 hover:text-ppx-neutral-12"
-            }`}
-          >
-            <ThumbsUpIcon className={feedback === "up" ? "fill-current" : ""} />
-          </Button>
-        </Tooltip.Trigger>
+        <Tooltip.Trigger
+          render={
+            <Button
+              variant="ghost"
+              size="icon-sm"
+              onClick={() => handleFeedback("up")}
+              className={`h-7 w-7 ${
+                feedback === "up"
+                  ? "bg-ppx-green-2 text-ppx-green-5"
+                  : "text-ppx-neutral-10 hover:text-ppx-neutral-12"
+              }`}
+            >
+              <ThumbsUpIcon className={feedback === "up" ? "fill-current" : ""} />
+            </Button>
+          }
+        />
         <Tooltip.Content>
           {feedback === "up" ? "You found this helpful" : "Good response"}
         </Tooltip.Content>
@@ -69,20 +71,22 @@ export function Feedback({ messageId }: FeedbackProps) {
 
       {/* Thumbs Down */}
       <Tooltip.Root>
-        <Tooltip.Trigger>
-          <Button
-            variant="ghost"
-            size="icon-sm"
-            onClick={() => handleFeedback("down")}
-            className={`h-7 w-7 ${
-              feedback === "down"
-                ? "bg-ppx-red-2 text-ppx-red-5"
-                : "text-ppx-neutral-10 hover:text-ppx-neutral-12"
-            }`}
-          >
-            <ThumbsDownIcon className={feedback === "down" ? "fill-current" : ""} />
-          </Button>
-        </Tooltip.Trigger>
+        <Tooltip.Trigger
+          render={
+            <Button
+              variant="ghost"
+              size="icon-sm"
+              onClick={() => handleFeedback("down")}
+              className={`h-7 w-7 ${
+                feedback === "down"
+                  ? "bg-ppx-red-2 text-ppx-red-5"
+                  : "text-ppx-neutral-10 hover:text-ppx-neutral-12"
+              }`}
+            >
+              <ThumbsDownIcon className={feedback === "down" ? "fill-current" : ""} />
+            </Button>
+          }
+        />
         <Tooltip.Content>
           {feedback === "down" ? "You found this unhelpful" : "Bad response"}
         </Tooltip.Content>
@@ -123,20 +127,22 @@ export function Copy({ content }: CopyProps) {
 
   return (
     <Tooltip.Root>
-      <Tooltip.Trigger>
-        <Button
-          variant="ghost"
-          size="icon-sm"
-          onClick={handleCopy}
-          className="h-7 w-7 text-ppx-neutral-10 hover:text-ppx-neutral-12"
-        >
-          {copied ? (
-            <CheckIcon className="text-ppx-green-5" />
-          ) : (
-            <CopyIcon />
-          )}
-        </Button>
-      </Tooltip.Trigger>
+      <Tooltip.Trigger
+        render={
+          <Button
+            variant="ghost"
+            size="icon-sm"
+            onClick={handleCopy}
+            className="h-7 w-7 text-ppx-neutral-10 hover:text-ppx-neutral-12"
+          >
+            {copied ? (
+              <CheckIcon className="text-ppx-green-5" />
+            ) : (
+              <CopyIcon />
+            )}
+          </Button>
+        }
+      />
       <Tooltip.Content>
         {copied ? "Copied!" : "Copy message"}
       </Tooltip.Content>
@@ -159,19 +165,21 @@ export function Debug({ messageId, debugTrace }: DebugProps) {
   return (
     <Dialog.Root open={debugOpen} onOpenChange={setDebugOpen}>
       <Tooltip.Root>
-        <Tooltip.Trigger>
-          <Dialog.Trigger
-            render={
-              <Button
-                variant="ghost"
-                size="icon-sm"
-                className="h-7 w-7 text-ppx-neutral-10 hover:text-ppx-neutral-12"
-              >
-                <DebugIcon />
-              </Button>
-            }
-          />
-        </Tooltip.Trigger>
+        <Tooltip.Trigger
+          render={
+            <Dialog.Trigger
+              render={
+                <Button
+                  variant="ghost"
+                  size="icon-sm"
+                  className="h-7 w-7 text-ppx-neutral-10 hover:text-ppx-neutral-12"
+                >
+                  <DebugIcon />
+                </Button>
+              }
+            />
+          }
+        />
         <Tooltip.Content>
           View debug trace
         </Tooltip.Content>
