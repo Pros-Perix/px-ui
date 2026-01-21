@@ -1,9 +1,14 @@
 import { createContext, useContext, useEffect, useState } from "react";
 
+export type MessageType = "text" | "markdown";
+export type FeedbackType = "up" | "down" | null;
+
 export interface Message {
   id: string;
   role: "user" | "assistant";
   content: string;
+  type?: MessageType;
+  debugTrace?: unknown;
 }
 
 export interface XandiContextValue {
@@ -11,6 +16,7 @@ export interface XandiContextValue {
   isLoading: boolean;
   sessionId: string | null;
   sendMessage: (text: string) => void;
+  onFeedback?: (messageId: string, feedback: FeedbackType) => void;
 }
 
 const XandiContext = createContext<XandiContextValue | null>(null);
@@ -20,6 +26,7 @@ export interface XandiProviderProps {
   userId: string;
   orgId: string;
   sessionId?: string;
+  onFeedback?: (messageId: string, feedback: FeedbackType) => void;
   children: React.ReactNode;
 }
 
@@ -28,6 +35,7 @@ export function XandiProvider({
   userId,
   orgId,
   sessionId: initialSessionId,
+  onFeedback,
   children,
 }: XandiProviderProps) {
   const [sessionId, setSessionId] = useState<string | null>(initialSessionId ?? null);
@@ -86,6 +94,7 @@ export function XandiProvider({
     isLoading,
     sessionId,
     sendMessage,
+    onFeedback,
   };
 
   return <XandiContext.Provider value={value}>{children}</XandiContext.Provider>;
