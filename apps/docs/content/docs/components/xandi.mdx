@@ -1,18 +1,18 @@
 ---
 title: Xandi
-description: AI chatbot component powered by Vercel AI SDK
+description: AI chatbot component for workforce and hiring applications
 ---
 
 import { XandiBasicDemo } from "../../../src/components/xandi-basic-demo";
 
 ## Overview
 
-Xandi is an AI chatbot component built on top of Vercel's AI SDK (`@ai-sdk/react`). It provides a simple, ready-to-use chat interface that connects to your AI backend.
+Xandi is a composable AI chatbot component designed for workforce and hiring applications. It provides a ready-to-use chat interface with welcome messages, prompt suggestions, message actions, and chat history management.
 
 ## Import
 
 ```tsx
-import { Xandi } from "@px-ui/ai";
+import { Xandi, XandiProvider, XHeader, XSidebar } from "@px-ui/ai";
 ```
 
 ## Usage
@@ -23,65 +23,221 @@ import { Xandi } from "@px-ui/ai";
 
 <CodeBlock>
 ```tsx
-import { Xandi } from "@px-ui/ai";
+import { Xandi, XandiProvider } from "@px-ui/ai";
 
 function MyPage() {
-  return <Xandi api="/api/chat" />;
+  return (
+    <XandiProvider
+      api="/api/chat"
+      userId="user-123"
+      orgId="org-456"
+    >
+      <Xandi />
+    </XandiProvider>
+  );
 }
 ```
 </CodeBlock>
 
-## Backend Setup
+## Architecture
 
-Xandi expects an API endpoint that follows the Vercel AI SDK streaming protocol. Here's an example using Next.js:
+Xandi uses a provider pattern to manage chat state and API communication. The `XandiProvider` wraps your chat components and provides context for:
 
-<CodeBlock>
+- **Message state** - Manages conversation history
+- **Session management** - Handles chat sessions with optional session restoration
+- **API communication** - Sends messages with custom headers for authentication
+
+### Basic Setup
+
 ```tsx
-// app/api/chat/route.ts
-import { openai } from "@ai-sdk/openai";
-import { streamText } from "ai";
+<XandiProvider
+  api="https://api.example.com/chat"
+  userId="user-id"
+  orgId="org-id"
+  sessionId="existing-session-id" // optional, for restoring sessions
+  onFeedback={(messageId, feedback) => console.log(messageId, feedback)}
+>
+  <Xandi
+    welcomeMessage="How can I help you today?"
+    suggestions={[
+      { id: "1", label: "Open Jobs", prompt: "Show me all open jobs" },
+      { id: "2", label: "Pending Timesheets", prompt: "Show me pending timesheets" },
+    ]}
+  />
+</XandiProvider>
+```
 
-export async function POST(req: Request) {
-  const { messages } = await req.json();
+### With Header and Sidebar
 
-  const result = streamText({
-    model: openai("gpt-4"),
-    messages,
-  });
+```tsx
+import { useState } from "react";
+import { Xandi, XandiProvider, XHeader, XSidebar } from "@px-ui/ai";
 
-  return result.toDataStreamResponse();
+function ChatWindow() {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  return (
+    <div className="flex h-full">
+      <XSidebar
+        isOpen={sidebarOpen}
+        chatHistory={chatHistory}
+        onClose={() => setSidebarOpen(false)}
+        onNewChat={handleNewChat}
+        onSelectChat={handleSelectChat}
+      />
+      <div className="flex flex-1 flex-col">
+        <XHeader
+          onToggleHistory={() => setSidebarOpen(!sidebarOpen)}
+          onNewChat={handleNewChat}
+        />
+        <XandiProvider api="/api/chat" userId="user-123" orgId="org-456">
+          <Xandi />
+        </XandiProvider>
+      </div>
+    </div>
+  );
 }
 ```
-</CodeBlock>
 
-## How It Works
+## Backend API
 
-Xandi uses the `useChat` hook from `@ai-sdk/react` with `DefaultChatTransport` to handle:
+Xandi sends POST requests with the following structure:
 
-- **Message state management** - Automatically manages the conversation history
-- **Streaming responses** - Displays AI responses as they stream in
-- **Connection status** - Tracks status (`ready`, `loading`, etc.) to disable input during generation
+**Request Headers:**
+```
+Content-Type: application/json
+x-org-id: <orgId>
+x-user-id: <userId>
+```
+
+**Request Body:**
+```json
+{ "message": "user input text" }
+```
+
+**Expected Response:**
+```json
+{
+  "success": true,
+  "response": "AI response text"
+}
+```
 
 ## API Reference
 
+### XandiProvider
+
+The context provider that manages chat state and API communication.
+
+| Prop | Type | Required | Description |
+|------|------|----------|-------------|
+| `api` | `string` | Yes | The API endpoint for the chat backend |
+| `userId` | `string` | Yes | User identifier sent in request headers |
+| `orgId` | `string` | Yes | Organization identifier sent in request headers |
+| `sessionId` | `string` | No | Existing session ID to restore a chat |
+| `onFeedback` | `(messageId: string, feedback: FeedbackType) => void` | No | Callback when user provides feedback on a message |
+
 ### Xandi
+
+The main chat component. Must be wrapped in `XandiProvider`.
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `api` | `string` | `"/api/chat"` | The API endpoint for the chat backend |
+| `welcomeMessage` | `string` | `"How can I help you today?"` | Message shown when chat is empty |
+| `suggestions` | `Suggestion[]` | `[]` | Prompt suggestions shown below the input |
 
-## Dependencies
+### XHeader
 
-Xandi requires the following peer dependencies:
+Header component for floating windows and sidebars.
 
-| Package | Version |
-|---------|---------|
-| `@ai-sdk/react` | >= 3.0.0 |
-| `ai` | >= 6.0.0 |
-| `react` | >= 19.0.0 |
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `title` | `string` | `"Xandi"` | Title displayed in the header |
+| `onClose` | `() => void` | - | Callback when close button is clicked |
+| `onNewChat` | `() => void` | - | Callback when new chat button is clicked |
+| `onToggleHistory` | `() => void` | - | Callback when menu button is clicked |
+
+### XSidebar
+
+Sidebar component for chat history.
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `isOpen` | `boolean` | `true` | Whether the sidebar is visible |
+| `chatHistory` | `ChatHistoryGroup[]` | `[]` | Grouped chat history items |
+| `activeChatId` | `string` | - | ID of the currently active chat |
+| `onClose` | `() => void` | - | Callback when close button is clicked |
+| `onNewChat` | `() => void` | - | Callback when new chat button is clicked |
+| `onSelectChat` | `(chatId: string) => void` | - | Callback when a chat is selected |
+
+### useXandi Hook
+
+Access the chat context from any component within `XandiProvider`.
+
+```tsx
+import { useXandi } from "@px-ui/ai";
+
+function CustomComponent() {
+  const { messages, isLoading, sessionId, sendMessage } = useXandi();
+  // ...
+}
+```
+
+| Property | Type | Description |
+|----------|------|-------------|
+| `messages` | `Message[]` | Array of chat messages |
+| `isLoading` | `boolean` | Whether a response is being fetched |
+| `sessionId` | `string \| null` | Current session identifier |
+| `sendMessage` | `(text: string) => void` | Function to send a message |
+| `onFeedback` | `(messageId: string, feedback: FeedbackType) => void` | Feedback handler from provider |
+
+## Types
+
+```tsx
+interface Suggestion {
+  id: string;
+  label: string;
+  prompt: string;
+}
+
+interface Message {
+  id: string;
+  role: "user" | "assistant";
+  content: string;
+  type?: "text" | "markdown";
+  debugTrace?: unknown;
+}
+
+type FeedbackType = "up" | "down" | null;
+
+interface ChatHistoryItem {
+  id: string;
+  title: string;
+  timestamp: Date;
+}
+
+interface ChatHistoryGroup {
+  label: string;
+  items: ChatHistoryItem[];
+}
+```
+
+## Message Actions
+
+Assistant messages include action buttons for feedback, copying, and debugging.
+
+- **Thumbs Up/Down** - Provide feedback on message quality
+- **Copy** - Copy message content to clipboard
+- **Debug** - View debug trace (when `debugTrace` is present in the message)
 
 ## Installation
 
 ```bash
-pnpm add @px-ui/ai @ai-sdk/react ai
+pnpm add @px-ui/ai
+```
+
+Don't forget to import the styles:
+
+```tsx
+import "@px-ui/ai/styles.css";
 ```
