@@ -49,7 +49,8 @@
     "react-dom": ">=19.0.0"
   },
   "dependencies": {
-    "class-variance-authority": "^0.7.1"
+    "class-variance-authority": "^0.7.1",
+    "react-markdown": "^10.1.0"
   },
   "devDependencies": {
     "@px-ui/core": "workspace:*",
@@ -69,4 +70,3 @@
     "vitest": "^4.0.9"
   }
 }
-
