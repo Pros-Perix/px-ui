@@ -41,6 +41,10 @@ interface Job {
 
 interface ApiResponse {
   success: boolean;
+  // Top-level response (current API structure)
+  response?: string;
+  debug?: unknown;
+  // Nested structure (future API structure)
   data?: {
     response: string;
     intent: string;
@@ -53,7 +57,7 @@ interface ApiResponse {
       };
     };
   };
-  message: string;
+  message?: string;
   trace?: unknown;
 }
 
@@ -97,16 +101,18 @@ async function fetchXandiResponse(message: string): Promise<XandiResponse> {
     throw new Error("Failed to get response");
   }
 
-  let content = json.data?.response ?? json.message;
+  // Handle both top-level response (current) and nested data.response (future)
+  let content = json.response ?? json.data?.response ?? json.message ?? "";
 
-  // Transform jobs data into markdown
+  // Transform jobs data into markdown (for nested structure)
   if (json.data?.data?.jobs && json.data.data.jobs.length > 0) {
     content = formatJobsAsMarkdown(json.data.data.jobs, json.data.data.pagination);
   }
 
+  // Handle both top-level debug (current) and nested trace (future)
   return {
     content,
-    debugTrace: json.trace,
+    debugTrace: json.debug ?? json.trace,
   };
 }
 
