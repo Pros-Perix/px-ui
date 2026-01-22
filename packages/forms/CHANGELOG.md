@@ -1,5 +1,12 @@
 # @px-ui/forms
 
+## 7.0.1
+
+### Patch Changes
+
+- Updated dependencies [c49c2be]
+  - @px-ui/core@4.0.1
+
 ## 7.0.0
 
 ### Minor Changes
