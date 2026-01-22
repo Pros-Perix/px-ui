@@ -54,11 +54,6 @@ export function XandiProvider({
   const sendMessage = async (text: string) => {
     if (!text.trim() || isLoading) return;
 
-    // #region agent log
-    console.log('[DEBUG H6] sendMessage called:', {text,isLoading});
-    fetch('http://127.0.0.1:7243/ingest/f64c9612-7108-4b37-8233-ace78f032f24',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'xandi-context.tsx:57',message:'sendMessage called',data:{text,isLoading},timestamp:Date.now(),sessionId:'debug-session',hypothesisId:'H6'})}).catch(()=>{});
-    // #endregion
-
     // Add user message
     const userMessage: Message = {
       id: crypto.randomUUID(),
@@ -69,16 +64,7 @@ export function XandiProvider({
     setIsLoading(true);
 
     try {
-      // #region agent log
-      console.log('[DEBUG H6] calling fetchResponse:', {text});
-      fetch('http://127.0.0.1:7243/ingest/f64c9612-7108-4b37-8233-ace78f032f24',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'xandi-context.tsx:71',message:'calling fetchResponse',data:{text},timestamp:Date.now(),sessionId:'debug-session',hypothesisId:'H6'})}).catch(()=>{});
-      // #endregion
       const response = await fetchResponse(text);
-
-      // #region agent log
-      console.log('[DEBUG H6] fetchResponse returned:', {content:response.content,contentLength:response.content?.length,type:response.type});
-      fetch('http://127.0.0.1:7243/ingest/f64c9612-7108-4b37-8233-ace78f032f24',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'xandi-context.tsx:77',message:'fetchResponse returned',data:{content:response.content,contentLength:response.content?.length,type:response.type},timestamp:Date.now(),sessionId:'debug-session',hypothesisId:'H6'})}).catch(()=>{});
-      // #endregion
 
       const assistantMessage: Message = {
         id: crypto.randomUUID(),
@@ -89,10 +75,6 @@ export function XandiProvider({
       };
       setMessages((prev) => [...prev, assistantMessage]);
     } catch (error) {
-      // #region agent log
-      console.log('[DEBUG H6] fetchResponse error:', {error:String(error)});
-      fetch('http://127.0.0.1:7243/ingest/f64c9612-7108-4b37-8233-ace78f032f24',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'xandi-context.tsx:91',message:'fetchResponse error',data:{error:String(error)},timestamp:Date.now(),sessionId:'debug-session',hypothesisId:'H6'})}).catch(()=>{});
-      // #endregion
       console.error("Failed to send message:", error);
     } finally {
       setIsLoading(false);
