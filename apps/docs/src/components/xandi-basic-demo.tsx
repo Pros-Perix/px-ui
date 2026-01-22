@@ -1,5 +1,9 @@
 import { useState } from "react";
-import { Xandi, XandiProvider, XHeader, XSidebar, type ChatHistoryGroup } from "@px-ui/ai";
+import { Xandi, XandiProvider, XHeader, XSidebar, type ChatHistoryGroup, type XandiResponse } from "@px-ui/ai";
+
+const API_URL = "http://localhost:3001/query";
+const USER_ID = "0108e28d-ec3b-4648-9178-b4a2c0d582ba";
+const ORG_ID = "e37723a6-4363-4831-86e0-5e4950ed15ec";
 
 const suggestions = [
   { id: "1", label: "Open Jobs", prompt: "Show me all open jobs" },
@@ -25,6 +29,29 @@ const mockChatHistory: ChatHistoryGroup[] = [
     ],
   },
 ];
+
+async function fetchXandiResponse(message: string): Promise<XandiResponse> {
+  const response = await fetch(API_URL, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "x-org-id": ORG_ID,
+      "x-user-id": USER_ID,
+    },
+    body: JSON.stringify({ message }),
+  });
+
+  const data = await response.json();
+
+  if (!data.success) {
+    throw new Error("Failed to get response");
+  }
+
+  return {
+    content: data.response,
+    debugTrace: data.debug,
+  };
+}
 
 export function XandiBasicDemo() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -63,11 +90,7 @@ export function XandiBasicDemo() {
 
         {/* Chat Area */}
         <div className="flex-1 overflow-hidden px-4 py-2">
-          <XandiProvider
-            api="http://localhost:3001/query"
-            userId="0108e28d-ec3b-4648-9178-b4a2c0d582ba"
-            orgId="e37723a6-4363-4831-86e0-5e4950ed15ec"
-          >
+          <XandiProvider fetchResponse={fetchXandiResponse}>
             <Xandi suggestions={suggestions} />
           </XandiProvider>
         </div>
