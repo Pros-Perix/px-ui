@@ -1,19 +1,52 @@
 import { createContext, useContext, useEffect, useState } from "react";
 
-export type MessageType = "text" | "markdown";
+export type MessageType = "text" | "markdown" | "jobs";
 export type FeedbackType = "up" | "down" | null;
+
+// ============================================================================
+// Data Types
+// ============================================================================
+
+export interface Job {
+  id: string;
+  title: string;
+  status: string;
+  office_country: string;
+  office_city: string;
+  created_at: string;
+}
+
+export interface Pagination {
+  page: number;
+  per_page: number;
+  total: number;
+}
+
+export interface JobsData {
+  jobs: Job[];
+  pagination: Pagination;
+}
+
+// Union type for all possible data payloads
+export type MessageData = JobsData | null;
+
+// ============================================================================
+// Message Types
+// ============================================================================
 
 export interface Message {
   id: string;
   role: "user" | "assistant";
   content: string;
   type?: MessageType;
+  data?: MessageData;
   debugTrace?: unknown;
 }
 
 export interface XandiResponse {
   content: string;
   type?: MessageType;
+  data?: MessageData;
   debugTrace?: unknown;
 }
 

@@ -1,7 +1,15 @@
 import { useState } from "react";
-import { Xandi, XandiProvider, XHeader, XSidebar, type ChatHistoryGroup, type XandiResponse } from "@px-ui/ai";
+import {
+  Xandi,
+  XandiProvider,
+  XHeader,
+  XSidebar,
+  type ChatHistoryGroup,
+  type XandiResponse,
+  type MessageType,
+} from "@px-ui/ai";
 
-const API_URL = "http://localhost:3001/query";
+const API_URL = "http://localhost:8080/chat";
 const USER_ID = "0108e28d-ec3b-4648-9178-b4a2c0d582ba";
 const ORG_ID = "e37723a6-4363-4831-86e0-5e4950ed15ec";
 
@@ -41,15 +49,29 @@ async function fetchXandiResponse(message: string): Promise<XandiResponse> {
     body: JSON.stringify({ message }),
   });
 
-  const data = await response.json();
+  const json = await response.json();
 
-  if (!data.success) {
+  if (!json.success) {
     throw new Error("Failed to get response");
   }
 
+  // Determine message type based on data content
+  let type: MessageType = "markdown";
+  let data = null;
+
+  if (json.data?.data?.jobs) {
+    type = "jobs";
+    data = {
+      jobs: json.data.data.jobs,
+      pagination: json.data.data.pagination,
+    };
+  }
+
   return {
-    content: data.response,
-    debugTrace: data.debug,
+    content: json.data?.response ?? json.message,
+    type,
+    data,
+    debugTrace: json.trace,
   };
 }
 

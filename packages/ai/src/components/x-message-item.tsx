@@ -1,4 +1,5 @@
 import type { Message, MessageType } from "../context/xandi-context";
+import { JobsRenderer } from "./renderers/jobs-renderer";
 import { MarkdownRenderer } from "./renderers/markdown-renderer";
 import { TextRenderer } from "./renderers/text-renderer";
 
@@ -41,6 +42,8 @@ function MessageRenderer({ type, message }: MessageRendererProps) {
   switch (type) {
     case "text":
       return <TextRenderer message={message} />;
+    case "jobs":
+      return <JobsRenderer message={message} />;
     case "markdown":
     default:
       return <MarkdownRenderer message={message} />;
