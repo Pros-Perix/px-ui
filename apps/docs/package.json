@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite dev",
-    "build": "pnpm --filter forms --filter core build && vite build",
+    "build": "pnpm --filter ai --filter forms --filter core build && vite build",
     "preview": "vite preview",
     "deploy": "pnpm build && wrangler deploy",
     "cf-typegen": "wrangler types",
@@ -13,7 +13,10 @@
     "postinstall": "fumadocs-mdx"
   },
   "dependencies": {
+    "@ai-sdk/react": "^3.0.43",
     "@hookform/resolvers": "^5.1.1",
+    "@px-ui/ai": "workspace:*",
+    "ai": "^6.0.41",
     "@px-ui/core": "workspace:*",
     "@px-ui/forms": "workspace:*",
     "@tanstack/react-query": "^5.90.1",

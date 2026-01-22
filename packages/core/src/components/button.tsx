@@ -3,7 +3,7 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "../utils";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap transition-colors disabled:cursor-not-allowed shrink-0 [&_svg]:shrink-0 outline-none rounded-ppx-s font-medium focus-visible:ring-3 focus-visible:ring-ppx-neutral-17/30",
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap transition-colors cursor-pointer disabled:cursor-not-allowed shrink-0 [&_svg]:shrink-0 outline-none rounded-ppx-s font-medium focus-visible:ring-3 focus-visible:ring-ppx-neutral-17/30",
   {
     variants: {
       variant: {
@@ -19,7 +19,7 @@ const buttonVariants = cva(
           "shadow-xs not-disabled:hover:bg-ppx-primary-1 not-disabled:active:bg-ppx-primary-2/50 disabled:text-ppx-primary-2 disabled:border-ppx-primary-2 border border-ppx-primary-5 text-ppx-primary-5",
         ghost:
           "not-disabled:hover:bg-ppx-neutral-2 not-disabled:active:bg-ppx-neutral-3 not-disabled:hover:text-black text-ppx-neutral-12 disabled:opacity-70",
-        link: "text-ppx-neutral-12 underline-offset-4 underline cursor-pointer not-disabled:hover:bg-ppx-neutral-2 not-disabled:active:bg-ppx-neutral-3 disabled:opacity-70",
+        link: "text-ppx-neutral-12 underline-offset-4 underline not-disabled:hover:bg-ppx-neutral-2 not-disabled:active:bg-ppx-neutral-3 disabled:opacity-70",
       },
       size: {
         default: "px-4 py-2 h-10 has-[>svg]:px-3 text-ppx-base",

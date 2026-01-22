@@ -43,6 +43,9 @@ export * from "input-otp";
 export { default as FileIcon } from "./icons/file-icon";
 export { default as UploadIcon } from "./icons/upload-icon";
 export { default as ChevronDownIcon } from "./icons/chevron-down-icon";
+export { default as SendIcon } from "./icons/send-icon";
+export { default as StopIcon } from "./icons/stop-icon";
+export { default as InfoIcon } from "./icons/info-icon";
 
 // Hooks
 export * from "./hooks/use-debounce";
