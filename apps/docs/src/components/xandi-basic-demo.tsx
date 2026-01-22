@@ -30,6 +30,56 @@ const mockChatHistory: ChatHistoryGroup[] = [
   },
 ];
 
+interface Job {
+  id: string;
+  title: string;
+  status: string;
+  office_country: string;
+  office_city: string;
+  created_at: string;
+}
+
+interface ApiResponse {
+  success: boolean;
+  data?: {
+    response: string;
+    intent: string;
+    data?: {
+      jobs?: Job[];
+      pagination?: {
+        page: number;
+        per_page: number;
+        total: number;
+      };
+    };
+  };
+  message: string;
+  trace?: unknown;
+}
+
+function formatJobsAsMarkdown(jobs: Job[], pagination?: { page: number; per_page: number; total: number }): string {
+  const lines: string[] = [];
+
+  if (pagination) {
+    lines.push(`Found **${pagination.total}** job(s) | Page ${pagination.page}\n`);
+  }
+
+  jobs.forEach((job, index) => {
+    const date = new Date(job.created_at).toLocaleDateString("en-US", {
+      month: "short",
+      day: "numeric",
+      year: "numeric",
+    });
+    const statusEmoji = job.status === "Open" ? "🟢" : job.status === "Draft" ? "📝" : "⚪";
+
+    lines.push(`**${index + 1}. ${job.title}**`);
+    lines.push(`${statusEmoji} ${job.status} · ${job.office_city}, ${job.office_country} · ${date}`);
+    lines.push(`[View Details →](https://app.prosperix.com/jobs/listing/any/${job.id})\n`);
+  });
+
+  return lines.join("\n");
+}
+
 async function fetchXandiResponse(message: string): Promise<XandiResponse> {
   const response = await fetch(API_URL, {
     method: "POST",
@@ -41,15 +91,22 @@ async function fetchXandiResponse(message: string): Promise<XandiResponse> {
     body: JSON.stringify({ message }),
   });
 
-  const data = await response.json();
+  const json: ApiResponse = await response.json();
 
-  if (!data.success) {
+  if (!json.success) {
     throw new Error("Failed to get response");
   }
 
+  let content = json.data?.response ?? json.message;
+
+  // Transform jobs data into markdown
+  if (json.data?.data?.jobs && json.data.data.jobs.length > 0) {
+    content = formatJobsAsMarkdown(json.data.data.jobs, json.data.data.pagination);
+  }
+
   return {
-    content: data.response,
-    debugTrace: data.debug,
+    content,
+    debugTrace: json.trace,
   };
 }
 
