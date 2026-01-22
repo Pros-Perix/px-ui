@@ -2,18 +2,7 @@
 import "./index.css";
 
 // Context and Provider
-export {
-  XandiProvider,
-  useXandi,
-  type Message,
-  type MessageType,
-  type FeedbackType,
-  type XandiResponse,
-  type MessageData,
-  type Job,
-  type JobsData,
-  type Pagination,
-} from "./context/xandi-context";
+export { XandiProvider, useXandi, type Message, type MessageType, type FeedbackType, type XandiResponse } from "./context/xandi-context";
 export type { XandiProviderProps } from "./context/xandi-context";
 
 // Components
