@@ -1,11 +1,5 @@
 # @px-ui/core
 
-## 4.0.2
-
-### Patch Changes
-
-- f23f5d0: Cursor hand icon for button component
-
 ## 4.0.1
 
 ### Patch Changes
