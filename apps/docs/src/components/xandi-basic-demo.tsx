@@ -1,5 +1,9 @@
 import { useState } from "react";
-import { Xandi, XandiProvider, XHeader, XSidebar, type ChatHistoryGroup } from "@px-ui/ai";
+import { Xandi, XandiProvider, XHeader, XSidebar, type ChatHistoryGroup, type XandiResponse } from "@px-ui/ai";
+
+const API_URL = "http://localhost:8080/chat";
+const USER_ID = "0108e28d-ec3b-4648-9178-b4a2c0d582ba";
+const ORG_ID = "e37723a6-4363-4831-86e0-5e4950ed15ec";
 
 const suggestions = [
   { id: "1", label: "Open Jobs", prompt: "Show me all open jobs" },
@@ -25,6 +29,92 @@ const mockChatHistory: ChatHistoryGroup[] = [
     ],
   },
 ];
+
+interface Job {
+  id: string;
+  title: string;
+  status: string;
+  office_country: string;
+  office_city: string;
+  created_at: string;
+}
+
+interface ApiResponse {
+  success: boolean;
+  // Top-level response (current API structure)
+  response?: string;
+  debug?: unknown;
+  // Nested structure (future API structure)
+  data?: {
+    response: string;
+    intent: string;
+    data?: {
+      jobs?: Job[];
+      pagination?: {
+        page: number;
+        per_page: number;
+        total: number;
+      };
+    };
+  };
+  message?: string;
+  trace?: unknown;
+}
+
+function formatJobsAsMarkdown(jobs: Job[], pagination?: { page: number; per_page: number; total: number }): string {
+  const lines: string[] = [];
+
+  if (pagination) {
+    lines.push(`Found **${pagination.total}** job(s) | Page ${pagination.page}\n`);
+  }
+
+  jobs.forEach((job, index) => {
+    const date = new Date(job.created_at).toLocaleDateString("en-US", {
+      month: "short",
+      day: "numeric",
+      year: "numeric",
+    });
+    const statusEmoji = job.status === "Open" ? "🟢" : job.status === "Draft" ? "📝" : "⚪";
+
+    lines.push(`**${index + 1}. ${job.title}**`);
+    lines.push(`${statusEmoji} ${job.status} · ${job.office_city}, ${job.office_country} · ${date}`);
+    lines.push(`[View Details →](https://app.prosperix.com/jobs/listing/any/${job.id})\n`);
+  });
+
+  return lines.join("\n");
+}
+
+async function fetchXandiResponse(message: string): Promise<XandiResponse> {
+  const response = await fetch(API_URL, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "x-org-id": ORG_ID,
+      "x-user-id": USER_ID,
+    },
+    body: JSON.stringify({ message }),
+  });
+
+  const json: ApiResponse = await response.json();
+
+  if (!json.success) {
+    throw new Error("Failed to get response");
+  }
+
+  // Handle both top-level response (current) and nested data.response (future)
+  let content = json.response ?? json.data?.response ?? json.message ?? "";
+
+  // Transform jobs data into markdown (for nested structure)
+  if (json.data?.data?.jobs && json.data.data.jobs.length > 0) {
+    content = formatJobsAsMarkdown(json.data.data.jobs, json.data.data.pagination);
+  }
+
+  // Handle both top-level debug (current) and nested trace (future)
+  return {
+    content,
+    debugTrace: json.debug ?? json.trace,
+  };
+}
 
 export function XandiBasicDemo() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -63,11 +153,7 @@ export function XandiBasicDemo() {
 
         {/* Chat Area */}
         <div className="flex-1 overflow-hidden px-4 py-2">
-          <XandiProvider
-            api="http://localhost:3001/query"
-            userId="0108e28d-ec3b-4648-9178-b4a2c0d582ba"
-            orgId="e37723a6-4363-4831-86e0-5e4950ed15ec"
-          >
+          <XandiProvider fetchResponse={fetchXandiResponse}>
             <Xandi suggestions={suggestions} />
           </XandiProvider>
         </div>

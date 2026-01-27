@@ -11,6 +11,12 @@ export interface Message {
   debugTrace?: unknown;
 }
 
+export interface XandiResponse {
+  content: string;
+  type?: MessageType;
+  debugTrace?: unknown;
+}
+
 export interface XandiContextValue {
   messages: Message[];
   isLoading: boolean;
@@ -22,18 +28,14 @@ export interface XandiContextValue {
 const XandiContext = createContext<XandiContextValue | null>(null);
 
 export interface XandiProviderProps {
-  api: string;
-  userId: string;
-  orgId: string;
+  fetchResponse: (message: string) => Promise<XandiResponse>;
   sessionId?: string;
   onFeedback?: (messageId: string, feedback: FeedbackType) => void;
   children: React.ReactNode;
 }
 
 export function XandiProvider({
-  api,
-  userId,
-  orgId,
+  fetchResponse,
   sessionId: initialSessionId,
   onFeedback,
   children,
@@ -62,26 +64,16 @@ export function XandiProvider({
     setIsLoading(true);
 
     try {
-      const response = await fetch(api, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "x-org-id": orgId,
-          "x-user-id": userId
-        },
-        body: JSON.stringify({ message: text }),
-      });
+      const response = await fetchResponse(text);
 
-      const data = await response.json();
-
-      if (data.success && data.response) {
-        const assistantMessage: Message = {
-          id: crypto.randomUUID(),
-          role: "assistant",
-          content: data.response,
-        };
-        setMessages((prev) => [...prev, assistantMessage]);
-      }
+      const assistantMessage: Message = {
+        id: crypto.randomUUID(),
+        role: "assistant",
+        content: response.content,
+        type: response.type,
+        debugTrace: response.debugTrace,
+      };
+      setMessages((prev) => [...prev, assistantMessage]);
     } catch (error) {
       console.error("Failed to send message:", error);
     } finally {
