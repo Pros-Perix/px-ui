@@ -1,5 +1,13 @@
 # @px-ui/ai
 
+## 1.0.1
+
+### Patch Changes
+
+- Version bump to 1.0.1
+- Fix API response parsing for new format
+- Separate out response getter from Xandi components
+
 ## 1.0.0
 
 ### Major Changes
