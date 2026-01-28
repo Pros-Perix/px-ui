@@ -47,6 +47,19 @@ export { default as SendIcon } from "./icons/send-icon";
 export { default as StopIcon } from "./icons/stop-icon";
 export { default as InfoIcon } from "./icons/info-icon";
 
+// File type icons
+export { default as PdfIcon } from "./icons/pdf-icon";
+export { default as WordIcon } from "./icons/word-icon";
+export { default as ExcelIcon } from "./icons/excel-icon";
+export { default as ImageFileIcon } from "./icons/image-file-icon";
+export { default as VideoIcon } from "./icons/video-icon";
+export { default as AudioIcon } from "./icons/audio-icon";
+export { default as ArchiveIcon } from "./icons/archive-icon";
+export { default as CodeFileIcon } from "./icons/code-file-icon";
+export { default as TextFileIcon } from "./icons/text-file-icon";
+export { default as GenericFileIcon } from "./icons/generic-file-icon";
+export { getFileTypeIcon } from "./icons/get-file-type-icon";
+
 // Hooks
 export * from "./hooks/use-debounce";
 export * from "./hooks/use-file-upload";

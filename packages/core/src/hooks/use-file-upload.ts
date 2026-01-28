@@ -7,6 +7,10 @@ import {
   useState,
 } from "react";
 
+// ============================================================================
+// Types
+// ============================================================================
+
 export type FileMetadata = {
   name: string;
   size: number;
@@ -15,68 +19,12 @@ export type FileMetadata = {
   id: string;
 };
 
-export type FileWithPreview = {
+export type UploadStatus = "idle" | "uploading" | "complete" | "error";
+
+export type FileUploadItem = {
   file: File | FileMetadata;
   id: string;
   preview?: string;
-};
-
-export type FileUploadOptions = {
-  maxFiles?: number; // Only used when multiple is true, defaults to Infinity
-  maxSize?: number; // in bytes
-  accept?: string;
-  multiple?: boolean; // Defaults to false
-  initialFiles?: FileMetadata[];
-  onFilesChange?: (files: FileWithPreview[]) => void; // Callback when files change
-  onFilesAdded?: (addedFiles: FileWithPreview[]) => void; // Callback when new files are added
-};
-
-export type FileUploadState = {
-  files: FileWithPreview[];
-  isDragging: boolean;
-  errors: string[];
-};
-
-export type FileUploadActions = {
-  addFiles: (files: FileList | File[]) => void;
-  removeFile: (id: string) => void;
-  clearFiles: () => void;
-  clearErrors: () => void;
-  handleDragEnter: (e: DragEvent<HTMLElement>) => void;
-  handleDragLeave: (e: DragEvent<HTMLElement>) => void;
-  handleDragOver: (e: DragEvent<HTMLElement>) => void;
-  handleDrop: (e: DragEvent<HTMLElement>) => void;
-  handleFileChange: (e: ChangeEvent<HTMLInputElement>) => void;
-  openFileDialog: () => void;
-  getInputProps: (
-    props?: InputHTMLAttributes<HTMLInputElement>,
-  ) => InputHTMLAttributes<HTMLInputElement> & {
-    // Use `any` here to avoid cross-React ref type conflicts across packages
-    // biome-ignore lint/suspicious/noExplicitAny: intentional
-    ref: any;
-  };
-};
-
-// Helper function to format bytes to human-readable format
-export const formatBytes = (bytes: number, decimals = 2): string => {
-  if (bytes === 0) return "0 Bytes";
-
-  const k = 1024;
-  const dm = decimals < 0 ? 0 : decimals;
-  const sizes = ["Bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
-
-  const i = Math.floor(Math.log(bytes) / Math.log(k));
-
-  return Number.parseFloat((bytes / k ** i).toFixed(dm)) + sizes[i];
-};
-
-// ============================================================================
-// Extended Hook with Upload Support
-// ============================================================================
-
-export type UploadStatus = "idle" | "uploading" | "success" | "error";
-
-export type FileWithUploadStatus = FileWithPreview & {
   progress: number;
   status: UploadStatus;
   error?: string;
@@ -84,17 +32,35 @@ export type FileWithUploadStatus = FileWithPreview & {
 };
 
 export type PresignedUrlResponse = {
+  /** The S3 bucket URL to POST to */
   url: string;
-  fullPath: string;
+  /** The full accessible path after upload (may include signed query params) */
+  full_path: string;
+  /** The S3 object key (e.g., "uuid/filename.pdf") */
+  key?: string;
+  /** Access control level */
+  acl?: string;
+  /** Expected response status from S3 */
+  success_action_status?: string;
+  /** Content-Type for the upload */
+  "Content-Type"?: string;
+  /** Base64-encoded policy document */
+  policy?: string;
+  /** AWS credential string */
+  "x-amz-credential"?: string;
+  /** AWS signing algorithm */
+  "x-amz-algorithm"?: string;
+  /** AWS request date */
+  "x-amz-date"?: string;
+  /** AWS request signature */
+  "x-amz-signature"?: string;
+  /** Additional fields */
   [key: string]: unknown;
 };
 
 export type UploadConfig = {
   /**
    * Function to get a presigned URL for uploading
-   * Called before uploading each file
-   * @param params - Parameters including filename, contentType, size, and optional AbortSignal
-   * @param params.signal - Optional AbortSignal to cancel the request
    */
   getPresignedUrl: (params: {
     filename: string;
@@ -108,12 +74,6 @@ export type UploadConfig = {
 
   /**
    * Function to upload the file to the storage
-   * Receives the presigned URL and the file
-   * @param url - The presigned URL to upload to
-   * @param file - The file to upload
-   * @param presignedData - The full presigned URL response data
-   * @param onProgress - Optional callback for upload progress
-   * @param signal - Optional AbortSignal to cancel the upload
    */
   uploadFile: (
     url: string,
@@ -135,62 +95,167 @@ export type UploadConfig = {
   /**
    * Called when a single file upload completes
    */
-  onUploadComplete?: (file: FileWithUploadStatus) => void;
+  onUploadComplete?: (file: FileUploadItem) => void;
 
   /**
    * Called when a single file upload fails
    */
-  onUploadError?: (file: FileWithUploadStatus, error: unknown) => void;
+  onUploadError?: (file: FileUploadItem, error: unknown) => void;
 
   /**
    * Called when all files finish uploading
    */
-  onAllUploadsComplete?: (files: FileWithUploadStatus[]) => void;
+  onAllUploadsComplete?: (files: FileUploadItem[]) => void;
 };
 
-export type FileUploadWithUploaderOptions = FileUploadOptions & {
+export type UseFileUploadOptions = {
+  maxFiles?: number;
+  maxSize?: number;
+  accept?: string;
+  multiple?: boolean;
+  initialFiles?: FileMetadata[];
+  onFilesChange?: (files: FileUploadItem[]) => void;
+  onFilesAdded?: (addedFiles: FileUploadItem[]) => void;
   upload?: UploadConfig;
 };
 
-export type FileUploadWithUploaderState = Omit<FileUploadState, "files"> & {
-  files: FileWithUploadStatus[];
+export type UseFileUploadReturn = {
+  // State
+  files: FileUploadItem[];
+  isDragging: boolean;
   isUploading: boolean;
-};
+  errors: string[];
 
-export type FileUploadWithUploaderActions = Omit<
-  FileUploadActions,
-  "addFiles"
-> & {
+  // Core Actions
   addFiles: (files: FileList | File[]) => void;
-  uploadFiles: (
-    files?: FileWithUploadStatus[],
-  ) => Promise<FileWithUploadStatus[]>;
+  removeFile: (id: string) => void;
+  clearFiles: () => void;
+  clearErrors: () => void;
+
+  // Form integration
+  reset: (newFiles?: FileMetadata[]) => void;
+  setFiles: (
+    files: FileUploadItem[] | ((prev: FileUploadItem[]) => FileUploadItem[]),
+  ) => void;
+  instanceKey: number;
+
+  // Upload Actions
+  uploadFiles: (files?: FileUploadItem[]) => Promise<FileUploadItem[]>;
   retryUpload: (id: string) => Promise<void>;
   cancelUpload: (id: string) => void;
+
+  // Drag/Drop + Input
+  handleDragEnter: (e: DragEvent<HTMLElement>) => void;
+  handleDragLeave: (e: DragEvent<HTMLElement>) => void;
+  handleDragOver: (e: DragEvent<HTMLElement>) => void;
+  handleDrop: (e: DragEvent<HTMLElement>) => void;
+  handleFileChange: (e: ChangeEvent<HTMLInputElement>) => void;
+  openFileDialog: () => void;
+  getInputProps: (
+    props?: InputHTMLAttributes<HTMLInputElement>,
+  ) => InputHTMLAttributes<HTMLInputElement> & {
+    // biome-ignore lint/suspicious/noExplicitAny: intentional for cross-React ref compatibility
+    ref: any;
+  };
 };
 
+// Helper function to format bytes to human-readable format
+export const formatBytes = (bytes: number, decimals = 2): string => {
+  if (bytes === 0) return "0 Bytes";
+
+  const k = 1024;
+  const dm = decimals < 0 ? 0 : decimals;
+  const sizes = ["Bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
+
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
+
+  return Number.parseFloat((bytes / k ** i).toFixed(dm)) + sizes[i];
+};
+
+/**
+ * Extract error message from various error formats, including S3 XML errors
+ */
+function extractErrorMessage(error: unknown): string {
+  if (typeof error === "string") {
+    return error;
+  }
+
+  if (error instanceof Error) {
+    // Check if it's an S3 XML error in the message
+    const xmlMatch = error.message.match(/<Message>(.*?)<\/Message>/);
+    if (xmlMatch) {
+      return xmlMatch[1];
+    }
+    return error.message;
+  }
+
+  // Handle objects with message property
+  if (error && typeof error === "object") {
+    // Check for responseText with XML
+    if ("responseText" in error && typeof error.responseText === "string") {
+      const xmlMatch = error.responseText.match(/<Message>(.*?)<\/Message>/);
+      if (xmlMatch) {
+        return xmlMatch[1];
+      }
+    }
+
+    // Check for body with XML
+    if ("body" in error && typeof error.body === "string") {
+      const xmlMatch = error.body.match(/<Message>(.*?)<\/Message>/);
+      if (xmlMatch) {
+        return xmlMatch[1];
+      }
+    }
+
+    // Standard message property
+    if ("message" in error && typeof error.message === "string") {
+      return error.message;
+    }
+
+    // Check for error property
+    if ("error" in error) {
+      return extractErrorMessage(error.error);
+    }
+  }
+
+  return "Upload failed";
+}
+
+// ============================================================================
+// Hook
+// ============================================================================
+
 export const useFileUpload = (
-  options: FileUploadWithUploaderOptions = {},
-): [FileUploadWithUploaderState, FileUploadWithUploaderActions] => {
+  options: UseFileUploadOptions = {},
+): UseFileUploadReturn => {
   const { upload, ...baseOptions } = options;
   const autoUpload = upload?.autoUpload ?? true;
 
-  const [files, setFiles] = useState<FileWithUploadStatus[]>(
+  const [files, setFilesState] = useState<FileUploadItem[]>(
     (baseOptions.initialFiles ?? []).map((file) => ({
       file,
       id: file.id,
       preview: file.url,
       progress: 100,
-      status: "success" as const,
+      status: "complete" as const,
       uploadedUrl: file.url,
     })),
   );
   const [isUploading, setIsUploading] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   const [errors, setErrors] = useState<string[]>([]);
+  const [instanceKey, setInstanceKey] = useState(0);
 
   const inputRef = useRef<HTMLInputElement>(null);
   const abortControllersRef = useRef<Map<string, AbortController>>(new Map());
+
+  // Helper to cancel all ongoing uploads
+  const cancelAllUploads = useCallback(() => {
+    for (const controller of abortControllersRef.current.values()) {
+      controller.abort();
+    }
+    abortControllersRef.current.clear();
+  }, []);
 
   const {
     maxFiles = Number.POSITIVE_INFINITY,
@@ -245,9 +310,7 @@ export const useFileUpload = (
   }, []);
 
   const uploadSingleFile = useCallback(
-    async (
-      fileWithStatus: FileWithUploadStatus,
-    ): Promise<FileWithUploadStatus> => {
+    async (fileWithStatus: FileUploadItem): Promise<FileUploadItem> => {
       if (!upload) {
         return {
           ...fileWithStatus,
@@ -259,7 +322,7 @@ export const useFileUpload = (
       const file = fileWithStatus.file as File;
       if (!(file instanceof File)) {
         // Already uploaded file (FileMetadata)
-        return { ...fileWithStatus, status: "success", progress: 100 };
+        return { ...fileWithStatus, status: "complete", progress: 100 };
       }
 
       const abortController = new AbortController();
@@ -267,7 +330,7 @@ export const useFileUpload = (
 
       try {
         // Update status to uploading
-        setFiles((prev) =>
+        setFilesState((prev) =>
           prev.map((f) =>
             f.id === fileWithStatus.id
               ? { ...f, status: "uploading" as const, progress: 0 }
@@ -289,7 +352,7 @@ export const useFileUpload = (
         }
 
         // Update progress after getting presigned URL
-        setFiles((prev) =>
+        setFilesState((prev) =>
           prev.map((f) =>
             f.id === fileWithStatus.id ? { ...f, progress: 10 } : f,
           ),
@@ -302,9 +365,9 @@ export const useFileUpload = (
             file,
             presignedResult,
             (progress) => {
-              // Scale progress from 10-100
-              const scaledProgress = 10 + progress * 0.9;
-              setFiles((prev) =>
+              // Scale progress from 10-99 (leave room for final 100%)
+              const scaledProgress = Math.min(10 + progress * 0.89, 99);
+              setFilesState((prev) =>
                 prev.map((f) =>
                   f.id === fileWithStatus.id
                     ? { ...f, progress: Math.round(scaledProgress) }
@@ -319,14 +382,24 @@ export const useFileUpload = (
           throw uploadError;
         }
 
-        const uploadedFile: FileWithUploadStatus = {
+        // Ensure progress hits 100% before changing status
+        setFilesState((prev) =>
+          prev.map((f) =>
+            f.id === fileWithStatus.id ? { ...f, progress: 100 } : f,
+          ),
+        );
+
+        // Small delay to show 100% before marking complete
+        await new Promise((resolve) => setTimeout(resolve, 150));
+
+        const uploadedFile: FileUploadItem = {
           ...fileWithStatus,
-          status: "success",
+          status: "complete",
           progress: 100,
-          uploadedUrl: uploadResult?.url ?? presignedResult.fullPath,
+          uploadedUrl: uploadResult?.url ?? presignedResult.full_path,
         };
 
-        setFiles((prev) =>
+        setFilesState((prev) =>
           prev.map((f) => (f.id === fileWithStatus.id ? uploadedFile : f)),
         );
 
@@ -340,8 +413,8 @@ export const useFileUpload = (
           (error.name === "AbortError" || abortController.signal.aborted);
 
         if (isAborted) {
-          // Upload was cancelled - return idle state (already set by cancelUpload)
-          const cancelledFile: FileWithUploadStatus = {
+          // Upload was cancelled - return idle state
+          const cancelledFile: FileUploadItem = {
             ...fileWithStatus,
             status: "idle",
             progress: 0,
@@ -349,15 +422,14 @@ export const useFileUpload = (
           return cancelledFile;
         }
 
-        const errorMessage =
-          error instanceof Error ? error.message : "Upload failed";
-        const failedFile: FileWithUploadStatus = {
+        const errorMessage = extractErrorMessage(error);
+        const failedFile: FileUploadItem = {
           ...fileWithStatus,
           status: "error",
           error: errorMessage,
         };
 
-        setFiles((prev) =>
+        setFilesState((prev) =>
           prev.map((f) => (f.id === fileWithStatus.id ? failedFile : f)),
         );
 
@@ -372,16 +444,14 @@ export const useFileUpload = (
   );
 
   const uploadFiles = useCallback(
-    async (
-      filesToUpload?: FileWithUploadStatus[],
-    ): Promise<FileWithUploadStatus[]> => {
+    async (filesToUpload?: FileUploadItem[]): Promise<FileUploadItem[]> => {
       const targetFiles =
         filesToUpload ?? files.filter((f) => f.status === "idle");
 
       if (targetFiles.length === 0) return [];
 
       setIsUploading(true);
-      const results: FileWithUploadStatus[] = [];
+      const results: FileUploadItem[] = [];
 
       for (const file of targetFiles) {
         const result = await uploadSingleFile(file);
@@ -408,7 +478,7 @@ export const useFileUpload = (
 
       // In single file mode, clear existing files first
       if (!multiple) {
-        setFiles((prev) => {
+        setFilesState((prev) => {
           for (const file of prev) {
             if (file.preview && file.file instanceof File) {
               URL.revokeObjectURL(file.preview);
@@ -429,7 +499,7 @@ export const useFileUpload = (
         return;
       }
 
-      const validFiles: FileWithUploadStatus[] = [];
+      const validFiles: FileUploadItem[] = [];
 
       for (const file of newFilesArray) {
         // Check for duplicates in multiple mode
@@ -461,10 +531,8 @@ export const useFileUpload = (
         // Call onFilesAdded callback
         onFilesAdded?.(validFiles);
 
-        setFiles((prev) => {
-          const updatedFiles = !multiple
-            ? validFiles
-            : [...prev, ...validFiles];
+        setFilesState((prev) => {
+          const updatedFiles = !multiple ? validFiles : [...prev, ...validFiles];
           onFilesChange?.(updatedFiles);
           return updatedFiles;
         });
@@ -511,7 +579,7 @@ export const useFileUpload = (
         abortControllersRef.current.delete(id);
       }
 
-      setFiles((prev) => {
+      setFilesState((prev) => {
         const fileToRemove = prev.find((file) => file.id === id);
         if (fileToRemove?.preview && fileToRemove.file instanceof File) {
           URL.revokeObjectURL(fileToRemove.preview);
@@ -526,13 +594,9 @@ export const useFileUpload = (
   );
 
   const clearFiles = useCallback(() => {
-    // Cancel all ongoing uploads
-    for (const controller of abortControllersRef.current.values()) {
-      controller.abort();
-    }
-    abortControllersRef.current.clear();
+    cancelAllUploads();
 
-    setFiles((prev) => {
+    setFilesState((prev) => {
       for (const file of prev) {
         if (file.preview && file.file instanceof File) {
           URL.revokeObjectURL(file.preview);
@@ -547,17 +611,73 @@ export const useFileUpload = (
 
     setErrors([]);
     onFilesChange?.([]);
-  }, [onFilesChange]);
+  }, [cancelAllUploads, onFilesChange]);
 
   const clearErrors = useCallback(() => {
     setErrors([]);
   }, []);
 
+  const reset = useCallback(
+    (newFiles?: FileMetadata[]) => {
+      cancelAllUploads();
+
+      // Revoke all previews
+      for (const file of files) {
+        if (file.preview && file.file instanceof File) {
+          URL.revokeObjectURL(file.preview);
+        }
+      }
+
+      // Reset input
+      if (inputRef.current) {
+        inputRef.current.value = "";
+      }
+
+      // Clear errors
+      setErrors([]);
+
+      // Set new files or clear
+      const initializedFiles: FileUploadItem[] = (newFiles ?? []).map(
+        (file) => ({
+          file,
+          id: file.id,
+          preview: file.url,
+          progress: 100,
+          status: "complete" as const,
+          uploadedUrl: file.url,
+        }),
+      );
+
+      setFilesState(initializedFiles);
+      onFilesChange?.(initializedFiles);
+
+      // Increment instance key to force remount
+      setInstanceKey((prev) => prev + 1);
+    },
+    [cancelAllUploads, files, onFilesChange],
+  );
+
+  const setFiles = useCallback(
+    (
+      newFiles:
+        | FileUploadItem[]
+        | ((prev: FileUploadItem[]) => FileUploadItem[]),
+    ) => {
+      setFilesState((prev) => {
+        const nextFiles =
+          typeof newFiles === "function" ? newFiles(prev) : newFiles;
+        onFilesChange?.(nextFiles);
+        return nextFiles;
+      });
+    },
+    [onFilesChange],
+  );
+
   const retryUpload = useCallback(
     async (id: string) => {
       const file = files.find((f) => f.id === id);
       if (file && file.status === "error") {
-        setFiles((prev) =>
+        setFilesState((prev) =>
           prev.map((f) =>
             f.id === id
               ? { ...f, status: "idle" as const, error: undefined }
@@ -577,7 +697,7 @@ export const useFileUpload = (
       abortControllersRef.current.delete(id);
     }
 
-    setFiles((prev) =>
+    setFilesState((prev) =>
       prev.map((f) =>
         f.id === id ? { ...f, status: "idle" as const, progress: 0 } : f,
       ),
@@ -647,23 +767,42 @@ export const useFileUpload = (
     [accept, multiple, handleFileChange],
   );
 
-  return [
-    { files, isDragging, errors, isUploading },
-    {
-      addFiles,
-      removeFile,
-      clearFiles,
-      clearErrors,
-      handleDragEnter,
-      handleDragLeave,
-      handleDragOver,
-      handleDrop,
-      handleFileChange,
-      openFileDialog,
-      getInputProps,
-      uploadFiles,
-      retryUpload,
-      cancelUpload,
-    },
-  ];
+  return {
+    // State
+    files,
+    isDragging,
+    isUploading,
+    errors,
+
+    // Core Actions
+    addFiles,
+    removeFile,
+    clearFiles,
+    clearErrors,
+
+    // Form integration
+    reset,
+    setFiles,
+    instanceKey,
+
+    // Upload Actions
+    uploadFiles,
+    retryUpload,
+    cancelUpload,
+
+    // Drag/Drop + Input
+    handleDragEnter,
+    handleDragLeave,
+    handleDragOver,
+    handleDrop,
+    handleFileChange,
+    openFileDialog,
+    getInputProps,
+  };
 };
+
+// Legacy type exports for backwards compatibility
+export type FileWithPreview = FileUploadItem;
+export type FileWithUploadStatus = FileUploadItem;
+export type FileUploadOptions = UseFileUploadOptions;
+export type FileUploadWithUploaderOptions = UseFileUploadOptions;

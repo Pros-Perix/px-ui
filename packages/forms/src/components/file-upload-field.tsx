@@ -1,12 +1,11 @@
 import * as React from "react";
 import {
-  FileIcon,
-  UploadIcon,
   FileUpload,
   useFileUpload,
-  type FileUploadWithUploaderOptions,
-  type FileWithPreview,
-  type FileWithUploadStatus,
+  type UseFileUploadOptions,
+  type FileUploadItem,
+  type DropzoneRenderProps,
+  type DropzoneState,
 } from "@px-ui/core";
 
 // ============================================================================
@@ -14,19 +13,15 @@ import {
 // ============================================================================
 
 export interface FileUploadFieldProps
-  extends Omit<FileUploadWithUploaderOptions, "initialFiles"> {
-  /** Variant determines the visual layout */
-  variant?: "dropzone" | "button" | "compact";
-  /** Size of the dropzone (only applies to dropzone variant) */
+  extends Omit<UseFileUploadOptions, "initialFiles"> {
+  /** Size of the dropzone (ignored when using render prop) */
   size?: "sm" | "default" | "lg";
-  /** Text displayed in the dropzone */
+  /** Text displayed in the dropzone (ignored when using render prop) */
   dropzoneText?: string;
-  /** Text for the browse/upload button */
+  /** Text for the browse/upload button (ignored when using render prop) */
   buttonText?: string;
   /** Show file list below the dropzone */
   showFileList?: boolean;
-  /** Show image grid instead of list for image files */
-  showImageGrid?: boolean;
   /** Initial files (already uploaded) */
   initialFiles?: Array<{
     id: string;
@@ -39,11 +34,17 @@ export interface FileUploadFieldProps
   disabled?: boolean;
   /** Custom className */
   className?: string;
-  /** Custom content to render inside the dropzone */
-  children?: React.ReactNode;
+  /**
+   * Render prop for complete dropzone customization.
+   * Receives props to spread and state for conditional styling.
+   */
+  render?: (
+    props: DropzoneRenderProps,
+    state: DropzoneState,
+  ) => React.ReactElement;
   /** Render prop for custom file item rendering */
   renderFileItem?: (
-    file: FileWithUploadStatus,
+    file: FileUploadItem,
     actions: { remove: () => void; retry: () => void },
   ) => React.ReactNode;
   /** Error handler */
@@ -55,16 +56,14 @@ export interface FileUploadFieldProps
 // ============================================================================
 
 export function FileUploadField({
-  variant = "dropzone",
   size = "default",
   dropzoneText = "Paste Or Drag & Drop Files Here",
   buttonText = "Browse for files",
   showFileList = true,
-  showImageGrid = false,
   initialFiles = [],
   disabled = false,
   className,
-  children,
+  render,
   renderFileItem,
   onError,
   // Hook options
@@ -74,9 +73,9 @@ export function FileUploadField({
   multiple = false,
   onFilesChange,
   onFilesAdded,
-  upload,
+  upload: uploadConfig,
 }: FileUploadFieldProps) {
-  const [state, actions] = useFileUpload({
+  const uploadHook = useFileUpload({
     maxFiles,
     maxSize,
     accept,
@@ -89,24 +88,12 @@ export function FileUploadField({
       type: f.type,
       url: f.url,
     })),
-    onFilesChange: onFilesChange as (files: FileWithPreview[]) => void,
-    onFilesAdded: onFilesAdded as (files: FileWithPreview[]) => void,
-    upload,
+    onFilesChange,
+    onFilesAdded,
+    upload: uploadConfig,
   });
 
-  const { files, isDragging, errors, isUploading } = state;
-  const {
-    addFiles,
-    removeFile,
-    clearFiles,
-    handleDragEnter,
-    handleDragLeave,
-    handleDragOver,
-    handleDrop,
-    openFileDialog,
-    getInputProps,
-    retryUpload,
-  } = actions;
+  const { files, errors, retryUpload, removeFile } = uploadHook;
 
   // Handle errors
   React.useEffect(() => {
@@ -118,28 +105,8 @@ export function FileUploadField({
     }
   }, [errors, onError]);
 
-  // Common props for FileUpload.Root
-  const rootProps = {
-    files,
-    addFiles,
-    removeFile,
-    clearFiles,
-    retryUpload,
-    openFileDialog,
-    getInputProps,
-    handleDragEnter,
-    handleDragLeave,
-    handleDragOver,
-    handleDrop,
-    isDragActive: isDragging,
-    isUploading,
-    accept,
-    multiple,
-    disabled,
-  };
-
-  // Render file item using primitives or custom render prop
-  const renderDefaultFileItem = (file: FileWithUploadStatus) => {
+  // Render file item using ListItem or custom render prop
+  const renderDefaultFileItem = (file: FileUploadItem) => {
     if (renderFileItem) {
       return renderFileItem(file, {
         remove: () => removeFile(file.id),
@@ -147,89 +114,24 @@ export function FileUploadField({
       });
     }
 
-    const isImage = file.file.type?.startsWith("image/") ?? false;
-
-    return (
-      <FileUpload.Item key={file.id} file={file}>
-        <FileUpload.ItemPreview
-          fallback={
-            isImage ? undefined : (
-              <FileIcon className="text-ppx-neutral-10 size-5" />
-            )
-          }
-        />
-
-        <div className="flex min-w-0 flex-1 flex-col gap-1">
-          <FileUpload.ItemName />
-
-          <div className="flex items-center gap-2">
-            <FileUpload.ItemSize />
-            {file.status === "uploading" && (
-              <FileUpload.ItemProgress className="flex-1" />
-            )}
-          </div>
-
-          <FileUpload.ItemError />
-        </div>
-
-        <div className="flex shrink-0 items-center gap-1">
-          <FileUpload.ItemStatus />
-          <FileUpload.ItemRetry />
-          <FileUpload.ItemRemove />
-        </div>
-      </FileUpload.Item>
-    );
+    return <FileUpload.ListItem key={file.id} file={file} />;
   };
 
-  // Render image grid item using primitives
-  const renderImageGridItem = (file: FileWithUploadStatus) => (
-    <FileUpload.ImageGridItem key={file.id} file={file} showStatusOverlay />
-  );
-
-  // Render based on variant
-  if (variant === "button" || variant === "compact") {
-    return (
-      <FileUpload.Root {...rootProps} className={className}>
-        <div className="flex items-center gap-3">
-          <FileUpload.Trigger
-            variant={variant === "compact" ? "outline" : "default"}
-            size={variant === "compact" ? "sm" : "default"}
-            showUploadingState
-          >
-            <UploadIcon className="size-4" />
-            {buttonText}
-          </FileUpload.Trigger>
-
-          {variant === "compact" && files.length > 0 && (
-            <span className="text-ppx-neutral-12 truncate text-sm">
-              {files.length === 1
-                ? files[0].file.name
-                : `${files.length} files selected`}
-            </span>
-          )}
-        </div>
-
-        {/* File List */}
-        {showFileList && files.length > 0 && variant !== "compact" && (
-          <FileUpload.ItemList>
-            {files.map(renderDefaultFileItem)}
-          </FileUpload.ItemList>
-        )}
-      </FileUpload.Root>
-    );
-  }
-
-  // Dropzone variant (default)
   return (
-    <FileUpload.Root {...rootProps} className={className}>
+    <FileUpload.Root
+      key={uploadHook.instanceKey}
+      upload={uploadHook}
+      accept={accept}
+      multiple={multiple}
+      disabled={disabled}
+      className={className}
+    >
       <FileUpload.Dropzone
         size={size}
         dropzoneText={dropzoneText}
         browseText={buttonText}
-        hideDefaultContent={!!children}
-      >
-        {children}
-      </FileUpload.Dropzone>
+        render={render}
+      />
 
       {/* Errors */}
       {errors.length > 0 && (
@@ -240,7 +142,7 @@ export function FileUploadField({
         </div>
       )}
 
-      {/* File List or Image Grid */}
+      {/* File List */}
       {showFileList && files.length > 0 && (
         <div>
           <div className="mb-2 flex items-center justify-between">
@@ -248,24 +150,18 @@ export function FileUploadField({
               {multiple ? `Files (${files.length})` : "Selected file"}
             </span>
             {multiple && files.length > 1 && (
-              <FileUpload.ClearButton
+              <FileUpload.ClearAll
                 size="sm"
                 className="text-ppx-red-5 hover:text-ppx-red-6"
               >
                 Remove all
-              </FileUpload.ClearButton>
+              </FileUpload.ClearAll>
             )}
           </div>
 
-          {showImageGrid ? (
-            <FileUpload.ImageGrid>
-              {files.map(renderImageGridItem)}
-            </FileUpload.ImageGrid>
-          ) : (
-            <FileUpload.ItemList>
-              {files.map(renderDefaultFileItem)}
-            </FileUpload.ItemList>
-          )}
+          <FileUpload.List>
+            {files.map(renderDefaultFileItem)}
+          </FileUpload.List>
         </div>
       )}
     </FileUpload.Root>
@@ -273,7 +169,9 @@ export function FileUploadField({
 }
 
 export type {
-  FileWithUploadStatus,
+  FileUploadItem,
   UploadConfig,
-  FileUploadWithUploaderOptions,
+  UseFileUploadOptions as FileUploadWithUploaderOptions,
+  DropzoneRenderProps,
+  DropzoneState,
 } from "@px-ui/core";
