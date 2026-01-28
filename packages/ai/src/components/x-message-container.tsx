@@ -9,7 +9,7 @@ export interface XMessageContainerProps {
 }
 
 export function XMessageContainer({ height = 400 }: XMessageContainerProps) {
-  const { messages, isLoading } = useXandi();
+  const { conversation, isLoading } = useXandi();
   const containerRef = useRef<HTMLDivElement>(null);
 
   // Auto-scroll to bottom when new messages arrive or loading state changes
@@ -17,7 +17,7 @@ export function XMessageContainer({ height = 400 }: XMessageContainerProps) {
     if (containerRef.current) {
       containerRef.current.scrollTop = containerRef.current.scrollHeight;
     }
-  }, [messages, isLoading]);
+  }, [conversation.messages, isLoading]);
 
   return (
     <div
@@ -26,7 +26,7 @@ export function XMessageContainer({ height = 400 }: XMessageContainerProps) {
       style={{ height: typeof height === "number" ? `${height}px` : height }}
     >
       <div className="flex flex-col gap-5 p-4">
-        {messages.map((message) => (
+        {conversation.messages.map((message) => (
           <XMessageItem key={message.id} message={message} />
         ))}
         {isLoading && <XTypingIndicator />}

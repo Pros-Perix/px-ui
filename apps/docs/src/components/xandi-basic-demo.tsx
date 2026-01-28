@@ -167,11 +167,6 @@ export function XandiBasicDemo() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [activeChatId, setActiveChatId] = useState<string | undefined>();
 
-  const handleNewChat = () => {
-    setActiveChatId(undefined);
-    // In a real app, this would reset the chat state
-  };
-
   const handleSelectChat = (chatId: string) => {
     setActiveChatId(chatId);
     // In a real app, this would load the selected chat
@@ -179,34 +174,30 @@ export function XandiBasicDemo() {
 
   return (
     <div className="flex h-[600px] w-full overflow-hidden rounded-lg border border-ppx-neutral-5 bg-ppx-background">
-      {/* Sidebar */}
-      <XSidebar
-        isOpen={sidebarOpen}
-        chatHistory={mockChatHistory}
-        activeChatId={activeChatId}
-        onClose={() => setSidebarOpen(false)}
-        onNewChat={handleNewChat}
-        onSelectChat={handleSelectChat}
-      />
-
-      {/* Main Content */}
-      <div className="flex flex-1 flex-col">
-        {/* Header */}
-        <XHeader
-          title={xandiConfig.assistantName}
-          avatarUrl={xandiConfig.avatarUrl}
-          onClose={() => {}}
-          onNewChat={handleNewChat}
-          onToggleHistory={() => setSidebarOpen(!sidebarOpen)}
+      <XandiProvider handlers={xandiHandlers} config={xandiConfig}>
+        {/* Sidebar */}
+        <XSidebar
+          isOpen={sidebarOpen}
+          chatHistory={mockChatHistory}
+          activeChatId={activeChatId}
+          onClose={() => setSidebarOpen(false)}
+          onSelectChat={handleSelectChat}
         />
 
-        {/* Chat Area */}
-        <div className="flex-1 overflow-hidden px-4 py-2">
-          <XandiProvider handlers={xandiHandlers} config={xandiConfig}>
+        {/* Main Content */}
+        <div className="flex flex-1 flex-col">
+          {/* Header */}
+          <XHeader
+            onClose={() => {}}
+            onToggleHistory={() => setSidebarOpen(!sidebarOpen)}
+          />
+
+          {/* Chat Area */}
+          <div className="flex-1 overflow-hidden px-4 py-2">
             <Xandi suggestions={suggestions} />
-          </XandiProvider>
+          </div>
         </div>
-      </div>
+      </XandiProvider>
     </div>
   );
 }

@@ -52,11 +52,22 @@ export interface ConversationSummary {
 
 /** Full conversation with messages */
 export interface Conversation {
-  id: string;
+  id: string | null;
   title: string;
   messages: Message[];
   createdAt: Date;
   updatedAt: Date;
+}
+
+/** Creates a new empty conversation */
+function createEmptyConversation(): Conversation {
+  return {
+    id: null,
+    title: "New Chat",
+    messages: [],
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  };
 }
 
 // ============================================================================
@@ -102,14 +113,21 @@ export interface XandiHandlers {
 // ============================================================================
 
 export interface XandiContextValue {
-  messages: Message[];
+  /** Current conversation with messages */
+  conversation: Conversation;
+  /** Whether a request is in progress */
   isLoading: boolean;
-  conversationId: string | null;
+  /** Send a message to the assistant */
   sendMessage: (text: string) => void;
+  /** Stop the current request */
   stopRequest: () => void;
+  /** Load an existing conversation by ID */
   loadConversation: (conversationId: string) => Promise<void>;
+  /** Start a new empty conversation */
   startNewConversation: () => void;
+  /** Submit feedback for a message */
   submitFeedback: (messageId: string, feedback: FeedbackType) => void;
+  /** Configuration for the assistant */
   config: Required<XandiConfig>;
 }
 
@@ -135,8 +153,7 @@ export function XandiProvider({
   config: userConfig,
   children,
 }: XandiProviderProps) {
-  const [conversationId, setConversationId] = useState<string | null>(initialConversationId ?? null);
-  const [messages, setMessages] = useState<Message[]>([]);
+  const [conversation, setConversation] = useState<Conversation>(createEmptyConversation);
   const [isLoading, setIsLoading] = useState(false);
   const abortControllerRef = useRef<AbortController | null>(null);
 
@@ -158,9 +175,8 @@ export function XandiProvider({
 
     try {
       setIsLoading(true);
-      const conversation = await handlers.getConv(convId);
-      setConversationId(conversation.id);
-      setMessages(conversation.messages);
+      const loadedConversation = await handlers.getConv(convId);
+      setConversation(loadedConversation);
     } catch (error) {
       console.error("Failed to load conversation:", error);
     } finally {
@@ -169,8 +185,7 @@ export function XandiProvider({
   };
 
   const startNewConversation = () => {
-    setConversationId(null);
-    setMessages([]);
+    setConversation(createEmptyConversation());
   };
 
   const sendMessage = async (text: string) => {
@@ -182,7 +197,11 @@ export function XandiProvider({
       role: "user",
       content: text,
     };
-    setMessages((prev) => [...prev, userMessage]);
+    setConversation((prev) => ({
+      ...prev,
+      messages: [...prev.messages, userMessage],
+      updatedAt: new Date(),
+    }));
     setIsLoading(true);
 
     // Create abort controller for this request
@@ -190,14 +209,9 @@ export function XandiProvider({
 
     try {
       const response = await handlers.fetchResp(text, {
-        conversationId: conversationId ?? undefined,
+        conversationId: conversation.id ?? undefined,
         signal: abortControllerRef.current.signal,
       });
-
-      // Update conversation ID if returned from API
-      if (response.conversationId) {
-        setConversationId(response.conversationId);
-      }
 
       const assistantMessage: Message = {
         id: crypto.randomUUID(),
@@ -206,7 +220,13 @@ export function XandiProvider({
         type: response.type,
         debugTrace: response.debugTrace,
       };
-      setMessages((prev) => [...prev, assistantMessage]);
+
+      setConversation((prev) => ({
+        ...prev,
+        id: response.conversationId ?? prev.id,
+        messages: [...prev.messages, assistantMessage],
+        updatedAt: new Date(),
+      }));
     } catch (error) {
       if ((error as Error).name !== "AbortError") {
         console.error("Failed to send message:", error);
@@ -222,22 +242,21 @@ export function XandiProvider({
       abortControllerRef.current.abort();
       abortControllerRef.current = null;
     }
-    if (conversationId && handlers.onStop) {
-      handlers.onStop(conversationId);
+    if (conversation.id && handlers.onStop) {
+      handlers.onStop(conversation.id);
     }
     setIsLoading(false);
   };
 
   const submitFeedback = (messageId: string, feedback: FeedbackType) => {
-    if (handlers.onFeedback && conversationId) {
-      handlers.onFeedback(messageId, conversationId, feedback);
+    if (handlers.onFeedback && conversation.id) {
+      handlers.onFeedback(messageId, conversation.id, feedback);
     }
   };
 
   const value: XandiContextValue = {
-    messages,
+    conversation,
     isLoading,
-    conversationId,
     sendMessage,
     stopRequest,
     loadConversation,

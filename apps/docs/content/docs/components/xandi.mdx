@@ -229,9 +229,8 @@ import { useXandi } from "@px-ui/ai";
 
 function CustomComponent() {
   const {
-    messages,
+    conversation,
     isLoading,
-    conversationId,
     sendMessage,
     stopRequest,
     loadConversation,
@@ -239,19 +238,22 @@ function CustomComponent() {
     submitFeedback,
     config,
   } = useXandi();
+
+  // Access messages from conversation
+  const messages = conversation.messages;
+  const conversationId = conversation.id;
   // ...
 }
 ```
 
 | Property | Type | Description |
 |----------|------|-------------|
-| `messages` | `Message[]` | Array of chat messages |
+| `conversation` | `Conversation` | Current conversation object with messages, id, title, and timestamps |
 | `isLoading` | `boolean` | Whether a response is being fetched |
-| `conversationId` | `string \| null` | Current conversation identifier |
 | `sendMessage` | `(text: string) => void` | Function to send a message |
 | `stopRequest` | `() => void` | Stop the current request |
 | `loadConversation` | `(conversationId: string) => Promise<void>` | Load an existing conversation |
-| `startNewConversation` | `() => void` | Clear messages and start fresh |
+| `startNewConversation` | `() => void` | Reset to a new empty conversation |
 | `submitFeedback` | `(messageId: string, feedback: FeedbackType) => void` | Submit feedback for a message |
 | `config` | `XandiConfig` | Configuration object with avatar URL and assistant name |
 
@@ -305,9 +307,9 @@ interface XandiApiResponse {
   };
 }
 
-// Full conversation with messages
+// Full conversation with messages (id is null for new unsaved conversations)
 interface Conversation {
-  id: string;
+  id: string | null;
   title: string;
   messages: Message[];
   createdAt: Date;

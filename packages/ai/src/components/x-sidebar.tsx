@@ -1,6 +1,7 @@
 import { Button } from "@px-ui/core";
 
 import { CloseIcon, NewChatIcon } from "../assets/icons";
+import { useXandi } from "../context/xandi-context";
 import { XChatHistory, type ChatHistoryItem } from "./x-chat-history";
 
 export interface XSidebarProps {
@@ -8,7 +9,6 @@ export interface XSidebarProps {
   chatHistory?: ChatHistoryItem[];
   activeChatId?: string;
   onClose?: () => void;
-  onNewChat?: () => void;
   onSelectChat?: (chatId: string) => void;
 }
 
@@ -17,9 +17,10 @@ export function XSidebar({
   chatHistory = [],
   activeChatId,
   onClose,
-  onNewChat,
   onSelectChat,
 }: XSidebarProps) {
+  const { startNewConversation } = useXandi();
+
   if (!isOpen) return null;
 
   return (
@@ -40,7 +41,7 @@ export function XSidebar({
       <div className="p-3">
         <Button
           variant="ghost"
-          onClick={onNewChat}
+          onClick={startNewConversation}
           className="w-full justify-start gap-3"
         >
           <NewChatIcon className="h-5 w-5" />
