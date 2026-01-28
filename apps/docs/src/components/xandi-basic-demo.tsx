@@ -4,14 +4,19 @@ import {
   XandiProvider,
   XHeader,
   XSidebar,
+  useXandi,
   type ChatHistoryItem,
   type XandiResponse,
   type XandiConfig,
   type XandiHandlers,
   type FeedbackType,
+  type Conversation,
+  type ConversationSummary,
 } from "@px-ui/ai";
 
-const API_URL = "http://localhost:8080/chat";
+const API_BASE = "http://localhost:8080";
+const API_URL = `${API_BASE}/chat`;
+const CONVERSATION_URL = `${API_BASE}/conversation`;
 const USER_ID = "0108e28d-ec3b-4648-9178-b4a2c0d582ba";
 const ORG_ID = "e37723a6-4363-4831-86e0-5e4950ed15ec";
 
@@ -29,14 +34,12 @@ const suggestions = [
   { id: "3", label: "Pending Timesheets", prompt: "Show me timesheets pending for approval" },
 ];
 
-const mockChatHistory: ChatHistoryItem[] = [
-  { id: "1", title: "What should I work on next?", timestamp: new Date() },
-  { id: "2", title: "Help me write a job posting.", timestamp: new Date() },
-  { id: "3", title: "Find me similar job posts.", timestamp: new Date() },
-  { id: "4", title: "Summarize the status and history of project...", timestamp: new Date() },
-  { id: "5", title: "I want to create a ticket", timestamp: new Date() },
-  { id: "6", title: "How many issues are assigned to me?", timestamp: new Date() },
-];
+// Helper to get common headers
+const getHeaders = () => ({
+  "Content-Type": "application/json",
+  "x-org-id": ORG_ID,
+  "x-user-id": USER_ID,
+});
 
 // ============================================================================
 // API Types
@@ -75,6 +78,41 @@ interface ApiResponse {
   };
 }
 
+interface ApiMessage {
+  id: string;
+  role: "user" | "assistant";
+  content: string;
+  created_at: string;
+}
+
+interface ApiConversationListItem {
+  conversation_id: string;
+  trace_id: string;
+  first_question: string;
+  last_activity_at: string;
+}
+
+interface ApiConversationDetail {
+  id: string;
+  title: string;
+  messages: ApiMessage[];
+  created_at: string;
+  updated_at: string;
+}
+
+interface ConversationListResponse {
+  success: boolean;
+  data: {
+    conversations: ApiConversationListItem[];
+  };
+  message: string;
+}
+
+interface ConversationDetailResponse {
+  success: boolean;
+  data: ApiConversationDetail;
+}
+
 // ============================================================================
 // Helpers
 // ============================================================================
@@ -111,16 +149,12 @@ const xandiHandlers: XandiHandlers = {
   fetchResp: async (message, options): Promise<XandiResponse> => {
     const response = await fetch(API_URL, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "x-org-id": ORG_ID,
-        "x-user-id": USER_ID,
-      },
+      headers: getHeaders(),
       body: JSON.stringify({
         message,
         conversation_id: options?.conversationId,
       }),
-      signal: options?.signal, // Pass abort signal to fetch
+      signal: options?.signal,
     });
 
     const json: ApiResponse = await response.json();
@@ -144,44 +178,94 @@ const xandiHandlers: XandiHandlers = {
     };
   },
 
+  // Get a conversation by ID
+  getConv: async (conversationId: string): Promise<Conversation> => {
+    const response = await fetch(`${CONVERSATION_URL}/${conversationId}`, {
+      method: "GET",
+      headers: getHeaders(),
+    });
+
+    const json: ConversationDetailResponse = await response.json();
+
+    if (!json.success) {
+      throw new Error("Failed to get conversation");
+    }
+
+    const conv = json.data;
+    return {
+      id: conv.id,
+      title: conv.title,
+      messages: conv.messages.map((msg) => ({
+        id: msg.id,
+        role: msg.role,
+        content: msg.content,
+      })),
+      createdAt: new Date(conv.created_at),
+      updatedAt: new Date(conv.updated_at),
+    };
+  },
+
+  // Get conversation history list
+  getConvHistory: async (): Promise<ConversationSummary[]> => {
+    const response = await fetch(CONVERSATION_URL, {
+      method: "GET",
+      headers: getHeaders(),
+    });
+
+    const json: ConversationListResponse = await response.json();
+
+    if (!json.success) {
+      throw new Error("Failed to get conversation history");
+    }
+
+    const conversations = json.data?.conversations ?? [];
+    return conversations.map((conv) => ({
+      id: conv.conversation_id,
+      title: conv.first_question,
+      timestamp: new Date(conv.last_activity_at),
+    }));
+  },
+
   // Handle feedback submission
   onFeedback: (messageId: string, conversationId: string, feedback: FeedbackType) => {
     console.log("Feedback submitted:", { messageId, conversationId, feedback });
-    // In a real app, send this to your feedback API
+    // TODO: POST to feedback API
   },
 
   // Handle stop request
   onStop: (conversationId: string) => {
     console.log("Request stopped for conversation:", conversationId);
-    // In a real app, cancel the ongoing request
-  },
-
-  // Get conversation history (optional)
-  getConvHistory: async () => {
-    // In a real app, fetch from API
-    return mockChatHistory;
+    // TODO: Cancel ongoing request on backend if needed
   },
 };
 
 export function XandiBasicDemo() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [activeChatId, setActiveChatId] = useState<string | undefined>();
+  const [chatHistory, setChatHistory] = useState<ChatHistoryItem[]>([]);
 
-  const handleSelectChat = (chatId: string) => {
-    setActiveChatId(chatId);
-    // In a real app, this would load the selected chat
+  // Fetch conversation history when sidebar opens
+  const handleToggleHistory = async () => {
+    if (!sidebarOpen) {
+      try {
+        const history = await xandiHandlers.getConvHistory?.();
+        if (history) {
+          setChatHistory(history);
+        }
+      } catch (error) {
+        console.error("Failed to fetch conversation history:", error);
+      }
+    }
+    setSidebarOpen(!sidebarOpen);
   };
 
   return (
     <div className="flex h-[600px] w-full overflow-hidden rounded-lg border border-ppx-neutral-5 bg-ppx-background">
       <XandiProvider handlers={xandiHandlers} config={xandiConfig}>
         {/* Sidebar */}
-        <XSidebar
+        <XSidebarWithContext
           isOpen={sidebarOpen}
-          chatHistory={mockChatHistory}
-          activeChatId={activeChatId}
+          chatHistory={chatHistory}
           onClose={() => setSidebarOpen(false)}
-          onSelectChat={handleSelectChat}
         />
 
         {/* Main Content */}
@@ -189,7 +273,7 @@ export function XandiBasicDemo() {
           {/* Header */}
           <XHeader
             onClose={() => {}}
-            onToggleHistory={() => setSidebarOpen(!sidebarOpen)}
+            onToggleHistory={handleToggleHistory}
           />
 
           {/* Chat Area */}
@@ -199,5 +283,32 @@ export function XandiBasicDemo() {
         </div>
       </XandiProvider>
     </div>
+  );
+}
+
+// Wrapper component that uses context for loadConversation
+function XSidebarWithContext({
+  isOpen,
+  chatHistory,
+  onClose,
+}: {
+  isOpen: boolean;
+  chatHistory: ChatHistoryItem[];
+  onClose: () => void;
+}) {
+  const { loadConversation, conversation } = useXandi();
+
+  const handleSelectChat = (chatId: string) => {
+    loadConversation(chatId);
+  };
+
+  return (
+    <XSidebar
+      isOpen={isOpen}
+      chatHistory={chatHistory}
+      activeChatId={conversation.id ?? undefined}
+      onClose={onClose}
+      onSelectChat={handleSelectChat}
+    />
   );
 }
