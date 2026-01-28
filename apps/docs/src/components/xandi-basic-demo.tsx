@@ -108,7 +108,7 @@ function formatJobsAsMarkdown(jobs: Job[], pagination?: { page: number; per_page
 
 const xandiHandlers: XandiHandlers = {
   // Fetch AI response
-  fetchResp: async (message: string, conversationId?: string): Promise<XandiResponse> => {
+  fetchResp: async (message, options): Promise<XandiResponse> => {
     const response = await fetch(API_URL, {
       method: "POST",
       headers: {
@@ -118,8 +118,9 @@ const xandiHandlers: XandiHandlers = {
       },
       body: JSON.stringify({
         message,
-        conversation_id: conversationId,
+        conversation_id: options?.conversationId,
       }),
+      signal: options?.signal, // Pass abort signal to fetch
     });
 
     const json: ApiResponse = await response.json();

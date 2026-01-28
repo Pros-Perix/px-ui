@@ -79,9 +79,14 @@ const defaultConfig: Required<XandiConfig> = {
 // Handlers
 // ============================================================================
 
+export interface FetchRespOptions {
+  conversationId?: string;
+  signal?: AbortSignal;
+}
+
 export interface XandiHandlers {
   /** Fetch AI response for a message */
-  fetchResp: (message: string, conversationId?: string) => Promise<XandiResponse>;
+  fetchResp: (message: string, options?: FetchRespOptions) => Promise<XandiResponse>;
   /** Get a conversation by ID (for restoring sessions) */
   getConv?: (conversationId: string) => Promise<Conversation>;
   /** Get conversation history list */
@@ -184,7 +189,10 @@ export function XandiProvider({
     abortControllerRef.current = new AbortController();
 
     try {
-      const response = await handlers.fetchResp(text, conversationId ?? undefined);
+      const response = await handlers.fetchResp(text, {
+        conversationId: conversationId ?? undefined,
+        signal: abortControllerRef.current.signal,
+      });
 
       // Update conversation ID if returned from API
       if (response.conversationId) {

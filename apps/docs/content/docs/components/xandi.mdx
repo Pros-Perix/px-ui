@@ -26,11 +26,12 @@ import { Xandi, XandiProvider, XHeader, XSidebar, type XandiHandlers } from "@px
 import { Xandi, XandiProvider, type XandiHandlers, type XandiResponse } from "@px-ui/ai";
 
 const handlers: XandiHandlers = {
-  fetchResp: async (message, conversationId) => {
+  fetchResp: async (message, options) => {
     const response = await fetch("/api/chat", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ message, conversation_id: conversationId }),
+      body: JSON.stringify({ message, conversation_id: options?.conversationId }),
+      signal: options?.signal, // Enable request cancellation
     });
     const data = await response.json();
     return {
@@ -66,14 +67,15 @@ import { type XandiHandlers, type XandiResponse, type FeedbackType } from "@px-u
 
 const handlers: XandiHandlers = {
   // Required: Fetch AI response
-  fetchResp: async (message: string, conversationId?: string): Promise<XandiResponse> => {
+  fetchResp: async (message, options): Promise<XandiResponse> => {
     const response = await fetch("https://api.example.com/chat", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer your-token",
       },
-      body: JSON.stringify({ message, conversation_id: conversationId }),
+      body: JSON.stringify({ message, conversation_id: options?.conversationId }),
+      signal: options?.signal, // Enable request cancellation
     });
     const data = await response.json();
     return {
@@ -88,7 +90,7 @@ const handlers: XandiHandlers = {
     console.log("Feedback:", { messageId, conversationId, feedback });
   },
 
-  // Optional: Handle stop request
+  // Optional: Handle stop request (for server-side cleanup)
   onStop: (conversationId: string) => {
     console.log("Stopped:", conversationId);
   },
@@ -121,11 +123,12 @@ const config: XandiConfig = {
 };
 
 const handlers: XandiHandlers = {
-  fetchResp: async (message, conversationId) => {
+  fetchResp: async (message, options) => {
     const response = await fetch("/api/chat", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ message, conversation_id: conversationId }),
+      body: JSON.stringify({ message, conversation_id: options?.conversationId }),
+      signal: options?.signal,
     });
     const data = await response.json();
     return {
@@ -137,7 +140,7 @@ const handlers: XandiHandlers = {
     // Send feedback to API
   },
   onStop: (conversationId) => {
-    // Cancel ongoing request
+    // Server-side cleanup if needed
   },
 };
 
@@ -255,9 +258,15 @@ function CustomComponent() {
 ## Types
 
 ```tsx
+// Options for fetchResp handler
+interface FetchRespOptions {
+  conversationId?: string;
+  signal?: AbortSignal; // For canceling requests
+}
+
 // Handler functions for API communication
 interface XandiHandlers {
-  fetchResp: (message: string, conversationId?: string) => Promise<XandiResponse>;
+  fetchResp: (message: string, options?: FetchRespOptions) => Promise<XandiResponse>;
   getConv?: (conversationId: string) => Promise<Conversation>;
   getConvHistory?: () => Promise<ConversationSummary[]>;
   onFeedback?: (messageId: string, conversationId: string, feedback: FeedbackType) => void;
