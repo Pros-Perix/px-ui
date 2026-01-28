@@ -12,7 +12,7 @@ Xandi is a composable AI chatbot component designed for workforce and hiring app
 ## Import
 
 ```tsx
-import { Xandi, XandiProvider, XHeader, XSidebar } from "@px-ui/ai";
+import { Xandi, XandiProvider, XHeader, XSidebar, type XandiHandlers } from "@px-ui/ai";
 ```
 
 ## Usage
@@ -23,21 +23,27 @@ import { Xandi, XandiProvider, XHeader, XSidebar } from "@px-ui/ai";
 
 <CodeBlock>
 ```tsx
-import { Xandi, XandiProvider, type XandiResponse } from "@px-ui/ai";
+import { Xandi, XandiProvider, type XandiHandlers, type XandiResponse } from "@px-ui/ai";
 
-async function fetchResponse(message: string): Promise<XandiResponse> {
-  const response = await fetch("/api/chat", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ message }),
-  });
-  const data = await response.json();
-  return { content: data.response };
-}
+const handlers: XandiHandlers = {
+  fetchResp: async (message, conversationId) => {
+    const response = await fetch("/api/chat", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ message, conversation_id: conversationId }),
+    });
+    const data = await response.json();
+    return {
+      content: data.message,
+      conversationId: data.data.conversation_id,
+      debugTrace: data.trace,
+    };
+  },
+};
 
 function MyPage() {
   return (
-    <XandiProvider fetchResponse={fetchResponse}>
+    <XandiProvider handlers={handlers}>
       <Xandi />
     </XandiProvider>
   );
@@ -50,34 +56,47 @@ function MyPage() {
 Xandi uses a provider pattern to manage chat state. The `XandiProvider` wraps your chat components and provides context for:
 
 - **Message state** - Manages conversation history
-- **Session management** - Handles chat sessions with optional session restoration
-- **API communication** - Delegates to your custom fetch function
+- **Conversation management** - Handles chat sessions with optional restoration
+- **API communication** - Delegates to your custom handler functions
 
 ### Basic Setup
 
 ```tsx
-import { type XandiResponse } from "@px-ui/ai";
+import { type XandiHandlers, type XandiResponse, type FeedbackType } from "@px-ui/ai";
 
-async function fetchResponse(message: string): Promise<XandiResponse> {
-  const response = await fetch("https://api.example.com/chat", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "Authorization": "Bearer your-token",
-    },
-    body: JSON.stringify({ message }),
-  });
-  const data = await response.json();
-  return {
-    content: data.response,
-    debugTrace: data.debug, // optional
-  };
-}
+const handlers: XandiHandlers = {
+  // Required: Fetch AI response
+  fetchResp: async (message: string, conversationId?: string): Promise<XandiResponse> => {
+    const response = await fetch("https://api.example.com/chat", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer your-token",
+      },
+      body: JSON.stringify({ message, conversation_id: conversationId }),
+    });
+    const data = await response.json();
+    return {
+      content: data.message,
+      conversationId: data.data.conversation_id,
+      debugTrace: data.trace,
+    };
+  },
+
+  // Optional: Handle feedback
+  onFeedback: (messageId: string, conversationId: string, feedback: FeedbackType) => {
+    console.log("Feedback:", { messageId, conversationId, feedback });
+  },
+
+  // Optional: Handle stop request
+  onStop: (conversationId: string) => {
+    console.log("Stopped:", conversationId);
+  },
+};
 
 <XandiProvider
-  fetchResponse={fetchResponse}
-  sessionId="existing-session-id" // optional, for restoring sessions
-  onFeedback={(messageId, feedback) => console.log(messageId, feedback)}
+  handlers={handlers}
+  conversationId="existing-conversation-id" // optional, for restoring sessions
 >
   <Xandi
     welcomeMessage="How can I help you today?"
@@ -93,17 +112,34 @@ async function fetchResponse(message: string): Promise<XandiResponse> {
 
 ```tsx
 import { useState } from "react";
-import { Xandi, XandiProvider, XHeader, XSidebar, type XandiResponse } from "@px-ui/ai";
+import { Xandi, XandiProvider, XHeader, XSidebar, type XandiConfig, type XandiHandlers } from "@px-ui/ai";
 
-async function fetchResponse(message: string): Promise<XandiResponse> {
-  const response = await fetch("/api/chat", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ message }),
-  });
-  const data = await response.json();
-  return { content: data.response };
-}
+// Custom configuration
+const config: XandiConfig = {
+  avatarUrl: "https://example.com/my-assistant-avatar.png",
+  assistantName: "Assistant",
+};
+
+const handlers: XandiHandlers = {
+  fetchResp: async (message, conversationId) => {
+    const response = await fetch("/api/chat", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ message, conversation_id: conversationId }),
+    });
+    const data = await response.json();
+    return {
+      content: data.message,
+      conversationId: data.data.conversation_id,
+    };
+  },
+  onFeedback: (messageId, conversationId, feedback) => {
+    // Send feedback to API
+  },
+  onStop: (conversationId) => {
+    // Cancel ongoing request
+  },
+};
 
 function ChatWindow() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -118,11 +154,15 @@ function ChatWindow() {
         onSelectChat={handleSelectChat}
       />
       <div className="flex flex-1 flex-col">
+        {/* XHeader is outside provider, pass avatar directly */}
         <XHeader
+          title={config.assistantName}
+          avatarUrl={config.avatarUrl}
           onToggleHistory={() => setSidebarOpen(!sidebarOpen)}
           onNewChat={handleNewChat}
         />
-        <XandiProvider fetchResponse={fetchResponse}>
+        {/* Provider shares config with internal components */}
+        <XandiProvider handlers={handlers} config={config}>
           <Xandi />
         </XandiProvider>
       </div>
@@ -135,13 +175,13 @@ function ChatWindow() {
 
 ### XandiProvider
 
-The context provider that manages chat state. Requires a `fetchResponse` function that handles the API transaction.
+The context provider that manages chat state. Requires a `handlers` object with API communication functions.
 
 | Prop | Type | Required | Description |
 |------|------|----------|-------------|
-| `fetchResponse` | `(message: string) => Promise<XandiResponse>` | Yes | Function that sends a message and returns the AI response |
-| `sessionId` | `string` | No | Existing session ID to restore a chat |
-| `onFeedback` | `(messageId: string, feedback: FeedbackType) => void` | No | Callback when user provides feedback on a message |
+| `handlers` | `XandiHandlers` | Yes | Object containing all handler functions |
+| `conversationId` | `string` | No | Existing conversation ID to restore a chat |
+| `config` | `XandiConfig` | No | Configuration for assistant appearance |
 
 ### Xandi
 
@@ -154,11 +194,12 @@ The main chat component. Must be wrapped in `XandiProvider`.
 
 ### XHeader
 
-Header component for floating windows and sidebars.
+Header component for floating windows and sidebars. Since this component lives outside the provider, avatar must be passed as a prop.
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
 | `title` | `string` | `"Xandi"` | Title displayed in the header |
+| `avatarUrl` | `string` | Default Xandi avatar | URL for the assistant's avatar image |
 | `onClose` | `() => void` | - | Callback when close button is clicked |
 | `onNewChat` | `() => void` | - | Callback when new chat button is clicked |
 | `onToggleHistory` | `() => void` | - | Callback when menu button is clicked |
@@ -170,7 +211,7 @@ Sidebar component for chat history.
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
 | `isOpen` | `boolean` | `true` | Whether the sidebar is visible |
-| `chatHistory` | `ChatHistoryGroup[]` | `[]` | Grouped chat history items |
+| `chatHistory` | `ChatHistoryItem[]` | `[]` | List of chat history items |
 | `activeChatId` | `string` | - | ID of the currently active chat |
 | `onClose` | `() => void` | - | Callback when close button is clicked |
 | `onNewChat` | `() => void` | - | Callback when new chat button is clicked |
@@ -184,7 +225,17 @@ Access the chat context from any component within `XandiProvider`.
 import { useXandi } from "@px-ui/ai";
 
 function CustomComponent() {
-  const { messages, isLoading, sessionId, sendMessage } = useXandi();
+  const {
+    messages,
+    isLoading,
+    conversationId,
+    sendMessage,
+    stopRequest,
+    loadConversation,
+    startNewConversation,
+    submitFeedback,
+    config,
+  } = useXandi();
   // ...
 }
 ```
@@ -193,17 +244,72 @@ function CustomComponent() {
 |----------|------|-------------|
 | `messages` | `Message[]` | Array of chat messages |
 | `isLoading` | `boolean` | Whether a response is being fetched |
-| `sessionId` | `string \| null` | Current session identifier |
+| `conversationId` | `string \| null` | Current conversation identifier |
 | `sendMessage` | `(text: string) => void` | Function to send a message |
-| `onFeedback` | `(messageId: string, feedback: FeedbackType) => void` | Feedback handler from provider |
+| `stopRequest` | `() => void` | Stop the current request |
+| `loadConversation` | `(conversationId: string) => Promise<void>` | Load an existing conversation |
+| `startNewConversation` | `() => void` | Clear messages and start fresh |
+| `submitFeedback` | `(messageId: string, feedback: FeedbackType) => void` | Submit feedback for a message |
+| `config` | `XandiConfig` | Configuration object with avatar URL and assistant name |
 
 ## Types
 
 ```tsx
+// Handler functions for API communication
+interface XandiHandlers {
+  fetchResp: (message: string, conversationId?: string) => Promise<XandiResponse>;
+  getConv?: (conversationId: string) => Promise<Conversation>;
+  getConvHistory?: () => Promise<ConversationSummary[]>;
+  onFeedback?: (messageId: string, conversationId: string, feedback: FeedbackType) => void;
+  onStop?: (conversationId: string) => void;
+}
+
+// Configuration for assistant appearance
+interface XandiConfig {
+  avatarUrl?: string;     // URL for the assistant's avatar
+  assistantName?: string; // Name of the assistant (default: "Xandi")
+}
+
+// Response from fetchResp handler
 interface XandiResponse {
   content: string;
   type?: "text" | "markdown";
   debugTrace?: unknown;
+  conversationId?: string;
+}
+
+// API response structure from backend
+interface XandiApiResponse {
+  success: boolean;
+  message: string;
+  data: {
+    intent: string;
+    data: unknown;
+    conversation_id: string;
+  };
+  trace?: {
+    trace_id: string;
+    execution_mode: string;
+    intent: string;
+    tool_id: string;
+    debug_trace: unknown;
+  };
+}
+
+// Full conversation with messages
+interface Conversation {
+  id: string;
+  title: string;
+  messages: Message[];
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+// Conversation summary for history list
+interface ConversationSummary {
+  id: string;
+  title: string;
+  timestamp: Date;
 }
 
 interface Suggestion {
@@ -226,11 +332,6 @@ interface ChatHistoryItem {
   id: string;
   title: string;
   timestamp: Date;
-}
-
-interface ChatHistoryGroup {
-  label: string;
-  items: ChatHistoryItem[];
 }
 ```
 

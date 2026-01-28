@@ -4,7 +4,10 @@ import { CloseIcon, MenuIcon, NewChatIcon } from "../assets/icons";
 import { XANDI_AVATAR_URL } from "../constants";
 
 export interface XHeaderProps {
+  /** Title displayed in the header (default: "Xandi") */
   title?: string;
+  /** URL for the assistant's avatar image */
+  avatarUrl?: string;
   onClose?: () => void;
   onNewChat?: () => void;
   onToggleHistory?: () => void;
@@ -12,6 +15,7 @@ export interface XHeaderProps {
 
 export function XHeader({
   title = "Xandi",
+  avatarUrl = XANDI_AVATAR_URL,
   onClose,
   onNewChat,
   onToggleHistory,
@@ -31,8 +35,8 @@ export function XHeader({
 
         <div className="flex items-center gap-2">
           <Avatar
-            imgSrc={XANDI_AVATAR_URL}
-            name="Xandi"
+            imgSrc={avatarUrl}
+            name={title}
             variant="rounded"
             size="24px"
             hideTooltip

@@ -1,11 +1,11 @@
 import { Button } from "@px-ui/core";
 
 import { CloseIcon, NewChatIcon } from "../assets/icons";
-import { XChatHistory, type ChatHistoryGroup } from "./x-chat-history";
+import { XChatHistory, type ChatHistoryItem } from "./x-chat-history";
 
 export interface XSidebarProps {
   isOpen?: boolean;
-  chatHistory?: ChatHistoryGroup[];
+  chatHistory?: ChatHistoryItem[];
   activeChatId?: string;
   onClose?: () => void;
   onNewChat?: () => void;
@@ -50,7 +50,7 @@ export function XSidebar({
 
       {/* Chat History */}
       <XChatHistory
-        groups={chatHistory}
+        items={chatHistory}
         activeChatId={activeChatId}
         onSelectChat={onSelectChat}
       />

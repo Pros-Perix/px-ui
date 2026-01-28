@@ -1,9 +1,27 @@
 import { useState } from "react";
-import { Xandi, XandiProvider, XHeader, XSidebar, type ChatHistoryGroup, type XandiResponse } from "@px-ui/ai";
+import {
+  Xandi,
+  XandiProvider,
+  XHeader,
+  XSidebar,
+  type ChatHistoryItem,
+  type XandiResponse,
+  type XandiConfig,
+  type XandiHandlers,
+  type FeedbackType,
+} from "@px-ui/ai";
 
 const API_URL = "http://localhost:8080/chat";
 const USER_ID = "0108e28d-ec3b-4648-9178-b4a2c0d582ba";
 const ORG_ID = "e37723a6-4363-4831-86e0-5e4950ed15ec";
+
+// Custom avatar URL (can be passed from parent or fetched from API)
+const CUSTOM_AVATAR_URL = "https://prosperix.ai/assets/xandi-avatar-CbNInruf.png";
+
+const xandiConfig: XandiConfig = {
+  avatarUrl: CUSTOM_AVATAR_URL,
+  assistantName: "Xandi",
+};
 
 const suggestions = [
   { id: "1", label: "Open Jobs", prompt: "Show me all open jobs" },
@@ -11,24 +29,18 @@ const suggestions = [
   { id: "3", label: "Pending Timesheets", prompt: "Show me timesheets pending for approval" },
 ];
 
-const mockChatHistory: ChatHistoryGroup[] = [
-  {
-    label: "This past week",
-    items: [
-      { id: "1", title: "What should I work on next?", timestamp: new Date() },
-      { id: "2", title: "Help me write a job posting.", timestamp: new Date() },
-      { id: "3", title: "Find me similar job posts.", timestamp: new Date() },
-    ],
-  },
-  {
-    label: "This past month",
-    items: [
-      { id: "4", title: "Summarize the status and history of project...", timestamp: new Date() },
-      { id: "5", title: "I want to create a ticket", timestamp: new Date() },
-      { id: "6", title: "How many issues are assigned to me?", timestamp: new Date() },
-    ],
-  },
+const mockChatHistory: ChatHistoryItem[] = [
+  { id: "1", title: "What should I work on next?", timestamp: new Date() },
+  { id: "2", title: "Help me write a job posting.", timestamp: new Date() },
+  { id: "3", title: "Find me similar job posts.", timestamp: new Date() },
+  { id: "4", title: "Summarize the status and history of project...", timestamp: new Date() },
+  { id: "5", title: "I want to create a ticket", timestamp: new Date() },
+  { id: "6", title: "How many issues are assigned to me?", timestamp: new Date() },
 ];
+
+// ============================================================================
+// API Types
+// ============================================================================
 
 interface Job {
   id: string;
@@ -41,14 +53,10 @@ interface Job {
 
 interface ApiResponse {
   success: boolean;
-  // Top-level response (current API structure)
-  response?: string;
-  debug?: unknown;
-  // Nested structure (future API structure)
-  data?: {
-    response: string;
+  message: string;
+  data: {
     intent: string;
-    data?: {
+    data: {
       jobs?: Job[];
       pagination?: {
         page: number;
@@ -56,10 +64,20 @@ interface ApiResponse {
         total: number;
       };
     };
+    conversation_id: string;
   };
-  message?: string;
-  trace?: unknown;
+  trace?: {
+    trace_id: string;
+    execution_mode: string;
+    intent: string;
+    tool_id: string;
+    debug_trace: unknown;
+  };
 }
+
+// ============================================================================
+// Helpers
+// ============================================================================
 
 function formatJobsAsMarkdown(jobs: Job[], pagination?: { page: number; per_page: number; total: number }): string {
   const lines: string[] = [];
@@ -84,37 +102,65 @@ function formatJobsAsMarkdown(jobs: Job[], pagination?: { page: number; per_page
   return lines.join("\n");
 }
 
-async function fetchXandiResponse(message: string): Promise<XandiResponse> {
-  const response = await fetch(API_URL, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "x-org-id": ORG_ID,
-      "x-user-id": USER_ID,
-    },
-    body: JSON.stringify({ message }),
-  });
+// ============================================================================
+// Handlers
+// ============================================================================
 
-  const json: ApiResponse = await response.json();
+const xandiHandlers: XandiHandlers = {
+  // Fetch AI response
+  fetchResp: async (message: string, conversationId?: string): Promise<XandiResponse> => {
+    const response = await fetch(API_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-org-id": ORG_ID,
+        "x-user-id": USER_ID,
+      },
+      body: JSON.stringify({
+        message,
+        conversation_id: conversationId,
+      }),
+    });
 
-  if (!json.success) {
-    throw new Error("Failed to get response");
-  }
+    const json: ApiResponse = await response.json();
 
-  // Handle both top-level response (current) and nested data.response (future)
-  let content = json.response ?? json.data?.response ?? json.message ?? "";
+    if (!json.success) {
+      throw new Error("Failed to get response");
+    }
 
-  // Transform jobs data into markdown (for nested structure)
-  if (json.data?.data?.jobs && json.data.data.jobs.length > 0) {
-    content = formatJobsAsMarkdown(json.data.data.jobs, json.data.data.pagination);
-  }
+    // Transform response content
+    let content = json.message;
 
-  // Handle both top-level debug (current) and nested trace (future)
-  return {
-    content,
-    debugTrace: json.debug ?? json.trace,
-  };
-}
+    // Transform jobs data into markdown if present
+    if (json.data?.data?.jobs && json.data.data.jobs.length > 0) {
+      content = formatJobsAsMarkdown(json.data.data.jobs, json.data.data.pagination);
+    }
+
+    return {
+      content,
+      conversationId: json.data.conversation_id,
+      debugTrace: json.trace,
+    };
+  },
+
+  // Handle feedback submission
+  onFeedback: (messageId: string, conversationId: string, feedback: FeedbackType) => {
+    console.log("Feedback submitted:", { messageId, conversationId, feedback });
+    // In a real app, send this to your feedback API
+  },
+
+  // Handle stop request
+  onStop: (conversationId: string) => {
+    console.log("Request stopped for conversation:", conversationId);
+    // In a real app, cancel the ongoing request
+  },
+
+  // Get conversation history (optional)
+  getConvHistory: async () => {
+    // In a real app, fetch from API
+    return mockChatHistory;
+  },
+};
 
 export function XandiBasicDemo() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -146,6 +192,8 @@ export function XandiBasicDemo() {
       <div className="flex flex-1 flex-col">
         {/* Header */}
         <XHeader
+          title={xandiConfig.assistantName}
+          avatarUrl={xandiConfig.avatarUrl}
           onClose={() => {}}
           onNewChat={handleNewChat}
           onToggleHistory={() => setSidebarOpen(!sidebarOpen)}
@@ -153,7 +201,7 @@ export function XandiBasicDemo() {
 
         {/* Chat Area */}
         <div className="flex-1 overflow-hidden px-4 py-2">
-          <XandiProvider fetchResponse={fetchXandiResponse}>
+          <XandiProvider handlers={xandiHandlers} config={xandiConfig}>
             <Xandi suggestions={suggestions} />
           </XandiProvider>
         </div>
