@@ -1,5 +1,11 @@
 # @px-ui/core
 
+## 4.1.0
+
+### Minor Changes
+
+- ffb1264: update file upload component
+
 ## 4.0.1
 
 ### Patch Changes
