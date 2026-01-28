@@ -1,5 +1,11 @@
 # @px-ui/forms
 
+## 7.0.2
+
+### Patch Changes
+
+- 2db8cb9: temp fix currency field
+
 ## 7.0.1
 
 ### Patch Changes
