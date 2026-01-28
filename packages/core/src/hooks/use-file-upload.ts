@@ -32,8 +32,29 @@ export type FileUploadItem = {
 };
 
 export type PresignedUrlResponse = {
+  /** The S3 bucket URL to POST to */
   url: string;
-  fullPath: string;
+  /** The full accessible path after upload (may include signed query params) */
+  full_path: string;
+  /** The S3 object key (e.g., "uuid/filename.pdf") */
+  key?: string;
+  /** Access control level */
+  acl?: string;
+  /** Expected response status from S3 */
+  success_action_status?: string;
+  /** Content-Type for the upload */
+  "Content-Type"?: string;
+  /** Base64-encoded policy document */
+  policy?: string;
+  /** AWS credential string */
+  "x-amz-credential"?: string;
+  /** AWS signing algorithm */
+  "x-amz-algorithm"?: string;
+  /** AWS request date */
+  "x-amz-date"?: string;
+  /** AWS request signature */
+  "x-amz-signature"?: string;
+  /** Additional fields */
   [key: string]: unknown;
 };
 
@@ -375,7 +396,7 @@ export const useFileUpload = (
           ...fileWithStatus,
           status: "complete",
           progress: 100,
-          uploadedUrl: uploadResult?.url ?? presignedResult.fullPath,
+          uploadedUrl: uploadResult?.url ?? presignedResult.full_path,
         };
 
         setFilesState((prev) =>
