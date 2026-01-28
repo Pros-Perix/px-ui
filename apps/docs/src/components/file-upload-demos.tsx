@@ -39,7 +39,7 @@ export function AvatarUploadDemo() {
       <FileUpload.Root upload={upload} accept="image/*">
         <FileUpload.Dropzone
           hideDefaultContent
-          className="size-32 min-h-0 rounded-full p-0 cursor-pointer"
+          className="size-32 min-h-0 cursor-pointer rounded-full p-0"
         >
           {upload.files.length > 0 ? (
             <img
@@ -132,11 +132,7 @@ export function FormResetDemo() {
           <label className="text-ppx-neutral-14 mb-1 block text-sm font-medium">
             Attachments
           </label>
-          <FileUpload.Root
-            key={upload.instanceKey}
-            upload={upload}
-            multiple
-          >
+          <FileUpload.Root key={upload.instanceKey} upload={upload} multiple>
             <FileUpload.Dropzone size="sm" />
             {upload.files.length > 0 && (
               <FileUpload.List className="mt-2">
@@ -242,8 +238,6 @@ export function SimpleUploadDemo() {
 }
 
 export function SimpleUploadWithS3Demo() {
-  const [uploadedCount, setUploadedCount] = React.useState(0);
-
   return (
     <div className="w-full max-w-md">
       <FileUploadField
@@ -258,7 +252,6 @@ export function SimpleUploadWithS3Demo() {
             console.log("Uploaded:", file);
           },
           onAllUploadsComplete: (files: FileUploadItem[]) => {
-            setUploadedCount(files.length);
             console.log("All uploads complete:", files);
           },
         }}
@@ -266,13 +259,6 @@ export function SimpleUploadWithS3Demo() {
           console.log("Files:", files)
         }
       />
-      {uploadedCount > 0 && (
-        <div className="mt-4">
-          <p className="text-ppx-neutral-10 text-sm">
-            {uploadedCount} file(s) uploaded successfully
-          </p>
-        </div>
-      )}
     </div>
   );
 }

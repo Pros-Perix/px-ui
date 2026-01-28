@@ -299,7 +299,8 @@ function HiddenInput({ className, ...props }: HiddenInputProps) {
 // List Component
 // ============================================================================
 
-export interface ListProps extends Omit<React.ComponentProps<"div">, "children"> {
+export interface ListProps
+  extends Omit<React.ComponentProps<"div">, "children"> {
   children?: React.ReactNode | ((files: FileUploadItem[]) => React.ReactNode);
 }
 
@@ -399,10 +400,6 @@ function ListItem({
         </span>
 
         <div className="flex items-center gap-2">
-          <span className="text-ppx-xs text-ppx-neutral-10">
-            {formatBytes(file.file.size)}
-          </span>
-
           {/* Progress bar */}
           {showProgress && isUploading && (
             <div className="bg-ppx-neutral-3 h-1.5 flex-1 overflow-hidden rounded-full">
