@@ -6,15 +6,13 @@ description: A composable file upload solution with drag-and-drop, validation, p
 import {
   SimpleUploadDemo,
   SimpleUploadWithS3Demo,
-  SimpleButtonVariantDemo,
-  SimpleImageGridDemo,
   BasicDropzoneDemo,
   MultipleFilesListDemo,
   UploadWithProgressDemo,
   FilesTableDemo,
   DropzoneSizesDemo,
-  MixedContentCardsDemo,
   AvatarUploadDemo,
+  FormResetDemo,
 } from "../../../src/components/file-upload-demos";
 
 ## Overview
@@ -29,6 +27,9 @@ import { FileUploadField } from "@px-ui/forms";
 
 // Advanced: hook + composable primitives
 import { FileUpload, useFileUpload } from "@px-ui/core";
+
+// File type icons
+import { getFileTypeIcon } from "@px-ui/core";
 ```
 
 ## Usage
@@ -101,64 +102,14 @@ export function UploaderWithUpload() {
         },
       }}
     />
-
-);
+  );
 }
-
-````
-</CodeBlock>
-
-### Variants (dropzone, button, compact)
-
-`FileUploadField` supports three layout variants.
-
-<Preview>
-  <SimpleButtonVariantDemo />
-</Preview>
-
-<CodeBlock>
-```tsx
-import { FileUploadField } from "@px-ui/forms";
-
-// Dropzone (default)
-<FileUploadField variant="dropzone" />
-
-// Button
-<FileUploadField variant="button" buttonText="Upload Files" multiple />
-
-// Compact
-<FileUploadField variant="compact" accept=".pdf,.doc,.docx" />
-````
-
-</CodeBlock>
-
-### Image uploads with a grid
-
-For image-first workflows, render a grid instead of a list.
-
-<Preview>
-  <SimpleImageGridDemo />
-</Preview>
-
-<CodeBlock>
-```tsx
-import { FileUploadField } from "@px-ui/forms";
-
-<FileUploadField
-  accept="image/*"
-  multiple
-  maxFiles={8}
-  showImageGrid
-  size="sm"
-  dropzoneText="Drop images here"
-  buttonText="Select images"
-/>
 ```
 </CodeBlock>
 
 ### Fully custom UI (hook + primitives)
 
-Use `useFileUpload` for state/actions and pass them into `FileUpload.Root`. Everything else is composed with `FileUpload.*`.
+Use `useFileUpload` for state/actions and pass the entire hook return directly into `FileUpload.Root`.
 
 <Preview>
   <BasicDropzoneDemo />
@@ -169,30 +120,17 @@ Use `useFileUpload` for state/actions and pass them into `FileUpload.Root`. Ever
 import { FileUpload, useFileUpload } from "@px-ui/core";
 
 export function CustomDropzone() {
-  const [state, actions] = useFileUpload({
+  const upload = useFileUpload({
     onFilesChange: (files) => console.log(files),
   });
 
-return (
-
-<FileUpload.Root
-  files={state.files}
-  addFiles={actions.addFiles}
-  removeFile={actions.removeFile}
-  clearFiles={actions.clearFiles}
-  openFileDialog={actions.openFileDialog}
-  getInputProps={actions.getInputProps}
-  handleDragEnter={actions.handleDragEnter}
-  handleDragLeave={actions.handleDragLeave}
-  handleDragOver={actions.handleDragOver}
-  handleDrop={actions.handleDrop}
-  isDragActive={state.isDragging}
->
-  <FileUpload.Dropzone />
-</FileUpload.Root>
-); }
-
-````
+  return (
+    <FileUpload.Root upload={upload}>
+      <FileUpload.Dropzone />
+    </FileUpload.Root>
+  );
+}
+```
 </CodeBlock>
 
 ### List view for mixed file types
@@ -203,24 +141,58 @@ A list layout is useful for documents and mixed uploads.
   <MultipleFilesListDemo />
 </Preview>
 
+<CodeBlock>
+```tsx
+import { FileUpload, useFileUpload } from "@px-ui/core";
+
+export function MultipleFilesDemo() {
+  const upload = useFileUpload({
+    maxSize: 100 * 1024 * 1024,
+    maxFiles: 10,
+    multiple: true,
+  });
+
+  return (
+    <FileUpload.Root upload={upload} multiple>
+      <FileUpload.Dropzone
+        dropzoneText="Drag & drop files here"
+        browseText="Browse files"
+      />
+      {upload.files.length > 0 && (
+        <div>
+          <div className="mb-2 flex items-center justify-between">
+            <span>Files ({upload.files.length})</span>
+            <FileUpload.ClearAll>Remove all</FileUpload.ClearAll>
+          </div>
+          <FileUpload.List>
+            {(files) =>
+              files.map((file) => (
+                <FileUpload.ListItem key={file.id} file={file} />
+              ))
+            }
+          </FileUpload.List>
+        </div>
+      )}
+    </FileUpload.Root>
+  );
+}
+```
+</CodeBlock>
+
 ### Upload progress UI
 
-If you enable uploads (via the hook’s `upload` option), you can surface progress with `ItemProgress` and status with `ItemStatus`.
+If you enable uploads (via the hook's `upload` option), progress is automatically shown in the `ListItem` component.
 
 <Preview>
   <UploadWithProgressDemo />
 </Preview>
 
-### Table and card layouts
+### Table layout
 
-Because the primitives are headless/composable, you can render your own layouts.
+Because the primitives are headless/composable, you can render your own layouts like tables.
 
 <Preview>
   <FilesTableDemo />
-</Preview>
-
-<Preview>
-  <MixedContentCardsDemo />
 </Preview>
 
 ### Dropzone sizes
@@ -234,8 +206,7 @@ Because the primitives are headless/composable, you can render your own layouts.
 <FileUpload.Dropzone size="sm" />
 <FileUpload.Dropzone size="default" />
 <FileUpload.Dropzone size="lg" />
-````
-
+```
 </CodeBlock>
 
 ### Avatar upload
@@ -247,7 +218,7 @@ Because the primitives are headless/composable, you can render your own layouts.
 <CodeBlock>
 ```tsx
 export function AvatarUploadDemo() {
-  const [state, actions] = useFileUpload({
+  const upload = useFileUpload({
     accept: "image/*",
     maxSize: 2 * 1024 * 1024,
     multiple: false,
@@ -255,60 +226,112 @@ export function AvatarUploadDemo() {
 
   return (
     <div className="flex flex-col items-center gap-4">
-      <FileUpload.Root
-        files={state.files}
-        addFiles={actions.addFiles}
-        removeFile={actions.removeFile}
-        clearFiles={actions.clearFiles}
-        openFileDialog={actions.openFileDialog}
-        getInputProps={actions.getInputProps}
-        handleDragEnter={actions.handleDragEnter}
-        handleDragLeave={actions.handleDragLeave}
-        handleDragOver={actions.handleDragOver}
-        handleDrop={actions.handleDrop}
-        isDragActive={state.isDragging}
-        accept="image/*"
-      >
-        <FileUpload.Trigger hideDefaultContent>
-          <FileUpload.Dropzone
-            hideDefaultContent
-            className="size-32 min-h-0 rounded-full p-0"
-          >
-            {state.files.length > 0 ? (
-              <img
-                src={state.files[0].preview}
-                alt="Avatar"
-                className="size-full rounded-full object-cover"
-              />
-            ) : (
-              <div className="text-ppx-neutral-10 flex flex-col items-center justify-center">
-                <UserIcon className="size-10" />
-                <span className="mt-1 text-xs">Upload</span>
-              </div>
-            )}
-          </FileUpload.Dropzone>
-        </FileUpload.Trigger>
+      <FileUpload.Root upload={upload} accept="image/*">
+        <FileUpload.Dropzone
+          hideDefaultContent
+          className="size-32 min-h-0 rounded-full p-0 cursor-pointer"
+        >
+          {upload.files.length > 0 ? (
+            <img
+              src={upload.files[0].preview}
+              alt="Avatar"
+              className="size-full rounded-full object-cover"
+            />
+          ) : (
+            <div className="flex flex-col items-center justify-center">
+              <UserIcon className="size-10" />
+              <span className="mt-1 text-xs">Upload</span>
+            </div>
+          )}
+        </FileUpload.Dropzone>
       </FileUpload.Root>
-      <p className="text-ppx-neutral-10 text-xs">
-        Click or drag to upload avatar
-      </p>
+      <p className="text-xs">Click or drag to upload avatar</p>
     </div>
   );
 }
 ```
 </CodeBlock>
 
+### Form reset integration
+
+Use `reset()` and `instanceKey` for proper form reset handling.
+
+<Preview>
+  <FormResetDemo />
+</Preview>
+
+<CodeBlock>
+```tsx
+import { FileUpload, useFileUpload, Button } from "@px-ui/core";
+
+export function FormResetDemo() {
+  const [name, setName] = useState("");
+  const upload = useFileUpload({
+    multiple: true,
+    upload: { getPresignedUrl, uploadFile },
+    onFilesChange: (files) => console.log("Files changed:", files),
+  });
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log("Submitted:", { name, files: upload.files });
+  };
+
+  const handleReset = () => {
+    setName("");
+    upload.reset(); // Clears files, cancels uploads, increments instanceKey
+  };
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <input value={name} onChange={(e) => setName(e.target.value)} />
+
+      {/* Use instanceKey to force remount on reset */}
+      <FileUpload.Root key={upload.instanceKey} upload={upload} multiple>
+        <FileUpload.Dropzone size="sm" />
+        <FileUpload.List>
+          {(files) => files.map((file) => (
+            <FileUpload.ListItem key={file.id} file={file} />
+          ))}
+        </FileUpload.List>
+      </FileUpload.Root>
+
+      <Button type="submit">Submit</Button>
+      <Button type="button" onClick={handleReset}>Reset</Button>
+    </form>
+  );
+}
+```
+</CodeBlock>
+
+## File Type Icons
+
+The library includes file type icons that automatically match based on file extension or MIME type.
+
+<CodeBlock>
+```tsx
+import { getFileTypeIcon } from "@px-ui/core";
+
+// Get the icon component for a file
+const Icon = getFileTypeIcon({ name: "document.pdf", type: "application/pdf" });
+
+// Use it like any React component
+<Icon className="size-5" />
+```
+</CodeBlock>
+
+Available icons: `PdfIcon`, `WordIcon`, `ExcelIcon`, `ImageIcon`, `VideoIcon`, `AudioIcon`, `ArchiveIcon`, `CodeIcon`, `TextIcon`, `GenericFileIcon`.
+
 ## Anatomy
 
-The file upload primitives are designed to be composed together. Most apps follow this structure:
+The file upload primitives are designed to be composed together:
 
-- **`FileUpload.Root`**: Provides context for all child components
+- **`FileUpload.Root`**: Provides context for all child components (accepts `upload` prop)
 - **`FileUpload.Dropzone`**: Drag-and-drop area (also supports paste and keyboard)
-- **`FileUpload.Trigger`**: Standalone “open file dialog” button
-- **`FileUpload.ItemList` / `FileUpload.Item`**: Render selected files
-- **`FileUpload.ImageGrid` / `FileUpload.ImageGridItem`**: Render images in a grid
-- **`FileUpload.*` item parts**: `ItemPreview`, `ItemName`, `ItemSize`, `ItemStatus`, `ItemProgress`, `ItemError`, `ItemRetry`, `ItemRemove`
-- **`FileUpload.ClearButton`**: Clear all selected files
+- **`FileUpload.List`**: Container for file items (render prop receives files)
+- **`FileUpload.ListItem`**: Consolidated file row with icon, name, size, progress, and actions
+- **`FileUpload.HiddenInput`**: Hidden file input (if you need it separately from Dropzone)
+- **`FileUpload.ClearAll`**: Clear all selected files button
 
 ## API Reference
 
@@ -318,12 +341,10 @@ A ready-to-use upload component that internally uses `useFileUpload` and the `Fi
 
 | Prop             | Type                                                                           | Default                             | Description                              |
 | ---------------- | ------------------------------------------------------------------------------ | ----------------------------------- | ---------------------------------------- |
-| `variant`        | `"dropzone" \| "button" \| "compact"`                                          | `"dropzone"`                        | Layout variant                           |
-| `size`           | `"sm" \| "default" \| "lg"`                                                    | `"default"`                         | Dropzone size (dropzone variant)         |
+| `size`           | `"sm" \| "default" \| "lg"`                                                    | `"default"`                         | Dropzone size                            |
 | `dropzoneText`   | `string`                                                                       | `"Paste Or Drag & Drop Files Here"` | Dropzone label text                      |
 | `buttonText`     | `string`                                                                       | `"Browse for files"`                | Trigger button label                     |
 | `showFileList`   | `boolean`                                                                      | `true`                              | Show file list below the control         |
-| `showImageGrid`  | `boolean`                                                                      | `false`                             | Show an image grid instead of a list     |
 | `initialFiles`   | `Array<{ id: string; name: string; size: number; type: string; url: string }>` | `[]`                                | Pre-populate with already-uploaded files |
 | `disabled`       | `boolean`                                                                      | `false`                             | Disable all interactions                 |
 | `renderFileItem` | `(file, actions) => React.ReactNode`                                           | -                                   | Custom renderer for list items           |
@@ -337,7 +358,7 @@ A ready-to-use upload component that internally uses `useFileUpload` and the `Fi
 
 A hook that manages file selection, validation, previews, and (optionally) uploads.
 
-**Options** (partial):
+**Options**:
 
 | Option          | Type                   | Default    | Description                                 |
 | --------------- | ---------------------- | ---------- | ------------------------------------------- |
@@ -350,36 +371,27 @@ A hook that manages file selection, validation, previews, and (optionally) uploa
 | `onFilesAdded`  | `(addedFiles) => void` | -          | Called with only newly-added files          |
 | `upload`        | `UploadConfig`         | -          | Enables uploads and progress tracking       |
 
-**Returns**: `[state, actions]`
+**Returns**: `UseFileUploadReturn`
 
-- **State**: `{ files, isDragging, errors, isUploading }`
-- **Actions**: `addFiles`, `removeFile`, `clearFiles`, `clearErrors`, `openFileDialog`, `getInputProps`, drag handlers, plus upload actions `uploadFiles`, `retryUpload`, `cancelUpload`.
+- **State**: `files`, `isDragging`, `errors`, `isUploading`
+- **Core Actions**: `addFiles`, `removeFile`, `clearFiles`, `clearErrors`
+- **Form Integration**: `reset(newFiles?)`, `setFiles(files | (prev) => files)`, `instanceKey`
+- **Upload Actions**: `uploadFiles`, `retryUpload`, `cancelUpload`
+- **Drag/Drop + Input**: `handleDragEnter`, `handleDragLeave`, `handleDragOver`, `handleDrop`, `handleFileChange`, `openFileDialog`, `getInputProps`
 
 ---
 
 ### FileUpload.Root
 
-Context provider and wiring point for `useFileUpload`.
+Context provider - accepts the entire hook return value.
 
-| Prop              | Type                                  | Required | Description                                              |
-| ----------------- | ------------------------------------- | -------- | -------------------------------------------------------- |
-| `files`           | `FileUploadFile[]`                    | Yes      | Files from `useFileUpload().files`                       |
-| `addFiles`        | `(files: FileList \| File[]) => void` | Yes      | Adds files                                               |
-| `removeFile`      | `(id: string) => void`                | Yes      | Removes a file                                           |
-| `clearFiles`      | `() => void`                          | Yes      | Clears all files                                         |
-| `retryUpload`     | `(id: string) => Promise<void>`       | No       | Enables retry UI (`ItemRetry`, image-grid retry overlay) |
-| `openFileDialog`  | `() => void`                          | Yes      | Opens native file picker                                 |
-| `getInputProps`   | `(props?) => InputProps`              | Yes      | Props for the internal `<input type="file" />`           |
-| `handleDragEnter` | `(e) => void`                         | Yes      | Drag enter handler                                       |
-| `handleDragLeave` | `(e) => void`                         | Yes      | Drag leave handler                                       |
-| `handleDragOver`  | `(e) => void`                         | Yes      | Drag over handler                                        |
-| `handleDrop`      | `(e) => void`                         | Yes      | Drop handler                                             |
-| `isDragActive`    | `boolean`                             | No       | Hook’s `isDragging` state                                |
-| `isUploading`     | `boolean`                             | No       | Hook’s `isUploading` state                               |
-| `accept`          | `string`                              | No       | Accepted types (used by Dropzone/input)                  |
-| `multiple`        | `boolean`                             | No       | Allow multiple file selection                            |
-| `disabled`        | `boolean`                             | No       | Disable all interactions                                 |
-| `className`       | `string`                              | No       | Additional CSS classes                                   |
+| Prop       | Type                  | Required | Description                              |
+| ---------- | --------------------- | -------- | ---------------------------------------- |
+| `upload`   | `UseFileUploadReturn` | Yes      | The return value from `useFileUpload()`  |
+| `accept`   | `string`              | No       | Accepted types (used by Dropzone/input)  |
+| `multiple` | `boolean`             | No       | Allow multiple file selection            |
+| `disabled` | `boolean`             | No       | Disable all interactions                 |
+| `className`| `string`              | No       | Additional CSS classes                   |
 
 ---
 
@@ -398,20 +410,7 @@ Drag-and-drop area (also supports paste, and keyboard Enter/Space).
 
 ---
 
-### FileUpload.Trigger
-
-Standalone trigger button for opening the file dialog.
-
-| Prop                 | Type      | Default          | Description                                        |
-| -------------------- | --------- | ---------------- | -------------------------------------------------- |
-| `uploadingText`      | `string`  | `"Uploading..."` | Text shown when `showUploadingState` and uploading |
-| `showUploadingState` | `boolean` | `true`           | Disable + show spinner/text during uploads         |
-
-**Inherited Props:** All `Button` props.
-
----
-
-### FileUpload.ItemList
+### FileUpload.List
 
 Renders nothing when there are no files.
 
@@ -423,57 +422,34 @@ Renders nothing when there are no files.
 
 ---
 
-### FileUpload.Item
+### FileUpload.ListItem
 
-Wraps a file row and provides item context for `Item*` parts.
+Consolidated file row component that replaces all the individual `Item*` parts.
 
-| Prop           | Type             | Default | Description                                  |
-| -------------- | ---------------- | ------- | -------------------------------------------- |
-| `file`         | `FileUploadFile` | -       | The file object (required)                   |
-| `statusStyles` | `boolean`        | `true`  | Apply error styling when status is `"error"` |
-
-**Inherited Props:** All native `div` props.
-
----
-
-### FileUpload.ItemPreview
-
-| Prop       | Type              | Default        | Description                           |
-| ---------- | ----------------- | -------------- | ------------------------------------- |
-| `fallback` | `React.ReactNode` | `<FileIcon />` | Fallback when no preview is available |
+| Prop           | Type              | Default | Description                                  |
+| -------------- | ----------------- | ------- | -------------------------------------------- |
+| `file`         | `FileUploadItem`  | -       | The file object (required)                   |
+| `showIcon`     | `boolean`         | `true`  | Show file type icon                          |
+| `showProgress` | `boolean`         | `true`  | Show progress bar when uploading             |
+| `showError`    | `boolean`         | `true`  | Show error message when status is error      |
+| `showRemove`   | `boolean`         | `true`  | Show remove button                           |
+| `showRetry`    | `boolean`         | `true`  | Show retry button when status is error       |
+| `icon`         | `React.ReactNode` | -       | Custom icon (overrides auto-detected icon)   |
 
 **Inherited Props:** All native `div` props.
 
 ---
 
-### FileUpload.ItemStatus
+### FileUpload.HiddenInput
 
-| Prop               | Type              | Default         | Description              |
-| ------------------ | ----------------- | --------------- | ------------------------ |
-| `successIcon`      | `React.ReactNode` | `<CheckIcon />` | Custom success icon      |
-| `uploadingContent` | `React.ReactNode` | `"{progress}%"` | Custom uploading content |
-| `errorContent`     | `React.ReactNode` | `"Failed"`      | Custom error content     |
+Hidden file input, useful if you need the input separate from the Dropzone.
 
-**Inherited Props:** All native `div` props.
+**Inherited Props:** All native `input` props (except `type`).
 
 ---
 
-### FileUpload.ImageGrid
+### FileUpload.ClearAll
 
-| Prop       | Type                                  | Default | Description                            |
-| ---------- | ------------------------------------- | ------- | -------------------------------------- |
-| `children` | `ReactNode \| ((files) => ReactNode)` | -       | Render prop receives the current files |
+Button to clear all selected files. Renders nothing when there are no files.
 
-**Inherited Props:** All native `div` props.
-
----
-
-### FileUpload.ImageGridItem
-
-| Prop                | Type             | Default | Description                           |
-| ------------------- | ---------------- | ------- | ------------------------------------- |
-| `file`              | `FileUploadFile` | -       | The file object (required)            |
-| `showStatusOverlay` | `boolean`        | `true`  | Show uploading/error/success overlays |
-
-**Inherited Props:** All native `div` props.
-```
+**Inherited Props:** All `Button` props.
