@@ -7,10 +7,6 @@ import {
   SimpleUploadDemo,
   SimpleUploadWithS3Demo,
   BasicDropzoneDemo,
-  MultipleFilesListDemo,
-  UploadWithProgressDemo,
-  FilesTableDemo,
-  DropzoneSizesDemo,
   AvatarUploadDemo,
   FormResetDemo,
 } from "../../../src/components/file-upload-demos";
@@ -130,82 +126,6 @@ export function CustomDropzone() {
     </FileUpload.Root>
   );
 }
-```
-</CodeBlock>
-
-### List view for mixed file types
-
-A list layout is useful for documents and mixed uploads.
-
-<Preview>
-  <MultipleFilesListDemo />
-</Preview>
-
-<CodeBlock>
-```tsx
-import { FileUpload, useFileUpload } from "@px-ui/core";
-
-export function MultipleFilesDemo() {
-  const upload = useFileUpload({
-    maxSize: 100 * 1024 * 1024,
-    maxFiles: 10,
-    multiple: true,
-  });
-
-  return (
-    <FileUpload.Root upload={upload} multiple>
-      <FileUpload.Dropzone
-        dropzoneText="Drag & drop files here"
-        browseText="Browse files"
-      />
-      {upload.files.length > 0 && (
-        <div>
-          <div className="mb-2 flex items-center justify-between">
-            <span>Files ({upload.files.length})</span>
-            <FileUpload.ClearAll>Remove all</FileUpload.ClearAll>
-          </div>
-          <FileUpload.List>
-            {(files) =>
-              files.map((file) => (
-                <FileUpload.ListItem key={file.id} file={file} />
-              ))
-            }
-          </FileUpload.List>
-        </div>
-      )}
-    </FileUpload.Root>
-  );
-}
-```
-</CodeBlock>
-
-### Upload progress UI
-
-If you enable uploads (via the hook's `upload` option), progress is automatically shown in the `ListItem` component.
-
-<Preview>
-  <UploadWithProgressDemo />
-</Preview>
-
-### Table layout
-
-Because the primitives are headless/composable, you can render your own layouts like tables.
-
-<Preview>
-  <FilesTableDemo />
-</Preview>
-
-### Dropzone sizes
-
-<Preview>
-  <DropzoneSizesDemo />
-</Preview>
-
-<CodeBlock>
-```tsx
-<FileUpload.Dropzone size="sm" />
-<FileUpload.Dropzone size="default" />
-<FileUpload.Dropzone size="lg" />
 ```
 </CodeBlock>
 

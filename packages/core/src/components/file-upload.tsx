@@ -173,6 +173,15 @@ function Dropzone({
     [disabled, addFiles],
   );
 
+  const handleClick = React.useCallback(() => {
+    if (disabled) return;
+    // Only open dialog when using custom content (hideDefaultContent=true)
+    // When showing default content, the Browse button handles clicks
+    if (hideDefaultContent) {
+      openFileDialog();
+    }
+  }, [disabled, hideDefaultContent, openFileDialog]);
+
   return (
     <div
       data-slot="file-upload-dropzone"
@@ -187,6 +196,7 @@ function Dropzone({
       onDrop={handleDrop}
       onPaste={handlePaste}
       onKeyDown={handleKeyDown}
+      onClick={handleClick}
       tabIndex={disabled ? -1 : 0}
       role="button"
       aria-disabled={disabled}
