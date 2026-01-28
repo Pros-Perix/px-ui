@@ -1,5 +1,16 @@
 # @px-ui/forms
 
+## 8.0.0
+
+### Minor Changes
+
+- ffb1264: update file upload component
+
+### Patch Changes
+
+- Updated dependencies [ffb1264]
+  - @px-ui/core@4.1.0
+
 ## 7.0.2
 
 ### Patch Changes
