@@ -1,8 +1,7 @@
 import * as React from "react";
-import { Combobox, cn, InputGroup, ChevronDownIcon } from "@px-ui/core";
+import { Combobox, cn, InputGroup } from "@px-ui/core";
 import ReactCountryFlag from "react-country-flag";
 import { CURRENCY_FLAG_CODE } from "../constants/currency-flag-code";
-const { BaseCombobox } = Combobox;
 
 // ============================================================================
 // Types
@@ -174,14 +173,6 @@ export function CurrencySelectField({
   inputRef,
   readOnly,
 }: CurrencySelectFieldProps) {
-  const triggerRef = React.useRef<HTMLDivElement>(null);
-
-  // Convert currency to string label for accessibility and input
-  const itemToStringLabel = React.useCallback(
-    (currency: Currency) => `${currency.abbr} - ${currency.name}`,
-    [],
-  );
-
   return (
     <Combobox.Root<Currency, false>
       items={currencies as Currency[]}
@@ -191,54 +182,35 @@ export function CurrencySelectField({
       invalid={invalid}
       isLoading={isLoading}
       isItemEqualToValue={(item, val) => item.id === val.id}
-      itemToStringLabel={itemToStringLabel}
       inputRef={inputRef}
       readOnly={readOnly}
       name={name}
     >
-      <InputGroup.Root
-        size={size}
+      <Combobox.Trigger
         widthVariant={widthVariant}
-        disabled={disabled}
-        ref={triggerRef}
         className={triggerClassName}
+        size={size}
       >
-        {value && (
-          <InputGroup.Addon align="inline-start" className="pl-3 pr-0">
-            <CurrencyFlag countryCode={CURRENCY_FLAG_CODE[value.abbr]} />
-          </InputGroup.Addon>
-        )}
-
-        <BaseCombobox.Input
-          render={(inputProps: React.ComponentProps<"input">) => (
-            <InputGroup.Input
-              {...inputProps}
-              invalid={invalid}
-              placeholder={placeholder}
+        <div className="flex items-center gap-2">
+          {value && (
+            <CurrencyFlag
+              countryCode={CURRENCY_FLAG_CODE[value.abbr]}
+              className="w-fit"
             />
           )}
-        />
-        <InputGroup.Addon align="inline-end" className="gap-0.5">
-          <BaseCombobox.Trigger
-            render={(triggerProps: React.ComponentProps<"button">) => (
-              <InputGroup.Button
-                size="icon-xs"
-                aria-label="Open popup"
-                {...triggerProps}
-              >
-                <ChevronDownIcon />
-              </InputGroup.Button>
-            )}
-          />
-        </InputGroup.Addon>
-      </InputGroup.Root>
+          <Combobox.Value placeholder={placeholder}>
+            {(currency: Currency) => `${currency.abbr} - ${currency.name}`}
+          </Combobox.Value>
+        </div>
+      </Combobox.Trigger>
 
       <Combobox.Content
         widthVariant={contentWidthVariant}
         empty="No currencies found"
-        positionerProps={{ anchor: triggerRef.current }}
         {...contentProps}
       >
+        <Combobox.Search />
+
         <Combobox.List>
           {(currency: Currency) => (
             <Combobox.Item key={currency.id} value={currency}>
