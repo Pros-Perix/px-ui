@@ -312,7 +312,6 @@ function Dropzone({
         type="button"
         variant="default"
         disabled={disabled || isUploading}
-        onClick={openFileDialog}
       >
         {isUploading ? (
           <>
