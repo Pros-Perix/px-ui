@@ -228,6 +228,14 @@ export const useFileUpload = (
   const inputRef = useRef<HTMLInputElement>(null);
   const abortControllersRef = useRef<Map<string, AbortController>>(new Map());
 
+  // Helper to cancel all ongoing uploads
+  const cancelAllUploads = useCallback(() => {
+    for (const controller of abortControllersRef.current.values()) {
+      controller.abort();
+    }
+    abortControllersRef.current.clear();
+  }, []);
+
   const {
     maxFiles = Number.POSITIVE_INFINITY,
     maxSize = Number.POSITIVE_INFINITY,
@@ -565,11 +573,7 @@ export const useFileUpload = (
   );
 
   const clearFiles = useCallback(() => {
-    // Cancel all ongoing uploads
-    for (const controller of abortControllersRef.current.values()) {
-      controller.abort();
-    }
-    abortControllersRef.current.clear();
+    cancelAllUploads();
 
     setFilesState((prev) => {
       for (const file of prev) {
@@ -586,7 +590,7 @@ export const useFileUpload = (
 
     setErrors([]);
     onFilesChange?.([]);
-  }, [onFilesChange]);
+  }, [cancelAllUploads, onFilesChange]);
 
   const clearErrors = useCallback(() => {
     setErrors([]);
@@ -594,11 +598,7 @@ export const useFileUpload = (
 
   const reset = useCallback(
     (newFiles?: FileMetadata[]) => {
-      // Cancel all ongoing uploads
-      for (const controller of abortControllersRef.current.values()) {
-        controller.abort();
-      }
-      abortControllersRef.current.clear();
+      cancelAllUploads();
 
       // Revoke all previews
       for (const file of files) {
@@ -633,7 +633,7 @@ export const useFileUpload = (
       // Increment instance key to force remount
       setInstanceKey((prev) => prev + 1);
     },
-    [files, onFilesChange],
+    [cancelAllUploads, files, onFilesChange],
   );
 
   const setFiles = useCallback(

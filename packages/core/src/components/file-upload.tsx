@@ -207,9 +207,9 @@ function Dropzone({
   );
 
   const handleClick = React.useCallback(() => {
-    if (disabled) return;
+    if (disabled || isUploading) return;
     openFileDialog();
-  }, [disabled, openFileDialog]);
+  }, [disabled, isUploading, openFileDialog]);
 
   // State passed to render prop
   const state: DropzoneState = {
@@ -304,9 +304,7 @@ function Dropzone({
 
       <div className="flex w-full items-center gap-3" aria-hidden="true">
         <div className="bg-ppx-neutral-5 h-px flex-1" />
-        <span className="text-ppx-sm text-ppx-neutral-10 font-medium">
-          OR
-        </span>
+        <span className="text-ppx-sm text-ppx-neutral-10 font-medium">OR</span>
         <div className="bg-ppx-neutral-5 h-px flex-1" />
       </div>
 
@@ -314,6 +312,7 @@ function Dropzone({
         type="button"
         variant="default"
         disabled={disabled || isUploading}
+        onClick={openFileDialog}
       >
         {isUploading ? (
           <>
@@ -415,7 +414,6 @@ function ListItem({
 
   const isUploading = file.status === "uploading";
   const isError = file.status === "error";
-  const isComplete = file.status === "complete";
 
   // Get the appropriate icon
   const FileTypeIcon = getFileTypeIcon({
