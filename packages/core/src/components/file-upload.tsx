@@ -107,31 +107,64 @@ const dropzoneVariants = cva(
   },
 );
 
+/** State passed to the render prop */
+export interface DropzoneState {
+  /** Whether files are being dragged over the dropzone */
+  isDragging: boolean;
+  /** Whether files are currently uploading */
+  isUploading: boolean;
+  /** Whether the dropzone is disabled */
+  disabled: boolean;
+  /** Current files in the upload */
+  files: FileUploadItem[];
+}
+
+/** Props passed to the render prop element */
+export interface DropzoneRenderProps {
+  onDragEnter: React.DragEventHandler;
+  onDragLeave: React.DragEventHandler;
+  onDragOver: React.DragEventHandler;
+  onDrop: React.DragEventHandler;
+  onPaste: React.ClipboardEventHandler;
+  onKeyDown: React.KeyboardEventHandler;
+  onClick: React.MouseEventHandler;
+  tabIndex: number;
+  role: string;
+  "aria-disabled": boolean;
+  "data-dragging": boolean;
+}
+
 export interface DropzoneProps
   extends Omit<React.ComponentProps<"div">, "children">,
     Omit<VariantProps<typeof dropzoneVariants>, "isDragActive"> {
-  children?: React.ReactNode;
   /** Custom text for the dropzone */
   dropzoneText?: string;
   /** Custom text for the browse button */
   browseText?: string;
-  /** Hide the default content */
-  hideDefaultContent?: boolean;
+  /**
+   * Render prop for complete customization.
+   * When provided, replaces the default dropzone element.
+   * Receives props to spread and state for conditional styling.
+   */
+  render?: (
+    props: DropzoneRenderProps,
+    state: DropzoneState,
+  ) => React.ReactElement;
 }
 
 function Dropzone({
   className,
   size,
-  children,
   dropzoneText = "Paste Or Drag & Drop Files Here",
   browseText = "Browse for files",
-  hideDefaultContent = false,
+  render,
   ...props
 }: DropzoneProps) {
   const { upload, accept, multiple, disabled } = useFileUploadContext();
   const {
     isDragging,
     isUploading,
+    files,
     openFileDialog,
     getInputProps,
     handleDragEnter,
@@ -160,10 +193,10 @@ function Dropzone({
   const handlePaste = React.useCallback(
     (e: React.ClipboardEvent) => {
       if (disabled) return;
-      const files = e.clipboardData.files;
-      if (files.length > 0) {
+      const pastedFiles = e.clipboardData.files;
+      if (pastedFiles.length > 0) {
         e.preventDefault();
-        const filesArray = Array.from(files);
+        const filesArray = Array.from(pastedFiles);
         addFiles(filesArray);
         setAnnouncement(
           `${filesArray.length} file${filesArray.length > 1 ? "s" : ""} pasted`,
@@ -175,36 +208,48 @@ function Dropzone({
 
   const handleClick = React.useCallback(() => {
     if (disabled) return;
-    // Only open dialog when using custom content (hideDefaultContent=true)
-    // When showing default content, the Browse button handles clicks
-    if (hideDefaultContent) {
-      openFileDialog();
-    }
-  }, [disabled, hideDefaultContent, openFileDialog]);
+    openFileDialog();
+  }, [disabled, openFileDialog]);
 
-  return (
-    <div
-      data-slot="file-upload-dropzone"
-      className={cn(
-        dropzoneVariants({ size, isDragActive: isDragging }),
-        disabled && "cursor-not-allowed opacity-60",
-        className,
-      )}
-      onDragEnter={handleDragEnter}
-      onDragLeave={handleDragLeave}
-      onDragOver={handleDragOver}
-      onDrop={handleDrop}
-      onPaste={handlePaste}
-      onKeyDown={handleKeyDown}
-      onClick={handleClick}
-      tabIndex={disabled ? -1 : 0}
-      role="button"
-      aria-disabled={disabled}
-      aria-describedby={`${descriptionId} ${instructionsId}`}
-      aria-label="File upload dropzone"
-      {...props}
-    >
-      {/* Screen reader announcements */}
+  // State passed to render prop
+  const state: DropzoneState = {
+    isDragging,
+    isUploading,
+    disabled,
+    files,
+  };
+
+  // Props passed to render prop (to be spread on custom element)
+  const renderProps: DropzoneRenderProps = {
+    onDragEnter: handleDragEnter,
+    onDragLeave: handleDragLeave,
+    onDragOver: handleDragOver,
+    onDrop: handleDrop,
+    onPaste: handlePaste,
+    onKeyDown: handleKeyDown,
+    onClick: handleClick,
+    tabIndex: disabled ? -1 : 0,
+    role: "button",
+    "aria-disabled": disabled,
+    "data-dragging": isDragging,
+  };
+
+  // Hidden input element (always rendered)
+  const hiddenInput = (
+    <input
+      {...inputProps}
+      className="sr-only"
+      accept={accept}
+      multiple={multiple}
+      disabled={disabled}
+      tabIndex={-1}
+      aria-hidden="true"
+    />
+  );
+
+  // Screen reader elements
+  const srElements = (
+    <>
       <div
         role="status"
         aria-live="polite"
@@ -219,53 +264,66 @@ function Dropzone({
       <div id={instructionsId} className="sr-only">
         Press Enter or Space to browse files, or drag and drop files here.
       </div>
+    </>
+  );
 
-      <input
-        {...inputProps}
-        className="sr-only"
-        accept={accept}
-        multiple={multiple}
-        disabled={disabled}
-        tabIndex={-1}
-        aria-hidden="true"
-      />
+  // If render prop is provided, use it for full customization
+  if (render) {
+    return (
+      <div data-slot="file-upload-dropzone">
+        {hiddenInput}
+        {srElements}
+        {render(renderProps, state)}
+      </div>
+    );
+  }
 
-      {children ? (
-        children
-      ) : !hideDefaultContent ? (
-        <>
-          <div className="text-ppx-neutral-10 flex items-center gap-3">
-            <UploadCloudIcon size={40} aria-hidden="true" />
-            <span className="text-ppx-base text-ppx-neutral-13 font-medium">
-              {dropzoneText}
-            </span>
-          </div>
+  // Default rendering
+  return (
+    <div
+      data-slot="file-upload-dropzone"
+      className={cn(
+        dropzoneVariants({ size, isDragActive: isDragging }),
+        disabled && "cursor-not-allowed opacity-60",
+        className,
+      )}
+      {...renderProps}
+      aria-describedby={`${descriptionId} ${instructionsId}`}
+      aria-label="File upload dropzone"
+      {...props}
+    >
+      {srElements}
+      {hiddenInput}
 
-          <div className="flex w-full items-center gap-3" aria-hidden="true">
-            <div className="bg-ppx-neutral-5 h-px flex-1" />
-            <span className="text-ppx-sm text-ppx-neutral-10 font-medium">
-              OR
-            </span>
-            <div className="bg-ppx-neutral-5 h-px flex-1" />
-          </div>
+      <div className="text-ppx-neutral-10 flex items-center gap-3">
+        <UploadCloudIcon size={40} aria-hidden="true" />
+        <span className="text-ppx-base text-ppx-neutral-13 font-medium">
+          {dropzoneText}
+        </span>
+      </div>
 
-          <Button
-            type="button"
-            variant="default"
-            onClick={openFileDialog}
-            disabled={disabled || isUploading}
-          >
-            {isUploading ? (
-              <>
-                <SpinnerIcon className="size-4 animate-spin" />
-                Uploading...
-              </>
-            ) : (
-              browseText
-            )}
-          </Button>
-        </>
-      ) : null}
+      <div className="flex w-full items-center gap-3" aria-hidden="true">
+        <div className="bg-ppx-neutral-5 h-px flex-1" />
+        <span className="text-ppx-sm text-ppx-neutral-10 font-medium">
+          OR
+        </span>
+        <div className="bg-ppx-neutral-5 h-px flex-1" />
+      </div>
+
+      <Button
+        type="button"
+        variant="default"
+        disabled={disabled || isUploading}
+      >
+        {isUploading ? (
+          <>
+            <SpinnerIcon className="size-4 animate-spin" />
+            Uploading...
+          </>
+        ) : (
+          browseText
+        )}
+      </Button>
     </div>
   );
 }

@@ -4,7 +4,8 @@ import {
   useFileUpload,
   type UseFileUploadOptions,
   type FileUploadItem,
-  getFileTypeIcon,
+  type DropzoneRenderProps,
+  type DropzoneState,
 } from "@px-ui/core";
 
 // ============================================================================
@@ -13,11 +14,11 @@ import {
 
 export interface FileUploadFieldProps
   extends Omit<UseFileUploadOptions, "initialFiles"> {
-  /** Size of the dropzone */
+  /** Size of the dropzone (ignored when using render prop) */
   size?: "sm" | "default" | "lg";
-  /** Text displayed in the dropzone */
+  /** Text displayed in the dropzone (ignored when using render prop) */
   dropzoneText?: string;
-  /** Text for the browse/upload button */
+  /** Text for the browse/upload button (ignored when using render prop) */
   buttonText?: string;
   /** Show file list below the dropzone */
   showFileList?: boolean;
@@ -33,8 +34,14 @@ export interface FileUploadFieldProps
   disabled?: boolean;
   /** Custom className */
   className?: string;
-  /** Custom content to render inside the dropzone */
-  children?: React.ReactNode;
+  /**
+   * Render prop for complete dropzone customization.
+   * Receives props to spread and state for conditional styling.
+   */
+  render?: (
+    props: DropzoneRenderProps,
+    state: DropzoneState,
+  ) => React.ReactElement;
   /** Render prop for custom file item rendering */
   renderFileItem?: (
     file: FileUploadItem,
@@ -56,7 +63,7 @@ export function FileUploadField({
   initialFiles = [],
   disabled = false,
   className,
-  children,
+  render,
   renderFileItem,
   onError,
   // Hook options
@@ -123,10 +130,8 @@ export function FileUploadField({
         size={size}
         dropzoneText={dropzoneText}
         browseText={buttonText}
-        hideDefaultContent={!!children}
-      >
-        {children}
-      </FileUpload.Dropzone>
+        render={render}
+      />
 
       {/* Errors */}
       {errors.length > 0 && (
@@ -167,4 +172,6 @@ export type {
   FileUploadItem,
   UploadConfig,
   UseFileUploadOptions as FileUploadWithUploaderOptions,
+  DropzoneRenderProps,
+  DropzoneState,
 } from "@px-ui/core";

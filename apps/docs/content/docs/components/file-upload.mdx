@@ -129,7 +129,9 @@ export function CustomDropzone() {
 ```
 </CodeBlock>
 
-### Avatar upload
+### Avatar upload (render prop)
+
+Use the `render` prop for complete control over the dropzone element. The render function receives `props` (event handlers to spread) and `state` (current upload state).
 
 <Preview>
   <AvatarUploadDemo />
@@ -137,36 +139,36 @@ export function CustomDropzone() {
 
 <CodeBlock>
 ```tsx
-export function AvatarUploadDemo() {
-  const upload = useFileUpload({
-    accept: "image/*",
-    maxSize: 2 * 1024 * 1024,
-    multiple: false,
-  });
+import { FileUploadField } from "@px-ui/forms";
 
+export function AvatarUpload() {
   return (
-    <div className="flex flex-col items-center gap-4">
-      <FileUpload.Root upload={upload} accept="image/*">
-        <FileUpload.Dropzone
-          hideDefaultContent
-          className="size-32 min-h-0 rounded-full p-0 cursor-pointer"
+    <FileUploadField
+      accept="image/*"
+      maxSize={2 * 1024 * 1024}
+      showFileList={false}
+      render={(props, state) => (
+        <div
+          {...props}
+          className={`flex size-32 cursor-pointer items-center justify-center rounded-full bg-neutral-100 transition-colors ${
+            state.isDragging ? "border-2 border-dashed border-blue-500" : ""
+          }`}
         >
-          {upload.files.length > 0 ? (
+          {state.files.length > 0 ? (
             <img
-              src={upload.files[0].preview}
+              src={state.files[0].preview}
               alt="Avatar"
               className="size-full rounded-full object-cover"
             />
           ) : (
-            <div className="flex flex-col items-center justify-center">
+            <div className="flex flex-col items-center justify-center text-neutral-500">
               <UserIcon className="size-10" />
               <span className="mt-1 text-xs">Upload</span>
             </div>
           )}
-        </FileUpload.Dropzone>
-      </FileUpload.Root>
-      <p className="text-xs">Click or drag to upload avatar</p>
-    </div>
+        </div>
+      )}
+    />
   );
 }
 ```
@@ -317,16 +319,49 @@ Context provider - accepts the entire hook return value.
 
 ### FileUpload.Dropzone
 
-Drag-and-drop area (also supports paste, and keyboard Enter/Space).
+Drag-and-drop area (also supports paste, click, and keyboard Enter/Space).
 
-| Prop                 | Type                        | Default                             | Description                                        |
-| -------------------- | --------------------------- | ----------------------------------- | -------------------------------------------------- |
-| `size`               | `"sm" \| "default" \| "lg"` | `"default"`                         | Dropzone size                                      |
-| `dropzoneText`       | `string`                    | `"Paste Or Drag & Drop Files Here"` | Primary label                                      |
-| `browseText`         | `string`                    | `"Browse for files"`                | Button label                                       |
-| `hideDefaultContent` | `boolean`                   | `false`                             | Hide built-in UI so you can render custom children |
+| Prop           | Type                                                                 | Default                             | Description                            |
+| -------------- | -------------------------------------------------------------------- | ----------------------------------- | -------------------------------------- |
+| `size`         | `"sm" \| "default" \| "lg"`                                          | `"default"`                         | Dropzone size                          |
+| `dropzoneText` | `string`                                                             | `"Paste Or Drag & Drop Files Here"` | Primary label                          |
+| `browseText`   | `string`                                                             | `"Browse for files"`                | Button label                           |
+| `render`       | `(props: DropzoneRenderProps, state: DropzoneState) => ReactElement` | -                                   | Render prop for complete customization |
 
-**Inherited Props:** All native `div` props.
+**Inherited Props:** All native `div` props (when not using `render`).
+
+#### DropzoneRenderProps
+
+Props passed to your custom element (spread these on your element):
+
+```ts
+interface DropzoneRenderProps {
+  onDragEnter: React.DragEventHandler;
+  onDragLeave: React.DragEventHandler;
+  onDragOver: React.DragEventHandler;
+  onDrop: React.DragEventHandler;
+  onPaste: React.ClipboardEventHandler;
+  onKeyDown: React.KeyboardEventHandler;
+  onClick: React.MouseEventHandler;
+  tabIndex: number;
+  role: string;
+  "aria-disabled": boolean;
+  "data-dragging": boolean;
+}
+```
+
+#### DropzoneState
+
+State passed to your render function for conditional styling:
+
+```ts
+interface DropzoneState {
+  isDragging: boolean;
+  isUploading: boolean;
+  disabled: boolean;
+  files: FileUploadItem[];
+}
+```
 
 ---
 

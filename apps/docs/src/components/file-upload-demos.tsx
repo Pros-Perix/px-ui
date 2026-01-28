@@ -24,37 +24,38 @@ export function BasicDropzoneDemo() {
 }
 
 // ============================================================================
-// Avatar Upload
+// Avatar Upload (using FileUploadField with render prop)
 // ============================================================================
 
 export function AvatarUploadDemo() {
-  const upload = useFileUpload({
-    accept: "image/*",
-    maxSize: 2 * 1024 * 1024,
-    multiple: false,
-  });
-
   return (
     <div className="flex flex-col items-center gap-4">
-      <FileUpload.Root upload={upload} accept="image/*">
-        <FileUpload.Dropzone
-          hideDefaultContent
-          className="size-32 min-h-0 cursor-pointer rounded-full p-0"
-        >
-          {upload.files.length > 0 ? (
-            <img
-              src={upload.files[0].preview}
-              alt="Avatar"
-              className="size-full rounded-full object-cover"
-            />
-          ) : (
-            <div className="text-ppx-neutral-10 flex flex-col items-center justify-center">
-              <UserIcon className="size-10" />
-              <span className="mt-1 text-xs">Upload</span>
-            </div>
-          )}
-        </FileUpload.Dropzone>
-      </FileUpload.Root>
+      <FileUploadField
+        accept="image/*"
+        maxSize={2 * 1024 * 1024}
+        showFileList={false}
+        render={(props, state) => (
+          <div
+            {...props}
+            className={`bg-ppx-neutral-2 flex size-32 cursor-pointer items-center justify-center rounded-full transition-colors ${
+              state.isDragging ? "border-ppx-primary-5 border-2 border-dashed" : ""
+            }`}
+          >
+            {state.files.length > 0 ? (
+              <img
+                src={state.files[0].preview}
+                alt="Avatar"
+                className="size-full rounded-full object-cover"
+              />
+            ) : (
+              <div className="text-ppx-neutral-10 flex flex-col items-center justify-center">
+                <UserIcon className="size-10" />
+                <span className="mt-1 text-xs">Upload</span>
+              </div>
+            )}
+          </div>
+        )}
+      />
       <p className="text-ppx-neutral-10 text-xs">
         Click or drag to upload avatar
       </p>
