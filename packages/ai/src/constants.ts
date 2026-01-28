@@ -1,6 +1,12 @@
 // Xandi avatar asset path
-// This will be resolved by the consuming app's bundler
-export const XANDI_AVATAR_URL = new URL(
-  "./assets/images/xandi-avatar.png",
-  import.meta.url
-).href;
+// Wrapped in try-catch for SSR compatibility (import.meta.url may not work in all environments)
+function getXandiAvatarUrl(): string {
+  try {
+    return new URL("./assets/images/xandi-avatar.png", import.meta.url).href;
+  } catch {
+    // Fallback for SSR environments where import.meta.url is not a valid URL
+    return "";
+  }
+}
+
+export const XANDI_AVATAR_URL = getXandiAvatarUrl();
