@@ -30,10 +30,15 @@ import { ComboboxField } from "@px-ui/forms";
 import { ComboboxField } from "@px-ui/forms";
 import { useState } from "react";
 
-export default function Example() {
-  const [value, setValue] = useState<string | null>(null);
+interface Fruit {
+  id: string;
+  label: string;
+}
 
-  const items = [
+export default function Example() {
+  const [value, setValue] = useState<Fruit | null>(null);
+
+  const items: Fruit[] = [
     { id: "apple", label: "Apple" },
     { id: "banana", label: "Banana" },
     { id: "orange", label: "Orange" },
@@ -66,10 +71,15 @@ Enable multi-select with the `multiple` prop. Selected items appear as removable
 import { ComboboxField } from "@px-ui/forms";
 import { useState } from "react";
 
-export default function Example() {
-  const [value, setValue] = useState<string[]>([]);
+interface Framework {
+  id: string;
+  label: string;
+}
 
-  const items = [
+export default function Example() {
+  const [value, setValue] = useState<Framework[]>([]);
+
+  const items: Framework[] = [
     { id: "react", label: "React" },
     { id: "vue", label: "Vue" },
     { id: "angular", label: "Angular" },
@@ -91,7 +101,7 @@ export default function Example() {
 
 ### Async Data Loading
 
-Use `loadOptions` to fetch data dynamically based on the search query.
+Use `loadOptions` with `defineLoadOptions` to fetch data dynamically based on the search query. This provides built-in caching via React Query.
 
 <Preview>
   <ComboboxFieldAsyncDemo />
@@ -99,6 +109,7 @@ Use `loadOptions` to fetch data dynamically based on the search query.
 
 ```tsx
 import { ComboboxField } from "@px-ui/forms";
+import { defineLoadOptions } from "@px-ui/core";
 import { useState } from "react";
 
 interface User {
@@ -107,18 +118,29 @@ interface User {
   email: string;
 }
 
-const searchUsers = async (query: string): Promise<User[]> => {
-  // Fetch from your API
-  const response = await fetch(`/api/users?q=${query}`);
-  return response.json();
-};
+// Define async options loader with caching
+const userOptions = defineLoadOptions<User>({
+  cacheKey: ["users"],
+  loader: async ({ search, page, signal }) => {
+    // Fetch from your API
+    const response = await fetch(`/api/users?q=${search}&page=${page}`, {
+      signal,
+    });
+    const data = await response.json();
+
+    return {
+      data: { options: data.users, hasMore: data.hasMore },
+      error: null,
+    };
+  },
+});
 
 export default function Example() {
   const [value, setValue] = useState<User | null>(null);
 
   return (
     <ComboboxField
-      loadOptions={searchUsers}
+      loadOptions={userOptions}
       value={value}
       onValueChange={setValue}
       placeholder="Search users..."
@@ -146,10 +168,17 @@ Control the size of the combobox field using the `size` prop.
 import { ComboboxField } from "@px-ui/forms";
 import { useState } from "react";
 
-export default function Example() {
-  const [value, setValue] = useState<string | null>(null);
+interface Size {
+  id: string;
+  label: string;
+}
 
-  const items = [
+export default function Example() {
+  const [defaultValue, setDefaultValue] = useState<Size | null>(null);
+  const [smallValue, setSmallValue] = useState<Size | null>(null);
+
+  const items: Size[] = [
+    { id: "xs", label: "Extra Small" },
     { id: "sm", label: "Small" },
     { id: "md", label: "Medium" },
     { id: "lg", label: "Large" },
@@ -159,24 +188,17 @@ export default function Example() {
     <div className="flex flex-col gap-4">
       <ComboboxField
         items={items}
-        value={value}
-        onValueChange={setValue}
+        value={defaultValue}
+        onValueChange={setDefaultValue}
+        placeholder="Default size"
+        size="default"
+      />
+      <ComboboxField
+        items={items}
+        value={smallValue}
+        onValueChange={setSmallValue}
         placeholder="Small size"
         size="sm"
-      />
-      <ComboboxField
-        items={items}
-        value={value}
-        onValueChange={setValue}
-        placeholder="Medium size (default)"
-        size="md"
-      />
-      <ComboboxField
-        items={items}
-        value={value}
-        onValueChange={setValue}
-        placeholder="Large size"
-        size="lg"
       />
     </div>
   );
@@ -195,10 +217,15 @@ Display the search input inside the dropdown instead of the trigger by using `se
 import { ComboboxField } from "@px-ui/forms";
 import { useState } from "react";
 
-export default function Example() {
-  const [value, setValue] = useState<string[]>([]);
+interface Language {
+  id: string;
+  label: string;
+}
 
-  const items = [
+export default function Example() {
+  const [value, setValue] = useState<Language[]>([]);
+
+  const items: Language[] = [
     { id: "typescript", label: "TypeScript" },
     { id: "javascript", label: "JavaScript" },
     { id: "python", label: "Python" },
@@ -228,15 +255,15 @@ The main combobox field component that wraps the Combobox component from `@px-ui
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
 | `items` | `ReadonlyArray<TItem>` | - | Array of items to display. Required if not using `loadOptions` |
-| `loadOptions` | `(query: string) => Promise<TItem[]>` | - | Function to load options asynchronously based on search query. If provided, `items` prop is not required |
-| `renderLabel` | `(item: TSelectedValue \| TSelectedValue[]) => React.ReactNode` | - | Function to render the label in the trigger for the selected item(s). For single select, receives a single item. For multiple select, receives an array of items. If not provided and item has a `label` property, it will be used automatically |
+| `loadOptions` | `LoadOptionsConfig<TItem>` | - | Async options loader configuration created with `defineLoadOptions`. Provides search, pagination, and caching support. If provided, `items` prop is not required |
+| `renderLabel` | `(item: TItem) => React.ReactNode` (single) or `(items: TItem[]) => React.ReactNode` (multiple) | - | Function to render the label in the trigger for the selected item(s). For single select, receives a single item. For multiple select, receives an array of items. If not provided and item has a `label` property, it will be used automatically |
 | `renderOption` | `(item: TItem) => React.ReactNode` | - | Function to render each option in the dropdown. If not provided and item has a `label` property, it will be used automatically |
-| `renderChip` | `(item: TSelectedValue) => React.ReactNode \| string` | - | Function to render each chip in ChipsTrigger (multiple selection only). If not provided, renderLabel or auto-detected label will be used |
+| `renderChip` | `(item: TItem) => React.ReactNode \| string` | - | Function to render each chip in ChipsTrigger (multiple selection only). If not provided, renderLabel or auto-detected label will be used |
 | `placeholder` | `string` | - | Placeholder text when no value is selected |
 | `searchInPopup` | `boolean` | `false` | Show search input inside the popup instead of in the trigger |
-| `size` | `'sm' \| 'md' \| 'lg'` | `'md'` | Size variant for the trigger |
-| `widthVariant` | `'enforced' \| 'full'` | `'full'` | Width variant for the trigger |
-| `contentWidthVariant` | `'trigger' \| 'fit' \| 'enforced'` | `'trigger'` | Width variant for the dropdown content |
+| `size` | `"default" \| "sm"` | `"default"` | Size variant for the trigger |
+| `widthVariant` | `"enforced" \| "full"` | `"full"` | Width variant for the trigger |
+| `contentWidthVariant` | `"trigger" \| "fit" \| "enforced"` | `"trigger"` | Width variant for the dropdown content |
 | `triggerClassName` | `string` | - | Additional CSS classes for the trigger element |
 | `contentProps` | `Omit<React.ComponentProps<typeof Combobox.Content>, 'children' \| 'widthVariant' \| 'empty'>` | - | Additional props for Combobox.Content component |
 
@@ -244,13 +271,13 @@ The main combobox field component that wraps the Combobox component from `@px-ui
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `value` * | `TSelectedValue \| TSelectedValue[] \| null` | - | The current selected value(s) |
-| `onValueChange` * | `(value: TSelectedValue \| TSelectedValue[] \| null) => void` | - | Callback fired when the selected value changes |
+| `value` * | `TItem \| TItem[] \| null` | - | The current selected value(s). The type matches your item type |
+| `onValueChange` * | `(value: TItem \| TItem[] \| null) => void` | - | Callback fired when the selected value changes |
 | `multiple` | `boolean` | `false` | Whether multiple items can be selected |
 | `disabled` | `boolean` | `false` | Whether the combobox is disabled |
 | `invalid` | `boolean` | `false` | Whether the combobox is in an invalid state |
 | `readOnly` | `boolean` | `false` | Whether the combobox is read-only |
-| `isItemEqualToValue` | `(item: TItem, value: TSelectedValue) => boolean` | - | Custom equality function to compare items. By default, uses strict equality |
+| `isItemEqualToValue` | `(item: TItem, value: TItem) => boolean` | - | Custom equality function to compare items. By default, uses strict equality |
 | `inputRef` | `React.Ref<HTMLInputElement>` | - | Ref to the hidden input element used for form submission |
 
 _* Required prop_

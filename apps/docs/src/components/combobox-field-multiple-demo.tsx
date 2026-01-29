@@ -1,10 +1,15 @@
 import { ComboboxField } from "@px-ui/forms";
 import { useState } from "react";
 
-export default function ComboboxFieldMultipleDemo() {
-  const [value, setValue] = useState<string[]>([]);
+interface Framework {
+  id: string;
+  label: string;
+}
 
-  const items = [
+export default function ComboboxFieldMultipleDemo() {
+  const [value, setValue] = useState<Framework[]>([]);
+
+  const items: Framework[] = [
     { id: "react", label: "React" },
     { id: "vue", label: "Vue" },
     { id: "angular", label: "Angular" },

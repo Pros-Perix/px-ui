@@ -1,10 +1,15 @@
 import { ComboboxField } from "@px-ui/forms";
 import { useState } from "react";
 
-export default function ComboboxFieldSearchPopupDemo() {
-  const [value, setValue] = useState<string[]>([]);
+interface Language {
+  id: string;
+  label: string;
+}
 
-  const items = [
+export default function ComboboxFieldSearchPopupDemo() {
+  const [value, setValue] = useState<Language[]>([]);
+
+  const items: Language[] = [
     { id: "typescript", label: "TypeScript" },
     { id: "javascript", label: "JavaScript" },
     { id: "python", label: "Python" },

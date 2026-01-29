@@ -1,7 +1,12 @@
 import { Combobox } from "@px-ui/core";
 import { useState } from "react";
 
-const languages = [
+interface Language {
+  value: string;
+  label: string;
+}
+
+const languages: Language[] = [
   { value: "javascript", label: "JavaScript" },
   { value: "typescript", label: "TypeScript" },
   { value: "python", label: "Python" },
@@ -12,15 +17,13 @@ const languages = [
 ];
 
 export function ComboboxMultipleDemo() {
-  const [value, setValue] = useState<any[]>([]);
+  const [value, setValue] = useState<Language[]>([]);
 
   return (
     <Combobox.Root multiple value={value} onValueChange={setValue}>
       <Combobox.ChipsTrigger placeholder="Select languages">
-        {(item: any) => (
-          <Combobox.Chip key={item.value}>
-            {item.label}
-          </Combobox.Chip>
+        {(item: Language) => (
+          <Combobox.Chip key={item.value}>{item.label}</Combobox.Chip>
         )}
       </Combobox.ChipsTrigger>
       <Combobox.Content>

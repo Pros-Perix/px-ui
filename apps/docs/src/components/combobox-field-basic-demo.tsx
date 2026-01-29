@@ -1,10 +1,15 @@
 import { ComboboxField } from "@px-ui/forms";
 import { useState } from "react";
 
-export default function ComboboxFieldBasicDemo() {
-  const [value, setValue] = useState<string | null>(null);
+interface Fruit {
+  id: string;
+  label: string;
+}
 
-  const items = [
+export default function ComboboxFieldBasicDemo() {
+  const [value, setValue] = useState<Fruit | null>(null);
+
+  const items: Fruit[] = [
     { id: "apple", label: "Apple" },
     { id: "banana", label: "Banana" },
     { id: "orange", label: "Orange" },
@@ -21,8 +26,6 @@ export default function ComboboxFieldBasicDemo() {
         items={items}
         value={value}
         onValueChange={setValue}
-        renderOption={(opt) => opt}
-        renderLabel={(opt) => opt}
         placeholder="Search for a fruit..."
       />
     </div>

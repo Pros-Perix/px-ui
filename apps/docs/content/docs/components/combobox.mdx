@@ -27,7 +27,7 @@ import { Combobox } from "@px-ui/core";
 
 <CodeBlock>
 ```tsx
-const [value, setValue] = useState<any>(null);
+const [value, setValue] = useState<{ value: string; label: string } | null>(null);
 
 const fruits = [
   { value: "apple", label: "Apple" },
@@ -35,7 +35,7 @@ const fruits = [
   { value: "orange", label: "Orange" },
 ];
 
-<Combobox.Root value={value} onValueChange={setValue}>
+<Combobox.Root items={fruits} value={value} onValueChange={setValue}>
   <Combobox.Trigger>
     <Combobox.Value placeholder="Select a fruit" />
   </Combobox.Trigger>
@@ -64,9 +64,15 @@ Use a searchable trigger to allow users to type and filter options as they searc
 
 <CodeBlock>
 ```tsx
-const [value, setValue] = useState<any>(null);
+const [value, setValue] = useState<{ value: string; label: string } | null>(null);
 
-<Combobox.Root value={value} onValueChange={setValue}>
+const countries = [
+  { value: "us", label: "United States" },
+  { value: "uk", label: "United Kingdom" },
+  { value: "ca", label: "Canada" },
+];
+
+<Combobox.Root items={countries} value={value} onValueChange={setValue}>
   <Combobox.SearchableTrigger placeholder="Search countries..." />
   <Combobox.Content>
     <Combobox.List>
@@ -91,11 +97,17 @@ Enable multi-select mode with chips to allow users to select multiple options.
 
 <CodeBlock>
 ```tsx
-const [value, setValue] = useState<any[]>([]);
+const [value, setValue] = useState<{ value: string; label: string }[]>([]);
+
+const languages = [
+  { value: "javascript", label: "JavaScript" },
+  { value: "typescript", label: "TypeScript" },
+  { value: "python", label: "Python" },
+];
 
 <Combobox.Root multiple value={value} onValueChange={setValue}>
   <Combobox.ChipsTrigger placeholder="Select languages">
-    {(item: any) => (
+    {(item: { value: string; label: string }) => (
       <Combobox.Chip key={item.value}>
         {item.label}
       </Combobox.Chip>
@@ -124,7 +136,15 @@ Add a dedicated search field within the dropdown for better filtering of large l
 
 <CodeBlock>
 ```tsx
-<Combobox.Root value={value} onValueChange={setValue}>
+const [value, setValue] = useState<{ value: string; label: string } | null>(null);
+
+const users = [
+  { value: "1", label: "John Doe" },
+  { value: "2", label: "Jane Smith" },
+  { value: "3", label: "Bob Johnson" },
+];
+
+<Combobox.Root items={users} value={value} onValueChange={setValue}>
   <Combobox.Trigger>
     <Combobox.Value placeholder="Select a user" />
   </Combobox.Trigger>
@@ -154,12 +174,17 @@ The root container that manages combobox state and coordinates all combobox comp
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `value` | `Value \| Value[]` | - | Selected value(s) |
-| `onValueChange` | `(value) => void` | - | Callback when selection changes |
+| `items` | `ReadonlyArray<TItem>` | - | Array of items for filtering and selection |
+| `value` | `TItem \| TItem[]` | - | Selected value(s) |
+| `onValueChange` | `(value: TItem \| TItem[] \| null) => void` | - | Callback when selection changes |
 | `multiple` | `boolean` | `false` | Enable multi-select mode |
 | `disabled` | `boolean` | `false` | Whether the combobox is disabled |
 | `invalid` | `boolean` | `false` | Whether the combobox is in an invalid state |
 | `isLoading` | `boolean` | `false` | Whether options are loading |
+| `isLoadingMore` | `boolean` | `false` | Whether more options are loading (infinite scroll) |
+| `isError` | `boolean` | `false` | Whether an error occurred loading options |
+| `hasMore` | `boolean` | `false` | Whether there are more options to load |
+| `onLoadMore` | `() => void` | - | Callback to load more options |
 | `loadOptions` | `LoadOptionsConfig` | - | Async options loading configuration |
 
 **Inherited Props:** Inherits all props from [Base UI Combobox.Root](https://base-ui.com/react/components/combobox#root)
@@ -174,7 +199,7 @@ Button that opens the combobox dropdown when clicked.
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `size` | `"sm" \| "md" \| "lg"` | `"md"` | Size of the trigger button |
+| `size` | `"default" \| "sm"` | `"default"` | Size of the trigger button |
 | `widthVariant` | `"fit" \| "enforced" \| "full"` | `"enforced"` | Width behavior of the trigger |
 | `className` | `string` | - | Additional CSS classes |
 
@@ -207,7 +232,7 @@ Multi-select trigger that displays selected values as removable chips.
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
 | `placeholder` | `string` | - | Placeholder when no values selected |
-| `children` | `function` | - | Render function for each chip |
+| `children` | `(item: TItem) => ReactNode` | - | Render function for each chip |
 | `size` | `"default" \| "sm"` | `"default"` | Size of the trigger |
 | `widthVariant` | `"enforced" \| "full"` | `"enforced"` | Width behavior |
 | `className` | `string` | - | Additional CSS classes |
