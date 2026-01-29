@@ -149,26 +149,18 @@ function ChatWindow() {
 
   return (
     <div className="flex h-full">
-      <XSidebar
-        isOpen={sidebarOpen}
-        chatHistory={chatHistory}
-        onClose={() => setSidebarOpen(false)}
-        onNewChat={handleNewChat}
-        onSelectChat={handleSelectChat}
-      />
-      <div className="flex flex-1 flex-col">
-        {/* XHeader is outside provider, pass avatar directly */}
-        <XHeader
-          title={config.assistantName}
-          avatarUrl={config.avatarUrl}
-          onToggleHistory={() => setSidebarOpen(!sidebarOpen)}
-          onNewChat={handleNewChat}
+      <XandiProvider handlers={handlers} config={config}>
+        <XSidebar
+          isOpen={sidebarOpen}
+          onClose={() => setSidebarOpen(false)}
         />
-        {/* Provider shares config with internal components */}
-        <XandiProvider handlers={handlers} config={config}>
+        <div className="flex flex-1 flex-col">
+          <XHeader
+            onToggleHistory={() => setSidebarOpen((prev) => !prev)}
+          />
           <Xandi />
-        </XandiProvider>
-      </div>
+        </div>
+      </XandiProvider>
     </div>
   );
 }
@@ -197,28 +189,21 @@ The main chat component. Must be wrapped in `XandiProvider`.
 
 ### XHeader
 
-Header component for floating windows and sidebars. Since this component lives outside the provider, avatar must be passed as a prop.
+Header component for floating windows and sidebars. Must be inside `XandiProvider`. Avatar and title come from context config; New Chat uses `startNewConversation` from context.
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `title` | `string` | `"Xandi"` | Title displayed in the header |
-| `avatarUrl` | `string` | Default Xandi avatar | URL for the assistant's avatar image |
 | `onClose` | `() => void` | - | Callback when close button is clicked |
-| `onNewChat` | `() => void` | - | Callback when new chat button is clicked |
 | `onToggleHistory` | `() => void` | - | Callback when menu button is clicked |
 
 ### XSidebar
 
-Sidebar component for chat history.
+Sidebar component for chat history. Must be inside `XandiProvider`. Fetches conversation history via `getConvHistory` from context when opened and manages its own loading state.
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
 | `isOpen` | `boolean` | `true` | Whether the sidebar is visible |
-| `chatHistory` | `ChatHistoryItem[]` | `[]` | List of chat history items |
-| `activeChatId` | `string` | - | ID of the currently active chat |
 | `onClose` | `() => void` | - | Callback when close button is clicked |
-| `onNewChat` | `() => void` | - | Callback when new chat button is clicked |
-| `onSelectChat` | `(chatId: string) => void` | - | Callback when a chat is selected |
 
 ### useXandi Hook
 
@@ -255,6 +240,7 @@ function CustomComponent() {
 | `loadConversation` | `(conversationId: string) => Promise<void>` | Load an existing conversation |
 | `startNewConversation` | `() => void` | Reset to a new empty conversation |
 | `submitFeedback` | `(messageId: string, feedback: FeedbackType) => void` | Submit feedback for a message |
+| `getConvHistory` | `() => Promise<ConversationSummary[]>` | Handler to fetch conversation list (from provider) |
 | `config` | `XandiConfig` | Configuration object with avatar URL and assistant name |
 
 ## Types

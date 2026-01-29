@@ -1,4 +1,4 @@
-import { Button } from "@px-ui/core";
+import { Button, Spinner } from "@px-ui/core";
 
 import { ChatIcon } from "../assets/icons";
 
@@ -10,12 +10,15 @@ export interface ChatHistoryItem {
 
 export interface XChatHistoryProps {
   items?: ChatHistoryItem[];
+  /** Whether conversation history is being fetched */
+  isLoading?: boolean;
   activeChatId?: string;
   onSelectChat?: (chatId: string) => void;
 }
 
 export function XChatHistory({
   items = [],
+  isLoading = false,
   activeChatId,
   onSelectChat,
 }: XChatHistoryProps) {
@@ -29,8 +32,13 @@ export function XChatHistory({
         </div>
       </div>
 
-      {/* Chat List */}
-      {items.length === 0 ? (
+      {/* Chat List - show loader only when loading and list is empty (first time) */}
+      {isLoading && items.length === 0 ? (
+        <div className="flex flex-col items-center justify-center gap-2 px-6 py-8">
+          <Spinner size="medium" className="text-ppx-neutral-10" />
+          <span className="text-ppx-sm text-ppx-neutral-10">Loading conversations...</span>
+        </div>
+      ) : items.length === 0 ? (
         <div className="px-6 py-4 text-ppx-sm text-ppx-neutral-10">
           No chat history yet
         </div>

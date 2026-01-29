@@ -4,8 +4,6 @@ import {
   XandiProvider,
   XHeader,
   XSidebar,
-  useXandi,
-  type ChatHistoryItem,
   type XandiResponse,
   type XandiConfig,
   type XandiHandlers,
@@ -241,30 +239,13 @@ const xandiHandlers: XandiHandlers = {
 
 export function XandiBasicDemo() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [chatHistory, setChatHistory] = useState<ChatHistoryItem[]>([]);
-
-  // Fetch conversation history when sidebar opens
-  const handleToggleHistory = async () => {
-    if (!sidebarOpen) {
-      try {
-        const history = await xandiHandlers.getConvHistory?.();
-        if (history) {
-          setChatHistory(history);
-        }
-      } catch (error) {
-        console.error("Failed to fetch conversation history:", error);
-      }
-    }
-    setSidebarOpen(!sidebarOpen);
-  };
 
   return (
     <div className="flex h-[600px] w-full overflow-hidden rounded-lg border border-ppx-neutral-5 bg-ppx-background">
       <XandiProvider handlers={xandiHandlers} config={xandiConfig}>
-        {/* Sidebar */}
-        <XSidebarWithContext
+        {/* Sidebar - fetches history via getConvHistory from context */}
+        <XSidebar
           isOpen={sidebarOpen}
-          chatHistory={chatHistory}
           onClose={() => setSidebarOpen(false)}
         />
 
@@ -273,7 +254,7 @@ export function XandiBasicDemo() {
           {/* Header */}
           <XHeader
             onClose={() => {}}
-            onToggleHistory={handleToggleHistory}
+            onToggleHistory={() => setSidebarOpen((prev) => !prev)}
           />
 
           {/* Chat Area */}
@@ -283,32 +264,5 @@ export function XandiBasicDemo() {
         </div>
       </XandiProvider>
     </div>
-  );
-}
-
-// Wrapper component that uses context for loadConversation
-function XSidebarWithContext({
-  isOpen,
-  chatHistory,
-  onClose,
-}: {
-  isOpen: boolean;
-  chatHistory: ChatHistoryItem[];
-  onClose: () => void;
-}) {
-  const { loadConversation, conversation } = useXandi();
-
-  const handleSelectChat = (chatId: string) => {
-    loadConversation(chatId);
-  };
-
-  return (
-    <XSidebar
-      isOpen={isOpen}
-      chatHistory={chatHistory}
-      activeChatId={conversation.id ?? undefined}
-      onClose={onClose}
-      onSelectChat={handleSelectChat}
-    />
   );
 }

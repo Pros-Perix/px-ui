@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { Button } from "@px-ui/core";
 
 import { CloseIcon, NewChatIcon } from "../assets/icons";
@@ -6,20 +7,43 @@ import { XChatHistory, type ChatHistoryItem } from "./x-chat-history";
 
 export interface XSidebarProps {
   isOpen?: boolean;
-  chatHistory?: ChatHistoryItem[];
-  activeChatId?: string;
   onClose?: () => void;
-  onSelectChat?: (chatId: string) => void;
 }
 
 export function XSidebar({
   isOpen = true,
-  chatHistory = [],
-  activeChatId,
   onClose,
-  onSelectChat,
 }: XSidebarProps) {
-  const { startNewConversation } = useXandi();
+  const { startNewConversation, getConvHistory, loadConversation, conversation } = useXandi();
+  const [chatHistoryItems, setChatHistoryItems] = useState<ChatHistoryItem[]>([]);
+  const [isLoadingHistory, setIsLoadingHistory] = useState(false);
+
+  // Fetch conversation history when sidebar opens
+  useEffect(() => {
+    if (!isOpen || !getConvHistory) return;
+
+    setIsLoadingHistory(true);
+    getConvHistory()
+      .then((history) => {
+        setChatHistoryItems(
+          (history ?? []).map((item) => ({
+            id: item.id,
+            title: item.title,
+            timestamp: item.timestamp,
+          }))
+        );
+      })
+      .catch((error) => {
+        console.error("Failed to fetch conversation history:", error);
+      })
+      .finally(() => {
+        setIsLoadingHistory(false);
+      });
+  }, [isOpen, getConvHistory]);
+
+  const handleSelectChat = (chatId: string) => {
+    loadConversation(chatId);
+  };
 
   if (!isOpen) return null;
 
@@ -51,9 +75,10 @@ export function XSidebar({
 
       {/* Chat History */}
       <XChatHistory
-        items={chatHistory}
-        activeChatId={activeChatId}
-        onSelectChat={onSelectChat}
+        items={chatHistoryItems}
+        isLoading={isLoadingHistory}
+        activeChatId={conversation.id ?? undefined}
+        onSelectChat={handleSelectChat}
       />
     </aside>
   );

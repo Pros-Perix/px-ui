@@ -127,6 +127,8 @@ export interface XandiContextValue {
   startNewConversation: () => void;
   /** Submit feedback for a message */
   submitFeedback: (messageId: string, feedback: FeedbackType) => void;
+  /** Get conversation history list (from handlers) */
+  getConvHistory?: () => Promise<ConversationSummary[]>;
   /** Configuration for the assistant */
   config: Required<XandiConfig>;
 }
@@ -262,6 +264,7 @@ export function XandiProvider({
     loadConversation,
     startNewConversation,
     submitFeedback,
+    getConvHistory: handlers.getConvHistory,
     config,
   };
 
