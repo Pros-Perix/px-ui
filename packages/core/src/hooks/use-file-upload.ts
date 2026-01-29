@@ -115,7 +115,8 @@ export type UseFileUploadOptions = {
   multiple?: boolean;
   initialFiles?: FileMetadata[];
   onFilesChange?: (files: FileUploadItem[]) => void;
-  onFilesAdded?: (addedFiles: FileUploadItem[]) => void;
+  onFileAdd?: (addedFile: FileUploadItem) => void;
+  onFileRemove?: (removedFile: FileUploadItem) => void;
   upload?: UploadConfig;
 };
 
@@ -263,7 +264,8 @@ export const useFileUpload = (
     accept = "*",
     multiple = false,
     onFilesChange,
-    onFilesAdded,
+    onFileAdd,
+    onFileRemove,
   } = baseOptions;
 
   const validateFile = useCallback(
@@ -528,8 +530,12 @@ export const useFileUpload = (
       }
 
       if (validFiles.length > 0) {
-        // Call onFilesAdded callback
-        onFilesAdded?.(validFiles);
+        // Call onFileAdd callback for each file
+        if (onFileAdd) {
+          for (const file of validFiles) {
+            onFileAdd(file);
+          }
+        }
 
         setFilesState((prev) => {
           const updatedFiles = !multiple ? validFiles : [...prev, ...validFiles];
@@ -563,7 +569,7 @@ export const useFileUpload = (
       createPreview,
       generateUniqueId,
       onFilesChange,
-      onFilesAdded,
+      onFileAdd,
       autoUpload,
       upload,
       uploadFiles,
@@ -581,8 +587,13 @@ export const useFileUpload = (
 
       setFilesState((prev) => {
         const fileToRemove = prev.find((file) => file.id === id);
-        if (fileToRemove?.preview && fileToRemove.file instanceof File) {
-          URL.revokeObjectURL(fileToRemove.preview);
+        if (fileToRemove) {
+          // Call onFileRemove callback before removing
+          onFileRemove?.(fileToRemove);
+
+          if (fileToRemove.preview && fileToRemove.file instanceof File) {
+            URL.revokeObjectURL(fileToRemove.preview);
+          }
         }
 
         const newFiles = prev.filter((file) => file.id !== id);
@@ -590,7 +601,7 @@ export const useFileUpload = (
         return newFiles;
       });
     },
-    [onFilesChange],
+    [onFilesChange, onFileRemove],
   );
 
   const clearFiles = useCallback(() => {

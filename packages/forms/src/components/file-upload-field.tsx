@@ -89,7 +89,8 @@ export const FileUploadField = React.forwardRef<
     accept,
     multiple = false,
     onFilesChange,
-    onFilesAdded,
+    onFileAdd,
+    onFileRemove,
     upload: uploadConfig,
   },
   ref,
@@ -108,7 +109,8 @@ export const FileUploadField = React.forwardRef<
       url: f.url,
     })),
     onFilesChange,
-    onFilesAdded,
+    onFileAdd,
+    onFileRemove,
     upload: uploadConfig,
   });
 
