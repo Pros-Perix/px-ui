@@ -395,6 +395,8 @@ export interface ListItemProps extends React.ComponentProps<"div"> {
   showRetry?: boolean;
   /** Custom icon component */
   icon?: React.ReactNode;
+  /** Click handler for the list item */
+  onItemClick?: (file: FileUploadItem) => void;
 }
 
 function ListItem({
@@ -406,6 +408,7 @@ function ListItem({
   showRemove = true,
   showRetry = true,
   icon,
+  onItemClick,
   ...props
 }: ListItemProps) {
   const { upload, disabled } = useFileUploadContext();
@@ -420,6 +423,31 @@ function ListItem({
     type: file.file.type,
   });
 
+  // Check if file is an image type (should show preview)
+  const isImageType = file.file.type?.startsWith("image/");
+  const shouldShowImagePreview = file.preview && isImageType;
+
+  const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    if ((e.target as HTMLElement).closest("button")) return;
+    onItemClick?.(file);
+    props.onClick?.(e);
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    if (onItemClick && (e.key === "Enter" || e.key === " ")) {
+      e.preventDefault();
+      onItemClick(file);
+    }
+    props.onKeyDown?.(e);
+  };
+
+  const interactiveProps = onItemClick
+    ? {
+        role: "button" as const,
+        tabIndex: 0,
+      }
+    : {};
+
   return (
     <div
       data-slot="file-upload-list-item"
@@ -427,14 +455,19 @@ function ListItem({
       className={cn(
         "rounded-ppx-s border-ppx-neutral-4 bg-ppx-neutral-1 flex items-center gap-3 border p-3",
         isError && "border-ppx-red-4 bg-ppx-red-1",
+        onItemClick &&
+          "cursor-pointer hover:bg-ppx-neutral-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ppx-primary-5",
         className,
       )}
       {...props}
+      {...interactiveProps}
+      onClick={handleClick}
+      onKeyDown={handleKeyDown}
     >
       {/* Icon/Preview */}
       {showIcon && (
         <div className="rounded-ppx-xs bg-ppx-neutral-3 flex size-10 shrink-0 items-center justify-center overflow-hidden">
-          {file.preview ? (
+          {shouldShowImagePreview ? (
             <img
               src={file.preview}
               alt={file.file.name}
