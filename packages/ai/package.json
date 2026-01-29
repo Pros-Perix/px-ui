@@ -1,6 +1,6 @@
 {
   "name": "@px-ui/ai",
-  "version": "3.0.0",
+  "version": "4.0.0",
   "description": "AI components built on top of px-ui-core",
   "type": "module",
   "module": "./dist/index.js",

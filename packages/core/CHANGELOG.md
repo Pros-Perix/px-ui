@@ -1,5 +1,11 @@
 # @px-ui/core
 
+## 4.3.0
+
+### Minor Changes
+
+- bd0e49c: added onFileRemove and onFileAdd to the useFileUpload hook
+
 ## 4.2.0
 
 ### Minor Changes
