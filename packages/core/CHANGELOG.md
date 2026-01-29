@@ -1,5 +1,11 @@
 # @px-ui/core
 
+## 4.2.0
+
+### Minor Changes
+
+- 082b304: add onClick event on FileListItem
+
 ## 4.1.0
 
 ### Minor Changes

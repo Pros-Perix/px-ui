@@ -1,5 +1,16 @@
 # @px-ui/forms
 
+## 9.0.0
+
+### Minor Changes
+
+- 082b304: add onClick event on FileListItem
+
+### Patch Changes
+
+- Updated dependencies [082b304]
+  - @px-ui/core@4.2.0
+
 ## 8.0.0
 
 ### Minor Changes
