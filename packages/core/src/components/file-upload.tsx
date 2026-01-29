@@ -427,13 +427,26 @@ function ListItem({
   const isImageType = file.file.type?.startsWith("image/");
   const shouldShowImagePreview = file.preview && isImageType;
 
-  const handleClick = onItemClick
-    ? (e: React.MouseEvent) => {
-        // Don't trigger item click if clicking on action buttons
-        if ((e.target as HTMLElement).closest("button")) return;
-        onItemClick(file);
+  const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    if ((e.target as HTMLElement).closest("button")) return;
+    onItemClick?.(file);
+    props.onClick?.(e);
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    if (onItemClick && (e.key === "Enter" || e.key === " ")) {
+      e.preventDefault();
+      onItemClick(file);
+    }
+    props.onKeyDown?.(e);
+  };
+
+  const interactiveProps = onItemClick
+    ? {
+        role: "button" as const,
+        tabIndex: 0,
       }
-    : undefined;
+    : {};
 
   return (
     <div
@@ -442,11 +455,14 @@ function ListItem({
       className={cn(
         "rounded-ppx-s border-ppx-neutral-4 bg-ppx-neutral-1 flex items-center gap-3 border p-3",
         isError && "border-ppx-red-4 bg-ppx-red-1",
-        onItemClick && "cursor-pointer hover:bg-ppx-neutral-2",
+        onItemClick &&
+          "cursor-pointer hover:bg-ppx-neutral-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ppx-primary-5",
         className,
       )}
-      onClick={handleClick}
       {...props}
+      {...interactiveProps}
+      onClick={handleClick}
+      onKeyDown={handleKeyDown}
     >
       {/* Icon/Preview */}
       {showIcon && (
