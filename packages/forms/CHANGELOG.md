@@ -1,5 +1,16 @@
 # @px-ui/forms
 
+## 10.0.0
+
+### Minor Changes
+
+- bd0e49c: added onFileRemove and onFileAdd to the useFileUpload hook
+
+### Patch Changes
+
+- Updated dependencies [bd0e49c]
+  - @px-ui/core@4.3.0
+
 ## 9.0.0
 
 ### Minor Changes
