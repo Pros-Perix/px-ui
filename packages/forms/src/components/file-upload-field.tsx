@@ -6,11 +6,21 @@ import {
   type FileUploadItem,
   type DropzoneRenderProps,
   type DropzoneState,
+  type FileMetadata,
 } from "@px-ui/core";
 
 // ============================================================================
 // Types
 // ============================================================================
+
+export interface FileUploadFieldRef {
+  /** Reset the file upload state, optionally with new initial files */
+  reset: (newFiles?: FileMetadata[]) => void;
+  /** Clear all files */
+  clearFiles: () => void;
+  /** Get current files */
+  getFiles: () => FileUploadItem[];
+}
 
 export interface FileUploadFieldProps
   extends Omit<UseFileUploadOptions, "initialFiles"> {
@@ -47,6 +57,8 @@ export interface FileUploadFieldProps
     file: FileUploadItem,
     actions: { remove: () => void; retry: () => void },
   ) => React.ReactNode;
+  /** Click handler for file list items (for preview, etc.) */
+  onItemClick?: (file: FileUploadItem) => void;
   /** Error handler */
   onError?: (error: { type: string; message: string; files?: File[] }) => void;
 }
@@ -55,26 +67,33 @@ export interface FileUploadFieldProps
 // Main Component
 // ============================================================================
 
-export function FileUploadField({
-  size = "default",
-  dropzoneText = "Paste Or Drag & Drop Files Here",
-  buttonText = "Browse for files",
-  showFileList = true,
-  initialFiles = [],
-  disabled = false,
-  className,
-  render,
-  renderFileItem,
-  onError,
-  // Hook options
-  maxFiles,
-  maxSize,
-  accept,
-  multiple = false,
-  onFilesChange,
-  onFilesAdded,
-  upload: uploadConfig,
-}: FileUploadFieldProps) {
+export const FileUploadField = React.forwardRef<
+  FileUploadFieldRef,
+  FileUploadFieldProps
+>(function FileUploadField(
+  {
+    size = "default",
+    dropzoneText = "Paste Or Drag & Drop Files Here",
+    buttonText = "Browse for files",
+    showFileList = true,
+    initialFiles = [],
+    disabled = false,
+    className,
+    render,
+    renderFileItem,
+    onItemClick,
+    onError,
+    // Hook options
+    maxFiles,
+    maxSize,
+    accept,
+    multiple = false,
+    onFilesChange,
+    onFilesAdded,
+    upload: uploadConfig,
+  },
+  ref,
+) {
   const uploadHook = useFileUpload({
     maxFiles,
     maxSize,
@@ -93,7 +112,19 @@ export function FileUploadField({
     upload: uploadConfig,
   });
 
-  const { files, errors, retryUpload, removeFile } = uploadHook;
+  const { files, errors, retryUpload, removeFile, reset, clearFiles } =
+    uploadHook;
+
+  // Expose reset method via ref
+  React.useImperativeHandle(
+    ref,
+    () => ({
+      reset: (newFiles?: FileMetadata[]) => reset(newFiles),
+      clearFiles: () => clearFiles(),
+      getFiles: () => files,
+    }),
+    [reset, clearFiles, files],
+  );
 
   // Handle errors
   React.useEffect(() => {
@@ -114,7 +145,13 @@ export function FileUploadField({
       });
     }
 
-    return <FileUpload.ListItem key={file.id} file={file} />;
+    return (
+      <FileUpload.ListItem
+        key={file.id}
+        file={file}
+        onItemClick={onItemClick}
+      />
+    );
   };
 
   return (
@@ -159,14 +196,12 @@ export function FileUploadField({
             )}
           </div>
 
-          <FileUpload.List>
-            {files.map(renderDefaultFileItem)}
-          </FileUpload.List>
+          <FileUpload.List>{files.map(renderDefaultFileItem)}</FileUpload.List>
         </div>
       )}
     </FileUpload.Root>
   );
-}
+});
 
 export type {
   FileUploadItem,
@@ -174,4 +209,5 @@ export type {
   UseFileUploadOptions as FileUploadWithUploaderOptions,
   DropzoneRenderProps,
   DropzoneState,
+  FileMetadata,
 } from "@px-ui/core";
