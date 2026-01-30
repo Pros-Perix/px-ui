@@ -18,7 +18,7 @@ export function XMainIntake({
   placeholder = "Ask about jobs, candidates, timesheets, or anything workforce...",
   suggestions = [],
 }: XMainIntakeProps) {
-  const { isLoading, sendMessage } = useXandi();
+  const { isLoading, sendMessage, stopRequest } = useXandi();
   const [input, setInput] = useState("");
 
   const handleSubmit = (e?: React.FormEvent) => {
@@ -31,6 +31,12 @@ export function XMainIntake({
 
   const handleSuggestionClick = (prompt: string) => {
     setInput(prompt);
+  };
+
+  const handleStopOrSend = () => {
+    if (isLoading) {
+      stopRequest();
+    }
   };
 
   return (
@@ -58,18 +64,25 @@ export function XMainIntake({
           <span className="ml-auto text-ppx-xs text-ppx-neutral-10">
             Enter to send · Shift+Enter for new line
           </span>
-          <Button
-            type="submit"
-            size="icon-sm"
-            disabled={isLoading || !input.trim()}
-            className="flex h-8 w-8 items-center justify-center rounded-full bg-ppx-green-5 text-white transition-all hover:bg-ppx-green-4 hover:shadow-[0_0_12px_rgba(40,182,116,0.6)] disabled:bg-ppx-neutral-5 disabled:text-ppx-neutral-10 disabled:shadow-none"
-          >
-            {isLoading ? (
+          {isLoading ? (
+            <Button
+              type="button"
+              size="icon-sm"
+              onClick={handleStopOrSend}
+              className="flex h-8 w-8 items-center justify-center rounded-full bg-ppx-red-5 text-white transition-all hover:bg-ppx-red-4 hover:shadow-[0_0_12px_rgba(220,38,38,0.6)]"
+            >
               <StopIcon width={14} />
-            ) : (
+            </Button>
+          ) : (
+            <Button
+              type="submit"
+              size="icon-sm"
+              disabled={!input.trim()}
+              className="flex h-8 w-8 items-center justify-center rounded-full bg-ppx-green-5 text-white transition-all hover:bg-ppx-green-4 hover:shadow-[0_0_12px_rgba(40,182,116,0.6)] disabled:bg-ppx-neutral-5 disabled:text-ppx-neutral-10 disabled:shadow-none"
+            >
               <SendIcon width={16} />
-            )}
-          </Button>
+            </Button>
+          )}
         </div>
       </form>
 

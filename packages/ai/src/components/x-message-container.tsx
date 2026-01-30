@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useLayoutEffect, useRef } from "react";
 
 import { XMessageItem } from "./x-message-item";
 import { XTypingIndicator } from "./x-typing-indicator";
@@ -6,26 +6,96 @@ import { useXandi } from "../context/xandi-context";
 
 export interface XMessageContainerProps {
   height?: string | number;
+  /** Called when user scrolls to top (load more / older messages) */
+  onLoadMore?: () => void;
 }
 
-export function XMessageContainer({ height = 400 }: XMessageContainerProps) {
-  const { messages, isLoading } = useXandi();
+export function XMessageContainer({ height = 400, onLoadMore }: XMessageContainerProps) {
+  const { conversation, isLoading } = useXandi();
   const containerRef = useRef<HTMLDivElement>(null);
+  const topSentinelRef = useRef<HTMLDivElement>(null);
+  const prevScrollHeightRef = useRef(0);
+  const prevScrollTopRef = useRef(0);
+  const prevLastMessageIdRef = useRef<string | null>(null);
+  const prevMessageCountRef = useRef(0);
+  const skipScrollToBottomRef = useRef(false);
 
-  // Auto-scroll to bottom when new messages arrive or loading state changes
-  useEffect(() => {
-    if (containerRef.current) {
-      containerRef.current.scrollTop = containerRef.current.scrollHeight;
+  const messages = conversation.messages;
+  const messageCount = messages.length;
+  const lastMessageId = messageCount > 0 ? messages[messageCount - 1].id : null;
+
+  // Restore scroll when older messages are appended (content added at top in column-reverse)
+  useLayoutEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+
+    const prevCount = prevMessageCountRef.current;
+    const prevLastId = prevLastMessageIdRef.current;
+    const isAppendOlder =
+      prevCount > 0 &&
+      messageCount > prevCount &&
+      lastMessageId != null &&
+      lastMessageId !== prevLastId;
+
+    if (isAppendOlder) {
+      const prevScrollHeight = prevScrollHeightRef.current;
+      const prevScrollTop = prevScrollTopRef.current;
+      const newScrollHeight = el.scrollHeight;
+      el.scrollTop = prevScrollTop + (newScrollHeight - prevScrollHeight);
+      skipScrollToBottomRef.current = true;
     }
-  }, [messages, isLoading]);
+
+    prevScrollHeightRef.current = el.scrollHeight;
+    prevScrollTopRef.current = el.scrollTop;
+    prevMessageCountRef.current = messageCount;
+    prevLastMessageIdRef.current = lastMessageId;
+  }, [messageCount, lastMessageId, messages]);
+
+  // Scroll to bottom (newest) when new messages arrive or typing starts (column-reverse: bottom = 0)
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    if (skipScrollToBottomRef.current) {
+      skipScrollToBottomRef.current = false;
+      return;
+    }
+    el.scrollTop = 0;
+  }, [conversation.messages, isLoading]);
+
+  // IntersectionObserver: when top sentinel is visible, trigger load more
+  useEffect(() => {
+    if (!onLoadMore) return;
+    const sentinel = topSentinelRef.current;
+    const container = containerRef.current;
+    if (!sentinel || !container) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const [entry] = entries;
+        if (entry?.isIntersecting) {
+          onLoadMore();
+        }
+      },
+      {
+        root: container,
+        rootMargin: "0px",
+        threshold: 0,
+      }
+    );
+
+    observer.observe(sentinel);
+    return () => observer.disconnect();
+  }, [onLoadMore]);
 
   return (
     <div
       ref={containerRef}
-      className="overflow-y-auto py-[10px]"
+      className="flex flex-col overflow-y-auto py-[10px]"
       style={{ height: typeof height === "number" ? `${height}px` : height }}
     >
-      <div className="flex flex-col gap-5 p-4">
+      {/* column-reverse: messages [newest…oldest] show as oldest at top, newest at bottom; sentinel at top for load more */}
+      <div className="flex flex-col-reverse gap-5 p-4">
+        <div ref={topSentinelRef} className="h-1 shrink-0" aria-hidden="true" />
         {messages.map((message) => (
           <XMessageItem key={message.id} message={message} />
         ))}

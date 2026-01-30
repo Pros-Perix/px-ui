@@ -1,4 +1,10 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useRef, useState } from "react";
+
+import { XANDI_AVATAR_URL } from "../constants";
+
+// ============================================================================
+// Types
+// ============================================================================
 
 export type MessageType = "text" | "markdown";
 export type FeedbackType = "up" | "down" | null;
@@ -11,45 +17,201 @@ export interface Message {
   debugTrace?: unknown;
 }
 
+/** API response structure from the backend */
+export interface XandiApiResponse {
+  success: boolean;
+  message: string;
+  data: {
+    intent: string;
+    data: unknown;
+    conversation_id: string;
+  };
+  trace?: {
+    trace_id: string;
+    execution_mode: string;
+    intent: string;
+    tool_id: string;
+    debug_trace: unknown;
+  };
+}
+
+/** Transformed response for internal use */
 export interface XandiResponse {
   content: string;
   type?: MessageType;
   debugTrace?: unknown;
+  conversationId?: string;
 }
 
-export interface XandiContextValue {
+/** Conversation summary for history list */
+export interface ConversationSummary {
+  id: string;
+  title: string;
+  timestamp: Date;
+}
+
+/** Full conversation with messages */
+export interface Conversation {
+  id: string | null;
+  title: string;
   messages: Message[];
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+/** Creates a new empty conversation */
+function createEmptyConversation(): Conversation {
+  return {
+    id: null,
+    title: "New Chat",
+    messages: [],
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  };
+}
+
+// ============================================================================
+// Config
+// ============================================================================
+
+export type XandiUIMode = "full" | "sidebar" | "floating";
+
+export interface XandiConfig {
+  /** URL for the assistant's avatar image */
+  avatarUrl?: string;
+  /** Name of the assistant (default: "Xandi") */
+  assistantName?: string;
+  /** UI mode: full (no close button), sidebar, or floating (with close button) */
+  uiMode?: XandiUIMode;
+}
+
+const defaultConfig: Required<XandiConfig> = {
+  avatarUrl: XANDI_AVATAR_URL,
+  assistantName: "Xandi",
+  uiMode: "full",
+};
+
+// ============================================================================
+// Handlers
+// ============================================================================
+
+export interface FetchRespOptions {
+  conversationId?: string;
+  signal?: AbortSignal;
+}
+
+export interface GetConvOptions {
+  /** Page number (default: 1) */
+  page?: number;
+  /** Items per page (default: 20) */
+  perPage?: number;
+}
+
+const defaultGetConvOptions: Required<GetConvOptions> = {
+  page: 1,
+  perPage: 20,
+};
+
+export interface XandiHandlers {
+  /** Fetch AI response for a message */
+  fetchResp: (message: string, options?: FetchRespOptions) => Promise<XandiResponse>;
+  /** Get a conversation by ID with pagination; consumer transforms API response to Conversation */
+  getConv?: (conversationId: string, options?: GetConvOptions) => Promise<Conversation>;
+  /** Get conversation history list */
+  getConvHistory?: () => Promise<ConversationSummary[]>;
+  /** Called when user provides feedback on a message */
+  onFeedback?: (messageId: string, conversationId: string, feedback: FeedbackType) => void;
+  /** Called when user stops the current request */
+  onStop?: (conversationId: string) => void;
+}
+
+// ============================================================================
+// Context
+// ============================================================================
+
+export interface XandiContextValue {
+  /** Current conversation with messages */
+  conversation: Conversation;
+  /** Whether a request is in progress */
   isLoading: boolean;
-  sessionId: string | null;
+  /** Send a message to the assistant */
   sendMessage: (text: string) => void;
-  onFeedback?: (messageId: string, feedback: FeedbackType) => void;
+  /** Stop the current request */
+  stopRequest: () => void;
+  /** Load an existing conversation by ID (with optional page/perPage) */
+  loadConversation: (conversationId: string, options?: GetConvOptions) => Promise<void>;
+  /** Start a new empty conversation */
+  startNewConversation: () => void;
+  /** Submit feedback for a message */
+  submitFeedback: (messageId: string, feedback: FeedbackType) => void;
+  /** Get conversation history list (from handlers) */
+  getConvHistory?: () => Promise<ConversationSummary[]>;
+  /** Configuration for the assistant */
+  config: Required<XandiConfig>;
+  /** Set UI mode override from Xandi component (internal use) */
+  setUiModeOverride: (mode: XandiUIMode | null) => void;
 }
 
 const XandiContext = createContext<XandiContextValue | null>(null);
 
+// ============================================================================
+// Provider
+// ============================================================================
+
 export interface XandiProviderProps {
-  fetchResponse: (message: string) => Promise<XandiResponse>;
-  sessionId?: string;
-  onFeedback?: (messageId: string, feedback: FeedbackType) => void;
+  /** All handler functions for API communication */
+  handlers: XandiHandlers;
+  /** Initial conversation ID to restore */
+  conversationId?: string;
+  /** Configuration for the assistant appearance */
+  config?: XandiConfig;
   children: React.ReactNode;
 }
 
 export function XandiProvider({
-  fetchResponse,
-  sessionId: initialSessionId,
-  onFeedback,
+  handlers,
+  conversationId: initialConversationId,
+  config: userConfig,
   children,
 }: XandiProviderProps) {
-  const [sessionId, setSessionId] = useState<string | null>(initialSessionId ?? null);
-  const [messages, setMessages] = useState<Message[]>([]);
+  const [conversation, setConversation] = useState<Conversation>(createEmptyConversation);
   const [isLoading, setIsLoading] = useState(false);
+  const [uiModeOverride, setUiModeOverride] = useState<XandiUIMode | null>(null);
+  const abortControllerRef = useRef<AbortController | null>(null);
 
-  // Initialize sessionId if not provided
+  // Merge user config with defaults; Xandi's uiMode prop overrides config.uiMode when set
+  const config: Required<XandiConfig> = {
+    ...defaultConfig,
+    ...userConfig,
+    uiMode: uiModeOverride ?? userConfig?.uiMode ?? defaultConfig.uiMode,
+  };
+
+  // Load initial conversation if ID is provided
   useEffect(() => {
-    if (!initialSessionId) {
-      setSessionId(crypto.randomUUID());
+    if (initialConversationId && handlers.getConv) {
+      loadConversation(initialConversationId);
     }
-  }, [initialSessionId]);
+  }, [initialConversationId]);
+
+  const loadConversation = async (convId: string, options?: GetConvOptions) => {
+    if (!handlers.getConv) return;
+
+    const opts = { ...defaultGetConvOptions, ...options };
+
+    try {
+      setIsLoading(true);
+      const loadedConversation = await handlers.getConv(convId, opts);
+      setConversation(loadedConversation);
+    } catch (error) {
+      console.error("Failed to load conversation:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const startNewConversation = () => {
+    setConversation(createEmptyConversation());
+  };
 
   const sendMessage = async (text: string) => {
     if (!text.trim() || isLoading) return;
@@ -60,11 +222,21 @@ export function XandiProvider({
       role: "user",
       content: text,
     };
-    setMessages((prev) => [...prev, userMessage]);
+    setConversation((prev) => ({
+      ...prev,
+      messages: [...prev.messages, userMessage],
+      updatedAt: new Date(),
+    }));
     setIsLoading(true);
 
+    // Create abort controller for this request
+    abortControllerRef.current = new AbortController();
+
     try {
-      const response = await fetchResponse(text);
+      const response = await handlers.fetchResp(text, {
+        conversationId: conversation.id ?? undefined,
+        signal: abortControllerRef.current.signal,
+      });
 
       const assistantMessage: Message = {
         id: crypto.randomUUID(),
@@ -73,20 +245,51 @@ export function XandiProvider({
         type: response.type,
         debugTrace: response.debugTrace,
       };
-      setMessages((prev) => [...prev, assistantMessage]);
+
+      setConversation((prev) => ({
+        ...prev,
+        id: response.conversationId ?? prev.id,
+        messages: [...prev.messages, assistantMessage],
+        updatedAt: new Date(),
+      }));
     } catch (error) {
-      console.error("Failed to send message:", error);
+      if ((error as Error).name !== "AbortError") {
+        console.error("Failed to send message:", error);
+      }
     } finally {
       setIsLoading(false);
+      abortControllerRef.current = null;
+    }
+  };
+
+  const stopRequest = () => {
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
+      abortControllerRef.current = null;
+    }
+    if (conversation.id && handlers.onStop) {
+      handlers.onStop(conversation.id);
+    }
+    setIsLoading(false);
+  };
+
+  const submitFeedback = (messageId: string, feedback: FeedbackType) => {
+    if (handlers.onFeedback && conversation.id) {
+      handlers.onFeedback(messageId, conversation.id, feedback);
     }
   };
 
   const value: XandiContextValue = {
-    messages,
+    conversation,
     isLoading,
-    sessionId,
     sendMessage,
-    onFeedback,
+    stopRequest,
+    loadConversation,
+    startNewConversation,
+    submitFeedback,
+    getConvHistory: handlers.getConvHistory,
+    config,
+    setUiModeOverride,
   };
 
   return <XandiContext.Provider value={value}>{children}</XandiContext.Provider>;

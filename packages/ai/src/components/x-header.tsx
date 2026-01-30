@@ -1,23 +1,21 @@
 import { Avatar, Button } from "@px-ui/core";
 
 import { CloseIcon, MenuIcon, NewChatIcon } from "../assets/icons";
-import { XANDI_AVATAR_URL } from "../constants";
+import { useXandi } from "../context/xandi-context";
 
 export interface XHeaderProps {
-  title?: string;
   onClose?: () => void;
-  onNewChat?: () => void;
   onToggleHistory?: () => void;
 }
 
 export function XHeader({
-  title = "Xandi",
   onClose,
-  onNewChat,
   onToggleHistory,
 }: XHeaderProps) {
+  const { startNewConversation, config } = useXandi();
+
   return (
-    <header className="flex items-center justify-between border-b border-ppx-neutral-5 bg-ppx-neutral-2 px-3 py-2">
+    <header className="flex items-center justify-between border-b border-ppx-neutral-5 bg-transparent px-3 py-2">
       {/* Left section - Menu & Title */}
       <div className="flex items-center gap-2">
         <Button
@@ -31,13 +29,13 @@ export function XHeader({
 
         <div className="flex items-center gap-2">
           <Avatar
-            imgSrc={XANDI_AVATAR_URL}
-            name="Xandi"
+            imgSrc={config.avatarUrl}
+            name={config.assistantName}
             variant="rounded"
             size="24px"
             hideTooltip
           />
-          <span className="font-medium text-ppx-foreground">{title}</span>
+          <span className="font-medium text-ppx-foreground">{config.assistantName}</span>
         </div>
       </div>
 
@@ -46,20 +44,22 @@ export function XHeader({
         <Button
           variant="ghost"
           size="icon-sm"
-          onClick={onNewChat}
+          onClick={startNewConversation}
           aria-label="New chat"
         >
           <NewChatIcon />
         </Button>
 
-        <Button
-          variant="ghost"
-          size="icon-sm"
-          onClick={onClose}
-          aria-label="Close"
-        >
-          <CloseIcon />
-        </Button>
+        {config.uiMode !== "full" && (
+          <Button
+            variant="ghost"
+            size="icon-sm"
+            onClick={onClose}
+            aria-label="Close"
+          >
+            <CloseIcon />
+          </Button>
+        )}
       </div>
     </header>
   );

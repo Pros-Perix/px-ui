@@ -35,13 +35,13 @@ export interface FeedbackProps {
 }
 
 export function Feedback({ messageId }: FeedbackProps) {
-  const { onFeedback } = useXandi();
+  const { submitFeedback } = useXandi();
   const [feedback, setFeedback] = useState<FeedbackType>(null);
 
   const handleFeedback = (type: FeedbackType) => {
     const newFeedback = feedback === type ? null : type;
     setFeedback(newFeedback);
-    onFeedback?.(messageId, newFeedback);
+    submitFeedback(messageId, newFeedback);
   };
 
   return (

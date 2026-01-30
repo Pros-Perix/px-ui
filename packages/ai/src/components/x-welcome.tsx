@@ -1,13 +1,15 @@
 import { Avatar } from "@px-ui/core";
 
 import { SparklesIcon } from "../assets/icons";
-import { XANDI_AVATAR_URL } from "../constants";
+import { useXandi } from "../context/xandi-context";
 
 export interface XWelcomeProps {
   message: string;
 }
 
 export function XWelcome({ message }: XWelcomeProps) {
+  const { config } = useXandi();
+
   return (
     <div className="flex flex-col items-center justify-center gap-4 py-12">
       <div className="relative">
@@ -17,8 +19,8 @@ export function XWelcome({ message }: XWelcomeProps) {
         {/* Avatar container */}
         <div className="relative rounded-full bg-ppx-neutral-18 p-1">
           <Avatar
-            imgSrc={XANDI_AVATAR_URL}
-            name="Xandi"
+            imgSrc={config.avatarUrl}
+            name={config.assistantName}
             variant="rounded"
             size="120px"
             hideTooltip
