@@ -1,5 +1,11 @@
 # @px-ui/ai
 
+## 4.2.0
+
+### Minor Changes
+
+- a978a05: UI fixes and better code readability
+
 ## 4.1.0
 
 ### Minor Changes
