@@ -186,10 +186,11 @@ The main chat component. Must be wrapped in `XandiProvider`.
 |------|------|---------|-------------|
 | `welcomeMessage` | `string` | `"How can I help you today?"` | Message shown when chat is empty |
 | `suggestions` | `Suggestion[]` | `[]` | Prompt suggestions shown below the input |
+| `uiMode` | `XandiUIMode` | `"full"` | UI mode: **full** = no close button (default); **sidebar** / **floating** = show close button in header. Overrides provider config when set. |
 
 ### XHeader
 
-Header component for floating windows and sidebars. Must be inside `XandiProvider`. Avatar and title come from context config; New Chat uses `startNewConversation` from context.
+Header component for floating windows and sidebars. Must be inside `XandiProvider`. Avatar and title come from context config; New Chat uses `startNewConversation` from context. Close button is hidden when `config.uiMode` is `"full"`.
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
@@ -237,7 +238,7 @@ function CustomComponent() {
 | `isLoading` | `boolean` | Whether a response is being fetched |
 | `sendMessage` | `(text: string) => void` | Function to send a message |
 | `stopRequest` | `() => void` | Stop the current request |
-| `loadConversation` | `(conversationId: string) => Promise<void>` | Load an existing conversation |
+| `loadConversation` | `(conversationId: string, options?: GetConvOptions) => Promise<void>` | Load an existing conversation (page/perPage default 1/20) |
 | `startNewConversation` | `() => void` | Reset to a new empty conversation |
 | `submitFeedback` | `(messageId: string, feedback: FeedbackType) => void` | Submit feedback for a message |
 | `getConvHistory` | `() => Promise<ConversationSummary[]>` | Handler to fetch conversation list (from provider) |
@@ -252,10 +253,16 @@ interface FetchRespOptions {
   signal?: AbortSignal; // For canceling requests
 }
 
+// Options for getConv handler (defaults: page 1, perPage 20)
+interface GetConvOptions {
+  page?: number;
+  perPage?: number;
+}
+
 // Handler functions for API communication
 interface XandiHandlers {
   fetchResp: (message: string, options?: FetchRespOptions) => Promise<XandiResponse>;
-  getConv?: (conversationId: string) => Promise<Conversation>;
+  getConv?: (conversationId: string, options?: GetConvOptions) => Promise<Conversation>;
   getConvHistory?: () => Promise<ConversationSummary[]>;
   onFeedback?: (messageId: string, conversationId: string, feedback: FeedbackType) => void;
   onStop?: (conversationId: string) => void;

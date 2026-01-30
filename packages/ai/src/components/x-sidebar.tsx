@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Button } from "@px-ui/core";
 
 import { CloseIcon, NewChatIcon } from "../assets/icons";
@@ -17,12 +17,15 @@ export function XSidebar({
   const { startNewConversation, getConvHistory, loadConversation, conversation } = useXandi();
   const [chatHistoryItems, setChatHistoryItems] = useState<ChatHistoryItem[]>([]);
   const [isLoadingHistory, setIsLoadingHistory] = useState(false);
+  const fetchInProgressRef = useRef(false);
 
-  // Fetch conversation history when sidebar opens
+  // Fetch conversation history when sidebar opens (skip if a request is already pending)
   useEffect(() => {
-    if (!isOpen || !getConvHistory) return;
+    if (!isOpen || !getConvHistory || fetchInProgressRef.current) return;
 
+    fetchInProgressRef.current = true;
     setIsLoadingHistory(true);
+
     getConvHistory()
       .then((history) => {
         setChatHistoryItems(
@@ -37,6 +40,7 @@ export function XSidebar({
         console.error("Failed to fetch conversation history:", error);
       })
       .finally(() => {
+        fetchInProgressRef.current = false;
         setIsLoadingHistory(false);
       });
   }, [isOpen, getConvHistory]);

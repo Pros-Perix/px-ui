@@ -15,7 +15,7 @@ export function XHeader({
   const { startNewConversation, config } = useXandi();
 
   return (
-    <header className="flex items-center justify-between border-b border-ppx-neutral-5 bg-ppx-neutral-2 px-3 py-2">
+    <header className="flex items-center justify-between border-b border-ppx-neutral-5 bg-transparent px-3 py-2">
       {/* Left section - Menu & Title */}
       <div className="flex items-center gap-2">
         <Button
@@ -50,14 +50,16 @@ export function XHeader({
           <NewChatIcon />
         </Button>
 
-        <Button
-          variant="ghost"
-          size="icon-sm"
-          onClick={onClose}
-          aria-label="Close"
-        >
-          <CloseIcon />
-        </Button>
+        {config.uiMode !== "full" && (
+          <Button
+            variant="ghost"
+            size="icon-sm"
+            onClick={onClose}
+            aria-label="Close"
+          >
+            <CloseIcon />
+          </Button>
+        )}
       </div>
     </header>
   );

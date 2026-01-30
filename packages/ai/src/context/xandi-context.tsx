@@ -74,16 +74,21 @@ function createEmptyConversation(): Conversation {
 // Config
 // ============================================================================
 
+export type XandiUIMode = "full" | "sidebar" | "floating";
+
 export interface XandiConfig {
   /** URL for the assistant's avatar image */
   avatarUrl?: string;
   /** Name of the assistant (default: "Xandi") */
   assistantName?: string;
+  /** UI mode: full (no close button), sidebar, or floating (with close button) */
+  uiMode?: XandiUIMode;
 }
 
 const defaultConfig: Required<XandiConfig> = {
   avatarUrl: XANDI_AVATAR_URL,
   assistantName: "Xandi",
+  uiMode: "full",
 };
 
 // ============================================================================
@@ -95,11 +100,23 @@ export interface FetchRespOptions {
   signal?: AbortSignal;
 }
 
+export interface GetConvOptions {
+  /** Page number (default: 1) */
+  page?: number;
+  /** Items per page (default: 20) */
+  perPage?: number;
+}
+
+const defaultGetConvOptions: Required<GetConvOptions> = {
+  page: 1,
+  perPage: 20,
+};
+
 export interface XandiHandlers {
   /** Fetch AI response for a message */
   fetchResp: (message: string, options?: FetchRespOptions) => Promise<XandiResponse>;
-  /** Get a conversation by ID (for restoring sessions) */
-  getConv?: (conversationId: string) => Promise<Conversation>;
+  /** Get a conversation by ID with pagination; consumer transforms API response to Conversation */
+  getConv?: (conversationId: string, options?: GetConvOptions) => Promise<Conversation>;
   /** Get conversation history list */
   getConvHistory?: () => Promise<ConversationSummary[]>;
   /** Called when user provides feedback on a message */
@@ -121,8 +138,8 @@ export interface XandiContextValue {
   sendMessage: (text: string) => void;
   /** Stop the current request */
   stopRequest: () => void;
-  /** Load an existing conversation by ID */
-  loadConversation: (conversationId: string) => Promise<void>;
+  /** Load an existing conversation by ID (with optional page/perPage) */
+  loadConversation: (conversationId: string, options?: GetConvOptions) => Promise<void>;
   /** Start a new empty conversation */
   startNewConversation: () => void;
   /** Submit feedback for a message */
@@ -131,6 +148,8 @@ export interface XandiContextValue {
   getConvHistory?: () => Promise<ConversationSummary[]>;
   /** Configuration for the assistant */
   config: Required<XandiConfig>;
+  /** Set UI mode override from Xandi component (internal use) */
+  setUiModeOverride: (mode: XandiUIMode | null) => void;
 }
 
 const XandiContext = createContext<XandiContextValue | null>(null);
@@ -157,12 +176,14 @@ export function XandiProvider({
 }: XandiProviderProps) {
   const [conversation, setConversation] = useState<Conversation>(createEmptyConversation);
   const [isLoading, setIsLoading] = useState(false);
+  const [uiModeOverride, setUiModeOverride] = useState<XandiUIMode | null>(null);
   const abortControllerRef = useRef<AbortController | null>(null);
 
-  // Merge user config with defaults
+  // Merge user config with defaults; Xandi's uiMode prop overrides config.uiMode when set
   const config: Required<XandiConfig> = {
     ...defaultConfig,
     ...userConfig,
+    uiMode: uiModeOverride ?? userConfig?.uiMode ?? defaultConfig.uiMode,
   };
 
   // Load initial conversation if ID is provided
@@ -172,12 +193,14 @@ export function XandiProvider({
     }
   }, [initialConversationId]);
 
-  const loadConversation = async (convId: string) => {
+  const loadConversation = async (convId: string, options?: GetConvOptions) => {
     if (!handlers.getConv) return;
+
+    const opts = { ...defaultGetConvOptions, ...options };
 
     try {
       setIsLoading(true);
-      const loadedConversation = await handlers.getConv(convId);
+      const loadedConversation = await handlers.getConv(convId, opts);
       setConversation(loadedConversation);
     } catch (error) {
       console.error("Failed to load conversation:", error);
@@ -266,6 +289,7 @@ export function XandiProvider({
     submitFeedback,
     getConvHistory: handlers.getConvHistory,
     config,
+    setUiModeOverride,
   };
 
   return <XandiContext.Provider value={value}>{children}</XandiContext.Provider>;

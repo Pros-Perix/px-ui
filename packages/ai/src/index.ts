@@ -11,8 +11,10 @@ export {
   type XandiResponse,
   type XandiApiResponse,
   type XandiConfig,
+  type XandiUIMode,
   type XandiHandlers,
   type FetchRespOptions,
+  type GetConvOptions,
   type Conversation,
   type ConversationSummary,
 } from "./context/xandi-context";

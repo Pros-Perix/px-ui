@@ -7,6 +7,7 @@ import {
   type XandiResponse,
   type XandiConfig,
   type XandiHandlers,
+  type GetConvOptions,
   type FeedbackType,
   type Conversation,
   type ConversationSummary,
@@ -111,6 +112,32 @@ interface ConversationDetailResponse {
   data: ApiConversationDetail;
 }
 
+/** One Q&A pair from GET /conversation/{id}/messages */
+interface ApiConversationMessage {
+  id: number;
+  trace_id: string;
+  question: string;
+  answer: string;
+  feedback: number;
+  created_at: string;
+}
+
+/** Response from GET /conversation/{id}/messages */
+interface ConversationMessagesResponse {
+  success: boolean;
+  data: {
+    conversation_id: string;
+    messages: ApiConversationMessage[];
+    pagination: {
+      page: number;
+      per_page: number;
+      total: number;
+      total_pages: number;
+    };
+  };
+  message: string;
+}
+
 // ============================================================================
 // Helpers
 // ============================================================================
@@ -176,30 +203,41 @@ const xandiHandlers: XandiHandlers = {
     };
   },
 
-  // Get a conversation by ID
-  getConv: async (conversationId: string): Promise<Conversation> => {
-    const response = await fetch(`${CONVERSATION_URL}/${conversationId}`, {
+  // Get a conversation by ID (loads messages from /conversation/{id}/messages)
+  getConv: async (
+    conversationId: string,
+    _options?: GetConvOptions
+  ): Promise<Conversation> => {
+    const response = await fetch(`${CONVERSATION_URL}/${conversationId}/messages`, {
       method: "GET",
       headers: getHeaders(),
     });
 
-    const json: ConversationDetailResponse = await response.json();
+    const json: ConversationMessagesResponse = await response.json();
 
     if (!json.success) {
-      throw new Error("Failed to get conversation");
+      throw new Error("Failed to get conversation messages");
     }
 
-    const conv = json.data;
+    const apiMessages = json.data.messages ?? [];
+    const mappedMessages: { id: string; role: "user" | "assistant"; content: string }[] = [];
+
+    for (const msg of apiMessages) {
+      mappedMessages.push(
+        { id: `${msg.id}-q`, role: "user", content: msg.question },
+        { id: `${msg.id}-a`, role: "assistant", content: msg.answer }
+      );
+    }
+
+    const firstAt = apiMessages[0]?.created_at;
+    const lastAt = apiMessages[apiMessages.length - 1]?.created_at;
+
     return {
-      id: conv.id,
-      title: conv.title,
-      messages: conv.messages.map((msg) => ({
-        id: msg.id,
-        role: msg.role,
-        content: msg.content,
-      })),
-      createdAt: new Date(conv.created_at),
-      updatedAt: new Date(conv.updated_at),
+      id: json.data.conversation_id,
+      title: "Chat",
+      messages: mappedMessages,
+      createdAt: firstAt ? new Date(firstAt) : new Date(),
+      updatedAt: lastAt ? new Date(lastAt) : new Date(),
     };
   },
 
