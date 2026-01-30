@@ -107,11 +107,6 @@ export function XMainIntake({
   );
 }
 
-
-/////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////Supporting Components//////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////
-
 interface XIntakeTextareaProps {
   value: string;
   onChange: (value: string) => void;
@@ -126,7 +121,6 @@ function XIntakeTextarea({ value, onChange, onSubmit, placeholder, disabled }: X
       e.preventDefault();
       onSubmit();
     }
-    // Shift+Enter allows default behavior (newline)
   };
 
   return (

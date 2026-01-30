@@ -6,10 +6,6 @@ export interface XMessageItemProps {
   message: Message;
 }
 
-/**
- * Router component that renders messages based on their type.
- * Defaults to markdown rendering if no type is specified.
- */
 export function XMessageItem({ message }: XMessageItemProps) {
   const isUser = message.role === "user";
   const messageType: MessageType = message.type ?? "markdown";
@@ -34,9 +30,6 @@ interface MessageRendererProps {
   message: Message;
 }
 
-/**
- * Switch component that selects the appropriate renderer based on message type.
- */
 function MessageRenderer({ type, message }: MessageRendererProps) {
   switch (type) {
     case "text":

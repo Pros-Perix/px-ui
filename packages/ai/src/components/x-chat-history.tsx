@@ -10,7 +10,6 @@ export interface ChatHistoryItem {
 
 export interface XChatHistoryProps {
   items?: ChatHistoryItem[];
-  /** Whether conversation history is being fetched */
   isLoading?: boolean;
   activeChatId?: string;
   onSelectChat?: (chatId: string) => void;
@@ -24,7 +23,6 @@ export function XChatHistory({
 }: XChatHistoryProps) {
   return (
     <div className="flex-1 overflow-y-auto">
-      {/* Header */}
       <div className="px-3 py-2">
         <div className="flex items-center gap-2 text-ppx-sm font-medium text-ppx-foreground">
           <ChatIcon />
@@ -32,7 +30,6 @@ export function XChatHistory({
         </div>
       </div>
 
-      {/* Chat List - show loader only when loading and list is empty (first time) */}
       {isLoading && items.length === 0 ? (
         <div className="flex flex-col items-center justify-center gap-2 px-6 py-8">
           <Spinner size="medium" className="text-ppx-neutral-10" />
