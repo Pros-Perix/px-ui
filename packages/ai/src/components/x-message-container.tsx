@@ -6,7 +6,6 @@ import { useXandi } from "../context/xandi-context";
 
 export interface XMessageContainerProps {
   height?: string | number;
-  /** Called when user scrolls to top (load more / older messages) */
   onLoadMore?: () => void;
 }
 
@@ -24,24 +23,23 @@ export function XMessageContainer({ height = 400, onLoadMore }: XMessageContaine
   const messageCount = messages.length;
   const lastMessageId = messageCount > 0 ? messages[messageCount - 1].id : null;
 
-  // Restore scroll when older messages are appended (content added at top in column-reverse)
   useLayoutEffect(() => {
     const el = containerRef.current;
     if (!el) return;
 
     const prevCount = prevMessageCountRef.current;
     const prevLastId = prevLastMessageIdRef.current;
-    const isAppendOlder =
+    const isPrependOlder =
       prevCount > 0 &&
       messageCount > prevCount &&
       lastMessageId != null &&
-      lastMessageId !== prevLastId;
+      lastMessageId === prevLastId;
 
-    if (isAppendOlder) {
+    if (isPrependOlder) {
       const prevScrollHeight = prevScrollHeightRef.current;
       const prevScrollTop = prevScrollTopRef.current;
       const newScrollHeight = el.scrollHeight;
-      el.scrollTop = prevScrollTop + (newScrollHeight - prevScrollHeight);
+      el.scrollTop = Math.max(0, prevScrollTop + (newScrollHeight - prevScrollHeight));
       skipScrollToBottomRef.current = true;
     }
 
@@ -51,7 +49,6 @@ export function XMessageContainer({ height = 400, onLoadMore }: XMessageContaine
     prevLastMessageIdRef.current = lastMessageId;
   }, [messageCount, lastMessageId, messages]);
 
-  // Scroll to bottom (newest) when new messages arrive or typing starts (column-reverse: bottom = 0)
   useEffect(() => {
     const el = containerRef.current;
     if (!el) return;
@@ -59,10 +56,9 @@ export function XMessageContainer({ height = 400, onLoadMore }: XMessageContaine
       skipScrollToBottomRef.current = false;
       return;
     }
-    el.scrollTop = 0;
+    el.scrollTop = el.scrollHeight - el.clientHeight;
   }, [conversation.messages, isLoading]);
 
-  // IntersectionObserver: when top sentinel is visible, trigger load more
   useEffect(() => {
     if (!onLoadMore) return;
     const sentinel = topSentinelRef.current;
@@ -93,13 +89,12 @@ export function XMessageContainer({ height = 400, onLoadMore }: XMessageContaine
       className="flex flex-col overflow-y-auto py-[10px]"
       style={{ height: typeof height === "number" ? `${height}px` : height }}
     >
-      {/* column-reverse: messages [newest…oldest] show as oldest at top, newest at bottom; sentinel at top for load more */}
       <div className="flex flex-col-reverse gap-5 p-4">
-        <div ref={topSentinelRef} className="h-1 shrink-0" aria-hidden="true" />
-        {messages.map((message) => (
+        {isLoading && <XTypingIndicator />}
+        {[...messages].reverse().map((message) => (
           <XMessageItem key={message.id} message={message} />
         ))}
-        {isLoading && <XTypingIndicator />}
+        <div ref={topSentinelRef} className="h-1 shrink-0" aria-hidden="true" />
       </div>
     </div>
   );

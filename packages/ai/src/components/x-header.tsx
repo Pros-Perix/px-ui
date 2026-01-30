@@ -16,7 +16,6 @@ export function XHeader({
 
   return (
     <header className="flex items-center justify-between border-b border-ppx-neutral-5 bg-transparent px-3 py-2">
-      {/* Left section - Menu & Title */}
       <div className="flex items-center gap-2">
         <Button
           variant="ghost"
@@ -39,7 +38,6 @@ export function XHeader({
         </div>
       </div>
 
-      {/* Right section - Actions */}
       <div className="flex items-center gap-1">
         <Button
           variant="ghost"

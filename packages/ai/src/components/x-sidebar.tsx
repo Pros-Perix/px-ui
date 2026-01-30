@@ -19,7 +19,6 @@ export function XSidebar({
   const [isLoadingHistory, setIsLoadingHistory] = useState(false);
   const fetchInProgressRef = useRef(false);
 
-  // Fetch conversation history when sidebar opens (skip if a request is already pending)
   useEffect(() => {
     if (!isOpen || !getConvHistory || fetchInProgressRef.current) return;
 
@@ -53,7 +52,6 @@ export function XSidebar({
 
   return (
     <aside className="flex h-full w-64 flex-col border-r border-ppx-neutral-5 bg-ppx-neutral-2">
-      {/* Header */}
       <div className="flex items-center justify-between border-b border-ppx-neutral-5 p-3">
         <Button
           variant="ghost"
@@ -65,7 +63,6 @@ export function XSidebar({
         </Button>
       </div>
 
-      {/* New Chat Button */}
       <div className="p-3">
         <Button
           variant="ghost"
@@ -77,7 +74,6 @@ export function XSidebar({
         </Button>
       </div>
 
-      {/* Chat History */}
       <XChatHistory
         items={chatHistoryItems}
         isLoading={isLoadingHistory}

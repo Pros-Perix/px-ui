@@ -8,10 +8,6 @@ import type { XandiUIMode } from "../context/xandi-context";
 export interface XandiProps {
   welcomeMessage?: string;
   suggestions?: Suggestion[];
-  /**
-   * UI mode: "full" (default) = no close button; "sidebar" | "floating" = show close button in header.
-   * Overrides provider config when set.
-   */
   uiMode?: XandiUIMode;
 }
 
@@ -22,7 +18,6 @@ export function Xandi({
 }: XandiProps) {
   const { conversation, setUiModeOverride } = useXandi();
 
-  // Push uiMode into provider so XHeader and others see it
   useEffect(() => {
     setUiModeOverride(uiMode ?? null);
     return () => setUiModeOverride(null);
