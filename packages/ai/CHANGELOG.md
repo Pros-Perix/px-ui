@@ -1,5 +1,11 @@
 # @px-ui/ai
 
+## 4.1.0
+
+### Minor Changes
+
+- f54795a: Add converstaion feature along with some UI fixes
+
 ## 4.0.0
 
 ### Patch Changes
