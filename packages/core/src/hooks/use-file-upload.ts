@@ -384,6 +384,10 @@ export const useFileUpload = (
           throw uploadError;
         }
 
+        if (!uploadResult?.url) {
+          throw new Error("Upload failed, no URL was returned");
+        }
+
         // Ensure progress hits 100% before changing status
         setFilesState((prev) =>
           prev.map((f) =>
@@ -398,7 +402,7 @@ export const useFileUpload = (
           ...fileWithStatus,
           status: "complete",
           progress: 100,
-          uploadedUrl: uploadResult?.url ?? presignedResult.full_path,
+          uploadedUrl: uploadResult.url,
         };
 
         setFilesState((prev) =>
@@ -609,6 +613,9 @@ export const useFileUpload = (
 
     setFilesState((prev) => {
       for (const file of prev) {
+        // Call onFileRemove for each file
+        onFileRemove?.(file);
+
         if (file.preview && file.file instanceof File) {
           URL.revokeObjectURL(file.preview);
         }
@@ -622,7 +629,7 @@ export const useFileUpload = (
 
     setErrors([]);
     onFilesChange?.([]);
-  }, [cancelAllUploads, onFilesChange]);
+  }, [cancelAllUploads, onFilesChange, onFileRemove]);
 
   const clearErrors = useCallback(() => {
     setErrors([]);
