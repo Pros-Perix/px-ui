@@ -22,7 +22,7 @@ type RootProps<
   | "name"
 >;
 
-interface SelectFieldProps<
+export interface SelectFieldProps<
   TItem = any,
   TMultiple extends boolean | undefined = false,
 > extends RootProps<TItem, TMultiple> {
@@ -59,6 +59,14 @@ interface SelectFieldProps<
   >["widthVariant"];
 
   triggerClassName?: string;
+
+  /**
+   * Additional props for Select.Trigger (e.g. `id` for label htmlFor)
+   */
+  triggerProps?: Omit<
+    React.ComponentProps<typeof Select.Trigger>,
+    "children" | "size" | "widthVariant"
+  >;
 
   /**
    * Additional props for Select.Content
@@ -110,6 +118,7 @@ export function SelectField<
     contentWidthVariant,
     contentProps,
     triggerClassName,
+    triggerProps,
     inputRef,
     readOnly,
   } = props;
@@ -168,9 +177,12 @@ export function SelectField<
       readOnly={readOnly}
     >
       <Select.Trigger
+        {...triggerProps}
         size={size}
         widthVariant={widthVariant}
-        className={triggerClassName}
+        className={[triggerClassName, triggerProps?.className]
+          .filter(Boolean)
+          .join(" ")}
       >
         <Select.Value placeholder={placeholder}>
           {(selectedValue: any) => {

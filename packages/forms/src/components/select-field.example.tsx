@@ -13,8 +13,8 @@ const fonts = [
 
 export function SimpleSelectExample() {
   const [selected, setSelected] = React.useState<
-    (typeof fonts)[number] | undefined
-  >(undefined);
+    (typeof fonts)[number] | null
+  >(null);
 
   return (
     <SelectField
@@ -46,7 +46,7 @@ const users: User[] = [
 ];
 
 export function CustomObjectExample() {
-  const [selected, setSelected] = React.useState<User | undefined>(undefined);
+  const [selected, setSelected] = React.useState<User | null>(null);
 
   return (
     <SelectField
@@ -109,8 +109,8 @@ const simpleItems = [
 
 export function AutoLabelExample() {
   const [selected, setSelected] = React.useState<
-    (typeof simpleItems)[number] | undefined
-  >(undefined);
+    (typeof simpleItems)[number] | null
+  >(null);
 
   return (
     <SelectField
@@ -126,8 +126,8 @@ export function AutoLabelExample() {
 // Example 5: With size and width variants
 export function StyledSelectExample() {
   const [selected, setSelected] = React.useState<
-    (typeof fonts)[number] | undefined
-  >(undefined);
+    (typeof fonts)[number] | null
+  >(null);
 
   return (
     <SelectField

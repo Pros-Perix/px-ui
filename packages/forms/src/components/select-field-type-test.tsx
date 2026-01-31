@@ -13,22 +13,22 @@ const fonts = [
 
 function Test1() {
   const [selected, setSelected] = React.useState<
-    (typeof fonts)[number] | undefined
-  >(undefined);
+    (typeof fonts)[number] | null
+  >(null);
 
   return (
     <SelectField
       items={fonts}
       value={selected}
       // ✅ onValueChange correctly infers:
-      // (value: { label: string, value: string } | undefined) => void
-      // NOT (value: string | undefined) => void
+      // (value: { label: string, value: string } | null) => void
+      // NOT (value: string | null) => void
       onValueChange={(value) => {
         // @ts-expect-error - should error because value is NOT a string
         const x: string = value;
 
         // ✅ should work - value is the full object
-        const y: { label: string; value: string } | undefined = value;
+        const y: { label: string; value: string } | null = value;
 
         console.log(value?.label); // ✅ TypeScript knows about .label
         console.log(value?.value); // ✅ TypeScript knows about .value
@@ -49,19 +49,19 @@ const users: User[] = [
 ];
 
 function Test2() {
-  const [selected, setSelected] = React.useState<User | undefined>(undefined);
+  const [selected, setSelected] = React.useState<User | null>(null);
 
   return (
     <SelectField
       items={users}
       value={selected}
-      // ✅ onValueChange correctly infers: (value: User | undefined) => void
+      // ✅ onValueChange correctly infers: (value: User | null) => void
       onValueChange={(value) => {
         // @ts-expect-error - should error because value is NOT a string
         const x: string = value;
 
         // ✅ should work - value is User
-        const y: User | undefined = value;
+        const y: User | null = value;
 
         console.log(value?.id); // ✅ TypeScript knows about .id
         console.log(value?.name); // ✅ TypeScript knows about .name
