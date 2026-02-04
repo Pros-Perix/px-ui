@@ -1,30 +1,57 @@
+import { useEffect, useRef, useState } from "react";
 import { Button } from "@px-ui/core";
 
 import { CloseIcon, NewChatIcon } from "../assets/icons";
-import { XChatHistory, type ChatHistoryGroup } from "./x-chat-history";
+import { useXandi } from "../context/xandi-context";
+import { XChatHistory, type ChatHistoryItem } from "./x-chat-history";
 
 export interface XSidebarProps {
   isOpen?: boolean;
-  chatHistory?: ChatHistoryGroup[];
-  activeChatId?: string;
   onClose?: () => void;
-  onNewChat?: () => void;
-  onSelectChat?: (chatId: string) => void;
 }
 
 export function XSidebar({
   isOpen = true,
-  chatHistory = [],
-  activeChatId,
   onClose,
-  onNewChat,
-  onSelectChat,
 }: XSidebarProps) {
+  const { startNewConversation, getConvHistory, loadConversation, conversation } = useXandi();
+  const [chatHistoryItems, setChatHistoryItems] = useState<ChatHistoryItem[]>([]);
+  const [isLoadingHistory, setIsLoadingHistory] = useState(false);
+  const fetchInProgressRef = useRef(false);
+
+  useEffect(() => {
+    if (!isOpen || !getConvHistory || fetchInProgressRef.current) return;
+
+    fetchInProgressRef.current = true;
+    setIsLoadingHistory(true);
+
+    getConvHistory()
+      .then((history) => {
+        setChatHistoryItems(
+          (history ?? []).map((item) => ({
+            id: item.id,
+            title: item.title,
+            timestamp: item.timestamp,
+          }))
+        );
+      })
+      .catch((error) => {
+        console.error("Failed to fetch conversation history:", error);
+      })
+      .finally(() => {
+        fetchInProgressRef.current = false;
+        setIsLoadingHistory(false);
+      });
+  }, [isOpen, getConvHistory]);
+
+  const handleSelectChat = (chatId: string) => {
+    loadConversation(chatId);
+  };
+
   if (!isOpen) return null;
 
   return (
     <aside className="flex h-full w-64 flex-col border-r border-ppx-neutral-5 bg-ppx-neutral-2">
-      {/* Header */}
       <div className="flex items-center justify-between border-b border-ppx-neutral-5 p-3">
         <Button
           variant="ghost"
@@ -36,11 +63,10 @@ export function XSidebar({
         </Button>
       </div>
 
-      {/* New Chat Button */}
       <div className="p-3">
         <Button
           variant="ghost"
-          onClick={onNewChat}
+          onClick={startNewConversation}
           className="w-full justify-start gap-3"
         >
           <NewChatIcon className="h-5 w-5" />
@@ -48,11 +74,11 @@ export function XSidebar({
         </Button>
       </div>
 
-      {/* Chat History */}
       <XChatHistory
-        groups={chatHistory}
-        activeChatId={activeChatId}
-        onSelectChat={onSelectChat}
+        items={chatHistoryItems}
+        isLoading={isLoadingHistory}
+        activeChatId={conversation.id ?? undefined}
+        onSelectChat={handleSelectChat}
       />
     </aside>
   );

@@ -1,5 +1,24 @@
 # @px-ui/ai
 
+## 4.2.1
+
+### Patch Changes
+
+- Updated dependencies [465106a]
+  - @px-ui/core@4.3.1
+
+## 4.2.0
+
+### Minor Changes
+
+- a978a05: UI fixes and better code readability
+
+## 4.1.0
+
+### Minor Changes
+
+- f54795a: Add converstaion feature along with some UI fixes
+
 ## 4.0.0
 
 ### Patch Changes

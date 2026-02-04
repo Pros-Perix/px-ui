@@ -12,41 +12,26 @@ import { useXandi, type FeedbackType } from "../context/xandi-context";
 
 export type { FeedbackType } from "../context/xandi-context";
 
-// ============================================================================
-// Root
-// ============================================================================
-
-/**
- * Container for message actions. Use with composable children:
- * - XMessageActions.Feedback
- * - XMessageActions.Copy
- * - XMessageActions.Debug
- */
 export function Root({ children }: { children: React.ReactNode }) {
   return <div className="flex items-center gap-1">{children}</div>;
 }
-
-// ============================================================================
-// Feedback
-// ============================================================================
 
 export interface FeedbackProps {
   messageId: string;
 }
 
 export function Feedback({ messageId }: FeedbackProps) {
-  const { onFeedback } = useXandi();
+  const { submitFeedback } = useXandi();
   const [feedback, setFeedback] = useState<FeedbackType>(null);
 
   const handleFeedback = (type: FeedbackType) => {
     const newFeedback = feedback === type ? null : type;
     setFeedback(newFeedback);
-    onFeedback?.(messageId, newFeedback);
+    submitFeedback(messageId, newFeedback);
   };
 
   return (
     <>
-      {/* Thumbs Up */}
       <Tooltip.Root>
         <Tooltip.Trigger
           render={
@@ -69,7 +54,6 @@ export function Feedback({ messageId }: FeedbackProps) {
         </Tooltip.Content>
       </Tooltip.Root>
 
-      {/* Thumbs Down */}
       <Tooltip.Root>
         <Tooltip.Trigger
           render={
@@ -94,10 +78,6 @@ export function Feedback({ messageId }: FeedbackProps) {
     </>
   );
 }
-
-// ============================================================================
-// Copy
-// ============================================================================
 
 export interface CopyProps {
   content: string;
@@ -149,10 +129,6 @@ export function Copy({ content }: CopyProps) {
     </Tooltip.Root>
   );
 }
-
-// ============================================================================
-// Debug
-// ============================================================================
 
 export interface DebugProps {
   messageId: string;
