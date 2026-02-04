@@ -1,5 +1,11 @@
 # @px-ui/core
 
+## 4.4.0
+
+### Minor Changes
+
+- d09d505: add onRemove Callback for file upload Clear files component, update the currency dropdown to be able to search currency via country name
+
 ## 4.3.1
 
 ### Patch Changes
