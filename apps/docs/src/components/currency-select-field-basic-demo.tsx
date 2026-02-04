@@ -14,6 +14,7 @@ const currencies: Currency[] = [
   { id: "10", abbr: "JPY", name: "Japanese Yen", value: "JPY" },
   { id: "11", abbr: "CHF", name: "Swiss Franc", value: "CHF" },
   { id: "12", abbr: "CNY", name: "Chinese Yuan", value: "CNY" },
+  { id: "13", abbr: "AED", name: "United Arab Emirates Dirham", value: "AED" },
 ];
 
 export default function CurrencySelectFieldBasicDemo() {
