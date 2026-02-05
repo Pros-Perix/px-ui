@@ -18,5 +18,5 @@ export {
   type FileMetadata,
 } from "./components/file-upload-field";
 export * as Field from "./components/field";
-export { FormInput, FormTextarea, FormCheckbox } from "./components/form";
+export { FormInput, FormTextarea, FormCheckbox, FormSelect } from "./components/form";
 export { PhoneInput } from "./components/phone-input";

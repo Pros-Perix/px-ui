@@ -8,18 +8,19 @@ import FormInputBasicDemo from "../../../src/components/form-input-basic-demo.ts
 import FormInputValidationDemo from "../../../src/components/form-input-validation-demo.tsx";
 import FormTextareaBasicDemo from "../../../src/components/form-textarea-basic-demo.tsx";
 import FormCheckboxBasicDemo from "../../../src/components/form-checkbox-basic-demo.tsx";
+import FormSelectBasicDemo from "../../../src/components/form-select-basic-demo.tsx";
 import FormMixedDemo from "../../../src/components/form-mixed-demo.tsx";
 
 ## Overview
 
-Form components are pre-built wrappers that combine Field components with Input, Textarea, and Checkbox controls, integrated with react-hook-form's Controller. They provide a quick way to build forms with consistent styling, validation, and error handling out of the box.
+Form components are pre-built wrappers that combine Field components with common controls (Input, Textarea, Checkbox, Select), integrated with react-hook-form's Controller. They provide a quick way to build forms with consistent styling, validation, and error handling out of the box.
 
 These components are ideal for simple to medium complexity forms. For more complex scenarios (like radio groups or custom controls), use the Field components directly with react-hook-form's Controller.
 
 ## Import
 
 ```tsx
-import { FormInput, FormTextarea, FormCheckbox } from "@px-ui/forms";
+import { FormInput, FormTextarea, FormCheckbox, FormSelect } from "@px-ui/forms";
 ```
 
 ## Usage
@@ -244,6 +245,51 @@ export default function Example() {
 }
 ```
 
+### FormSelect
+
+Select dropdown integrated with react-hook-form. This is built on top of `SelectField` and is ideal for common dropdown use cases.
+
+<Preview>
+  <FormSelectBasicDemo />
+</Preview>
+
+```tsx
+import { FormSelect } from "@px-ui/forms";
+import { useForm } from "react-hook-form";
+import { Button } from "@px-ui/core";
+
+const themeOptions = ["light", "dark", "system"] as const;
+
+interface FormData {
+  theme?: (typeof themeOptions)[number];
+}
+
+export default function Example() {
+  const { control, handleSubmit } = useForm<FormData>({
+    defaultValues: { theme: undefined },
+  });
+
+  const onSubmit = (data: FormData) => {
+    console.log("Form submitted:", data);
+  };
+
+  return (
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+      <FormSelect
+        control={control}
+        name="theme"
+        label="Theme"
+        description="Choose how the interface appears"
+        placeholder="Select a theme"
+        items={themeOptions}
+        required
+      />
+      <Button type="submit">Submit</Button>
+    </form>
+  );
+}
+```
+
 ### Complete Form
 
 Combining multiple form components in a single form.
@@ -362,6 +408,20 @@ A form checkbox field that integrates Checkbox with Field and react-hook-form's 
 | `description` | `React.ReactNode` | -       | Optional description text shown below the checkbox                  |
 | `required`    | `boolean`         | `false` | Whether the field is required. Adds a visual indicator to the label |
 
+### FormSelect
+
+A form select field that integrates `SelectField` with Field and react-hook-form's Controller.
+
+| Prop          | Type              | Default | Description                                                         |
+| ------------- | ----------------- | ------- | ------------------------------------------------------------------- |
+| `control` \*  | `Control`         | -       | The control object from `useForm()` hook                            |
+| `name` \*     | `string`          | -       | The name of the form field. Must match a key in your form data type |
+| `label` \*    | `React.ReactNode` | -       | Label text for the select field                                     |
+| `description` | `React.ReactNode` | -       | Optional description text shown below the select                    |
+| `placeholder` | `string`          | -       | Placeholder text displayed when no item is selected                 |
+| `required`    | `boolean`         | `false` | Whether the field is required. Adds a visual indicator to the label |
+| `items` \*    | `Item[]`          | -       | Items to display in the dropdown (the selected value is the item)   |
+
 _\* Required prop_
 
 ## Notes
@@ -369,5 +429,5 @@ _\* Required prop_
 - All form components automatically display validation errors from react-hook-form's validation rules
 - The `required` prop only adds a visual indicator (asterisk) to the label; add actual validation rules using react-hook-form's validation options
 - FormCheckbox uses horizontal layout with `controlFirst` by default, placing the checkbox before the label
-- For radio groups or more complex form controls, use the Field components directly with react-hook-form's Controller component
+- For radio groups or more complex form controls (custom Select trigger/layout, grouped options, searching, etc.), use the Field components directly with react-hook-form's Controller component
 - These components work seamlessly with react-hook-form's validation, error handling, and form state management
