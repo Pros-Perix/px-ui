@@ -5,6 +5,7 @@ import {
   FormInput,
   FormTextarea,
   FormCheckbox,
+  FormSelect,
 } from "../../src/components/form";
 import * as Field from "../../src/components/field";
 import {
@@ -30,6 +31,7 @@ These form components provide a convenient abstraction over react-hook-form's Co
 - **FormInput** - Standard text input fields
 - **FormTextarea** - Multi-line text areas
 - **FormCheckbox** - Single checkbox fields
+- **FormSelect** - Select dropdowns (built on SelectField)
 
 ## When to use these abstractions:
 - For standard form fields (input, textarea, checkbox) without customization
@@ -38,7 +40,7 @@ These form components provide a convenient abstraction over react-hook-form's Co
 
 ## When to use the verbose version (Controller):
 - For radio buttons (requires RadioGroup wrapper with Controller)
-- For complex form controls (Select, Combobox, DatePicker, etc.)
+- For complex form controls (Combobox, DatePicker, custom triggers/layout, etc.)
 - When you need custom field layouts or styling
 - For conditional field logic or custom validation display
 
@@ -60,6 +62,12 @@ interface UserProfileFormData {
   bio: string;
   newsletter: boolean;
   accountType: "personal" | "business";
+}
+
+const themeOptions = ["light", "dark", "system"] as const;
+
+interface PreferencesFormData {
+  theme?: (typeof themeOptions)[number];
 }
 
 interface ContactFormData {
@@ -765,6 +773,50 @@ export const ComparisonExample: Story = {
           </ul>
         </div>
       </div>
+    );
+  },
+};
+
+/**
+ * FormSelect Example - Simple Abstraction
+ *
+ * Demonstrates a select dropdown using the FormSelect abstraction.
+ */
+export const FormSelectExample: Story = {
+  render: () => {
+    const { control, handleSubmit } = useForm<PreferencesFormData>({
+      defaultValues: {
+        theme: undefined,
+      },
+    });
+
+    const onSubmit = (data: PreferencesFormData) => {
+      console.log("Preferences submitted:", data);
+      alert(`Theme: ${data.theme ?? "(none)"}`);
+    };
+
+    return (
+      <form onSubmit={handleSubmit(onSubmit)} className="mx-auto max-w-2xl">
+        <Field.Group>
+          <h2 className="mb-4 text-lg font-semibold">Preferences</h2>
+
+          <FormSelect
+            name="theme"
+            label="Theme"
+            description="Choose how the interface appears"
+            control={control}
+            required
+            items={themeOptions}
+            placeholder="Select a theme"
+            renderOption={(item) => item[0]!.toUpperCase() + item.slice(1)}
+            renderLabel={(item) => item[0]!.toUpperCase() + item.slice(1)}
+          />
+
+          <div className="flex justify-end">
+            <Button type="submit">Save</Button>
+          </div>
+        </Field.Group>
+      </form>
     );
   },
 };

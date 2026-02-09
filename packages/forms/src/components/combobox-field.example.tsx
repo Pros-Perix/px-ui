@@ -13,11 +13,11 @@ const posts = [
 
 export function SimpleComboboxExample() {
   const [selected, setSelected] = React.useState<
-    (typeof posts)[number] | undefined
-  >(undefined);
+    (typeof posts)[number] | null
+  >(null);
 
   return (
-    <ComboboxField
+    <ComboboxField<(typeof posts)[number]>
       items={posts}
       value={selected}
       // ✅ Type inference: value is inferred as { label: string, value: string } | undefined
@@ -44,7 +44,7 @@ const users: User[] = [
 ];
 
 export function CustomObjectExample() {
-  const [selected, setSelected] = React.useState<User | undefined>(undefined);
+  const [selected, setSelected] = React.useState<User | null>(null);
 
   return (
     <ComboboxField
@@ -100,11 +100,11 @@ export function MultiSelectExample() {
 // Example 4: With search in popup
 export function SearchInPopupExample() {
   const [selected, setSelected] = React.useState<
-    (typeof posts)[number] | undefined
-  >(undefined);
+    (typeof posts)[number] | null
+  >(null);
 
   return (
-    <ComboboxField
+    <ComboboxField<(typeof posts)[number]>
       items={posts}
       value={selected}
       onValueChange={setSelected}
@@ -117,11 +117,11 @@ export function SearchInPopupExample() {
 // Example 5: Size and width variants
 export function StyledComboboxExample() {
   const [selected, setSelected] = React.useState<
-    (typeof posts)[number] | undefined
-  >(undefined);
+    (typeof posts)[number] | null
+  >(null);
 
   return (
-    <ComboboxField
+    <ComboboxField<(typeof posts)[number]>
       items={posts}
       value={selected}
       onValueChange={setSelected}
@@ -135,7 +135,7 @@ export function StyledComboboxExample() {
 
 // Example 6: Invalid/error state
 export function InvalidExample() {
-  const [selected, setSelected] = React.useState<User | undefined>(undefined);
+  const [selected, setSelected] = React.useState<User | null>(null);
 
   return (
     <div>

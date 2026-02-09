@@ -7,6 +7,7 @@ import {
 import * as Field from "./field";
 import { type ReactNode } from "react";
 import { Textarea, Checkbox, Input } from "@px-ui/core";
+import { SelectField, type SelectFieldProps } from "./select-field";
 
 type FormControlProps<
   TFieldValues extends FieldValues = FieldValues,
@@ -135,6 +136,57 @@ export const FormCheckbox: FormControlFunc = (props) => {
     <FormBase {...props} horizontal controlFirst>
       {({ onChange, value, ...field }) => (
         <Checkbox {...field} checked={value} onCheckedChange={onChange} />
+      )}
+    </FormBase>
+  );
+};
+
+type FormSelectExtraProps<
+  TItem = any,
+  TMultiple extends boolean | undefined = false,
+> = Omit<
+  SelectFieldProps<TItem, TMultiple>,
+  "value" | "onValueChange" | "invalid" | "name" | "triggerProps" | "inputRef"
+>;
+
+export const FormSelect: FormControlFunc<FormSelectExtraProps> = ({
+  placeholder,
+  ...props
+}) => {
+  const { control, label, name, required, description, items, ...selectProps } =
+    props;
+
+  return (
+    <FormBase
+      control={control}
+      label={label}
+      name={name}
+      required={required}
+      description={description}
+    >
+      {(field) => (
+        <SelectField
+          items={items}
+          {...(selectProps as Omit<
+            SelectFieldProps<any, boolean | undefined>,
+            | "items"
+            | "value"
+            | "onValueChange"
+            | "invalid"
+            | "name"
+            | "triggerProps"
+          >)}
+          name={field.name}
+          value={field.value}
+          onValueChange={(nextValue) => {
+            field.onChange(nextValue);
+            field.onBlur();
+          }}
+          invalid={field.invalid}
+          placeholder={placeholder}
+          inputRef={field.ref}
+          triggerProps={{ id: field.id }}
+        />
       )}
     </FormBase>
   );
