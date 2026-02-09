@@ -1,5 +1,11 @@
 # @px-ui/core
 
+## 4.4.2
+
+### Patch Changes
+
+- ab2d61c: Update form components and dropdowns to be cursor pointer
+
 ## 4.4.1
 
 ### Patch Changes
