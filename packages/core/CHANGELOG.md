@@ -1,5 +1,11 @@
 # @px-ui/core
 
+## 4.4.1
+
+### Patch Changes
+
+- e682c07: Update dialog style
+
 ## 4.4.0
 
 ### Minor Changes
