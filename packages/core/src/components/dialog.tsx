@@ -37,7 +37,7 @@ export function Overlay({
     <BaseDialog.Backdrop
       data-slot="dialog-overlay"
       className={cn(
-        "inset-0 bg-black/50 fixed transition-all duration-200 [&[data-ending-style]]:opacity-0 [&[data-starting-style]]:opacity-0",
+        "fixed inset-0 isolate z-50 bg-black/50 transition-all duration-200 [&[data-ending-style]]:opacity-0 [&[data-starting-style]]:opacity-0",
         className,
       )}
       {...props}
@@ -56,9 +56,9 @@ export function Content({
       <BaseDialog.Popup
         data-slot="dialog-content"
         className={cn(
-          "fixed z-50 grid w-full bg-ppx-background text-ppx-foreground ppx-sm:max-w-[calc(100%-2rem)]",
-          "gap-8 p-6 shadow-lg ppx-sm:max-w-lg rounded-ppx-m rounded-b-none border border-ppx-neutral-5 duration-200 outline-none ppx-sm:scale-[calc(1-0.1*var(--nested-dialogs))] ppx-sm:rounded-b-ppx-m",
-          "bottom-0 fixed w-full ppx-sm:top-[50%] ppx-sm:bottom-auto ppx-sm:left-[50%] ppx-sm:translate-x-[-50%] ppx-sm:translate-y-[-50%]",
+          "bg-ppx-background text-ppx-foreground ppx-sm:max-w-[calc(100%-2rem)] fixed z-50 grid w-full",
+          "ppx-sm:max-w-lg rounded-ppx-m border-ppx-neutral-5 ppx-sm:scale-[calc(1-0.1*var(--nested-dialogs))] ppx-sm:rounded-b-ppx-m gap-8 rounded-b-none border p-6 shadow-lg outline-none duration-200",
+          "ppx-sm:top-[50%] ppx-sm:bottom-auto ppx-sm:left-[50%] ppx-sm:translate-x-[-50%] ppx-sm:translate-y-[-50%] fixed bottom-0 w-full",
           "duration-200",
           "data-[starting-style]:translate-y-full data-[starting-style]:opacity-0",
           "data-[ending-style]:translate-y-full data-[ending-style]:opacity-0",
@@ -70,7 +70,7 @@ export function Content({
       >
         {children}
         <BaseDialog.Close
-          className="top-4 right-4 absolute text-ppx-muted-foreground"
+          className="text-ppx-muted-foreground absolute right-4 top-4"
           render={(closeProps) => (
             <Button {...closeProps} size="icon-sm" variant="ghost">
               <CloseIcon />
@@ -87,7 +87,7 @@ export function Header({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       data-slot="dialog-header"
-      className={cn("gap-3 flex", className)}
+      className={cn("flex gap-3", className)}
       {...props}
     />
   );
@@ -100,7 +100,7 @@ export function HeaderContent({
 }: React.ComponentProps<"div">) {
   return (
     <div
-      className={cn("gap-2 flex flex-col self-center", className)}
+      className={cn("flex flex-col gap-2 self-center", className)}
       {...props}
     >
       {children}
@@ -116,7 +116,7 @@ export function HeaderIcon({
   return (
     <div
       className={cn(
-        "size-12 flex shrink-0 items-center justify-center rounded-full bg-ppx-neutral-2 text-ppx-muted-foreground",
+        "bg-ppx-neutral-2 text-ppx-muted-foreground flex size-12 shrink-0 items-center justify-center rounded-full",
         className,
       )}
       {...props}
@@ -131,7 +131,7 @@ export function Footer({ className, ...props }: React.ComponentProps<"div">) {
     <div
       data-slot="dialog-footer"
       className={cn(
-        "gap-2 flex flex-col-reverse ppx-sm:flex-row ppx-sm:justify-end",
+        "ppx-sm:flex-row ppx-sm:justify-end flex flex-col-reverse gap-2",
         className,
       )}
       {...props}
