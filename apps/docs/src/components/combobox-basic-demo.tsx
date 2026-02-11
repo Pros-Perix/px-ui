@@ -13,21 +13,26 @@ export function ComboboxBasicDemo() {
   const [value, setValue] = useState<(typeof fruits)[number] | null>(null);
 
   return (
-    <>
-      <Combobox.Root items={fruits} value={value} onValueChange={setValue}>
-        <Combobox.Trigger>
-          <Combobox.Value placeholder="Select a fruit" />
-        </Combobox.Trigger>
-        <Combobox.Content>
-          <Combobox.List>
-            {fruits.map((fruit) => (
-              <Combobox.Item key={fruit.value} value={fruit}>
-                {fruit.label}
-              </Combobox.Item>
-            ))}
-          </Combobox.List>
-        </Combobox.Content>
-      </Combobox.Root>
-    </>
+    <Combobox.Root
+      items={fruits}
+      value={value}
+      onValueChange={setValue}
+      isItemEqualToValue={(item, selected) => item.value === selected.value}
+      itemToStringLabel={(item) => item.label}
+    >
+      <Combobox.SearchableTrigger
+        placeholder="Select a fruit"
+        widthVariant="enforced"
+      />
+      <Combobox.Content>
+        <Combobox.List>
+          {(fruit: (typeof fruits)[number]) => (
+            <Combobox.Item key={fruit.value} value={fruit}>
+              {fruit.label}
+            </Combobox.Item>
+          )}
+        </Combobox.List>
+      </Combobox.Content>
+    </Combobox.Root>
   );
 }

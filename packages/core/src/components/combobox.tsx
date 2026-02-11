@@ -459,6 +459,14 @@ export function Chip(
   );
 }
 
+export function Clear({ children, ...props }: Combobox.Clear.Props) {
+  return (
+    <Combobox.Clear {...props}>
+      <ClearIcon />
+    </Combobox.Clear>
+  );
+}
+
 export function Search({
   placeholder = "Search options",
   ...props
