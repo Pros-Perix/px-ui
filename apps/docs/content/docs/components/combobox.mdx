@@ -80,26 +80,52 @@ Use a searchable trigger to allow users to type and filter options as they searc
 
 <CodeBlock>
 ```tsx
-const [value, setValue] = useState<{ value: string; label: string } | null>(null);
+import { Combobox } from "@px-ui/core";
+import { useState } from "react";
 
-const countries = [
+interface Country {
+  value: string;
+  label: string;
+}
+
+const countries: Country[] = [
   { value: "us", label: "United States" },
   { value: "uk", label: "United Kingdom" },
   { value: "ca", label: "Canada" },
+  { value: "au", label: "Australia" },
+  { value: "de", label: "Germany" },
+  { value: "fr", label: "France" },
+  { value: "jp", label: "Japan" },
+  { value: "cn", label: "China" },
 ];
 
-<Combobox.Root items={countries} value={value} onValueChange={setValue}>
-  <Combobox.SearchableTrigger placeholder="Search countries..." />
-  <Combobox.Content>
-    <Combobox.List>
-      {countries.map((country) => (
-        <Combobox.Item key={country.value} value={country}>
-          {country.label}
-        </Combobox.Item>
-      ))}
-    </Combobox.List>
-  </Combobox.Content>
-</Combobox.Root>
+export function ComboboxSearchableDemo() {
+  const [value, setValue] = useState<Country | null>(null);
+
+  return (
+    <Combobox.Root
+      items={countries}
+      value={value}
+      onValueChange={setValue}
+      isItemEqualToValue={(item, selected) => item.value === selected.value}
+      itemToStringLabel={(item) => item.label}
+    >
+      <Combobox.SearchableTrigger
+        placeholder="Select a country"
+        widthVariant="enforced"
+      />
+      <Combobox.Content>
+        <Combobox.List>
+          {(country: Country) => (
+            <Combobox.Item key={country.value} value={country}>
+              {country.label}
+            </Combobox.Item>
+          )}
+        </Combobox.List>
+      </Combobox.Content>
+    </Combobox.Root>
+  );
+}
 ```
 </CodeBlock>
 
@@ -113,32 +139,53 @@ Enable multi-select mode with chips to allow users to select multiple options.
 
 <CodeBlock>
 ```tsx
-const [value, setValue] = useState<{ value: string; label: string }[]>([]);
+import { Combobox } from "@px-ui/core";
+import { useState } from "react";
 
-const languages = [
+interface Language {
+  value: string;
+  label: string;
+}
+
+const languages: Language[] = [
   { value: "javascript", label: "JavaScript" },
   { value: "typescript", label: "TypeScript" },
   { value: "python", label: "Python" },
+  { value: "java", label: "Java" },
+  { value: "csharp", label: "C#" },
+  { value: "go", label: "Go" },
+  { value: "rust", label: "Rust" },
 ];
 
-<Combobox.Root multiple value={value} onValueChange={setValue}>
-  <Combobox.ChipsTrigger placeholder="Select languages">
-    {(item: { value: string; label: string }) => (
-      <Combobox.Chip key={item.value}>
-        {item.label}
-      </Combobox.Chip>
-    )}
-  </Combobox.ChipsTrigger>
-  <Combobox.Content>
-    <Combobox.List>
-      {languages.map((language) => (
-        <Combobox.MultiItem key={language.value} value={language}>
-          {language.label}
-        </Combobox.MultiItem>
-      ))}
-    </Combobox.List>
-  </Combobox.Content>
-</Combobox.Root>
+export function ComboboxMultipleDemo() {
+  const [value, setValue] = useState<Language[]>([]);
+
+  return (
+    <Combobox.Root
+      items={languages}
+      multiple
+      value={value}
+      onValueChange={setValue}
+      isItemEqualToValue={(item, selected) => item.value === selected.value}
+      itemToStringLabel={(item) => item.label}
+    >
+      <Combobox.ChipsTrigger placeholder="Select languages">
+        {(item: Language) => (
+          <Combobox.Chip key={item.value}>{item.label}</Combobox.Chip>
+        )}
+      </Combobox.ChipsTrigger>
+      <Combobox.Content>
+        <Combobox.List>
+          {(language: Language) => (
+            <Combobox.MultiItem key={language.value} value={language}>
+              {language.label}
+            </Combobox.MultiItem>
+          )}
+        </Combobox.List>
+      </Combobox.Content>
+    </Combobox.Root>
+  );
+}
 ```
 </CodeBlock>
 

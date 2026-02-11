@@ -21,15 +21,24 @@ export function ComboboxSearchableDemo() {
   const [value, setValue] = useState<Country | null>(null);
 
   return (
-    <Combobox.Root items={countries} value={value} onValueChange={setValue}>
-      <Combobox.SearchableTrigger placeholder="Search countries..." />
+    <Combobox.Root
+      items={countries}
+      value={value}
+      onValueChange={setValue}
+      isItemEqualToValue={(item, selected) => item.value === selected.value}
+      itemToStringLabel={(item) => item.label}
+    >
+      <Combobox.SearchableTrigger
+        placeholder="Select a country"
+        widthVariant="enforced"
+      />
       <Combobox.Content>
         <Combobox.List>
-          {countries.map((country) => (
+          {(country: Country) => (
             <Combobox.Item key={country.value} value={country}>
               {country.label}
             </Combobox.Item>
-          ))}
+          )}
         </Combobox.List>
       </Combobox.Content>
     </Combobox.Root>

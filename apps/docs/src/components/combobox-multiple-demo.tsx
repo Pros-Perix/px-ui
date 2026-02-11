@@ -20,7 +20,14 @@ export function ComboboxMultipleDemo() {
   const [value, setValue] = useState<Language[]>([]);
 
   return (
-    <Combobox.Root multiple value={value} onValueChange={setValue}>
+    <Combobox.Root
+      items={languages}
+      multiple
+      value={value}
+      onValueChange={setValue}
+      isItemEqualToValue={(item, selected) => item.value === selected.value}
+      itemToStringLabel={(item) => item.label}
+    >
       <Combobox.ChipsTrigger placeholder="Select languages">
         {(item: Language) => (
           <Combobox.Chip key={item.value}>{item.label}</Combobox.Chip>
@@ -28,11 +35,11 @@ export function ComboboxMultipleDemo() {
       </Combobox.ChipsTrigger>
       <Combobox.Content>
         <Combobox.List>
-          {languages.map((language) => (
+          {(language: Language) => (
             <Combobox.MultiItem key={language.value} value={language}>
               {language.label}
             </Combobox.MultiItem>
-          ))}
+          )}
         </Combobox.List>
       </Combobox.Content>
     </Combobox.Root>
