@@ -177,34 +177,12 @@ export function MultiSelectedValue({
   );
 }
 
-/**
- * Renders the value, if `value` is a string or an object with `label` property in it,
- * then renders that value else you should provide a render function to render your custom value
- * **/
-export function Value({
-  children,
-  className,
-  placeholder,
-  ...props
-}: Select.Value.Props & { placeholder?: string }) {
+export function Value({ className, ...props }: Select.Value.Props) {
   return (
-    <Select.Value className={cn("text-ppx-sm truncate", className)} {...props}>
-      {(value) => {
-        if (value == null && placeholder) {
-          return placeholder;
-        }
-
-        if (children) {
-          return typeof children === "function" ? children(value) : children;
-        }
-
-        if (value && typeof value === "object" && "label" in value) {
-          return value.label;
-        }
-
-        return value;
-      }}
-    </Select.Value>
+    <Select.Value
+      className={cn("text-ppx-sm truncate", className)}
+      {...props}
+    />
   );
 }
 

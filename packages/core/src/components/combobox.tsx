@@ -353,10 +353,6 @@ export function Trigger({
   );
 }
 
-/**
- * Renders the value, if `value` is a string or an object with `label` property in it,
- * then renders that value else you should provide a render function to render your custom value
- * **/
 export function Value({
   children,
   className,
@@ -369,23 +365,7 @@ export function Value({
 }) {
   return (
     <span className={cn("text-ppx-sm truncate", className)} {...props}>
-      <Combobox.Value>
-        {(value) => {
-          if (value == null && placeholder) {
-            return placeholder;
-          }
-
-          if (children) {
-            return typeof children === "function" ? children(value) : children;
-          }
-
-          if (value && typeof value === "object" && "label" in value) {
-            return value.label;
-          }
-
-          return value;
-        }}
-      </Combobox.Value>
+      <Combobox.Value placeholder={placeholder} children={children} />
     </span>
   );
 }
