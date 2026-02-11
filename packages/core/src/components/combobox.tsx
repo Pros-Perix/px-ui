@@ -44,7 +44,7 @@ const ComboboxContext = React.createContext<ComboboxContextValues>(
 export function Root<ItemValue, Multiple extends boolean | undefined = false>({
   children,
   ...props
-}: React.ComponentProps<typeof Combobox.Root<ItemValue, Multiple>> &
+}: Combobox.Root.Props<ItemValue, Multiple> &
   Pick<
     ComboboxContextValues,
     | "isLoading"
@@ -57,13 +57,33 @@ export function Root<ItemValue, Multiple extends boolean | undefined = false>({
   const chipsTriggerRef = React.useRef<HTMLDivElement>(null);
   const searchableTriggerRef = React.useRef<HTMLDivElement>(null);
   const [isOpen, setIsOpen] = React.useState(false);
-  const [inputValue, setInputValue] = React.useState("");
+  const isInfiniteLoadable = !!props.loadOptions;
+  const [inputValue, setInputValue] = isInfiniteLoadable
+    ? React.useState("")
+    : [];
+
+  React.useLayoutEffect(() => {
+    if (
+      isInfiniteLoadable &&
+      searchableTriggerRef.current &&
+      props.itemToStringLabel &&
+      !props.multiple &&
+      props.value != undefined
+    ) {
+      // @ts-expect-error
+      setInputValue(props.itemToStringLabel(props.value));
+    }
+  }, []);
 
   const fallbackProps = {
     open: isOpen,
     onOpenChange: setIsOpen,
-    inputValue,
-    onInputValueChange: setInputValue,
+    ...(isInfiniteLoadable
+      ? {
+          inputValue,
+          onInputValueChange: setInputValue,
+        }
+      : {}),
   };
 
   const mergedProps = {
@@ -71,8 +91,8 @@ export function Root<ItemValue, Multiple extends boolean | undefined = false>({
     ...props,
   };
 
-  const asyncOptionsProps = props.loadOptions
-    ? useAsyncOptions(props.loadOptions, {
+  const asyncOptionsProps = isInfiniteLoadable
+    ? useAsyncOptions(props.loadOptions!, {
         isOpen: mergedProps.open,
         inputValue: mergedProps.inputValue as string,
       })

@@ -10,7 +10,10 @@ const fruits = [
 ];
 
 export function ComboboxBasicDemo() {
-  const [value, setValue] = useState<(typeof fruits)[number] | null>(null);
+  const [value, setValue] = useState<(typeof fruits)[number] | null>({
+    label: "Orange",
+    value: "orange",
+  });
 
   return (
     <Combobox.Root
