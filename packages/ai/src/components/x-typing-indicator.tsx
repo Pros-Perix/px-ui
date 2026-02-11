@@ -1,14 +1,16 @@
 import { Avatar } from "@px-ui/core";
 
-import { XANDI_AVATAR_URL } from "../constants";
+import { useXandi } from "../context/xandi-context";
 
 export function XTypingIndicator() {
+  const { config } = useXandi();
+
   return (
     <div className="flex items-center gap-4">
       <div className="animate-[popUp_0.3s_ease-out_forwards]">
         <Avatar
-          imgSrc={XANDI_AVATAR_URL}
-          name="Xandi"
+          imgSrc={config.avatarUrl}
+          name={config.assistantName}
           variant="rounded"
           size="48px"
           hideTooltip

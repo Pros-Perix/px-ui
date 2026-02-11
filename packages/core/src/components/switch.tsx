@@ -14,7 +14,7 @@ function Switch({
     <BaseSwitch.Root
       data-slot="switch"
       className={cn(
-        "shadow-xs focus-visible:ring-3 focus-visible:ring-ppx-neutral-17/30 data-checked:bg-ppx-primary-5 data-unchecked:bg-ppx-neutral-4 data-disabled:cursor-not-allowed data-disabled:opacity-50 peer inline-flex shrink-0 items-center rounded-full border border-transparent outline-none transition-all",
+        "shadow-xs focus-visible:ring-3 focus-visible:ring-ppx-neutral-17/30 data-checked:bg-ppx-primary-5 data-unchecked:bg-ppx-neutral-4 data-disabled:cursor-not-allowed data-disabled:opacity-50 peer inline-flex shrink-0 cursor-pointer items-center rounded-full border border-transparent outline-none transition-all",
         size === "sm" && "h-4 w-8",
         size === undefined || size === "default" ? "h-5 w-10" : "",
         size === "lg" && "h-6 w-12",

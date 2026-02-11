@@ -1,5 +1,56 @@
 # @px-ui/ai
 
+## 5.0.2
+
+### Patch Changes
+
+- Updated dependencies [ab2d61c]
+  - @px-ui/core@4.4.2
+
+## 5.0.1
+
+### Patch Changes
+
+- Updated dependencies [e682c07]
+  - @px-ui/core@4.4.1
+
+## 5.0.0
+
+### Minor Changes
+
+- d09d505: add onRemove Callback for file upload Clear files component, update the currency dropdown to be able to search currency via country name
+
+### Patch Changes
+
+- Updated dependencies [d09d505]
+  - @px-ui/core@4.4.0
+
+## 4.2.1
+
+### Patch Changes
+
+- Updated dependencies [465106a]
+  - @px-ui/core@4.3.1
+
+## 4.2.0
+
+### Minor Changes
+
+- a978a05: UI fixes and better code readability
+
+## 4.1.0
+
+### Minor Changes
+
+- f54795a: Add converstaion feature along with some UI fixes
+
+## 4.0.0
+
+### Patch Changes
+
+- Updated dependencies [bd0e49c]
+  - @px-ui/core@4.3.0
+
 ## 3.0.0
 
 ### Patch Changes

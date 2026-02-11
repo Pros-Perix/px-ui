@@ -1,5 +1,35 @@
 # @px-ui/core
 
+## 4.4.2
+
+### Patch Changes
+
+- ab2d61c: Update form components and dropdowns to be cursor pointer
+
+## 4.4.1
+
+### Patch Changes
+
+- e682c07: Update dialog style
+
+## 4.4.0
+
+### Minor Changes
+
+- d09d505: add onRemove Callback for file upload Clear files component, update the currency dropdown to be able to search currency via country name
+
+## 4.3.1
+
+### Patch Changes
+
+- 465106a: Downgrade base-ui to v1
+
+## 4.3.0
+
+### Minor Changes
+
+- bd0e49c: added onFileRemove and onFileAdd to the useFileUpload hook
+
 ## 4.2.0
 
 ### Minor Changes

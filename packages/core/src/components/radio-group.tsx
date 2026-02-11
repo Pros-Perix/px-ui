@@ -19,7 +19,7 @@ export function Group({
 }
 
 const radioVariants = cva(
-  "relative inline-flex bg-ppx-background aria-invalid:border-ppx-red-5 aspect-square shrink-0 rounded-full border border-ppx-neutral-10 shadow-xs transition-[color,box-shadow] outline-none focus-visible:ring-[3px] data-disabled:cursor-not-allowed data-disabled:opacity-50 items-center justify-center",
+  "relative inline-flex bg-ppx-background aria-invalid:border-ppx-red-5 aspect-square shrink-0 rounded-full border border-ppx-neutral-10 shadow-xs transition-[color,box-shadow] outline-none focus-visible:ring-[3px] data-disabled:cursor-not-allowed data-disabled:opacity-50 items-center justify-center cursor-pointer",
   {
     variants: {
       variant: {

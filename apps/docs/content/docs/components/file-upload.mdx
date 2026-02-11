@@ -272,7 +272,7 @@ A ready-to-use upload component that internally uses `useFileUpload` and the `Fi
 | `renderFileItem` | `(file, actions) => React.ReactNode`                                           | -                                   | Custom renderer for list items           |
 | `onError`        | `(error: { type: string; message: string; files?: File[] }) => void`           | -                                   | Validation errors callback               |
 
-**Also accepts hook options:** `accept`, `multiple`, `maxSize`, `maxFiles`, `onFilesChange`, `onFilesAdded`, and `upload`.
+**Also accepts hook options:** `accept`, `multiple`, `maxSize`, `maxFiles`, `onFilesChange`, `onFileAdd`, `onFileRemove`, and `upload`.
 
 ---
 
@@ -290,7 +290,8 @@ A hook that manages file selection, validation, previews, and (optionally) uploa
 | `maxFiles`      | `number`               | `Infinity` | Max file count (only when `multiple`)       |
 | `initialFiles`  | `FileMetadata[]`       | `[]`       | Pre-populate with uploaded files            |
 | `onFilesChange` | `(files) => void`      | -          | Called when files change                    |
-| `onFilesAdded`  | `(addedFiles) => void` | -          | Called with only newly-added files          |
+| `onFileAdd`     | `(file) => void`       | -          | Called when a file is added                 |
+| `onFileRemove`  | `(file) => void`       | -          | Called when a file is removed               |
 | `upload`        | `UploadConfig`         | -          | Enables uploads and progress tracking       |
 
 **Returns**: `UseFileUploadReturn`
