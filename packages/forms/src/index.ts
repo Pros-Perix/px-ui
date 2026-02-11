@@ -1,5 +1,4 @@
 export { SelectField } from "./components/select-field";
-export { ComboboxField } from "./components/combobox-field";
 export {
   CurrencySelectField,
   type Currency,
