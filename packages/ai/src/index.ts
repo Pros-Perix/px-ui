@@ -24,3 +24,4 @@ export { XSidebar, type XSidebarProps } from "./components/x-sidebar";
 export { XChatHistory, type XChatHistoryProps, type ChatHistoryItem } from "./components/x-chat-history";
 export * as XMessageActions from "./components/x-message-actions";
 export { type Suggestion } from "./components/x-main-intake";
+export { XBaseListing, type XBaseListingProps } from "./components/x-base-listing";

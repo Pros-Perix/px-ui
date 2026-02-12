@@ -8,6 +8,7 @@ export interface TextRendererProps {
 export function TextRenderer({ message }: TextRendererProps) {
   const isUser = message.role === "user";
   const showActions = !isUser;
+  const contentIsString = typeof message.content === "string";
 
   return (
     <div>
@@ -18,7 +19,7 @@ export function TextRenderer({ message }: TextRendererProps) {
         <div className="mt-2">
           <XMessageActions.Root>
             <XMessageActions.Feedback messageId={message.id} />
-            <XMessageActions.Copy content={message.content} />
+            {contentIsString && <XMessageActions.Copy content={message.content} />}
             {message.debugTrace != null && (
               <XMessageActions.Debug messageId={message.id} debugTrace={message.debugTrace} />
             )}
