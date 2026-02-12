@@ -8,11 +8,41 @@ import { ComboboxBasicDemo } from "../../../src/components/combobox-basic-demo";
 import { ComboboxSearchableDemo } from "../../../src/components/combobox-searchable-demo";
 import { ComboboxMultipleDemo } from "../../../src/components/combobox-multiple-demo";
 import { ComboboxWithSearchDemo } from "../../../src/components/combobox-with-search-demo";
-import { ComboboxInfiniteListDemo} from "../../../src/components/combobox-infinite-list-demo";
+import { ComboboxInfiniteListDemo } from "../../../src/components/combobox-infinite-list-demo";
+import { ComboboxInfiniteMultipleDemo } from "../../../src/components/combobox-infinite-multiple-demo";
+import { ComboboxInfiniteCustomTriggerDemo } from "../../../src/components/combobox-infinite-custom-trigger-demo";
 
 ## Overview
 
 The Combobox component combines a text input with a dropdown list, allowing users to search and select values with autocomplete functionality. It supports single and multiple selection, async data loading, and infinite scrolling.
+
+## Important: Required Props
+
+When working with object values (not primitive strings/numbers), you must provide these functions to ensure proper behavior:
+
+### `isItemEqualToValue` (Always Required)
+
+This function tells the combobox how to compare items for equality. Without it, selection, highlighting, and deselection may not work correctly.
+
+```tsx
+isItemEqualToValue={(item, selected) => item.id === selected.id}
+```
+
+### `itemToStringLabel` (Required for SearchableTrigger)
+
+When using `SearchableTrigger` with single selection, this function is required to display the selected value as text in the input field.
+
+```tsx
+itemToStringLabel={(item) => item.name}
+```
+
+<Callout type="info">
+You do NOT need `itemToStringLabel` when using `Combobox.Trigger` with a custom `Combobox.Value` render function, since you control how the value is displayed.
+</Callout>
+
+<Callout type="warning">
+Omitting these props when using object values will cause unexpected behavior such as items not being selectable, selected values not displaying correctly, or the input showing `[object Object]`.
+</Callout>
 
 ## Import
 
@@ -168,7 +198,6 @@ export function ComboboxMultipleDemo() {
       value={value}
       onValueChange={setValue}
       isItemEqualToValue={(item, selected) => item.value === selected.value}
-      itemToStringLabel={(item) => item.label}
     >
       <Combobox.ChipsTrigger placeholder="Select languages">
         {(item: Language) => (
@@ -336,6 +365,240 @@ export function ComboboxInfiniteListDemo() {
 ```
 </CodeBlock>
 
+### Infinite List with Multiple Selection
+
+Combine infinite scrolling with multi-select mode to handle large datasets with multiple selections.
+
+<Preview>
+  <ComboboxInfiniteMultipleDemo />
+</Preview>
+
+<CodeBlock>
+```tsx
+import { Avatar, Combobox, defineLoadOptions, InferOption } from "@px-ui/core";
+import { useState } from "react";
+
+interface Character {
+  id: number;
+  name: string;
+  image: string;
+  species: string;
+}
+
+interface RickAndMortyCharactersApiResponse {
+  info: {
+    pages: number;
+  };
+  results: Character[];
+}
+
+const loadRickAndMortyCharacters = defineLoadOptions({
+  cacheKey: ["character-options-multiple"],
+  loader: async ({ search, page, signal }) => {
+    const url = new URL("https://rickandmortyapi.com/api/character");
+    url.searchParams.set("page", page.toString());
+    search && url.searchParams.set("name", search);
+
+    const res = await fetch(url, { signal });
+
+    if (!res.ok) {
+      if (res.status === 404) {
+        return { data: { options: [], hasMore: false }, error: null };
+      }
+      return {
+        data: { options: [], hasMore: false },
+        error: "Cannot able to fetch characters",
+      };
+    }
+
+    const data = (await res.json()) as RickAndMortyCharactersApiResponse;
+
+    return {
+      data: {
+        options: data.results,
+        hasMore: page < data.info.pages,
+      },
+      error: null,
+    };
+  },
+});
+
+export function ComboboxInfiniteMultipleDemo() {
+  const [value, setValue] = useState<
+    InferOption<typeof loadRickAndMortyCharacters>[]
+  >([]);
+
+  return (
+    <Combobox.Root
+      loadOptions={loadRickAndMortyCharacters}
+      multiple
+      value={value}
+      onValueChange={setValue}
+      isItemEqualToValue={(item, selected) => item.id === selected.id}
+    >
+      <Combobox.ChipsTrigger placeholder="Select characters">
+        {(character: InferOption<typeof loadRickAndMortyCharacters>) => (
+          <Combobox.Chip key={character.id}>
+            <Avatar
+              imgSrc={character.image}
+              name={character.name}
+              size="24px"
+              variant="rounded"
+            />
+            {character.name}
+          </Combobox.Chip>
+        )}
+      </Combobox.ChipsTrigger>
+      <Combobox.Content>
+        <Combobox.List>
+          {(character: InferOption<typeof loadRickAndMortyCharacters>) => (
+            <Combobox.MultiItem key={character.id} value={character}>
+              <Avatar
+                imgSrc={character.image}
+                name={character.name}
+                size="30px"
+                variant="rounded"
+              />
+              <div className="flex flex-col">
+                <span className="font-medium">{character.name}</span>
+                <span className="text-ppx-muted-foreground text-xs">
+                  {character.species}
+                </span>
+              </div>
+            </Combobox.MultiItem>
+          )}
+        </Combobox.List>
+      </Combobox.Content>
+    </Combobox.Root>
+  );
+}
+```
+</CodeBlock>
+
+### Infinite List with Custom Trigger
+
+Use a custom trigger with a search field inside the popup for infinite loading scenarios. Note that `itemToStringLabel` is not required here since we're using a custom trigger with `Combobox.Value` render function.
+
+<Preview>
+  <ComboboxInfiniteCustomTriggerDemo />
+</Preview>
+
+<CodeBlock>
+```tsx
+import { Avatar, Combobox, defineLoadOptions, InferOption } from "@px-ui/core";
+import { useState } from "react";
+
+interface Character {
+  id: number;
+  name: string;
+  image: string;
+  species: string;
+}
+
+interface RickAndMortyCharactersApiResponse {
+  info: {
+    pages: number;
+  };
+  results: Character[];
+}
+
+const loadRickAndMortyCharacters = defineLoadOptions({
+  cacheKey: ["character-options-custom-trigger"],
+  loader: async ({ search, page, signal }) => {
+    const url = new URL("https://rickandmortyapi.com/api/character");
+    url.searchParams.set("page", page.toString());
+    search && url.searchParams.set("name", search);
+
+    const res = await fetch(url, { signal });
+
+    if (!res.ok) {
+      if (res.status === 404) {
+        return { data: { options: [], hasMore: false }, error: null };
+      }
+      return {
+        data: { options: [], hasMore: false },
+        error: "Cannot able to fetch characters",
+      };
+    }
+
+    const data = (await res.json()) as RickAndMortyCharactersApiResponse;
+
+    return {
+      data: {
+        options: data.results,
+        hasMore: page < data.info.pages,
+      },
+      error: null,
+    };
+  },
+});
+
+export function ComboboxInfiniteCustomTriggerDemo() {
+  const [value, setValue] = useState<InferOption<
+    typeof loadRickAndMortyCharacters
+  > | null>(null);
+
+  return (
+    <Combobox.Root
+      loadOptions={loadRickAndMortyCharacters}
+      value={value}
+      onValueChange={setValue}
+      isItemEqualToValue={(item, selected) => item.id === selected.id}
+    >
+      <Combobox.Trigger>
+        <Combobox.Value>
+          {(
+            character:
+              | InferOption<typeof loadRickAndMortyCharacters>
+              | undefined,
+          ) =>
+            character ? (
+              <div className="flex items-center gap-2">
+                <Avatar
+                  imgSrc={character.image}
+                  name={character.name}
+                  size="30px"
+                  variant="rounded"
+                />
+                <span>{character.name}</span>
+              </div>
+            ) : (
+              "Select a character"
+            )
+          }
+        </Combobox.Value>
+      </Combobox.Trigger>
+      <Combobox.Content>
+        <Combobox.Search placeholder="Search characters..." />
+        <Combobox.List>
+          {(character: InferOption<typeof loadRickAndMortyCharacters>) => (
+            <Combobox.Item
+              key={character.id}
+              value={character}
+              className="flex items-center gap-3"
+            >
+              <Avatar
+                imgSrc={character.image}
+                name={character.name}
+                size="40px"
+                variant="rounded"
+              />
+              <div className="flex flex-col">
+                <span className="font-medium">{character.name}</span>
+                <span className="text-ppx-muted-foreground text-xs">
+                  {character.species}
+                </span>
+              </div>
+            </Combobox.Item>
+          )}
+        </Combobox.List>
+      </Combobox.Content>
+    </Combobox.Root>
+  );
+}
+```
+</CodeBlock>
+
 ## Anatomy
 
 Components that make up `Combobox`:
@@ -351,6 +614,8 @@ The root container that manages combobox state and coordinates all combobox comp
 | `items` | `ReadonlyArray<TItem>` | - | Array of items for filtering and selection |
 | `value` | `TItem \| TItem[]` | - | Selected value(s) |
 | `onValueChange` | `(value: TItem \| TItem[] \| null) => void` | - | Callback when selection changes |
+| `isItemEqualToValue` | `(item: TItem, selected: TItem) => boolean` | - | **Required for object values.** Function to compare items for equality |
+| `itemToStringLabel` | `(item: TItem) => string` | - | **Required for SearchableTrigger.** Function to convert item to display string |
 | `multiple` | `boolean` | `false` | Enable multi-select mode |
 | `disabled` | `boolean` | `false` | Whether the combobox is disabled |
 | `invalid` | `boolean` | `false` | Whether the combobox is in an invalid state |
@@ -360,6 +625,7 @@ The root container that manages combobox state and coordinates all combobox comp
 | `hasMore` | `boolean` | `false` | Whether there are more options to load |
 | `onLoadMore` | `() => void` | - | Callback to load more options |
 | `loadOptions` | `LoadOptionsConfig` | - | Async options loading configuration |
+| `debounceMs` | `number` | `300` | Debounce delay for search input when using `loadOptions` |
 
 **Inherited Props:** Inherits all props from [Base UI Combobox.Root](https://base-ui.com/react/components/combobox#root)
 

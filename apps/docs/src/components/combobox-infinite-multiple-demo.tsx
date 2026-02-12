@@ -1,33 +1,28 @@
-import { Combobox, defineLoadOptions, InferOption } from "@px-ui/core";
+import { Avatar, Combobox, defineLoadOptions, InferOption } from "@px-ui/core";
 import { useState } from "react";
 
 interface Character {
   id: number;
   name: string;
   image: string;
-  gender: string;
   species: string;
 }
 
 interface RickAndMortyCharactersApiResponse {
   info: {
-    count: number;
     pages: number;
   };
   results: Character[];
 }
 
 const loadRickAndMortyCharacters = defineLoadOptions({
-  cacheKey: ["character-options"],
+  cacheKey: ["character-options-multiple"],
   loader: async ({ search, page, signal }) => {
-    await new Promise((res) => setTimeout(res, 300));
     const url = new URL("https://rickandmortyapi.com/api/character");
     url.searchParams.set("page", page.toString());
     search && url.searchParams.set("name", search);
 
-    const res = await fetch(url, {
-      signal,
-    });
+    const res = await fetch(url, { signal });
 
     if (!res.ok) {
       if (res.status === 404) {
@@ -51,29 +46,49 @@ const loadRickAndMortyCharacters = defineLoadOptions({
   },
 });
 
-export function ComboboxInfiniteListDemo() {
-  const [value, setValue] = useState<InferOption<
-    typeof loadRickAndMortyCharacters
-  > | null>(null);
+export function ComboboxInfiniteMultipleDemo() {
+  const [value, setValue] = useState<
+    InferOption<typeof loadRickAndMortyCharacters>[]
+  >([]);
 
   return (
     <Combobox.Root
       loadOptions={loadRickAndMortyCharacters}
+      multiple
       value={value}
       onValueChange={setValue}
       isItemEqualToValue={(item, selected) => item?.id === selected?.id}
-      itemToStringLabel={(item) => item.name}
     >
-      <Combobox.SearchableTrigger
-        placeholder="Select an character"
-        widthVariant="enforced"
-      />
+      <Combobox.ChipsTrigger placeholder="Select characters">
+        {(character: InferOption<typeof loadRickAndMortyCharacters>) => (
+          <Combobox.Chip key={character.id}>
+            <Avatar
+              imgSrc={character.image}
+              name={character.name}
+              size="24px"
+              variant="rounded"
+            />
+            {character.name}
+          </Combobox.Chip>
+        )}
+      </Combobox.ChipsTrigger>
       <Combobox.Content>
         <Combobox.List>
           {(character: InferOption<typeof loadRickAndMortyCharacters>) => (
-            <Combobox.Item key={character.id} value={character}>
-              {character.name}
-            </Combobox.Item>
+            <Combobox.MultiItem key={character.id} value={character}>
+              <Avatar
+                imgSrc={character.image}
+                name={character.name}
+                size="30px"
+                variant="rounded"
+              />
+              <div className="flex flex-col">
+                <span className="font-medium">{character.name}</span>
+                <span className="text-ppx-muted-foreground text-xs">
+                  {character.species}
+                </span>
+              </div>
+            </Combobox.MultiItem>
           )}
         </Combobox.List>
       </Combobox.Content>

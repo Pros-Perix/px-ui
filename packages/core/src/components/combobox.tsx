@@ -367,11 +367,7 @@ export function Value({
   className,
   placeholder,
   ...props
-}: {
-  placeholder?: string;
-  children?: React.ReactNode | ((selectedValue: any) => React.ReactNode);
-  className?: string;
-}) {
+}: Combobox.Value.Props & { className?: string }) {
   return (
     <span className={cn("text-ppx-sm truncate", className)} {...props}>
       <Combobox.Value placeholder={placeholder} children={children} />
