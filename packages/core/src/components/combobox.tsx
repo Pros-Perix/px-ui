@@ -53,35 +53,38 @@ export function Root<ItemValue, Multiple extends boolean | undefined = false>({
     | "onLoadMore"
     | "hasMore"
     | "invalid"
-  > & { loadOptions?: LoadOptionsConfig<ItemValue> }) {
+  > & { loadOptions?: LoadOptionsConfig<ItemValue>; debounceMs?: number }) {
   const chipsTriggerRef = React.useRef<HTMLDivElement>(null);
   const searchableTriggerRef = React.useRef<HTMLDivElement>(null);
   const [isOpen, setIsOpen] = React.useState(false);
   const isInfiniteLoadable = !!props.loadOptions;
-  const [inputValue, setInputValue] = isInfiniteLoadable
+  const [debouncedInputValue, setDebouncedInputValue] = isInfiniteLoadable
     ? React.useState("")
     : [];
 
-  React.useLayoutEffect(() => {
-    if (
-      isInfiniteLoadable &&
-      searchableTriggerRef.current &&
-      props.itemToStringLabel &&
-      !props.multiple &&
-      props.value != undefined
-    ) {
-      // @ts-expect-error
-      setInputValue(props.itemToStringLabel(props.value));
-    }
-  }, []);
+  const debounceTimerRef = React.useRef<ReturnType<typeof setTimeout>>(null);
 
   const fallbackProps = {
     open: isOpen,
     onOpenChange: setIsOpen,
     ...(isInfiniteLoadable
       ? {
-          inputValue,
-          onInputValueChange: setInputValue,
+          onInputValueChange: (searchTerm: any, { reason }: any) => {
+            if (reason === "item-press") return;
+
+            if (debounceTimerRef.current) {
+              clearTimeout(debounceTimerRef.current);
+            }
+
+            if (searchTerm === "" && debouncedInputValue !== "" && isOpen) {
+              setDebouncedInputValue!("");
+            } else {
+              debounceTimerRef.current = setTimeout(() => {
+                setDebouncedInputValue!(searchTerm);
+              }, props.debounceMs ?? 300);
+            }
+          },
+          filter: null,
         }
       : {}),
   };
@@ -94,7 +97,7 @@ export function Root<ItemValue, Multiple extends boolean | undefined = false>({
   const asyncOptionsProps = isInfiniteLoadable
     ? useAsyncOptions(props.loadOptions!, {
         isOpen: mergedProps.open,
-        inputValue: mergedProps.inputValue as string,
+        inputValue: debouncedInputValue!,
       })
     : {};
 
@@ -132,21 +135,7 @@ export function Content({
   popupProps?: React.ComponentProps<typeof Combobox.Popup>;
   widthVariant?: "trigger" | "fit" | "enforced";
 }>) {
-  const {
-    chipsTriggerRef,
-    searchableTriggerRef,
-    isLoading,
-    isError,
-    isLoadingMore,
-    hasMore,
-    onLoadMore,
-  } = useComboboxContext();
-  const [infiniteScrollRef] = useInfiniteScroll({
-    isLoadingMore: !!isLoadingMore,
-    hasMore: !!hasMore,
-    onLoadMore: () => onLoadMore?.(),
-    disabled: isError,
-  });
+  const { chipsTriggerRef, searchableTriggerRef } = useComboboxContext();
 
   return (
     <Combobox.Portal {...portalProps}>
@@ -177,39 +166,59 @@ export function Content({
           {...popupProps}
         >
           {children}
-
-          {!isLoading && !isError && (
-            <Combobox.Empty
-              className={cn(SINGLE_TEXT_CONTENT_CN, "empty:hidden")}
-            >
-              {empty}
-            </Combobox.Empty>
-          )}
-
-          {isLoading && (
-            <Combobox.Status className={SINGLE_TEXT_CONTENT_CN}>
-              Loading...
-            </Combobox.Status>
-          )}
-
-          {isError && (
-            <Combobox.Status className={SINGLE_TEXT_CONTENT_CN}>
-              Error loading options
-            </Combobox.Status>
-          )}
-
-          {hasMore && (
-            <Combobox.Status
-              ref={infiniteScrollRef}
-              className="flex h-10 items-center justify-center"
-              aria-label="Loading more options"
-            >
-              <Spinner className="stroke-ppx-neutral-10" size="medium" />
-            </Combobox.Status>
-          )}
+          <RenderStatus emptyText={empty} />
         </Combobox.Popup>
       </Combobox.Positioner>
     </Combobox.Portal>
+  );
+}
+
+function RenderStatus(props: { emptyText: string }) {
+  const { isError, isLoading, hasMore } = useComboboxContext();
+
+  if (isLoading) {
+    return (
+      <Combobox.Status className={SINGLE_TEXT_CONTENT_CN}>
+        Loading...
+      </Combobox.Status>
+    );
+  }
+
+  if (isError) {
+    return (
+      <Combobox.Status className={SINGLE_TEXT_CONTENT_CN}>
+        Error loading options
+      </Combobox.Status>
+    );
+  }
+
+  if (hasMore) {
+    return <LoadMoreSpinner />;
+  }
+
+  return (
+    <Combobox.Empty className={cn(SINGLE_TEXT_CONTENT_CN, "empty:hidden")}>
+      {props.emptyText}
+    </Combobox.Empty>
+  );
+}
+
+function LoadMoreSpinner() {
+  const { isError, isLoadingMore, hasMore, onLoadMore } = useComboboxContext();
+  const [infiniteScrollRef] = useInfiniteScroll({
+    isLoadingMore: !!isLoadingMore,
+    hasMore: !!hasMore,
+    onLoadMore: () => onLoadMore?.(),
+    disabled: isError,
+  });
+  return (
+    <Combobox.Status
+      ref={infiniteScrollRef}
+      className="flex h-10 items-center justify-center"
+      aria-label="Loading more options"
+    >
+      <Spinner className="stroke-ppx-neutral-10" size="medium" />
+    </Combobox.Status>
   );
 }
 

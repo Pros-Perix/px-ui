@@ -51,14 +51,13 @@ export function useAsyncOptions<TData = any>(
     inputValue: string;
   },
 ) {
-  const [debouncedSearch, setDebouncedSearch] = useState(inputValue);
   const isFetchedAfterMount = useRef(false);
 
   const query = useInfiniteQuery({
-    queryKey: [...params.cacheKey, debouncedSearch],
+    queryKey: [...params.cacheKey, inputValue],
     queryFn: async ({ pageParam, signal }) => {
       const { error, data } = await params.loader({
-        search: debouncedSearch,
+        search: inputValue,
         page: pageParam,
         signal,
       });
@@ -81,19 +80,7 @@ export function useAsyncOptions<TData = any>(
     isFetchedAfterMount.current = true;
   }
 
-  if (inputValue === "" && debouncedSearch !== "" && isOpen) {
-    setDebouncedSearch("");
-  }
-
-  useDebounce(
-    () => {
-      setDebouncedSearch(inputValue);
-    },
-    300,
-    [inputValue],
-  );
-
-  const items = query.data?.pages.flatMap((page) => page.options) ?? [];
+  const items = query.data?.pages.flatMap((page) => page.options);
 
   const handleLoadMore = () => {
     query.fetchNextPage();
