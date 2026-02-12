@@ -255,42 +255,77 @@ export function ComboboxWithSearchDemo() {
 
 <CodeBlock>
 ```tsx
-import { Combobox } from "@px-ui/core";
+import { Combobox, defineLoadOptions, InferOption } from "@px-ui/core";
 import { useState } from "react";
 
-interface User {
-  value: string;
-  label: string;
+interface Character {
+  id: number;
+  name: string;
 }
 
-const users: User[] = [
-  { value: "1", label: "John Doe" },
-  { value: "2", label: "Jane Smith" },
-  { value: "3", label: "Bob Johnson" },
-  { value: "4", label: "Alice Williams" },
-  { value: "5", label: "Charlie Brown" },
-];
+interface RickAndMortyCharactersApiResponse {
+  info: {
+    pages: number;
+  };
+  results: Character[];
+}
 
-export function ComboboxWithSearchDemo() {
-  const [value, setValue] = useState<User | null>(null);
+const loadRickAndMortyCharacters = defineLoadOptions({
+  cacheKey: ["character-options"],
+  loader: async ({ search, page, signal }) => {
+    await new Promise((res) => setTimeout(res, 300));
+    const url = new URL("https://rickandmortyapi.com/api/character");
+    url.searchParams.set("page", page.toString());
+    search && url.searchParams.set("name", search);
+
+    const res = await fetch(url, {
+      signal,
+    });
+
+    if (!res.ok) {
+      if (res.status === 404) {
+        return { data: { options: [], hasMore: false }, error: null };
+      }
+      return {
+        data: { options: [], hasMore: false },
+        error: "Cannot able to fetch characters",
+      };
+    }
+
+    const data = (await res.json()) as RickAndMortyCharactersApiResponse;
+
+    return {
+      data: {
+        options: data.results,
+        hasMore: page < data.info.pages,
+      },
+      error: null,
+    };
+  },
+});
+
+export function ComboboxInfiniteListDemo() {
+  const [value, setValue] = useState<InferOption<
+    typeof loadRickAndMortyCharacters
+  > | null>(null);
 
   return (
     <Combobox.Root
-      items={users}
+      loadOptions={loadRickAndMortyCharacters}
       value={value}
       onValueChange={setValue}
-      isItemEqualToValue={(item, selected) => item.value === selected.value}
-      itemToStringLabel={(item) => item.label}
+      isItemEqualToValue={(item, selected) => item?.id === selected?.id}
+      itemToStringLabel={(item) => item.name}
     >
-      <Combobox.Trigger>
-        <Combobox.Value placeholder="Select a user" />
-      </Combobox.Trigger>
+      <Combobox.SearchableTrigger
+        placeholder="Select an character"
+        widthVariant="enforced"
+      />
       <Combobox.Content>
-        <Combobox.Search placeholder="Search users..." />
         <Combobox.List>
-          {(user: User) => (
-            <Combobox.Item key={user.value} value={user}>
-              {user.label}
+          {(character: InferOption<typeof loadRickAndMortyCharacters>) => (
+            <Combobox.Item key={character.id} value={character}>
+              {character.name}
             </Combobox.Item>
           )}
         </Combobox.List>

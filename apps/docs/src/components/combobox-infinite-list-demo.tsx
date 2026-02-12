@@ -4,14 +4,10 @@ import { useState } from "react";
 interface Character {
   id: number;
   name: string;
-  image: string;
-  gender: string;
-  species: string;
 }
 
 interface RickAndMortyCharactersApiResponse {
   info: {
-    count: number;
     pages: number;
   };
   results: Character[];
@@ -54,13 +50,7 @@ const loadRickAndMortyCharacters = defineLoadOptions({
 export function ComboboxInfiniteListDemo() {
   const [value, setValue] = useState<InferOption<
     typeof loadRickAndMortyCharacters
-  > | null>({
-    id: 81,
-    name: "Crocubot",
-    species: "Animal",
-    gender: "Male",
-    image: "https://rickandmortyapi.com/api/character/avatar/81.jpeg",
-  });
+  > | null>(null);
 
   return (
     <Combobox.Root
