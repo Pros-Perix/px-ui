@@ -9,9 +9,9 @@ import {
 } from "../tw-styles/dropdown";
 import CheckIcon from "../icons/check-icon";
 import ChevronDownIcon from "../icons/chevron-down-icon";
-import { cva, type VariantProps } from "class-variance-authority";
+import { type VariantProps } from "class-variance-authority";
 
-type SelectContextValues = {
+type SelectContextValues = Select.Root.Props<any, any> & {
   invalid?: boolean;
 };
 
@@ -23,20 +23,20 @@ function useSelectContext() {
   return React.useContext(SelectContext);
 }
 
-export function Root<
-  Value = any,
-  Multiple extends boolean | undefined = false,
->({
+export function Root<Value, Multiple extends boolean | undefined = false>({
   children,
   invalid,
   ...props
-}: React.ComponentPropsWithoutRef<typeof Select.Root<Value, Multiple>> & {
+}: Select.Root.Props<Value, Multiple> & {
   invalid?: boolean;
 }) {
-  const value = React.useMemo(() => ({ invalid }), [invalid]);
+  const contextValue = React.useMemo(
+    () => ({ invalid, ...props }),
+    [invalid, props],
+  );
 
   return (
-    <SelectContext.Provider value={value}>
+    <SelectContext.Provider value={contextValue}>
       <Select.Root {...props}>{children}</Select.Root>
     </SelectContext.Provider>
   );

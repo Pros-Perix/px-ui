@@ -3,13 +3,12 @@ import { useState } from "react";
 
 export default function SelectFieldSizesDemo() {
   const [smallValue, setSmallValue] = useState<string | null>(null);
-  const [mediumValue, setMediumValue] = useState<string | null>(null);
-  const [largeValue, setLargeValue] = useState<string | null>(null);
+  const [defaultValue, setDefaultValue] = useState<string | null>(null);
 
   const items = [
-    { id: "sm", label: "Small" },
-    { id: "md", label: "Medium" },
-    { id: "lg", label: "Large" },
+    { id: "option1", label: "Option 1" },
+    { id: "option2", label: "Option 2" },
+    { id: "option3", label: "Option 3" },
   ];
 
   return (
@@ -23,17 +22,10 @@ export default function SelectFieldSizesDemo() {
       />
       <SelectField
         items={items}
-        value={mediumValue}
-        onValueChange={setMediumValue}
-        placeholder="Medium size (default)"
-        size="md"
-      />
-      <SelectField
-        items={items}
-        value={largeValue}
-        onValueChange={setLargeValue}
-        placeholder="Large size"
-        size="lg"
+        value={defaultValue}
+        onValueChange={setDefaultValue}
+        placeholder="Default size"
+        size="default"
       />
     </div>
   );

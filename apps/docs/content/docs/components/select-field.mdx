@@ -5,7 +5,6 @@ apiReference: https://base-ui.com/react/components/select
 ---
 
 import SelectFieldBasicDemo from "../../../src/components/select-field-basic-demo.tsx";
-import SelectFieldMultipleDemo from "../../../src/components/select-field-multiple-demo.tsx";
 import SelectFieldSizesDemo from "../../../src/components/select-field-sizes-demo.tsx";
 import SelectFieldCustomRenderDemo from "../../../src/components/select-field-custom-render-demo.tsx";
 
@@ -53,41 +52,6 @@ export default function Example() {
 
 ## Examples
 
-### Multiple Selection
-
-Enable multiple item selection with the `multiple` prop.
-
-<Preview>
-  <SelectFieldMultipleDemo />
-</Preview>
-
-```tsx
-import { SelectField } from "@px-ui/forms";
-import { useState } from "react";
-
-export default function Example() {
-  const [value, setValue] = useState<string[]>([]);
-
-  const items = [
-    { id: "react", label: "React" },
-    { id: "vue", label: "Vue" },
-    { id: "angular", label: "Angular" },
-    { id: "svelte", label: "Svelte" },
-    { id: "solid", label: "Solid" },
-  ];
-
-  return (
-    <SelectField
-      items={items}
-      value={value}
-      onValueChange={setValue}
-      multiple
-      placeholder="Select frameworks"
-    />
-  );
-}
-```
-
 ### Sizes
 
 Control the size of the select field using the `size` prop.
@@ -105,8 +69,7 @@ export default function Example() {
 
   const items = [
     { id: "sm", label: "Small" },
-    { id: "md", label: "Medium" },
-    { id: "lg", label: "Large" },
+    { id: "default", label: "Default" },
   ];
 
   return (
@@ -122,15 +85,8 @@ export default function Example() {
         items={items}
         value={value}
         onValueChange={setValue}
-        placeholder="Medium size (default)"
-        size="md"
-      />
-      <SelectField
-        items={items}
-        value={value}
-        onValueChange={setValue}
-        placeholder="Large size"
-        size="lg"
+        placeholder="Default size"
+        size="default"
       />
     </div>
   );
@@ -198,9 +154,9 @@ The main select field component that wraps the Select component from `@px-ui/cor
 | `renderLabel` | `(item: TItem) => React.ReactNode` | - | Function to render the label in the trigger for the selected item. If not provided and item has a `label` property, it will be used automatically |
 | `renderOption` | `(item: TItem) => React.ReactNode` | - | Function to render each option in the dropdown. If not provided and item has a `label` property, it will be used automatically |
 | `placeholder` | `string` | - | Placeholder text when no value is selected |
-| `size` | `'sm' \| 'md' \| 'lg'` | `'md'` | Size variant for the select trigger |
-| `widthVariant` | `'sm' \| 'md' \| 'lg' \| 'full'` | `'full'` | Width variant for the select trigger |
-| `contentWidthVariant` | `'trigger' \| 'full'` | `'trigger'` | Width variant for the dropdown content |
+| `size` | `'default' \| 'sm'` | `'default'` | Size variant for the select trigger |
+| `widthVariant` | `'enforced' \| 'fit' \| 'full'` | `'enforced'` | Width variant for the select trigger |
+| `contentWidthVariant` | `'trigger' \| 'fit' \| 'enforced'` | `'trigger'` | Width variant for the dropdown content |
 | `triggerClassName` | `string` | - | Additional CSS classes for the trigger element |
 | `contentProps` | `Omit<React.ComponentProps<typeof Select.Content>, 'children' \| 'widthVariant'>` | - | Additional props for Select.Content component |
 
@@ -208,9 +164,8 @@ The main select field component that wraps the Select component from `@px-ui/cor
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `value` * | `TItem \| TItem[] \| null` | - | The current selected value(s) |
-| `onValueChange` * | `(value: TItem \| TItem[] \| null) => void` | - | Callback fired when the selected value changes |
-| `multiple` | `boolean` | `false` | Whether multiple items can be selected |
+| `value` * | `TItem \| null` | - | The current selected value |
+| `onValueChange` * | `(value: TItem \| null) => void` | - | Callback fired when the selected value changes |
 | `disabled` | `boolean` | `false` | Whether the select is disabled |
 | `invalid` | `boolean` | `false` | Whether the select is in an invalid state |
 | `readOnly` | `boolean` | `false` | Whether the select is read-only |
@@ -223,6 +178,5 @@ _* Required prop_
 ## Notes
 
 - SelectField automatically detects `label`, `id`, or `value` properties from items for key generation and display
-- For complex layouts or custom sub-component composition, use the full `Select` component from `@px-ui/core`
+- For multiple selection, use the full `Select` component from `@px-ui/core` with `Select.MultiItem`
 - The component is fully type-safe and infers the item type from the `items` array
-- When using `multiple` selection, selected items are displayed as chips with a configurable max items (default: 2)
