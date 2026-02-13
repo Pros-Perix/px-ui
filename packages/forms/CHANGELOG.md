@@ -1,5 +1,16 @@
 # @px-ui/forms
 
+## 12.0.0
+
+### Minor Changes
+
+- ab43931: Lots of bug fixes related to Combobox
+
+### Patch Changes
+
+- Updated dependencies [ab43931]
+  - @px-ui/core@4.5.0
+
 ## 11.0.2
 
 ### Patch Changes
