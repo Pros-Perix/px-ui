@@ -57,7 +57,7 @@ export function ComboboxInfiniteMultipleDemo() {
       multiple
       value={value}
       onValueChange={setValue}
-      isItemEqualToValue={(item, selected) => item?.id === selected?.id}
+      isItemEqualToValue={(item, selected) => item.id === selected.id}
     >
       <Combobox.ChipsTrigger placeholder="Select characters">
         {(character: InferOption<typeof loadRickAndMortyCharacters>) => (

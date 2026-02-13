@@ -76,12 +76,12 @@ export function Root<ItemValue, Multiple extends boolean | undefined = false>({
               clearTimeout(debounceTimerRef.current);
             }
 
-            if (searchTerm === "" && debouncedInputValue !== "" && isOpen) {
+            if (searchTerm === "") {
               setDebouncedInputValue!("");
             } else {
               debounceTimerRef.current = setTimeout(() => {
                 setDebouncedInputValue!(searchTerm);
-              }, props.debounceMs ?? 300);
+              }, props.debounceMs ?? 500);
             }
           },
           filter: null,
@@ -355,7 +355,18 @@ export function Trigger({
     >
       {children}
       <div className="flex shrink-0 items-center gap-2">
-        {isLoading && <LoadingIndicator />}
+        {isLoading ? (
+          <LoadingIndicator />
+        ) : (
+          <Combobox.Clear
+            aria-label="Clear selection"
+            render={(clearProps) => (
+              <InputGroup.Button size="icon-xs" {...clearProps}>
+                <ClearIcon className="size-4" />
+              </InputGroup.Button>
+            )}
+          />
+        )}
         <ChevronDownIcon />
       </div>
     </Combobox.Trigger>
@@ -467,7 +478,7 @@ export function Chip(
 export function Clear({ children, ...props }: Combobox.Clear.Props) {
   return (
     <Combobox.Clear {...props}>
-      <ClearIcon />
+      <ClearIcon className="size-4" />
     </Combobox.Clear>
   );
 }

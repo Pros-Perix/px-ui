@@ -56,7 +56,7 @@ export function ComboboxInfiniteCustomTriggerDemo() {
       loadOptions={loadRickAndMortyCharacters}
       value={value}
       onValueChange={setValue}
-      isItemEqualToValue={(item, selected) => item?.id === selected?.id}
+      isItemEqualToValue={(item, selected) => item.id === selected.id}
     >
       <Combobox.Trigger>
         <Combobox.Value>

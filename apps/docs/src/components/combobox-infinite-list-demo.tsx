@@ -54,14 +54,20 @@ const loadRickAndMortyCharacters = defineLoadOptions({
 export function ComboboxInfiniteListDemo() {
   const [value, setValue] = useState<InferOption<
     typeof loadRickAndMortyCharacters
-  > | null>(null);
+  > | null>({
+    id: 61,
+    name: "Campaign Manager Morty",
+    species: "Human",
+    gender: "Male",
+    image: "https://rickandmortyapi.com/api/character/avatar/61.jpeg",
+  });
 
   return (
     <Combobox.Root
       loadOptions={loadRickAndMortyCharacters}
       value={value}
       onValueChange={setValue}
-      isItemEqualToValue={(item, selected) => item?.id === selected?.id}
+      isItemEqualToValue={(item, selected) => item.id === selected.id}
       itemToStringLabel={(item) => item.name}
     >
       <Combobox.SearchableTrigger
