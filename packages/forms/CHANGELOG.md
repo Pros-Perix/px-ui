@@ -1,5 +1,11 @@
 # @px-ui/forms
 
+## 12.0.1
+
+### Patch Changes
+
+- 740eae3: Update currency select field
+
 ## 12.0.0
 
 ### Minor Changes
