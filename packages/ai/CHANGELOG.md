@@ -1,5 +1,12 @@
 # @px-ui/ai
 
+## 6.0.0
+
+### Patch Changes
+
+- Updated dependencies [ab43931]
+  - @px-ui/core@4.5.0
+
 ## 5.0.2
 
 ### Patch Changes

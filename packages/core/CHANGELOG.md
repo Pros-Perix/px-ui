@@ -1,5 +1,11 @@
 # @px-ui/core
 
+## 4.5.0
+
+### Minor Changes
+
+- ab43931: Lots of bug fixes related to Combobox
+
 ## 4.4.2
 
 ### Patch Changes

@@ -1,6 +1,6 @@
 {
   "name": "@px-ui/forms",
-  "version": "11.0.2",
+  "version": "12.0.0",
   "description": "Form components built on top of px-ui-core",
   "type": "module",
   "module": "./dist/index.js",
