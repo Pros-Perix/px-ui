@@ -182,36 +182,33 @@ export function CurrencySelectField({
       invalid={invalid}
       isLoading={isLoading}
       isItemEqualToValue={(item, val) => item.id === val.id}
-      itemToStringLabel={(item) => `${item.abbr} ${item.name}`}
+      itemToStringLabel={(item) => `${item.abbr} - ${item.name}`}
       inputRef={inputRef}
       readOnly={readOnly}
       name={name}
     >
-      <Combobox.Trigger
-        widthVariant={widthVariant}
+      <Combobox.SearchableTrigger
         className={triggerClassName}
+        widthVariant={widthVariant}
         size={size}
-      >
-        <div className="flex items-center gap-2">
-          {value && (
-            <CurrencyFlag
-              countryCode={CURRENCY_FLAG_CODE[value.abbr]}
-              className="w-fit"
-            />
-          )}
-          <Combobox.Value placeholder={placeholder}>
-            {(currency: Currency) => `${currency.abbr} - ${currency.name}`}
-          </Combobox.Value>
-        </div>
-      </Combobox.Trigger>
+        placeholder={placeholder}
+        addons={
+          value ? (
+            <InputGroup.Addon align="inline-start">
+              <CurrencyFlag
+                countryCode={CURRENCY_FLAG_CODE[value.abbr]}
+                className="w-fit"
+              />
+            </InputGroup.Addon>
+          ) : undefined
+        }
+      />
 
       <Combobox.Content
         widthVariant={contentWidthVariant}
         empty="No currencies found"
         {...contentProps}
       >
-        <Combobox.Search />
-
         <Combobox.List>
           {(currency: Currency) => (
             <Combobox.Item key={currency.id} value={currency}>
