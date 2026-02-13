@@ -44,7 +44,7 @@ const ComboboxContext = React.createContext<ComboboxContextValues>(
 export function Root<ItemValue, Multiple extends boolean | undefined = false>({
   children,
   ...props
-}: React.ComponentProps<typeof Combobox.Root<ItemValue, Multiple>> &
+}: Combobox.Root.Props<ItemValue, Multiple> &
   Pick<
     ComboboxContextValues,
     | "isLoading"
@@ -53,17 +53,40 @@ export function Root<ItemValue, Multiple extends boolean | undefined = false>({
     | "onLoadMore"
     | "hasMore"
     | "invalid"
-  > & { loadOptions?: LoadOptionsConfig<ItemValue> }) {
+  > & { loadOptions?: LoadOptionsConfig<ItemValue>; debounceMs?: number }) {
   const chipsTriggerRef = React.useRef<HTMLDivElement>(null);
   const searchableTriggerRef = React.useRef<HTMLDivElement>(null);
   const [isOpen, setIsOpen] = React.useState(false);
-  const [inputValue, setInputValue] = React.useState("");
+  const isInfiniteLoadable = !!props.loadOptions;
+  const [debouncedInputValue, setDebouncedInputValue] = isInfiniteLoadable
+    ? React.useState("")
+    : [];
+
+  const debounceTimerRef = React.useRef<ReturnType<typeof setTimeout>>(null);
 
   const fallbackProps = {
     open: isOpen,
     onOpenChange: setIsOpen,
-    inputValue,
-    onInputValueChange: setInputValue,
+    ...(isInfiniteLoadable
+      ? {
+          onInputValueChange: (searchTerm: any, { reason }: any) => {
+            if (reason === "item-press") return;
+
+            if (debounceTimerRef.current) {
+              clearTimeout(debounceTimerRef.current);
+            }
+
+            if (searchTerm === "") {
+              setDebouncedInputValue!("");
+            } else {
+              debounceTimerRef.current = setTimeout(() => {
+                setDebouncedInputValue!(searchTerm);
+              }, props.debounceMs ?? 500);
+            }
+          },
+          filter: null,
+        }
+      : {}),
   };
 
   const mergedProps = {
@@ -71,10 +94,10 @@ export function Root<ItemValue, Multiple extends boolean | undefined = false>({
     ...props,
   };
 
-  const asyncOptionsProps = props.loadOptions
-    ? useAsyncOptions(props.loadOptions, {
+  const asyncOptionsProps = isInfiniteLoadable
+    ? useAsyncOptions(props.loadOptions!, {
         isOpen: mergedProps.open,
-        inputValue: mergedProps.inputValue as string,
+        inputValue: debouncedInputValue!,
       })
     : {};
 
@@ -112,21 +135,7 @@ export function Content({
   popupProps?: React.ComponentProps<typeof Combobox.Popup>;
   widthVariant?: "trigger" | "fit" | "enforced";
 }>) {
-  const {
-    chipsTriggerRef,
-    searchableTriggerRef,
-    isLoading,
-    isError,
-    isLoadingMore,
-    hasMore,
-    onLoadMore,
-  } = useComboboxContext();
-  const [infiniteScrollRef] = useInfiniteScroll({
-    isLoadingMore: !!isLoadingMore,
-    hasMore: !!hasMore,
-    onLoadMore: () => onLoadMore?.(),
-    disabled: isError,
-  });
+  const { chipsTriggerRef, searchableTriggerRef } = useComboboxContext();
 
   return (
     <Combobox.Portal {...portalProps}>
@@ -157,39 +166,59 @@ export function Content({
           {...popupProps}
         >
           {children}
-
-          {!isLoading && !isError && (
-            <Combobox.Empty
-              className={cn(SINGLE_TEXT_CONTENT_CN, "empty:hidden")}
-            >
-              {empty}
-            </Combobox.Empty>
-          )}
-
-          {isLoading && (
-            <Combobox.Status className={SINGLE_TEXT_CONTENT_CN}>
-              Loading...
-            </Combobox.Status>
-          )}
-
-          {isError && (
-            <Combobox.Status className={SINGLE_TEXT_CONTENT_CN}>
-              Error loading options
-            </Combobox.Status>
-          )}
-
-          {hasMore && (
-            <Combobox.Status
-              ref={infiniteScrollRef}
-              className="flex h-10 items-center justify-center"
-              aria-label="Loading more options"
-            >
-              <Spinner className="stroke-ppx-neutral-10" size="medium" />
-            </Combobox.Status>
-          )}
+          <RenderStatus emptyText={empty} />
         </Combobox.Popup>
       </Combobox.Positioner>
     </Combobox.Portal>
+  );
+}
+
+function RenderStatus(props: { emptyText: string }) {
+  const { isError, isLoading, hasMore } = useComboboxContext();
+
+  if (isLoading) {
+    return (
+      <Combobox.Status className={SINGLE_TEXT_CONTENT_CN}>
+        Loading...
+      </Combobox.Status>
+    );
+  }
+
+  if (isError) {
+    return (
+      <Combobox.Status className={SINGLE_TEXT_CONTENT_CN}>
+        Error loading options
+      </Combobox.Status>
+    );
+  }
+
+  if (hasMore) {
+    return <LoadMoreSpinner />;
+  }
+
+  return (
+    <Combobox.Empty className={cn(SINGLE_TEXT_CONTENT_CN, "empty:hidden")}>
+      {props.emptyText}
+    </Combobox.Empty>
+  );
+}
+
+function LoadMoreSpinner() {
+  const { isError, isLoadingMore, hasMore, onLoadMore } = useComboboxContext();
+  const [infiniteScrollRef] = useInfiniteScroll({
+    isLoadingMore: !!isLoadingMore,
+    hasMore: !!hasMore,
+    onLoadMore: () => onLoadMore?.(),
+    disabled: isError,
+  });
+  return (
+    <Combobox.Status
+      ref={infiniteScrollRef}
+      className="flex h-10 items-center justify-center"
+      aria-label="Loading more options"
+    >
+      <Spinner className="stroke-ppx-neutral-10" size="medium" />
+    </Combobox.Status>
   );
 }
 
@@ -326,46 +355,33 @@ export function Trigger({
     >
       {children}
       <div className="flex shrink-0 items-center gap-2">
-        {isLoading && <LoadingIndicator />}
+        {isLoading ? (
+          <LoadingIndicator />
+        ) : (
+          <Combobox.Clear
+            aria-label="Clear selection"
+            render={(clearProps) => (
+              <InputGroup.Button size="icon-xs" {...clearProps}>
+                <ClearIcon className="size-4" />
+              </InputGroup.Button>
+            )}
+          />
+        )}
         <ChevronDownIcon />
       </div>
     </Combobox.Trigger>
   );
 }
 
-/**
- * Renders the value, if `value` is a string or an object with `label` property in it,
- * then renders that value else you should provide a render function to render your custom value
- * **/
 export function Value({
   children,
   className,
   placeholder,
   ...props
-}: {
-  placeholder?: string;
-  children?: React.ReactNode | ((selectedValue: any) => React.ReactNode);
-  className?: string;
-}) {
+}: Combobox.Value.Props & { className?: string }) {
   return (
     <span className={cn("text-ppx-sm truncate", className)} {...props}>
-      <Combobox.Value>
-        {(value) => {
-          if (value == null && placeholder) {
-            return placeholder;
-          }
-
-          if (children) {
-            return typeof children === "function" ? children(value) : children;
-          }
-
-          if (value && typeof value === "object" && "label" in value) {
-            return value.label;
-          }
-
-          return value;
-        }}
-      </Combobox.Value>
+      <Combobox.Value placeholder={placeholder} children={children} />
     </span>
   );
 }
@@ -456,6 +472,14 @@ export function Chip(
         <CloseIcon className="size-3" />
       </Combobox.ChipRemove>
     </Combobox.Chip>
+  );
+}
+
+export function Clear({ children, ...props }: Combobox.Clear.Props) {
+  return (
+    <Combobox.Clear {...props}>
+      <ClearIcon className="size-4" />
+    </Combobox.Clear>
   );
 }
 

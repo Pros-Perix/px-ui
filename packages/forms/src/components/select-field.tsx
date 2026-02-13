@@ -6,14 +6,10 @@ type AllRootProps<
   TMultiple extends boolean | undefined = false,
 > = React.ComponentProps<typeof Select.Root<TItem, TMultiple>>;
 
-type RootProps<
-  TItem = any,
-  TMultiple extends boolean | undefined = false,
-> = Pick<
-  AllRootProps<TItem, TMultiple>,
+type RootProps<TItem = any> = Pick<
+  AllRootProps<TItem, false>,
   | "value"
   | "onValueChange"
-  | "multiple"
   | "disabled"
   | "invalid"
   | "isItemEqualToValue"
@@ -22,10 +18,7 @@ type RootProps<
   | "name"
 >;
 
-interface SelectFieldProps<
-  TItem = any,
-  TMultiple extends boolean | undefined = false,
-> extends RootProps<TItem, TMultiple> {
+interface SelectFieldProps<TItem = any> extends RootProps<TItem> {
   /**
    * Array of items to display in the select dropdown
    */
@@ -89,10 +82,7 @@ interface SelectFieldProps<
  * />
  * ```
  */
-export function SelectField<
-  TItem = any,
-  TMultiple extends boolean | undefined = false,
->(props: SelectFieldProps<TItem, TMultiple>) {
+export function SelectField<TItem = any>(props: SelectFieldProps<TItem>) {
   const {
     items,
     value,
@@ -100,7 +90,6 @@ export function SelectField<
     renderLabel,
     renderOption,
     placeholder,
-    multiple,
     disabled,
     invalid,
     name,
@@ -156,10 +145,9 @@ export function SelectField<
   };
 
   return (
-    <Select.Root<TItem, TMultiple>
+    <Select.Root<TItem, false>
       value={value}
       onValueChange={onValueChange}
-      multiple={multiple}
       disabled={disabled}
       invalid={invalid}
       name={name}
@@ -174,26 +162,9 @@ export function SelectField<
       >
         <Select.Value placeholder={placeholder}>
           {(selectedValue: any) => {
-            // Handle multiple selection
-            if (multiple && Array.isArray(selectedValue)) {
-              // For multiple, show MultiSelectedValue by default
-              const labels = selectedValue.map((item: TItem) => {
-                const label = renderValueLabel(item);
-                return typeof label === "string" ? label : String(label);
-              });
-              return (
-                <Select.MultiSelectedValue
-                  selectedValue={labels}
-                  maxItems={2}
-                />
-              );
-            }
-
-            // Single selection - show placeholder if no value
             if (selectedValue == null) {
               return placeholder || null;
             }
-
             return renderValueLabel(selectedValue as TItem);
           }}
         </Select.Value>
@@ -203,12 +174,10 @@ export function SelectField<
         <Select.List>
           {(items as any[])?.map((item, index) => {
             const key = getItemKey(item, index);
-            const ItemComponent = multiple ? Select.MultiItem : Select.Item;
-
             return (
-              <ItemComponent key={key} value={item}>
+              <Select.Item key={key} value={item}>
                 {renderItemContent(item)}
-              </ItemComponent>
+              </Select.Item>
             );
           })}
         </Select.List>

@@ -48,7 +48,7 @@ const [value, setValue] = useState<string | null>(null);
 
 ### Multiple Selection
 
-Enable multi-select mode to allow users to choose multiple options.
+Enable multi-select mode to allow users to choose multiple options. Use `Select.Value` with a render function to customize how selected values are displayed.
 
 <Preview>
   <SelectMultipleDemo />
@@ -60,8 +60,19 @@ const [value, setValue] = useState<string[]>([]);
 
 <Select.Root multiple value={value} onValueChange={setValue}>
   <Select.Trigger>
-    <Select.MultiSelectedValue selectedValue={value} maxItems={2} />
-    <Select.Value placeholder="Select technologies" />
+    <Select.Value placeholder="Select technologies">
+      {(selectedValues: string[]) => {
+        if (!selectedValues || selectedValues.length === 0) {
+          return "Select technologies";
+        }
+        const maxItems = 2;
+        const displayValues = selectedValues.slice(0, maxItems).join(", ");
+        const remaining = selectedValues.length - maxItems;
+        return remaining > 0
+          ? `${displayValues} (+${remaining})`
+          : displayValues;
+      }}
+    </Select.Value>
   </Select.Trigger>
   <Select.Content>
     <Select.List>
@@ -96,8 +107,8 @@ Select components support different sizes to match your design needs.
 </Select.Root>
 
 <Select.Root value={value} onValueChange={setValue}>
-  <Select.Trigger size="md">
-    <Select.Value placeholder="Medium" />
+  <Select.Trigger size="default">
+    <Select.Value placeholder="Default" />
   </Select.Trigger>
   <Select.Content>
     <Select.List>
@@ -162,8 +173,8 @@ Button that opens the select dropdown when clicked.
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `size` | `"sm" \| "md" \| "lg"` | `"md"` | Size of the trigger button |
-| `widthVariant` | `"fit" \| "enforced" \| "full"` | `"enforced"` | Width behavior of the trigger |
+| `size` | `"default" \| "sm"` | `"default"` | Size of the trigger button |
+| `widthVariant` | `"enforced" \| "fit" \| "full"` | `"enforced"` | Width behavior of the trigger |
 | `className` | `string` | - | Additional CSS classes |
 
 **Inherited Props:** Inherits all props from [Base UI Select.Trigger](https://base-ui.com/react/components/select#trigger)
@@ -240,19 +251,6 @@ Item component for multi-select mode with checkbox indicator.
 | `className` | `string` | - | Additional CSS classes |
 
 **Inherited Props:** Inherits all props from [Base UI Select.Item](https://base-ui.com/react/components/select#item)
-
----
-
-### `Select.MultiSelectedValue`
-
-Helper component to display selected values in multi-select mode.
-
-**Custom Props:**
-
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `selectedValue` | `any[]` | - | Array of selected values |
-| `maxItems` | `number` | - | Maximum number of items to display before showing count |
 
 ---
 

@@ -7,8 +7,19 @@ export function SelectMultipleDemo() {
   return (
     <Select.Root multiple value={value} onValueChange={setValue}>
       <Select.Trigger>
-        <Select.MultiSelectedValue selectedValue={value} maxItems={2} />
-        <Select.Value placeholder="Select technologies" />
+        <Select.Value placeholder="Select technologies">
+          {(selectedValues: string[]) => {
+            if (!selectedValues || selectedValues.length === 0) {
+              return "Select technologies";
+            }
+            const maxItems = 2;
+            const displayValues = selectedValues.slice(0, maxItems).join(", ");
+            const remaining = selectedValues.length - maxItems;
+            return remaining > 0
+              ? `${displayValues} (+${remaining})`
+              : displayValues;
+          }}
+        </Select.Value>
       </Select.Trigger>
       <Select.Content>
         <Select.List>

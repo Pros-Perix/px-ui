@@ -9,9 +9,9 @@ import {
 } from "../tw-styles/dropdown";
 import CheckIcon from "../icons/check-icon";
 import ChevronDownIcon from "../icons/chevron-down-icon";
-import { cva, type VariantProps } from "class-variance-authority";
+import { type VariantProps } from "class-variance-authority";
 
-type SelectContextValues = {
+type SelectContextValues = Select.Root.Props<any, any> & {
   invalid?: boolean;
 };
 
@@ -23,20 +23,20 @@ function useSelectContext() {
   return React.useContext(SelectContext);
 }
 
-export function Root<
-  Value = any,
-  Multiple extends boolean | undefined = false,
->({
+export function Root<Value, Multiple extends boolean | undefined = false>({
   children,
   invalid,
   ...props
-}: React.ComponentPropsWithoutRef<typeof Select.Root<Value, Multiple>> & {
+}: Select.Root.Props<Value, Multiple> & {
   invalid?: boolean;
 }) {
-  const value = React.useMemo(() => ({ invalid }), [invalid]);
+  const contextValue = React.useMemo(
+    () => ({ invalid, ...props }),
+    [invalid, props],
+  );
 
   return (
-    <SelectContext.Provider value={value}>
+    <SelectContext.Provider value={contextValue}>
       <Select.Root {...props}>{children}</Select.Root>
     </SelectContext.Provider>
   );
@@ -177,34 +177,12 @@ export function MultiSelectedValue({
   );
 }
 
-/**
- * Renders the value, if `value` is a string or an object with `label` property in it,
- * then renders that value else you should provide a render function to render your custom value
- * **/
-export function Value({
-  children,
-  className,
-  placeholder,
-  ...props
-}: Select.Value.Props & { placeholder?: string }) {
+export function Value({ className, ...props }: Select.Value.Props) {
   return (
-    <Select.Value className={cn("text-ppx-sm truncate", className)} {...props}>
-      {(value) => {
-        if (value == null && placeholder) {
-          return placeholder;
-        }
-
-        if (children) {
-          return typeof children === "function" ? children(value) : children;
-        }
-
-        if (value && typeof value === "object" && "label" in value) {
-          return value.label;
-        }
-
-        return value;
-      }}
-    </Select.Value>
+    <Select.Value
+      className={cn("text-ppx-sm truncate", className)}
+      {...props}
+    />
   );
 }
 

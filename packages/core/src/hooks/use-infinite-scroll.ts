@@ -25,7 +25,7 @@ function useInfiniteScroll({
   onLoadMore,
   rootMargin,
   disabled,
-  threshold,
+  threshold = 0,
 }: UseInfiniteScrollHookArgs) {
   const [ref, entry] = useIntersectionObserver({
     rootMargin,

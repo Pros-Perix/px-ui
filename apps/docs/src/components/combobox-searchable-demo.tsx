@@ -1,7 +1,12 @@
 import { Combobox } from "@px-ui/core";
 import { useState } from "react";
 
-const countries = [
+interface Country {
+  value: string;
+  label: string;
+}
+
+const countries: Country[] = [
   { value: "us", label: "United States" },
   { value: "uk", label: "United Kingdom" },
   { value: "ca", label: "Canada" },
@@ -13,18 +18,27 @@ const countries = [
 ];
 
 export function ComboboxSearchableDemo() {
-  const [value, setValue] = useState<any>(null);
+  const [value, setValue] = useState<Country | null>(null);
 
   return (
-    <Combobox.Root value={value} onValueChange={setValue}>
-      <Combobox.SearchableTrigger placeholder="Search countries..." />
+    <Combobox.Root
+      items={countries}
+      value={value}
+      onValueChange={setValue}
+      isItemEqualToValue={(item, selected) => item.value === selected.value}
+      itemToStringLabel={(item) => item.label}
+    >
+      <Combobox.SearchableTrigger
+        placeholder="Select a country"
+        widthVariant="enforced"
+      />
       <Combobox.Content>
         <Combobox.List>
-          {countries.map((country) => (
+          {(country: Country) => (
             <Combobox.Item key={country.value} value={country}>
               {country.label}
             </Combobox.Item>
-          ))}
+          )}
         </Combobox.List>
       </Combobox.Content>
     </Combobox.Root>

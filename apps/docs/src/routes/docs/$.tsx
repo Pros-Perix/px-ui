@@ -22,6 +22,8 @@ import { Preview, PreviewStack, CodeBlock } from "@/components/preview";
 import { buttonVariants } from "@px-ui/core";
 import { LLMCopyButton } from "@/components/page-actions";
 import { ExternalLink } from "lucide-react";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { useMemo } from "react";
 
 export const Route = createFileRoute("/docs/$")({
   component: Page,
@@ -114,19 +116,27 @@ function Page() {
   const { pageTree } = useFumadocsLoader(data);
   const Content = clientLoader.getComponent(data.path);
   const link = linkOptions({ to: "/llms-full.txt" });
+  const queryClient = useMemo(() => new QueryClient(), []);
 
   return (
-    <DocsLayout
-      {...baseOptions()}
-      tree={{
-        ...pageTree,
-        children: [
-          ...pageTree.children,
-          { type: "page", name: "llms-full.txt", url: link.to, external: true },
-        ],
-      }}
-    >
-      <Content />
-    </DocsLayout>
+    <QueryClientProvider client={queryClient}>
+      <DocsLayout
+        {...baseOptions()}
+        tree={{
+          ...pageTree,
+          children: [
+            ...pageTree.children,
+            {
+              type: "page",
+              name: "llms-full.txt",
+              url: link.to,
+              external: true,
+            },
+          ],
+        }}
+      >
+        <Content />
+      </DocsLayout>
+    </QueryClientProvider>
   );
 }
