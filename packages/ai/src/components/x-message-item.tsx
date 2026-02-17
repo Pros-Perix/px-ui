@@ -1,4 +1,5 @@
 import type { Message, MessageType } from "../context/xandi-context";
+import * as XMessageActions from "./x-message-actions";
 import { MarkdownRenderer } from "./renderers/markdown-renderer";
 import { TextRenderer } from "./renderers/text-renderer";
 
@@ -31,8 +32,23 @@ interface MessageRendererProps {
 }
 
 function MessageRenderer({ type, message }: MessageRendererProps) {
+  const isAssistant = message.role !== "user";
   if (typeof message.content !== "string") {
-    return <>{message.content}</>;
+    return (
+      <>
+        {message.content}
+        {isAssistant && (
+          <div className="mt-2">
+            <XMessageActions.Root>
+              <XMessageActions.Feedback messageId={message.id} />
+              {message.debugTrace != null && (
+                <XMessageActions.Debug messageId={message.id} debugTrace={message.debugTrace} />
+              )}
+            </XMessageActions.Root>
+          </div>
+        )}
+      </>
+    );
   }
   switch (type) {
     case "text":
