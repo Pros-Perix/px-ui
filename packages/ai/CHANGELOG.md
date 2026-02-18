@@ -1,5 +1,11 @@
 # @px-ui/ai
 
+## 6.1.0
+
+### Minor Changes
+
+- bf36fb3: Add base classes for list message types
+
 ## 6.0.0
 
 ### Patch Changes
