@@ -2,6 +2,7 @@ import { useState } from "react";
 import {
   Xandi,
   XandiProvider,
+  XBaseListing,
   XHeader,
   XSidebar,
   type XandiResponse,
@@ -53,6 +54,16 @@ interface Job {
   created_at: string;
 }
 
+interface Worker {
+  id: string;
+  first_name: string;
+  last_name: string;
+  email: string;
+  on_assignment_progress: number;
+  assignment_title?: string;
+  worker_type: string;
+}
+
 interface ApiResponse {
   success: boolean;
   message: string;
@@ -60,6 +71,7 @@ interface ApiResponse {
     intent: string;
     data: {
       jobs?: Job[];
+      workers?: Worker[];
       pagination?: {
         page: number;
         per_page: number;
@@ -67,6 +79,8 @@ interface ApiResponse {
       };
     };
     conversation_id: string;
+    tool_id?: string;
+    operand?: unknown;
   };
   trace?: {
     trace_id: string;
@@ -138,31 +152,145 @@ interface ConversationMessagesResponse {
   message: string;
 }
 
-// ============================================================================
-// Helpers
-// ============================================================================
+const JOBS_LISTING_BASE = "https://app.uat.prosperix.com/jobs/listing/any";
+const WORKERS_LISTING_BASE = "https://app.uat.prosperix.com/workers/listing/any";
 
-function formatJobsAsMarkdown(jobs: Job[], pagination?: { page: number; per_page: number; total: number }): string {
-  const lines: string[] = [];
+function encodeOperandToFilter(operand: unknown): string {
+  const json = JSON.stringify(operand ?? {});
+  const base64 = typeof btoa !== "undefined"
+    ? btoa(unescape(encodeURIComponent(json)))
+    : Buffer.from(json, "utf-8").toString("base64");
+  return base64.replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+}
 
-  if (pagination) {
-    lines.push(`Found **${pagination.total}** job(s) | Page ${pagination.page}\n`);
+function listingUrl(base: string, operand: unknown): string {
+  const filter = encodeOperandToFilter(operand);
+  return `${base}?filter=${filter}`;
+}
+
+function JobCard({ job }: { job: Job }) {
+  const date = new Date(job.created_at).toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  });
+  return (
+    <div className="flex flex-col gap-1">
+      <span className="font-medium text-ppx-foreground">{job.title}</span>
+      <span className="text-ppx-xs text-ppx-neutral-10">
+        {job.status} · {job.office_city}, {job.office_country}
+      </span>
+      <span className="text-ppx-xs text-ppx-neutral-10">{date}</span>
+      <a
+        href={`${JOBS_LISTING_BASE}/${job.id}`}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="mt-1 text-ppx-xs text-ppx-green-5 hover:underline"
+      >
+        View Details →
+      </a>
+    </div>
+  );
+}
+
+function WorkerCard({ worker }: { worker: Worker }) {
+  const name = [worker.first_name, worker.last_name].filter(Boolean).join(" ") || "—";
+  return (
+    <div className="flex flex-col gap-1">
+      <span className="font-medium text-ppx-foreground">{name}</span>
+      <span className="text-ppx-xs text-ppx-neutral-10">{worker.email}</span>
+      {worker.assignment_title != null && worker.assignment_title !== "" && (
+        <span className="text-ppx-xs text-ppx-neutral-10">{worker.assignment_title}</span>
+      )}
+      <span className="text-ppx-xs text-ppx-neutral-10">
+        {worker.worker_type}
+        {worker.on_assignment_progress != null && (
+          <> · {worker.on_assignment_progress}% on assignment</>
+        )}
+      </span>
+      <a
+        href={`${WORKERS_LISTING_BASE}/${worker.id}`}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="mt-1 text-ppx-xs text-ppx-green-5 hover:underline"
+      >
+        View Details →
+      </a>
+    </div>
+  );
+}
+
+function respTransformer(json: ApiResponse): XandiResponse {
+  const toolId = json.data.tool_id ?? json.trace?.tool_id;
+  const base = {
+    conversationId: json.data.conversation_id,
+    debugTrace: json.trace,
+    toolId,
+    intent: json.data.intent,
+    operand: json.data.operand ?? json.data.data,
+  };
+  const data = json.data.data as {
+    jobs?: Job[];
+    workers?: Worker[];
+    pagination?: { page: number; per_page: number; total: number };
+  };
+
+  if (toolId === "jobs.get" && data?.jobs && data.jobs.length > 0) {
+    const viewAllHref = listingUrl(JOBS_LISTING_BASE, base.operand);
+    return {
+      ...base,
+      content: (
+        <XBaseListing<Job>
+          title="Open Jobs"
+          count={data.pagination?.total}
+          items={data.jobs}
+          actions={
+            <a
+              href={viewAllHref}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="cursor-pointer text-ppx-sm font-medium text-ppx-green-5 hover:underline"
+            >
+              View All →
+            </a>
+          }
+        >
+          {(job) => <JobCard job={job} />}
+        </XBaseListing>
+      ),
+    };
   }
 
-  jobs.forEach((job, index) => {
-    const date = new Date(job.created_at).toLocaleDateString("en-US", {
-      month: "short",
-      day: "numeric",
-      year: "numeric",
-    });
-    const statusEmoji = job.status === "Open" ? "🟢" : job.status === "Draft" ? "📝" : "⚪";
+  if (toolId === "workforce.get_worker" && data?.workers && data.workers.length > 0) {
+    const viewAllHref = listingUrl(WORKERS_LISTING_BASE, base.operand);
+    return {
+      ...base,
+      content: (
+        <XBaseListing<Worker>
+          title="People"
+          count={data.pagination?.total}
+          items={data.workers}
+          actions={
+            <a
+              href={viewAllHref}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="cursor-pointer text-ppx-sm font-medium text-ppx-green-5 hover:underline"
+            >
+              View All →
+            </a>
+          }
+        >
+          {(worker) => <WorkerCard worker={worker} />}
+        </XBaseListing>
+      ),
+    };
+  }
 
-    lines.push(`**${index + 1}. ${job.title}**`);
-    lines.push(`${statusEmoji} ${job.status} · ${job.office_city}, ${job.office_country} · ${date}`);
-    lines.push(`[View Details →](https://app.prosperix.com/jobs/listing/any/${job.id})\n`);
-  });
-
-  return lines.join("\n");
+  return {
+    ...base,
+    content: json.message,
+  };
 }
 
 // ============================================================================
@@ -170,7 +298,6 @@ function formatJobsAsMarkdown(jobs: Job[], pagination?: { page: number; per_page
 // ============================================================================
 
 const xandiHandlers: XandiHandlers = {
-  // Fetch AI response
   fetchResp: async (message, options): Promise<XandiResponse> => {
     const response = await fetch(API_URL, {
       method: "POST",
@@ -188,19 +315,7 @@ const xandiHandlers: XandiHandlers = {
       throw new Error("Failed to get response");
     }
 
-    // Transform response content
-    let content = json.message;
-
-    // Transform jobs data into markdown if present
-    if (json.data?.data?.jobs && json.data.data.jobs.length > 0) {
-      content = formatJobsAsMarkdown(json.data.data.jobs, json.data.data.pagination);
-    }
-
-    return {
-      content,
-      conversationId: json.data.conversation_id,
-      debugTrace: json.trace,
-    };
+    return respTransformer(json);
   },
 
   // Get a conversation by ID (loads messages from /conversation/{id}/messages)

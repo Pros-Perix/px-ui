@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import { createContext, useContext, useEffect, useRef, useState } from "react";
 
 import { XANDI_AVATAR_URL } from "../constants";
@@ -8,9 +9,12 @@ export type FeedbackType = "up" | "down" | null;
 export interface Message {
   id: string;
   role: "user" | "assistant";
-  content: string;
+  content: string | ReactNode;
   type?: MessageType;
   debugTrace?: unknown;
+  toolId?: string;
+  intent?: string;
+  operand?: unknown;
 }
 
 export interface XandiApiResponse {
@@ -20,6 +24,8 @@ export interface XandiApiResponse {
     intent: string;
     data: unknown;
     conversation_id: string;
+    tool_id?: string;
+    operand?: unknown;
   };
   trace?: {
     trace_id: string;
@@ -31,10 +37,13 @@ export interface XandiApiResponse {
 }
 
 export interface XandiResponse {
-  content: string;
+  content: string | ReactNode;
   type?: MessageType;
   debugTrace?: unknown;
   conversationId?: string;
+  toolId?: string;
+  intent?: string;
+  operand?: unknown;
 }
 
 export interface ConversationSummary {
@@ -192,6 +201,9 @@ export function XandiProvider({
         content: response.content,
         type: response.type,
         debugTrace: response.debugTrace,
+        toolId: response.toolId,
+        intent: response.intent,
+        operand: response.operand,
       };
 
       setConversation((prev) => ({

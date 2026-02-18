@@ -89,7 +89,7 @@ export function XMessageContainer({ height = 400, onLoadMore }: XMessageContaine
       className="flex flex-col overflow-y-auto py-[10px]"
       style={{ height: typeof height === "number" ? `${height}px` : height }}
     >
-      <div className="flex flex-col-reverse gap-5 p-4">
+      <div className="flex min-w-0 flex-col-reverse gap-5 p-4">
         {isLoading && <XTypingIndicator />}
         {[...messages].reverse().map((message) => (
           <XMessageItem key={message.id} message={message} />
