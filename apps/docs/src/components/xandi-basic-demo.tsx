@@ -54,6 +54,16 @@ interface Job {
   created_at: string;
 }
 
+interface Worker {
+  id: string;
+  first_name: string;
+  last_name: string;
+  email: string;
+  on_assignment_progress: number;
+  assignment_title?: string;
+  worker_type: string;
+}
+
 interface ApiResponse {
   success: boolean;
   message: string;
@@ -61,6 +71,7 @@ interface ApiResponse {
     intent: string;
     data: {
       jobs?: Job[];
+      workers?: Worker[];
       pagination?: {
         page: number;
         per_page: number;
@@ -142,6 +153,7 @@ interface ConversationMessagesResponse {
 }
 
 const JOBS_LISTING_BASE = "https://app.uat.prosperix.com/jobs/listing/any";
+const WORKERS_LISTING_BASE = "https://app.uat.prosperix.com/workers/listing/any";
 
 function encodeOperandToFilter(operand: unknown): string {
   const json = JSON.stringify(operand ?? {});
@@ -151,9 +163,9 @@ function encodeOperandToFilter(operand: unknown): string {
   return base64.replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
 }
 
-function jobsListingUrl(operand: unknown): string {
+function listingUrl(base: string, operand: unknown): string {
   const filter = encodeOperandToFilter(operand);
-  return `${JOBS_LISTING_BASE}?filter=${filter}`;
+  return `${base}?filter=${filter}`;
 }
 
 function JobCard({ job }: { job: Job }) {
@@ -181,6 +193,33 @@ function JobCard({ job }: { job: Job }) {
   );
 }
 
+function WorkerCard({ worker }: { worker: Worker }) {
+  const name = [worker.first_name, worker.last_name].filter(Boolean).join(" ") || "—";
+  return (
+    <div className="flex flex-col gap-1">
+      <span className="font-medium text-ppx-foreground">{name}</span>
+      <span className="text-ppx-xs text-ppx-neutral-10">{worker.email}</span>
+      {worker.assignment_title != null && worker.assignment_title !== "" && (
+        <span className="text-ppx-xs text-ppx-neutral-10">{worker.assignment_title}</span>
+      )}
+      <span className="text-ppx-xs text-ppx-neutral-10">
+        {worker.worker_type}
+        {worker.on_assignment_progress != null && (
+          <> · {worker.on_assignment_progress}% on assignment</>
+        )}
+      </span>
+      <a
+        href={`${WORKERS_LISTING_BASE}/${worker.id}`}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="mt-1 text-ppx-xs text-ppx-green-5 hover:underline"
+      >
+        View Details →
+      </a>
+    </div>
+  );
+}
+
 function respTransformer(json: ApiResponse): XandiResponse {
   const toolId = json.data.tool_id ?? json.trace?.tool_id;
   const base = {
@@ -190,10 +229,14 @@ function respTransformer(json: ApiResponse): XandiResponse {
     intent: json.data.intent,
     operand: json.data.operand ?? json.data.data,
   };
-  const data = json.data.data as { jobs?: Job[]; pagination?: { page: number; per_page: number; total: number } };
+  const data = json.data.data as {
+    jobs?: Job[];
+    workers?: Worker[];
+    pagination?: { page: number; per_page: number; total: number };
+  };
 
   if (toolId === "jobs.get" && data?.jobs && data.jobs.length > 0) {
-    const viewAllHref = jobsListingUrl(base.operand);
+    const viewAllHref = listingUrl(JOBS_LISTING_BASE, base.operand);
     return {
       ...base,
       content: (
@@ -213,6 +256,32 @@ function respTransformer(json: ApiResponse): XandiResponse {
           }
         >
           {(job) => <JobCard job={job} />}
+        </XBaseListing>
+      ),
+    };
+  }
+
+  if (toolId === "workforce.get_worker" && data?.workers && data.workers.length > 0) {
+    const viewAllHref = listingUrl(WORKERS_LISTING_BASE, base.operand);
+    return {
+      ...base,
+      content: (
+        <XBaseListing<Worker>
+          title="People"
+          count={data.pagination?.total}
+          items={data.workers}
+          actions={
+            <a
+              href={viewAllHref}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="cursor-pointer text-ppx-sm font-medium text-ppx-green-5 hover:underline"
+            >
+              View All →
+            </a>
+          }
+        >
+          {(worker) => <WorkerCard worker={worker} />}
         </XBaseListing>
       ),
     };
