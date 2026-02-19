@@ -1,5 +1,11 @@
 # @px-ui/ai
 
+## 6.2.0
+
+### Minor Changes
+
+- 8887955: Fix xmessage container height
+
 ## 6.1.0
 
 ### Minor Changes
