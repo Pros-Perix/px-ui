@@ -25,11 +25,13 @@ export function Xandi({
   const isEmpty = conversation.messages.length === 0;
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-1 flex-col min-h-0">
       {isEmpty ? (
         <XWelcome message={welcomeMessage} />
       ) : (
-        <XMessageContainer />
+        <div className="min-h-0 flex-1 flex flex-col">
+          <XMessageContainer height="100%" />
+        </div>
       )}
       <XMainIntake suggestions={isEmpty ? suggestions : []} />
     </div>
