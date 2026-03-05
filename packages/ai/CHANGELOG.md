@@ -1,5 +1,11 @@
 # @px-ui/ai
 
+## 6.3.0
+
+### Minor Changes
+
+- 9c5dfb3: Add more exports to xandi
+
 ## 6.2.0
 
 ### Minor Changes
