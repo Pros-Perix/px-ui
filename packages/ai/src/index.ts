@@ -25,3 +25,6 @@ export { XChatHistory, type XChatHistoryProps, type ChatHistoryItem } from "./co
 export * as XMessageActions from "./components/x-message-actions";
 export { type Suggestion } from "./components/x-main-intake";
 export { XBaseListing, type XBaseListingProps } from "./components/x-base-listing";
+export { XWelcome, type XWelcomeProps } from "./components/x-welcome";
+export { XMessageContainer, type XMessageContainerProps } from "./components/x-message-container";
+export { XMainIntake, type XMainIntakeProps } from "./components/x-main-intake";
