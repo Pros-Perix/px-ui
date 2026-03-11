@@ -1,0 +1,106 @@
+---
+title: Phone Input
+description: An international phone number input with country selector, formatting, and validation using E.164 format
+---
+
+import PhoneInputBasicDemo from "../../../src/components/phone-input-basic-demo.tsx";
+import PhoneInputCountriesDemo from "../../../src/components/phone-input-countries-demo.tsx";
+import PhoneInputValidationDemo from "../../../src/components/phone-input-validation-demo.tsx";
+import PhoneInputDisabledDemo from "../../../src/components/phone-input-disabled-demo.tsx";
+
+## Overview
+
+The PhoneInput component provides an international phone number input with a country selector dropdown. It automatically validates and formats phone numbers into E.164 format using `google-libphonenumber`, and shows inline error feedback for invalid numbers.
+
+## Import
+
+```tsx
+import { PhoneInput } from "@px-ui/forms";
+```
+
+## Usage
+
+<Preview>
+  <PhoneInputBasicDemo />
+</Preview>
+
+<CodeBlock>
+```tsx
+import { useState } from "react";
+import { PhoneInput } from "@px-ui/forms";
+
+function Example() {
+  const [phone, setPhone] = useState("");
+
+  return <PhoneInput value={phone} onChange={setPhone} />;
+}
+```
+</CodeBlock>
+
+## Examples
+
+### Default Country
+
+Use the `country` prop to set the default selected country. Accepts ISO 3166-1 alpha-2 codes (lowercase).
+
+<Preview>
+  <PhoneInputCountriesDemo />
+</Preview>
+
+<CodeBlock>
+```tsx
+<PhoneInput value={phone} onChange={setPhone} country="us" />
+<PhoneInput value={phone} onChange={setPhone} country="gb" />
+<PhoneInput value={phone} onChange={setPhone} country="in" />
+```
+</CodeBlock>
+
+### Validation
+
+PhoneInput has built-in validation powered by `google-libphonenumber`. Invalid numbers display an error message and red styling. You can also force the error state externally via the `error` prop.
+
+<Preview>
+  <PhoneInputValidationDemo />
+</Preview>
+
+<CodeBlock>
+```tsx
+{/* Built-in validation */}
+<PhoneInput value={phone} onChange={setPhone} />
+
+{/* External error state */}
+<PhoneInput value={phone} onChange={setPhone} error />
+```
+</CodeBlock>
+
+### Disabled
+
+<Preview>
+  <PhoneInputDisabledDemo />
+</Preview>
+
+<CodeBlock>
+```tsx
+<PhoneInput value="+14155552671" onChange={() => {}} disabled />
+```
+</CodeBlock>
+
+## API Reference
+
+### PhoneInput
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `value` | `string` | - | The phone number value (E.164 format when valid) |
+| `onChange` | `(value: string) => void` | - | Callback fired when the value changes |
+| `country` | `string` | `"us"` | Default country code (ISO 3166-1 alpha-2, lowercase) |
+| `error` | `boolean` | `false` | Forces error styling regardless of validation state |
+| `placeholder` | `string` | - | Placeholder text for the input |
+| `disabled` | `boolean` | `false` | Disables the input |
+| `className` | `string` | - | Additional CSS classes for the wrapper |
+
+## Notes
+
+- Valid phone numbers are automatically formatted to [E.164](https://en.wikipedia.org/wiki/E.164) (e.g., `+14155552671`).
+- Invalid numbers pass through the raw input string to `onChange`.
+- The country dropdown allows users to switch countries at any time; validation adjusts to the selected region.
