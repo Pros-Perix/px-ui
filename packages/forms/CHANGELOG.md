@@ -1,5 +1,11 @@
 # @px-ui/forms
 
+## 12.0.2
+
+### Patch Changes
+
+- 9c00ceb: Fix phone input buggy onChange implementation
+
 ## 12.0.1
 
 ### Patch Changes
