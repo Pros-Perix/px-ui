@@ -61,7 +61,7 @@ export function Content({
   sideOffset?: BaseTooltip.Positioner.Props["sideOffset"];
 }) {
   return (
-    <TooltipPortal {...portalProps}>
+    <TooltipPortal className="z-60" {...portalProps}>
       <TooltipPositioner sideOffset={sideOffset} align={align} side={side}>
         <BaseTooltip.Popup
           data-slot="tooltip-content"
