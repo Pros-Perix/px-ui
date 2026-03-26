@@ -223,7 +223,7 @@ function SidebarRoot({
 
   return (
     <div
-      className="group peer hidden text-ppx-foreground md:block"
+      className="group peer hidden text-ppx-foreground ppx-md:block"
       data-state={state}
       data-collapsible={state === "collapsed" ? collapsible : ""}
       data-variant={variant}
@@ -246,7 +246,7 @@ function SidebarRoot({
         data-slot="sidebar-container"
         data-side={side}
         className={cn(
-          "fixed inset-y-0 z-10 hidden h-svh w-(--sidebar-width) transition-[left,right,width] duration-200 ease-linear md:flex",
+          "fixed inset-y-0 z-10 hidden h-svh w-(--sidebar-width) transition-[left,right,width] duration-200 ease-linear ppx-md:flex",
           "data-[side=left]:left-0 data-[side=left]:group-data-[collapsible=offcanvas]:left-[calc(var(--sidebar-width)*-1)]",
           "data-[side=right]:right-0 data-[side=right]:group-data-[collapsible=offcanvas]:right-[calc(var(--sidebar-width)*-1)]",
           variant === "floating" || variant === "inset"
@@ -334,7 +334,7 @@ function SidebarRail({
       onClick={toggleSidebar}
       title="Toggle Sidebar"
       className={cn(
-        "absolute inset-y-0 z-20 hidden w-4 transition-all ease-linear sm:flex",
+        "absolute inset-y-0 z-20 hidden w-4 transition-all ease-linear ppx-sm:flex",
         "hover:after:bg-ppx-neutral-5 after:absolute after:inset-y-0 after:start-1/2 after:w-[2px]",
         "group-data-[side=left]:-right-4 group-data-[side=right]:left-0",
         "in-data-[side=left]:cursor-w-resize in-data-[side=right]:cursor-e-resize",
@@ -360,8 +360,8 @@ function SidebarInset({
       data-slot="sidebar-inset"
       className={cn(
         "relative flex w-full flex-1 flex-col bg-ppx-background",
-        "md:peer-data-[variant=inset]:m-2 md:peer-data-[variant=inset]:ml-0 md:peer-data-[variant=inset]:rounded-ppx-m md:peer-data-[variant=inset]:shadow-sm",
-        "md:peer-data-[variant=inset]:peer-data-[state=collapsed]:ml-2",
+        "ppx-md:peer-data-[variant=inset]:m-2 ppx-md:peer-data-[variant=inset]:ml-0 ppx-md:peer-data-[variant=inset]:rounded-ppx-m ppx-md:peer-data-[variant=inset]:shadow-sm",
+        "ppx-md:peer-data-[variant=inset]:peer-data-[state=collapsed]:ml-2",
         className,
       )}
       {...props}
@@ -511,7 +511,7 @@ function SidebarGroupAction({
         "focus-visible:ring-2 focus-visible:ring-ppx-primary-focus",
         "[&>svg]:size-4 [&>svg]:shrink-0",
         "group-data-[collapsible=icon]:hidden",
-        "after:absolute after:-inset-2 md:after:hidden",
+        "after:absolute after:-inset-2 ppx-md:after:hidden",
         className,
       )}
       {...props}
@@ -675,9 +675,9 @@ function SidebarMenuAction({
         "focus-visible:ring-2 focus-visible:ring-ppx-primary-focus",
         "[&>svg]:size-4 [&>svg]:shrink-0",
         "group-data-[collapsible=icon]:hidden",
-        "after:absolute after:-inset-2 md:after:hidden",
+        "after:absolute after:-inset-2 ppx-md:after:hidden",
         showOnHover &&
-          "group-focus-within/menu-item:opacity-100 group-hover/menu-item:opacity-100 peer-data-active/menu-button:text-ppx-foreground aria-expanded:opacity-100 md:opacity-0",
+          "group-focus-within/menu-item:opacity-100 group-hover/menu-item:opacity-100 peer-data-active/menu-button:text-ppx-foreground aria-expanded:opacity-100 ppx-md:opacity-0",
         className,
       )}
       {...props}

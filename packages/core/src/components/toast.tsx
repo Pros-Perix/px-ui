@@ -70,7 +70,7 @@ function Toasts(props: { position: ToastPosition }) {
       )}
       <Toast.Viewport
         className={cn(
-          "max-w-90 fixed z-50 mx-auto flex w-[calc(100%-var(--toast-inset)*2)] [--toast-inset:--spacing(4)] sm:[--toast-inset:--spacing(8)]",
+          "max-w-90 fixed z-50 mx-auto flex w-[calc(100%-var(--toast-inset)*2)] [--toast-inset:--spacing(4)] ppx-sm:[--toast-inset:--spacing(8)]",
           // Vertical positioning
           "data-[position*=top]:top-(--toast-inset)",
           "data-[position*=bottom]:bottom-(--toast-inset)",
