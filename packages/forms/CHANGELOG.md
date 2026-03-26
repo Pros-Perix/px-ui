@@ -1,5 +1,29 @@
 # @px-ui/forms
 
+## 16.0.0
+
+### Minor Changes
+
+- 4cf7739: fix media query mismatch
+
+### Patch Changes
+
+- Updated dependencies [4cf7739]
+  - @px-ui/core@4.9.0
+
+## 15.0.0
+
+### Minor Changes
+
+- 14efc3d: Expose Tooltip portal props
+- 14efc3d: Fixed tooltip popover z-index
+
+### Patch Changes
+
+- Updated dependencies [14efc3d]
+- Updated dependencies [14efc3d]
+  - @px-ui/core@4.8.0
+
 ## 14.0.0
 
 ### Minor Changes

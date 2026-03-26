@@ -1,5 +1,20 @@
 # @px-ui/ai
 
+## 10.0.0
+
+### Patch Changes
+
+- Updated dependencies [4cf7739]
+  - @px-ui/core@4.9.0
+
+## 9.0.0
+
+### Patch Changes
+
+- Updated dependencies [14efc3d]
+- Updated dependencies [14efc3d]
+  - @px-ui/core@4.8.0
+
 ## 8.0.0
 
 ### Patch Changes
