@@ -3,16 +3,19 @@ import { cn } from "../utils";
 import { Avatar, AvatarImpl } from "./avatar";
 import * as Popover from "./popover";
 import * as Tooltip from "./tooltip";
+import { Popover as BasePopover } from "@base-ui/react/popover";
 
 interface AvatarGroupProps {
   avatars: React.ComponentProps<typeof Avatar>[];
   max?: number;
   className?: string;
+  popoverPortalProps?: React.ComponentProps<typeof BasePopover.Portal>;
 }
 
 export function AvatarGroup({ max = 4, avatars, className }: AvatarGroupProps) {
   const hasOverflow = avatars.length > max;
   const overflowAvatars = avatars.slice(max);
+  const groupAvatarDisplay = !max ? avatars : avatars.slice(0, max);
 
   return (
     <Tooltip.BaseProvider>
@@ -20,7 +23,7 @@ export function AvatarGroup({ max = 4, avatars, className }: AvatarGroupProps) {
         className={cn("flex items-center", className)}
         data-slot="avatar-group"
       >
-        {avatars.map((avatar, index) => (
+        {groupAvatarDisplay.map((avatar, index) => (
           <React.Fragment key={avatar.name}>
             <Tooltip.BaseRoot>
               <Tooltip.Trigger
