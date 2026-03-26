@@ -1,5 +1,16 @@
 # @px-ui/forms
 
+## 14.0.0
+
+### Minor Changes
+
+- 72accd0: Add sidebar primitive
+
+### Patch Changes
+
+- Updated dependencies [72accd0]
+  - @px-ui/core@4.7.0
+
 ## 13.0.0
 
 ### Minor Changes
