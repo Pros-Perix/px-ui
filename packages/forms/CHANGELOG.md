@@ -1,5 +1,16 @@
 # @px-ui/forms
 
+## 13.0.0
+
+### Minor Changes
+
+- 8ac70a6: Expose Tooltip portal props
+
+### Patch Changes
+
+- Updated dependencies [8ac70a6]
+  - @px-ui/core@4.6.0
+
 ## 12.0.2
 
 ### Patch Changes
