@@ -8,7 +8,7 @@ export function Separator({
   decorative = false,
   ...props
 }: React.ComponentProps<"div"> & {
-  orientation: "horizontal" | "vertical";
+  orientation?: "horizontal" | "vertical";
   decorative?: boolean;
 }) {
   // `aria-orientation` defaults to `horizontal` so we only need it if `orientation` is vertical
@@ -23,7 +23,7 @@ export function Separator({
       {...semanticProps}
       data-slot="separator"
       className={cn(
-        "shrink-0 bg-ppx-neutral-3 data-[orientation=horizontal]:h-px data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-px",
+        "bg-ppx-neutral-3 shrink-0 data-[orientation=horizontal]:h-px data-[orientation=vertical]:h-full data-[orientation=horizontal]:w-full data-[orientation=vertical]:w-px",
         className,
       )}
       {...props}
