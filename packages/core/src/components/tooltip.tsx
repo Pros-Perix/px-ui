@@ -52,14 +52,16 @@ export function Content({
   sideOffset = 8,
   side = "top",
   children,
+  portalProps,
   ...props
 }: React.ComponentProps<typeof BaseTooltip.Popup> & {
+  portalProps?: React.ComponentProps<typeof BaseTooltip.Portal>;
   align?: BaseTooltip.Positioner.Props["align"];
   side?: BaseTooltip.Positioner.Props["side"];
   sideOffset?: BaseTooltip.Positioner.Props["sideOffset"];
 }) {
   return (
-    <TooltipPortal>
+    <TooltipPortal {...portalProps}>
       <TooltipPositioner sideOffset={sideOffset} align={align} side={side}>
         <BaseTooltip.Popup
           data-slot="tooltip-content"
