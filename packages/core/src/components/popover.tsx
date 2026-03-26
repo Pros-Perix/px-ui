@@ -80,7 +80,7 @@ export function Content({
   positionerProps?: React.ComponentProps<typeof Positioner>;
 } & { children: React.ReactNode; arrow?: boolean; className?: string }) {
   return (
-    <Portal className="z-60" {...portalProps}>
+    <Portal className="z-60 relative" {...portalProps}>
       <Positioner
         sideOffset={8}
         align="center"
