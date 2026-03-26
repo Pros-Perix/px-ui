@@ -1,5 +1,11 @@
 # @px-ui/core
 
+## 4.9.0
+
+### Minor Changes
+
+- 4cf7739: fix media query mismatch
+
 ## 4.8.0
 
 ### Minor Changes
