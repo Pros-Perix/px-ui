@@ -1,5 +1,11 @@
 # @px-ui/core
 
+## 4.6.0
+
+### Minor Changes
+
+- 8ac70a6: Expose Tooltip portal props
+
 ## 4.5.0
 
 ### Minor Changes
