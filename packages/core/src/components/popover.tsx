@@ -74,11 +74,13 @@ export function Content({
   positionerProps = {},
   popupProps = {},
   arrow = true,
+  portalProps
 }: { popupProps?: React.ComponentProps<typeof BasePopover.Popup> } & {
+  portalProps?: React.ComponentProps<typeof BasePopover.Portal>;
   positionerProps?: React.ComponentProps<typeof Positioner>;
 } & { children: React.ReactNode; arrow?: boolean; className?: string }) {
   return (
-    <Portal>
+    <Portal className="z-60" {...portalProps}>
       <Positioner
         sideOffset={8}
         align="center"
