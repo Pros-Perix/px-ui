@@ -1,5 +1,17 @@
 # @px-ui/core
 
+## 4.7.0
+
+### Minor Changes
+
+- 72accd0: Add sidebar primitive
+
+## 4.6.0
+
+### Minor Changes
+
+- 8ac70a6: Expose Tooltip portal props
+
 ## 4.5.0
 
 ### Minor Changes

@@ -1,0 +1,558 @@
+---
+title: Sidebar
+description: A composable sidebar component for building app navigation with collapsible groups, submenus, badges, and responsive mobile support
+---
+
+import { SidebarBasicDemo } from "../../../src/components/sidebar-basic-demo";
+import { SidebarRightDemo } from "../../../src/components/sidebar-right-demo";
+import { SidebarWithSubmenuDemo } from "../../../src/components/sidebar-with-submenu-demo";
+import { SidebarFloatingDemo } from "../../../src/components/sidebar-floating-demo";
+import { SidebarWithBadgeDemo } from "../../../src/components/sidebar-with-badge-demo";
+
+## Overview
+
+The Sidebar component provides a fully composable navigation sidebar with support for collapsible groups, nested submenus, icon-only mode, keyboard shortcuts, mobile responsiveness, and cookie-based state persistence. It adapts to mobile viewports automatically using a sheet overlay.
+
+## Import
+
+```tsx
+import { Sidebar } from "@px-ui/core";
+```
+
+To use the sidebar hook independently:
+
+```tsx
+import { Sidebar } from "@px-ui/core";
+const { useSidebar } = Sidebar;
+```
+
+## Usage
+
+<Preview>
+  <SidebarBasicDemo />
+</Preview>
+
+<CodeBlock>
+```tsx
+<Sidebar.Provider>
+  <Sidebar.Root>
+    <Sidebar.Header>
+      <div className="flex items-center gap-2 px-2">
+        <Logo />
+        <span className="font-sans-sb text-ppx-sm">PX Platform</span>
+      </div>
+    </Sidebar.Header>
+    <Sidebar.Separator />
+    <Sidebar.Content>
+      <Sidebar.Group>
+        <Sidebar.GroupLabel>Main</Sidebar.GroupLabel>
+        <Sidebar.GroupContent>
+          <Sidebar.Menu>
+            <Sidebar.MenuItem>
+              <Sidebar.MenuButton isActive>
+                <HomeIcon />
+                <span>Dashboard</span>
+              </Sidebar.MenuButton>
+            </Sidebar.MenuItem>
+            <Sidebar.MenuItem>
+              <Sidebar.MenuButton>
+                <UsersIcon />
+                <span>Users</span>
+              </Sidebar.MenuButton>
+            </Sidebar.MenuItem>
+          </Sidebar.Menu>
+        </Sidebar.GroupContent>
+      </Sidebar.Group>
+    </Sidebar.Content>
+    <Sidebar.Footer>
+      <Sidebar.Menu>
+        <Sidebar.MenuItem>
+          <Sidebar.MenuButton>
+            <UserIcon />
+            <span>John Doe</span>
+          </Sidebar.MenuButton>
+        </Sidebar.MenuItem>
+      </Sidebar.Menu>
+    </Sidebar.Footer>
+  </Sidebar.Root>
+  <Sidebar.Inset>
+    <header className="flex h-12 items-center gap-2 border-b px-4">
+      <Sidebar.Trigger />
+      <span>Dashboard</span>
+    </header>
+    <main className="flex-1 p-4">
+      {/* Page content */}
+    </main>
+  </Sidebar.Inset>
+</Sidebar.Provider>
+```
+</CodeBlock>
+
+## Examples
+
+### Right Side
+
+Place the sidebar on the right side of the layout. Note that `Sidebar.Inset` must come before `Sidebar.Root` in the JSX order.
+
+<Preview>
+  <SidebarRightDemo />
+</Preview>
+
+<CodeBlock>
+```tsx
+<Sidebar.Provider>
+  <Sidebar.Inset>
+    <header className="flex h-12 items-center gap-2 border-b px-4">
+      <span>Right Sidebar</span>
+      <div className="ml-auto">
+        <Sidebar.Trigger />
+      </div>
+    </header>
+    <main className="flex-1 p-4">{/* content */}</main>
+  </Sidebar.Inset>
+  <Sidebar.Root side="right">
+    <Sidebar.Header>
+      <span>Details</span>
+    </Sidebar.Header>
+    <Sidebar.Separator />
+    <Sidebar.Content>
+      <Sidebar.Group>
+        <Sidebar.GroupLabel>Properties</Sidebar.GroupLabel>
+        <Sidebar.GroupContent>
+          <Sidebar.Menu>
+            <Sidebar.MenuItem>
+              <Sidebar.MenuButton isActive>
+                <InfoIcon />
+                <span>Overview</span>
+              </Sidebar.MenuButton>
+            </Sidebar.MenuItem>
+            <Sidebar.MenuItem>
+              <Sidebar.MenuButton>
+                <ActivityIcon />
+                <span>Activity</span>
+              </Sidebar.MenuButton>
+            </Sidebar.MenuItem>
+          </Sidebar.Menu>
+        </Sidebar.GroupContent>
+      </Sidebar.Group>
+    </Sidebar.Content>
+  </Sidebar.Root>
+</Sidebar.Provider>
+```
+</CodeBlock>
+
+### With Submenus
+
+Combine `Collapsible` with `MenuSub` components to create nested navigation hierarchies.
+
+<Preview>
+  <SidebarWithSubmenuDemo />
+</Preview>
+
+<CodeBlock>
+```tsx
+import { Sidebar, Collapsible } from "@px-ui/core";
+
+<Sidebar.Menu>
+  <Collapsible.Root defaultOpen>
+    <Sidebar.MenuItem>
+      <Collapsible.Trigger className="flex w-full items-center">
+        <Sidebar.MenuButton className="w-full">
+          <SettingsIcon />
+          <span>Settings</span>
+          <ChevronIcon className="ml-auto transition-transform group-data-[panel-open]:rotate-90" />
+        </Sidebar.MenuButton>
+      </Collapsible.Trigger>
+      <Collapsible.Panel>
+        <Sidebar.MenuSub>
+          <Sidebar.MenuSubItem>
+            <Sidebar.MenuSubButton href="#">
+              <span>General</span>
+            </Sidebar.MenuSubButton>
+          </Sidebar.MenuSubItem>
+          <Sidebar.MenuSubItem>
+            <Sidebar.MenuSubButton href="#" isActive>
+              <span>Security</span>
+            </Sidebar.MenuSubButton>
+          </Sidebar.MenuSubItem>
+        </Sidebar.MenuSub>
+      </Collapsible.Panel>
+    </Sidebar.MenuItem>
+  </Collapsible.Root>
+</Sidebar.Menu>
+```
+</CodeBlock>
+
+### Floating Variant
+
+The `floating` variant renders the sidebar with rounded corners and a subtle shadow, giving it an elevated appearance.
+
+<Preview>
+  <SidebarFloatingDemo />
+</Preview>
+
+<CodeBlock>
+```tsx
+<Sidebar.Provider>
+  <Sidebar.Root variant="floating">
+    <Sidebar.Content>
+      <Sidebar.Group>
+        <Sidebar.Menu>
+          <Sidebar.MenuItem>
+            <Sidebar.MenuButton isActive>
+              <HomeIcon />
+              <span>Dashboard</span>
+            </Sidebar.MenuButton>
+          </Sidebar.MenuItem>
+          <Sidebar.MenuItem>
+            <Sidebar.MenuButton>
+              <InboxIcon />
+              <span>Inbox</span>
+              <Sidebar.MenuBadge>12</Sidebar.MenuBadge>
+            </Sidebar.MenuButton>
+          </Sidebar.MenuItem>
+        </Sidebar.Menu>
+      </Sidebar.Group>
+    </Sidebar.Content>
+  </Sidebar.Root>
+  <Sidebar.Inset>{/* content */}</Sidebar.Inset>
+</Sidebar.Provider>
+```
+</CodeBlock>
+
+### With Badges
+
+Use `MenuBadge` to display notification counts or status indicators alongside menu items.
+
+<Preview>
+  <SidebarWithBadgeDemo />
+</Preview>
+
+<CodeBlock>
+```tsx
+<Sidebar.MenuItem>
+  <Sidebar.MenuButton>
+    <InboxIcon />
+    <span>Inbox</span>
+  </Sidebar.MenuButton>
+  <Sidebar.MenuBadge>24</Sidebar.MenuBadge>
+</Sidebar.MenuItem>
+```
+</CodeBlock>
+
+### Controlled State
+
+Control the sidebar open/closed state externally.
+
+<CodeBlock>
+```tsx
+function App() {
+  const [open, setOpen] = React.useState(true);
+
+  return (
+    <Sidebar.Provider open={open} onOpenChange={setOpen}>
+      <Sidebar.Root collapsible="icon">
+        {/* sidebar content */}
+      </Sidebar.Root>
+      <Sidebar.Inset>{/* content */}</Sidebar.Inset>
+    </Sidebar.Provider>
+  );
+}
+```
+</CodeBlock>
+
+### Using the Hook
+
+Access sidebar state from any child component using the `useSidebar` hook.
+
+<CodeBlock>
+```tsx
+import { Sidebar } from "@px-ui/core";
+
+function CustomToggle() {
+  const { state, toggleSidebar, isMobile } = Sidebar.useSidebar();
+
+  return (
+    <button onClick={toggleSidebar}>
+      Sidebar is {state} {isMobile ? "(mobile)" : "(desktop)"}
+    </button>
+  );
+}
+```
+</CodeBlock>
+
+## Keyboard Shortcuts
+
+| Shortcut | Action |
+|----------|--------|
+| `Cmd+B` (Mac) / `Ctrl+B` (Windows) | Toggle sidebar open/closed |
+
+## Anatomy
+
+Components that make up `Sidebar`:
+
+### `Sidebar.Provider`
+
+The root provider that manages sidebar state and coordinates all sidebar components. Must wrap all other sidebar components.
+
+**Custom Props:**
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `defaultOpen` | `boolean` | `true` | Default open state (uncontrolled) |
+| `open` | `boolean` | - | Controlled open state |
+| `onOpenChange` | `(open: boolean) => void` | - | Callback when open state changes |
+
+**Inherited Props:** Standard HTML `div` props
+
+---
+
+### `Sidebar.Root`
+
+The main sidebar container. Handles desktop layout, mobile sheet overlay, and collapsible behavior.
+
+**Custom Props:**
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `side` | `"left" \| "right"` | `"left"` | Which side the sidebar appears on |
+| `variant` | `"sidebar" \| "floating" \| "inset"` | `"sidebar"` | Visual variant |
+| `collapsible` | `"offcanvas" \| "icon" \| "none"` | `"offcanvas"` | Collapse behavior |
+
+**Inherited Props:** Standard HTML `div` props
+
+---
+
+### `Sidebar.Trigger`
+
+A button that toggles the sidebar open/closed state. Renders the built-in panel icon.
+
+**Custom Props:**
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `onClick` | `(event) => void` | - | Additional click handler (toggle still fires) |
+
+**Inherited Props:** All `Button` component props
+
+---
+
+### `Sidebar.Rail`
+
+An invisible draggable rail at the edge of the sidebar that toggles on click. Only visible on hover.
+
+**Inherited Props:** Standard HTML `button` props
+
+---
+
+### `Sidebar.Inset`
+
+The main content area that sits alongside the sidebar. Renders as a `<main>` element.
+
+**Inherited Props:** Standard HTML `main` props
+
+---
+
+### `Sidebar.Header`
+
+Container for sidebar header content (typically a logo or brand).
+
+**Inherited Props:** Standard HTML `div` props
+
+---
+
+### `Sidebar.Footer`
+
+Container for sidebar footer content (typically user info or actions).
+
+**Inherited Props:** Standard HTML `div` props
+
+---
+
+### `Sidebar.Content`
+
+Scrollable container for sidebar navigation groups.
+
+**Inherited Props:** Standard HTML `div` props
+
+---
+
+### `Sidebar.Separator`
+
+A horizontal divider line between sidebar sections.
+
+**Inherited Props:** `Separator` component props
+
+---
+
+### `Sidebar.SidebarInput`
+
+A styled input for search or filter functionality within the sidebar.
+
+**Inherited Props:** `Input` component props
+
+---
+
+### `Sidebar.Group`
+
+Groups related menu items together with an optional label.
+
+**Inherited Props:** Standard HTML `div` props
+
+---
+
+### `Sidebar.GroupLabel`
+
+A label for a sidebar group. Automatically hides in icon-only collapsed mode.
+
+**Inherited Props:** Standard HTML `div` props
+
+---
+
+### `Sidebar.GroupAction`
+
+An action button positioned at the top-right of a group (e.g., "Add" button).
+
+**Inherited Props:** Standard HTML `button` props
+
+---
+
+### `Sidebar.GroupContent`
+
+Container for the content within a group.
+
+**Inherited Props:** Standard HTML `div` props
+
+---
+
+### `Sidebar.Menu`
+
+An unordered list container for menu items.
+
+**Inherited Props:** Standard HTML `ul` props
+
+---
+
+### `Sidebar.MenuItem`
+
+A list item that wraps a menu button and optional action/badge.
+
+**Inherited Props:** Standard HTML `li` props
+
+---
+
+### `Sidebar.MenuButton`
+
+The clickable button within a menu item. Supports variants, sizes, active state, and optional tooltip.
+
+**Custom Props:**
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `isActive` | `boolean` | `false` | Whether this item is currently active |
+| `variant` | `"default" \| "outline"` | `"default"` | Visual variant |
+| `size` | `"default" \| "sm" \| "lg"` | `"default"` | Button size |
+| `tooltip` | `string \| TooltipContentProps` | - | Tooltip shown in collapsed icon mode |
+
+**Inherited Props:** Standard HTML `button` props
+
+---
+
+### `Sidebar.MenuAction`
+
+An action button that appears on the right side of a menu item.
+
+**Custom Props:**
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `showOnHover` | `boolean` | `false` | Only show when the parent menu item is hovered |
+
+**Inherited Props:** Standard HTML `button` props
+
+---
+
+### `Sidebar.MenuBadge`
+
+A badge displayed on the right side of a menu item for counts or status.
+
+**Inherited Props:** Standard HTML `div` props
+
+---
+
+### `Sidebar.MenuSkeleton`
+
+A loading skeleton placeholder for menu items.
+
+**Custom Props:**
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `showIcon` | `boolean` | `false` | Whether to show an icon placeholder |
+
+**Inherited Props:** Standard HTML `div` props
+
+---
+
+### `Sidebar.MenuSub`
+
+A nested submenu container rendered as a bordered list.
+
+**Inherited Props:** Standard HTML `ul` props
+
+---
+
+### `Sidebar.MenuSubItem`
+
+A list item within a submenu.
+
+**Inherited Props:** Standard HTML `li` props
+
+---
+
+### `Sidebar.MenuSubButton`
+
+A clickable link within a submenu item.
+
+**Custom Props:**
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `size` | `"sm" \| "md"` | `"md"` | Text size |
+| `isActive` | `boolean` | `false` | Whether this sub-item is currently active |
+
+**Inherited Props:** Standard HTML `a` props
+
+---
+
+### `useSidebar`
+
+A hook that returns the current sidebar context. Must be used within a `Sidebar.Provider`.
+
+**Return Value:**
+
+| Property | Type | Description |
+|----------|------|-------------|
+| `state` | `"expanded" \| "collapsed"` | Current sidebar state |
+| `open` | `boolean` | Whether the sidebar is open |
+| `setOpen` | `(open: boolean) => void` | Set the open state |
+| `openMobile` | `boolean` | Whether the mobile sidebar sheet is open |
+| `setOpenMobile` | `(open: boolean) => void` | Set the mobile open state |
+| `isMobile` | `boolean` | Whether the viewport is mobile-sized |
+| `toggleSidebar` | `() => void` | Toggle sidebar open/closed |
+
+---
+
+## Features
+
+- **Responsive**: Automatically switches to a sheet overlay on mobile viewports (below 768px)
+- **Collapsible**: Three modes — `offcanvas` (slides out), `icon` (collapses to icons), `none` (always visible)
+- **Keyboard shortcut**: `Cmd/Ctrl+B` toggles the sidebar
+- **State persistence**: Saves open/closed state to a cookie for page reloads
+- **Controlled & uncontrolled**: Use `open`/`onOpenChange` for controlled mode, or `defaultOpen` for uncontrolled
+- **Variants**: `sidebar` (default border), `floating` (rounded with shadow), `inset` (embedded)
+- **Composable**: Build any layout by composing the atomic sidebar components
+
+## API Reference
+
+See the [Anatomy](#anatomy) section above for detailed component props.
