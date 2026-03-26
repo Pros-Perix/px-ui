@@ -33,7 +33,7 @@ export const Default: Story = {
               </Button>
             )}
           />
-          <Popover.Content className="sm:w-[500px] w-[calc(100vw-4rem)]">
+          <Popover.Content className="ppx-sm:w-[500px] w-[calc(100vw-4rem)]">
             <Popover.Header>
               <Popover.Title>Share</Popover.Title>
               <Popover.Description>
