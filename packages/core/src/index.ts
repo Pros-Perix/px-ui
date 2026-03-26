@@ -17,6 +17,7 @@ export * as BlockRadioGroup from "./components/block-radio-group";
 export * as Breadcrumbs from "./components/breadcrumbs";
 export * as RadioGroup from "./components/radio-group";
 export * as Collapsible from "./components/collapsible";
+export * as Sidebar from "./components/sidebar";
 export { Calendar } from "./components/calendar";
 export { PXUIProvider } from "./providers/px-ui-provider";
 export { toast, anchoredToast } from "./components/toast";
