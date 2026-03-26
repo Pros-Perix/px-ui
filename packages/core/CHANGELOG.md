@@ -1,5 +1,12 @@
 # @px-ui/core
 
+## 4.8.0
+
+### Minor Changes
+
+- 14efc3d: Expose Tooltip portal props
+- 14efc3d: Fixed tooltip popover z-index
+
 ## 4.7.0
 
 ### Minor Changes
