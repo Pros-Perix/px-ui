@@ -1,5 +1,16 @@
 # @px-ui/forms
 
+## 16.0.0
+
+### Minor Changes
+
+- 4cf7739: fix media query mismatch
+
+### Patch Changes
+
+- Updated dependencies [4cf7739]
+  - @px-ui/core@4.9.0
+
 ## 15.0.0
 
 ### Minor Changes
