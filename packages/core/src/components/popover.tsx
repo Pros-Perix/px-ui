@@ -80,11 +80,7 @@ export function Content({
   positionerProps?: React.ComponentProps<typeof Positioner>;
 } & { children: React.ReactNode; arrow?: boolean; className?: string }) {
   return (
-<<<<<<< HEAD
     <Portal className="z-60 relative" {...portalProps}>
-=======
-    <Portal className="z-60" {...portalProps}>
->>>>>>> ppxmaster
       <Positioner
         sideOffset={8}
         align="center"
