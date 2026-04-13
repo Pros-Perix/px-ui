@@ -1,5 +1,11 @@
 # @px-ui/core
 
+## 5.1.0
+
+### Minor Changes
+
+- 0597ec4: try to fix z-index issues
+
 ## 5.0.0
 
 ### Major Changes
