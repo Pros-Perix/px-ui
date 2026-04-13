@@ -1,5 +1,11 @@
 # @px-ui/forms
 
+## 18.0.1
+
+### Patch Changes
+
+- b315b39: fix currency field selected value breaking
+
 ## 18.0.0
 
 ### Patch Changes
