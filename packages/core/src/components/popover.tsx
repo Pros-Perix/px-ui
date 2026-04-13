@@ -36,7 +36,7 @@ export function Header({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       data-slot="popover-header"
-      className={cn("gap-y-1 relative flex flex-col", className)}
+      className={cn("relative flex flex-col gap-y-1", className)}
       {...props}
     />
   );
@@ -74,31 +74,32 @@ export function Content({
   positionerProps = {},
   popupProps = {},
   arrow = true,
-  portalProps
+  portalProps,
 }: { popupProps?: React.ComponentProps<typeof BasePopover.Popup> } & {
   portalProps?: React.ComponentProps<typeof BasePopover.Portal>;
   positionerProps?: React.ComponentProps<typeof Positioner>;
 } & { children: React.ReactNode; arrow?: boolean; className?: string }) {
   return (
-    <Portal className="z-60 relative" {...portalProps}>
+    <Portal {...portalProps}>
       <Positioner
         sideOffset={8}
         align="center"
         positionMethod="fixed"
         side="bottom"
         {...positionerProps}
+        className={cn("z-50", positionerProps.className)}
       >
         <BasePopover.Popup
           data-slot="popover-content"
           {...popupProps}
           className={cn(
-            "p-4 shadow-md z-50 min-w-input origin-[var(--transform-origin)] rounded-ppx-m bg-ppx-background text-ppx-foreground outline -outline-offset-1 outline-ppx-neutral-5 transition-[transform,scale,opacity] data-[ending-style]:scale-95 data-[ending-style]:opacity-0 data-[starting-style]:scale-95 data-[starting-style]:opacity-0",
+            "min-w-input rounded-ppx-m bg-ppx-background text-ppx-foreground outline-ppx-neutral-5 z-50 origin-[var(--transform-origin)] p-4 shadow-md outline -outline-offset-1 transition-[transform,scale,opacity] data-[ending-style]:scale-95 data-[starting-style]:scale-95 data-[ending-style]:opacity-0 data-[starting-style]:opacity-0",
             popupProps.className,
             className,
           )}
         >
           {arrow && (
-            <Arrow className="data-[side=bottom]:top-[-8px] data-[side=left]:right-[-13px] data-[side=left]:rotate-90 data-[side=right]:left-[-13px] data-[side=right]:-rotate-90 data-[side=top]:bottom-[-8px] data-[side=top]:rotate-180">
+            <Arrow className="data-[side=bottom]:top-[-8px] data-[side=left]:right-[-13px] data-[side=right]:left-[-13px] data-[side=top]:bottom-[-8px] data-[side=left]:rotate-90 data-[side=right]:-rotate-90 data-[side=top]:rotate-180">
               <svg width="20" height="10" viewBox="0 0 20 10" fill="none">
                 <path
                   d="M9.66437 2.60207L4.80758 6.97318C4.07308 7.63423 3.11989 8 2.13172 8H0V9H20V8H18.5349C17.5468 8 16.5936 7.63423 15.8591 6.97318L11.0023 2.60207C10.622 2.2598 10.0447 2.25979 9.66437 2.60207Z"
@@ -130,7 +131,7 @@ export function CloseIconButton({
           variant="ghost"
           size="icon-sm"
           className={cn(
-            "self-start text-ppx-muted-foreground transition-colors hover:text-ppx-foreground",
+            "text-ppx-muted-foreground hover:text-ppx-foreground self-start transition-colors",
             className,
           )}
           {...closeProps}
@@ -148,7 +149,7 @@ export function Footer({ className, ...props }: React.ComponentProps<"div">) {
     <div
       data-slot="popover-footer"
       className={cn(
-        "gap-2 flex flex-col-reverse ppx-sm:flex-row ppx-sm:justify-end",
+        "ppx-sm:flex-row ppx-sm:justify-end flex flex-col-reverse gap-2",
         className,
       )}
       {...props}
