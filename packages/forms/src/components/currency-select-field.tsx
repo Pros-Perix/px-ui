@@ -181,7 +181,13 @@ export function CurrencySelectField({
       disabled={disabled}
       invalid={invalid}
       isLoading={isLoading}
-      isItemEqualToValue={(item, val) => item.id === val.id}
+      isItemEqualToValue={(item, val) =>
+        item.id
+          ? item.id === val.id
+          : item.abbr
+            ? item.abbr === val.abbr
+            : item.value === val.value
+      }
       itemToStringLabel={(item) => `${item.abbr} - ${item.name}`}
       inputRef={inputRef}
       readOnly={readOnly}
