@@ -1,5 +1,11 @@
 # @px-ui/core
 
+## 5.1.1
+
+### Patch Changes
+
+- dc4b397: export dialog stuff
+
 ## 5.1.0
 
 ### Minor Changes
